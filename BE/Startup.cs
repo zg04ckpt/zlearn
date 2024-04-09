@@ -1,5 +1,5 @@
-using Application.System;
-using Data;
+using ZG04WEB.Application.System;
+using ZG04WEB.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities;
+using ZG04.Utilities;
 
 namespace BE
 {

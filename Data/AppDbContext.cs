@@ -1,13 +1,9 @@
-﻿using Data.Configurations;
-using Data.Entities;
+﻿
+using ZG04WEB.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ZG04WEB.Data.Configurations;
 
-namespace Data
+namespace ZG04WEB.Data
 {
     public class AppDbContext : DbContext
     {

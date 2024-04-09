@@ -1,12 +1,12 @@
-﻿using Application.System;
-using Data.Entities;
+﻿using ZG04WEB.Application.System;
+using ZG04WEB.Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using ViewModels.System;
+using ZG04WEB.ViewModels.System;
 
-namespace BE.Controllers
+namespace ZG04.BE.Controllers
 {
     [Route("api/question-sets")]
     [ApiController]

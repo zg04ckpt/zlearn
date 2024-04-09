@@ -1,4 +1,4 @@
-﻿using Data.Entities;
+﻿using ZG04WEB.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Configurations
+namespace ZG04WEB.Data.Configurations
 {
     public class QuestionConfig : IEntityTypeConfiguration<Question>
     {
