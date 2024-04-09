@@ -11,9 +11,9 @@ namespace Application.System
     public interface IQuestionSetService
     {
         Task<ApiResult> GetAll();
-        Task<ApiResult> GetById(Guid id);
-        Task<ApiResult> Create(QuestionSetCreateRequest request);
-        Task<ApiResult> Update(Guid id, QuestionSetCreateRequest request);
-        Task<ApiResult> Delete(Guid id);
+        Task<ApiResult> GetById(string id);
+        Task<ApiResult> Create(QuestionSetRequest request);
+        Task<ApiResult> Update(string id, QuestionSetRequest request);
+        Task<ApiResult> Delete(string id);
     }
 }

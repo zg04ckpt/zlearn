@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ViewModels.System
 {
-    public class QuestionSetCreateRequest
+    public class QuestionSetRequest
     {
         public string Name { get; set; }
         public string Description { get; set; }

@@ -20,33 +20,34 @@ namespace Application.System
             _context = context;
         }
 
-        public async Task<ApiResult> Create(QuestionSetCreateRequest request)
+        public async Task<ApiResult> Create(QuestionSetRequest request)
         {
-            var check = await _context.QuestionSets.AnyAsync(x => x.Name == request.Name);
-            if (check) return new ApiResult("Name is existed");
-
-            var questionSet = new QuestionSet
-            {
-                Id = Guid.NewGuid(),
-                Name = request.Name,
-                Description = request.Description,
-                Image = request.Image,
-                Questions = request.Questions.Select(x => new Question
-                {
-                    Content = x.Content,
-                    Image = x.Image,
-                    AnswerA = x.AnswerA,
-                    AnswerB = x.AnswerB,
-                    AnswerC = x.AnswerC,
-                    AnswerD = x.AnswerD,
-                    CorrectAnswer = x.CorrectAnswer,
-                    Score = x.Score,
-                    Mark = false
-                }).ToList()
-            };
-
             try
             {
+                var check = await _context.QuestionSets.AnyAsync(x => x.Name == request.Name);
+                if (check) return new ApiResult("Name is existed");
+
+                var questionSet = new QuestionSet
+                {
+                    Id = Guid.NewGuid(),
+                    Name = request.Name,
+                    CreatedDate = DateTime.Now,
+                    Description = request.Description,
+                    Image = request.Image,
+                    Questions = request.Questions.Select(x => new Question
+                    {
+                        Content = x.Content,
+                        Image = x.Image,
+                        AnswerA = x.AnswerA,
+                        AnswerB = x.AnswerB,
+                        AnswerC = x.AnswerC,
+                        AnswerD = x.AnswerD,
+                        CorrectAnswer = x.CorrectAnswer,
+                        Score = x.Score,
+                        Mark = false
+                    }).ToList()
+                };
+
                 _context.QuestionSets.Add(questionSet);
                 await _context.SaveChangesAsync();
                 return new ApiResult();
@@ -55,16 +56,15 @@ namespace Application.System
             {
                 return new ApiResult(e.Message);
             }
-
         }
 
-        public async Task<ApiResult> Delete(Guid id)
+        public async Task<ApiResult> Delete(string id)
         {
-            var questionSet = await _context.QuestionSets.FindAsync(id);
-            if (questionSet == null) return new ApiResult("Not found");
-
             try
             {
+                var questionSet = await _context.QuestionSets.FindAsync(Guid.Parse(id));
+                if (questionSet == null) return new ApiResult("Not found");
+
                 _context.QuestionSets.Remove(questionSet);
                 await _context.SaveChangesAsync();
                 return new ApiResult();
@@ -77,49 +77,63 @@ namespace Application.System
 
         public async Task<ApiResult> GetAll()
         {
-            var questionSets = await _context.QuestionSets.Select(x => new QuestionSetViewModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                CreatedDate = x.CreatedDate,
-                Image = x.Image,
-                NumberOfQuestions = x.Questions.Count
-            }).ToListAsync();
-
-            return new ApiResult(questionSets);
-        }
-
-        public async Task<ApiResult> GetById(Guid id)
-        {
-            var questionSet = await _context.QuestionSets.FindAsync(id);
-            if (questionSet == null) return new ApiResult("Not found");
-            return new ApiResult(questionSet);
-        }
-
-        public async Task<ApiResult> Update(Guid id, QuestionSetCreateRequest request)
-        {
-            var questionSet = await _context.QuestionSets.FindAsync(id);
-            if (questionSet == null) return new ApiResult("Not found");
-
-            questionSet.Name = request.Name;
-            questionSet.Description = request.Description;
-            questionSet.Image = request.Image;
-            questionSet.Questions = request.Questions.Select(x => new Question
-            {
-                Content = x.Content,
-                Image = x.Image,
-                AnswerA = x.AnswerA,
-                AnswerB = x.AnswerB,
-                AnswerC = x.AnswerC,
-                AnswerD = x.AnswerD,
-                CorrectAnswer = x.CorrectAnswer,
-                Score = x.Score,
-                Mark = false
-            }).ToList();
-
             try
             {
+                var questionSets = await _context.QuestionSets.Select(x => new QuestionSetViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    CreatedDate = x.CreatedDate,
+                    Image = x.Image,
+                    NumberOfQuestions = x.Questions.Count
+                }).ToListAsync();
+
+                return new ApiResult(questionSets);
+            }
+            catch (Exception e)
+            {
+                return new ApiResult(e.Message);
+            }
+        }
+
+        public async Task<ApiResult> GetById(string id)
+        {
+            try
+            {
+                var questionSet = await _context.QuestionSets.FindAsync(Guid.Parse(id));
+                if (questionSet == null) return new ApiResult("Not found");
+                return new ApiResult(questionSet);
+            }
+            catch(Exception e)
+            {
+                return new ApiResult(e.Message);
+            }
+        }
+
+        public async Task<ApiResult> Update(string id, QuestionSetRequest request)
+        {
+            try
+            {
+                var questionSet = await _context.QuestionSets.FindAsync(Guid.Parse(id));
+                if (questionSet == null) return new ApiResult("Not found");
+
+                questionSet.Name = request.Name;
+                questionSet.Description = request.Description;
+                questionSet.Image = request.Image;
+                questionSet.Questions = request.Questions.Select(x => new Question
+                {
+                    Content = x.Content,
+                    Image = x.Image,
+                    AnswerA = x.AnswerA,
+                    AnswerB = x.AnswerB,
+                    AnswerC = x.AnswerC,
+                    AnswerD = x.AnswerD,
+                    CorrectAnswer = x.CorrectAnswer,
+                    Score = x.Score,
+                    Mark = false
+                }).ToList();
+
                 _context.Update(questionSet);
                 await _context.SaveChangesAsync();
                 return new ApiResult();

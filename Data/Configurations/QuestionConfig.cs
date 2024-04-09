@@ -26,7 +26,7 @@ namespace Data.Configurations
             builder.HasOne(x => x.QuestionSet)
                 .WithMany(x => x.Questions)
                 .HasForeignKey(x => x.QuestionSetId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
