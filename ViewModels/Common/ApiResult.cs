@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZG04WEB.ViewModels.Common
+namespace  ViewModels.Common
 {
     public class ApiResult
     {

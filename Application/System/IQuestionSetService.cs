@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZG04WEB.ViewModels.Common;
-using ZG04WEB.ViewModels.System;
+using  ViewModels.Common;
+using  ViewModels.System;
 
-namespace ZG04WEB.Application.System
+namespace  Application.System
 {
     public interface IQuestionSetService
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZG04WEB.Data.Entities
+namespace  Data.Entities
 {
     public class QuestionSet
     {

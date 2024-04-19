@@ -1,8 +1,8 @@
-﻿using ZG04WEB.Data.Entities;
+﻿using  Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ZG04WEB.Data.Configurations
+namespace  Data.Configurations
 {
     public class QuestionSetConfig : IEntityTypeConfiguration<QuestionSet>
     {

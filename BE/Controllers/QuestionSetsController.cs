@@ -1,10 +1,10 @@
-﻿using ZG04WEB.Application.System;
-using ZG04WEB.Data.Entities;
+﻿using  Application.System;
+using  Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using ZG04WEB.ViewModels.System;
+using  ViewModels.System;
 
 namespace ZG04.BE.Controllers
 {

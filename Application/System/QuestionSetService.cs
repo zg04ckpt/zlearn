@@ -1,4 +1,4 @@
-﻿using ZG04WEB.Data;
+﻿using  Data;
 
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZG04WEB.ViewModels.Common;
-using ZG04WEB.ViewModels.System;
-using ZG04WEB.Data.Entities;
+using  ViewModels.Common;
+using  ViewModels.System;
+using  Data.Entities;
 
-namespace ZG04WEB.Application.System
+namespace  Application.System
 {
     public class QuestionSetService : IQuestionSetService
     {

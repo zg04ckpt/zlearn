@@ -1,5 +1,5 @@
-using ZG04WEB.Application.System;
-using ZG04WEB.Data;
+using  Application.System;
+using  Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
