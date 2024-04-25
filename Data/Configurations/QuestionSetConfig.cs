@@ -13,7 +13,8 @@ namespace  Data.Configurations
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
             builder.Property(x => x.Description).HasMaxLength(1000);
             builder.Property(x => x.CreatedDate).IsRequired();
-            builder.Property(x => x.Image).HasMaxLength(500);
+            builder.Property(x => x.UpdatedDate).IsRequired();
+            builder.Property(x => x.ImageUrl).HasMaxLength(500);
         }
     }
 }

@@ -9,6 +9,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { QuestionSetsComponent } from './components/question-sets/question-sets.component';
 import { QuestionSetsCreateComponent } from './components/question-sets-create/question-sets-create.component';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
