@@ -3,21 +3,21 @@ import { QuestionModule } from './question.module';
 export class QuestionSetsModule {
   id: string
   name: string
-  desc: string
+  description: string
   imageUrl: string
   creator: string
   createdDate: Date
   updatedDate: Date
-  questions: Array<QuestionModule>
+  questionCount: number
 
-  constructor(id: string, name: string, desc: string, imageUrl: string, creator:string, createdDate:Date, updatedDate:Date, questions: Array<QuestionModule>) {
-    this.id = id
-    this.name = name
-    this.desc = desc
-    this.creator = creator
-    this.createdDate = createdDate
-    this.updatedDate = updatedDate
-    this.imageUrl = imageUrl
-    this.questions = questions
+  constructor(id: string, name: string, description: string, imageUrl: string, creator: string, createdDate: Date, updatedDate: Date, questionCount: number) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.imageUrl = imageUrl;
+    this.creator = creator;
+    this.createdDate = createdDate;
+    this.updatedDate = updatedDate;
+    this.questionCount = questionCount;
   }
 }

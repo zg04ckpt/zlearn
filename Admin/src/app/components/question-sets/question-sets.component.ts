@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { QuestionSetsModule } from 'src/app/models/question-sets.module';
-import { QuestionModule } from 'src/app/models/question.module';
 import { QuestionSetsService } from 'src/app/services/question-sets.service';
 
 @Component({
@@ -18,7 +17,7 @@ export class QuestionSetsComponent {
 
   ngOnInit(): void {
     this.service.getAll().subscribe(data => {
-      this.questionSetsList = this.service.convertToQuestionSet(data);
+      this.questionSetsList = this.service.convertToListQuestionSet(data);
     });
   }
 
@@ -26,7 +25,6 @@ export class QuestionSetsComponent {
   {
     if(confirm("Are you sure you want to delete this question set?"))
     {
-      this.questionSetsList = this.questionSetsList.filter(x => x.id != id);
       alert("Đã xóa thành công !");
       //handle with api
     }

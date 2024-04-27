@@ -1,41 +1,60 @@
-import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { QSCreateRequest } from 'src/app/interfaces/qsCreateRequest';
+import { ActivatedRoute } from '@angular/router';
+import { QSUpdateRequest } from 'src/app/interfaces/qsUpdateRequest';
+import { QuestionSetsModule } from 'src/app/models/question-sets.module';
 import { QuestionModule } from 'src/app/models/question.module';
 import { QuestionSetsService } from 'src/app/services/question-sets.service';
+import { environment } from 'src/environments/environment';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-question-sets-create',
-  templateUrl: './question-sets-create.component.html',
-  styleUrls: ['./question-sets-create.component.css']
+  selector: 'app-question-sets-update',
+  templateUrl: './question-sets-update.component.html',
+  styleUrls: ['./question-sets-update.component.css']
 })
-export class QuestionSetsCreateComponent {
+export class QuestionSetsUpdateComponent {
 
-  constructor(
-    private location: Location,
-    private service: QuestionSetsService
-  ) {}
+  id: string = ""
+  title: string = "Cập nhật bộ câu hỏi"
 
   selectedCount: number = 0
   modalTitle?: string
   modelMessage?: string
   modelValid: boolean = false
-
-  title:string = "Tạo bộ câu hỏi mới";
-  imageUrl: string = ""
+  image: File | null = null
 
   questions: QuestionModule[] = []
   question: QuestionModule = new QuestionModule(0, "", "", " ", "", "", "", 1, false);
-
-  qsCreateRequest: QSCreateRequest = {
+  questionSet: QuestionSetsModule = {
+    id: "",
     name: "",
     description: "",
-    creator: "admin",
-    image: new File([""], "filename"),
-    questions: []
+    imageUrl: "",
+    creator: "",
+    createdDate: new Date(),
+    updatedDate: new Date(),
+    questionCount: 0,
   }
 
+  constructor(
+    private location: Location,
+    private service: QuestionSetsService,
+    private route: ActivatedRoute
+  ) {}
+
+
   ngOnInit(): void {
+    this.id = this.route.snapshot.params['id'];
+    this.service.getById(this.id)
+    .subscribe(res => {
+      this.questionSet = this.service.convertToQuestionSet(res);
+      this.questionSet.imageUrl = environment.baseUrl + this.questionSet.imageUrl;
+    })
+
+    this.service.getAllQuestions(this.id)
+    .subscribe(res => {
+      this.questions = this.service.convertToQuestions(res);
+    })
   }
 
   addNewQuestion()
@@ -79,25 +98,18 @@ export class QuestionSetsCreateComponent {
   checkValidAndConfirm()
   {
     this.modelValid = false;
-    if(this.qsCreateRequest.name == "")
+    if(this.questionSet.name == "")
     {
       this.modalTitle = "Lỗi"
       this.modelMessage = "Tên bộ câu hỏi không được để trống"
       return;
     }
-    if(this.qsCreateRequest.description == "")
+    if(this.questionSet.description == "")
     {
       this.modalTitle = "Lỗi"
       this.modelMessage = "Mô tả bộ câu hỏi không được để trống"
       return;
     }
-
-    if(this.imageUrl == "")
-      {
-        this.modalTitle = "Lỗi"
-        this.modelMessage = "Ảnh minh họa không được để trống"
-        return;
-      }
 
     if(this.questions.length == 0)
     {
@@ -114,25 +126,29 @@ export class QuestionSetsCreateComponent {
   saveQuestionSets(): void {
     if(this.modelValid)
     {
-      this.qsCreateRequest.questions = this.questions.map(x => {
-        return {
-          order: x.order,
-          content: x.content,
-          image: null,
-          answerA: x.answerA,
-          answerB: x.answerB,
-          answerC: x.answerC,
-          answerD: x.answerD,
-          correctAnswer: x.correctAnswer,
-          mark: false
-        };
-      });
-
-      this.service.create(this.qsCreateRequest)
+      let request: QSUpdateRequest = {
+        name: this.questionSet.name,
+        description: this.questionSet.description,
+        image: this.image,
+        questions: this.questions.map(x => {
+          return {
+            order: x.order,
+            content: x.content,
+            image: null,
+            answerA: x.answerA,
+            answerB: x.answerB,
+            answerC: x.answerC,
+            answerD: x.answerD,
+            correctAnswer: x.correctAnswer,
+            mark: false
+          }
+        }),
+        mark: false
+      }
+      this.service.update(this.id, request)
       .subscribe(res => {
-        console.log(res.message);
-        alert("Lưu thành công");
-        this.location.back();
+        alert("Cập nhật bộ câu hỏi thành công")
+        
       })
     }
   }
@@ -147,9 +163,9 @@ export class QuestionSetsCreateComponent {
     const file: File = event.target.files[0];
     if(file) 
     {
-      this.qsCreateRequest.image = file;
+      this.image = file;
       const reader = new FileReader();
-      reader.onload = e => this.imageUrl = reader.result as string;
+      reader.onload = e => this.questionSet.imageUrl = reader.result as string;
       reader.readAsDataURL(file);
     }
   }

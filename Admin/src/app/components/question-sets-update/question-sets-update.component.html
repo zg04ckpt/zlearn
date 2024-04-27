@@ -15,14 +15,14 @@
               <div class="mb-3 row">
                 <label for="name" class="col-md-2 col-form-label">Tên</label>
                 <div class="col-md-10">
-                  <input class="form-control" type="text" id="name" [(ngModel)]="qsCreateRequest.name">
+                  <input class="form-control" type="text" id="name" [(ngModel)]="questionSet.name">
                 </div>
               </div>
 
               <div class="mb-3 row">
                 <label for="desc" class="form-label col-md-2">Mô tả</label>
                 <div class="col-md-10">
-                    <textarea class="form-control" id="desc" rows="3" [(ngModel)]="qsCreateRequest.description"></textarea>
+                    <textarea class="form-control" id="desc" rows="3" [(ngModel)]="questionSet.description"></textarea>
                 </div>
               </div>
 
@@ -32,7 +32,7 @@
 
                     <div class="d-flex align-items-start align-items-sm-center gap-4">
 
-                        <img [src]="imageUrl" alt="set-image" 
+                        <img [src]="questionSet.imageUrl" alt="set-image" 
                         class="d-block rounded" style="object-fit: cover;" height="100" width="100" id="uploadedAvatar">
                         
                         <div class="button-wrapper">
@@ -54,11 +54,9 @@
               </div>
 
               <div class="d-flex justify-content-center mt-5 ">
-                
                 <button (click)="checkValidAndConfirm()" type="button" class="btn btn-dark ms-1 " data-bs-toggle="modal" data-bs-target="#modalToggle">
-                    Tạo mới
+                    Cập nhật
                 </button>
-
               </div>
             </div>
         </div>

@@ -1,3 +1,4 @@
+using Application.Common;
 using Application.Practice;
 using Data;
 using Microsoft.AspNetCore.Builder;
@@ -7,11 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ZG04.Utilities;
@@ -37,7 +40,7 @@ namespace BE
 
             services.AddScoped<IQuestionSetService, QuestionSetService>();
             services.AddScoped<IQuestionServices, QuestionService>();
-
+            services.AddScoped<IFileService, FileService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -66,6 +69,16 @@ namespace BE
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                                       Path.Combine(Directory.GetCurrentDirectory(), 
+                                       FileService.FOLDER_NAME)),
+                RequestPath = FileService.REQUEST_PATH
+            });
 
             app.UseRouting();
 

@@ -10,25 +10,30 @@ using ViewModels.Common;
 using Data.Entities;
 using System.Net;
 using ViewModels.QuestionSet;
+using Application.Common;
 
 namespace Application.Practice
 {
     public class QuestionSetService : IQuestionSetService
     {
         private readonly AppDbContext _context;
+        private readonly IFileService _fileService;
 
-        public QuestionSetService(AppDbContext context)
+        public QuestionSetService(AppDbContext context, IFileService fileService)
         {
             _context = context;
+            _fileService = fileService;
         }
 
         public async Task<ApiResult> Create(QSCreateRequest request)
         {
             try
             {
+                //check if question set name is existed
                 var check = await _context.QuestionSets.AnyAsync(x => x.Name == request.Name);
                 if (check) return new ApiResult("Question set name is existed", HttpStatusCode.BadRequest);
 
+                //create new question set
                 var questionSet = new QuestionSet
                 {
                     Id = Guid.NewGuid(),
@@ -37,23 +42,35 @@ namespace Application.Practice
                     Creator = request.Creator,
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now,
-                    ImageUrl = request.ImageUrl,
-                    Questions = request.Questions.Select(x => new Question
-                    {
-                        Content = x.Content,
-                        ImageUrl = x.ImageUrl,
-                        AnswerA = x.AnswerA,
-                        AnswerB = x.AnswerB,
-                        AnswerC = x.AnswerC,
-                        AnswerD = x.AnswerD,
-                        CorrectAnswer = x.CorrectAnswer,
-                        Score = 0,
-                        Mark = x.Mark
-                    }).ToList()
+                    ImageUrl = await _fileService.SaveFile(request.Image)
                 };
+
+                //create questions
+                var questions = new List<Question>();
+                if(request.Questions != null) //test
+                    foreach (var question in request.Questions)
+                    {
+                        var newQuestion = new Question
+                        {
+                            Order = question.Order,
+                            Content = question.Content,
+                            ImageUrl = (question.Image != null) ? await _fileService.SaveFile(question.Image) : null,
+                            AnswerA = question.AnswerA,
+                            AnswerB = question.AnswerB,
+                            AnswerC = question.AnswerC,
+                            AnswerD = question.AnswerD,
+                            CorrectAnswer = question.CorrectAnswer,
+                            QuestionSetId = questionSet.Id,
+                            Score = 0,
+                            Mark = question.Mark
+                        };
+                        questions.Add(newQuestion);
+                    }
+                questionSet.Questions = questions;
 
                 _context.QuestionSets.Add(questionSet);
                 await _context.SaveChangesAsync();
+
                 return new ApiResult();
             }
             catch (Exception e)
@@ -68,6 +85,8 @@ namespace Application.Practice
             {
                 var questionSet = await _context.QuestionSets.FindAsync(Guid.Parse(id));
                 if (questionSet == null) return new ApiResult("Not found", HttpStatusCode.NotFound);
+
+                await _fileService.DeleteFile(questionSet.ImageUrl);
 
                 _context.QuestionSets.Remove(questionSet);
                 await _context.SaveChangesAsync();
@@ -93,7 +112,7 @@ namespace Application.Practice
                         Creator = qs.Creator,
                         CreatedDate = qs.CreatedDate,
                         UpdatedDate = qs.UpdatedDate,
-                        ImageUrl = qs.ImageUrl,
+                        ImageUrl = _fileService.GetFileUrl(qs.ImageUrl),
                         QuestionCount = qs.Questions.Count
                     }).ToListAsync();
 
@@ -121,7 +140,7 @@ namespace Application.Practice
                     Creator = questionSet.Creator,
                     CreatedDate = questionSet.CreatedDate,
                     UpdatedDate = questionSet.UpdatedDate,
-                    ImageUrl = questionSet.ImageUrl,
+                    ImageUrl = _fileService.GetFileUrl(questionSet.ImageUrl),
                     QuestionCount = await _context.Questions.CountAsync(q => q.QuestionSetId == questionSet.Id)
                 });
             }
@@ -135,39 +154,59 @@ namespace Application.Practice
         {
             try
             {
+                //check if question set is existed
                 var questionSet = await _context.QuestionSets.FindAsync(Guid.Parse(id));
                 if (questionSet == null) return new ApiResult("Not found", HttpStatusCode.NotFound);
 
+                //get questions
                 questionSet.Questions = await _context.Questions
                     .Where(q => q.QuestionSetId == questionSet.Id)
                     .ToListAsync();
 
+                #region Update question set
                 questionSet.Name = request.Name;
                 questionSet.Description = request.Description;
                 questionSet.UpdatedDate = DateTime.Now;
-                questionSet.ImageUrl = request.ImageUrl;
 
+                //update image
+                if(request.Image != null)
+                {
+                    await _fileService.DeleteFile(questionSet.ImageUrl);
+                    questionSet.ImageUrl = await _fileService.SaveFile(request.Image);
+                }    
+
+                //remove old questions
                 var oldQuestions = await _context.Questions
                     .Where(q => q.QuestionSetId == questionSet.Id)
                     .ToListAsync();
                 _context.Questions.RemoveRange(oldQuestions);
 
-                var newQuestions = request.Questions.Select(x => new Question
+                //add new questions
+                var newQuestions = new List<Question>();
+                foreach(var question in request.Questions)
                 {
-                    Content = x.Content,
-                    ImageUrl = x.ImageUrl,
-                    AnswerA = x.AnswerA,
-                    AnswerB = x.AnswerB,
-                    AnswerC = x.AnswerC,
-                    AnswerD = x.AnswerD,
-                    CorrectAnswer = x.CorrectAnswer,
-                    QuestionSetId = questionSet.Id,
-                    Score = 0,
-                    Mark = x.Mark
-                }).ToList();
-                _context.Questions.AddRange(newQuestions);
+                    var newQuestion = new Question
+                    {
+                        Order = question.Order,
+                        Content = question.Content,
+                        ImageUrl = (question.Image != null)? await _fileService.SaveFile(question.Image) : null,
+                        AnswerA = question.AnswerA,
+                        AnswerB = question.AnswerB,
+                        AnswerC = question.AnswerC,
+                        AnswerD = question.AnswerD,
+                        CorrectAnswer = question.CorrectAnswer,
+                        QuestionSetId = questionSet.Id,
+                        Score = 0,
+                        Mark = question.Mark
+                    };
+                    newQuestions.Add(newQuestion);
+                }
+                questionSet.Questions = newQuestions;
 
+                _context.QuestionSets.Update(questionSet);
                 await _context.SaveChangesAsync();
+                #endregion
+
                 return new ApiResult();
             }
             catch (Exception e)

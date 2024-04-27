@@ -10,6 +10,8 @@ import { QuestionSetsComponent } from './components/question-sets/question-sets.
 import { QuestionSetsCreateComponent } from './components/question-sets-create/question-sets-create.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { QuestionSetsUpdateComponent } from './components/question-sets-update/question-sets-update.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -19,12 +21,14 @@ import { HttpClientModule } from '@angular/common/http';
     FooterComponent,
     QuestionSetsComponent,
     QuestionSetsCreateComponent,
+    QuestionSetsUpdateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

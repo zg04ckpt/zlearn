@@ -38,14 +38,14 @@ namespace ZG04.BE.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] QSCreateRequest request)
+        public async Task<IActionResult> Create([FromForm] QSCreateRequest request)
         {
             var result = await _questionSetService.Create(request);
             return ApiResult(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody] QSUpdateRequest questionSet)
+        public async Task<IActionResult> Update(string id, [FromForm] QSUpdateRequest questionSet)
         {
             var result = await _questionSetService.Update(id, questionSet);
             return ApiResult(result);
