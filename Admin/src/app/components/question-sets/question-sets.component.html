@@ -15,19 +15,19 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th class="narrow-column">STT</th>
-          <th>Tên</th>
-          <th>Ngày tạo</th>
-          <th>Người tạo</th>
-          <th>Số câu</th>
-          <th>Tùy chọn</th>
+          <th class="narrow-column text-info">STT</th>
+          <th class="text-info">Tên</th>
+          <th class="text-info">Ngày sửa đổi</th>
+          <th class="text-info">Người tạo</th>
+          <th class="text-info">Số câu</th>
+          <th class="text-info">Tùy chọn</th>
         </tr>
       </thead>
       <tbody class="table-border-bottom-0">
-        <tr *ngFor="let item of questionSetsList">
-          <td class="text-center">{{1}}</td>
+        <tr *ngFor="let item of questionSetsList; let i = index">
+          <td class="text-center">{{i+1}}</td>
           <td>{{item.name}}</td>
-          <td>{{item.createdDate | date: "dd/MM/yyyy"}}</td>
+          <td>{{item.updatedDate | date: "dd/MM/yyyy"}}</td>
           <td>{{item.creator}}</td>
           <td>{{item.questionCount}}</td>
           <td>
@@ -44,11 +44,90 @@
                   <i class="bx bx-trash me-1"></i> 
                   Delete
                 </a>
+                <a type="button" class="dropdown-item" (click)="showDetail(item)" data-bs-toggle="modal" data-bs-target="#detailModal">
+                  <i class='bx bx-detail me-1'></i>
+                  Detail
+                </a>
               </div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="detailModal" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title text-info" id="exampleModalLabel1">Chi tiết</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body overflow-auto" style="height: 60vh;">
+
+        <div class="row">
+          <div class="col-3 fw-bold">Tên:</div>
+          <div class="col-9" style="word-wrap: break-word;">
+            {{questionSet.name}}
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-3 fw-bold">Mô tả:</div>
+          <div class="col-9" style="word-wrap: break-word;">
+            {{questionSet.description}}
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-3 fw-bold">Ảnh:</div>
+          <div class="col-9">
+            <img [src]="questionSet.imageUrl" alt="image" 
+            style="object-fit: contain; width: 100%;">
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-3 fw-bold">Người tạo:</div>
+          <div class="col-9" style="word-wrap: break-word;">
+            {{questionSet.creator}}
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-3 fw-bold">Ngày tạo:</div>
+          <div class="col-9" style="word-wrap: break-word;">
+            {{questionSet.createdDate | date: "dd/MM/yyyy"}}
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-3 fw-bold">Ngày sửa đổi:</div>
+          <div class="col-9" style="word-wrap: break-word;">
+            {{questionSet.updatedDate | date: "dd/MM/yyyy"}}
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-3 fw-bold">Số câu hỏi:</div>
+          <div class="col-9" style="word-wrap: break-word;">
+            {{questionSet.questionCount}}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+
+    </div>
   </div>
 </div>

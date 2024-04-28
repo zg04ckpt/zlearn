@@ -146,10 +146,13 @@ export class QuestionSetsUpdateComponent {
         mark: false
       }
       this.service.update(this.id, request)
-      .subscribe(res => {
-        alert("Cập nhật bộ câu hỏi thành công")
-        
-      })
+      .subscribe(
+        res => {
+          alert("Cập nhật bộ câu hỏi thành công")
+          this.location.back();
+        },
+        error => alert("Error: " + JSON.stringify(error))
+      )
     }
   }
 

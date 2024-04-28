@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { QSCreateRequest } from 'src/app/interfaces/qsCreateRequest';
 import { QuestionModule } from 'src/app/models/question.module';
 import { QuestionSetsService } from 'src/app/services/question-sets.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-question-sets-create',
@@ -142,7 +143,7 @@ export class QuestionSetsCreateComponent {
     this.selectedCount = this.questions.filter(x => x.selected).length;
   }
 
-  onFileSelected(event: any) 
+  onImageFileSelected(event: any) 
   {
     const file: File = event.target.files[0];
     if(file) 
@@ -152,5 +153,31 @@ export class QuestionSetsCreateComponent {
       reader.onload = e => this.imageUrl = reader.result as string;
       reader.readAsDataURL(file);
     }
+  }
+
+  onExcelFileSelected(event: any)
+  {
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if(target.files.length != 1) throw new Error("Không thể tải lên nhiều file");
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+      const range: XLSX.Range = XLSX.utils.decode_range(ws['!ref']!);
+      for(let i=0; i<=range.e.r; i++)
+      {
+        let question: QuestionModule = new QuestionModule(i+1, "", "", " ", "", "", "", 1, false);
+        question.content = ws[XLSX.utils.encode_cell({c: 0, r: i})]?.v;
+        question.answerA = ws[XLSX.utils.encode_cell({c: 1, r: i})]?.v;
+        question.answerB = ws[XLSX.utils.encode_cell({c: 2, r: i})]?.v;
+        question.answerC = ws[XLSX.utils.encode_cell({c: 3, r: i})]?.v;
+        question.answerD = ws[XLSX.utils.encode_cell({c: 4, r: i})]?.v;
+        question.correctAnswer = Number(ws[XLSX.utils.encode_cell({c: 5, r: i})]?.v);
+        this.questions.push(question);
+      }
+    };
+    reader.readAsBinaryString(target.files[0]);
   }
 }

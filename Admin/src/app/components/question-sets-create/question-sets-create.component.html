@@ -1,7 +1,12 @@
 <div class="row">
     <div class="col-12">
-        <div class=" mb-3">
-            <h3  class="text-uppercase ">{{title}}</h3>
+        <div class="mb-3 d-flex justify-content-between">
+            <h3 class="text-uppercase ">{{title}}</h3>
+            <label for="chooseFile" class="btn btn-dark ">
+              Chọn file excel
+              <input type="file" (change)="onExcelFileSelected($event)" hidden="" class="account-file-input" id="chooseFile">
+            </label>
+            
         </div>
     </div>
 </div>
@@ -39,7 +44,7 @@
                           <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                             <span class="d-none d-sm-block">Tải ảnh mới</span>
                             <i class="bx bx-upload d-block d-sm-none"></i>
-                            <input type="file" id="upload" class="account-file-input" (change)="onFileSelected($event)" hidden="" accept="image/png, image/jpeg">
+                            <input type="file" id="upload" class="account-file-input" (change)="onImageFileSelected($event)" hidden="" accept="image/png, image/jpeg">
                           </label>
                           <button type="button"  class="btn btn-outline-secondary account-image-reset mb-4">
                             <i class="bx bx-reset d-block d-sm-none"></i>
