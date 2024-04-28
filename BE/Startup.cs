@@ -1,4 +1,5 @@
-using Application.System;
+using Application.Common;
+using Application.Practice;
 using Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,14 +8,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities;
+using ZG04.Utilities;
 
 namespace BE
 {
@@ -36,11 +39,22 @@ namespace BE
             });
 
             services.AddScoped<IQuestionSetService, QuestionSetService>();
-
+            services.AddScoped<IQuestionServices, QuestionService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BE", Version = "v1" });
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
             });
         }
 
@@ -56,7 +70,19 @@ namespace BE
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                                       Path.Combine(Directory.GetCurrentDirectory(), 
+                                       FileService.FOLDER_NAME)),
+                RequestPath = FileService.REQUEST_PATH
+            });
+
             app.UseRouting();
+
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 

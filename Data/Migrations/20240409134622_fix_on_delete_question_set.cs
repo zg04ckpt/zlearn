@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Data.Migrations
+namespace  Data.Migrations
 {
     public partial class fix_on_delete_question_set : Migration
     {
