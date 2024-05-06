@@ -70,6 +70,8 @@ export class QuestionSetsService {
       formData.append(`questions[${i}].correctAnswer`, request.questions[i].correctAnswer.toString());
       formData.append(`questions[${i}].mark`, request.questions[i].mark.toString());
     }
+    formData.append("testTime.minutes", request.testTime.minutes.toString());
+    formData.append("testTime.seconds", request.testTime.seconds.toString());
     return formData;
   }
 
@@ -96,6 +98,8 @@ export class QuestionSetsService {
       formData.append(`questions[${i}].correctAnswer`, request.questions[i].correctAnswer.toString());
       formData.append(`questions[${i}].mark`, request.questions[i].mark.toString());
     }
+    formData.append("testTime.minutes", request.testTime.minutes.toString());
+    formData.append("testTime.seconds", request.testTime.seconds.toString());
     return formData;
   }
 
@@ -134,7 +138,11 @@ export class QuestionSetsService {
       creator: data.creator,
       createdDate: data.createdDate,
       updatedDate: data.createdDate,
-      questionCount: data.questionCount
+      questionCount: data.questionCount,
+      testTime: {
+        minutes: data.testTime.minutes,
+        seconds: data.testTime.seconds
+      }
     }
     return questionSet;
   }
@@ -149,13 +157,16 @@ export class QuestionSetsService {
         imageUrl: element.imageUrl,
         creator: element.creator,
         createdDate: element.createdDate,
-        updatedDate: element.createdDate,
-        questionCount: element.questionCount
+        updatedDate: element.updatedDate,
+        questionCount: element.questionCount,
+        testTime: {
+          minutes: element.testTime.minutes,
+          seconds: element.testTime.seconds
+        }
       }
       questionSets.push(questionSet);
     });
     return questionSets;
   }
-
 
 }

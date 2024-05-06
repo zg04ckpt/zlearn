@@ -33,7 +33,11 @@ export class QuestionSetsCreateComponent {
     description: "",
     creator: "admin",
     image: new File([""], "filename"),
-    questions: []
+    questions: [],
+    testTime: {
+      minutes: 0,
+      seconds: 0
+    }
   }
 
   ngOnInit(): void {

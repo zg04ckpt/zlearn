@@ -42,7 +42,12 @@ namespace Application.Practice
                     Creator = request.Creator,
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now,
-                    ImageUrl = await _fileService.SaveFile(request.Image)
+                    ImageUrl = await _fileService.SaveFile(request.Image),
+                    TestTime = new TimeSpan(
+                        0,
+                        request.TestTime.Minutes,
+                        request.TestTime.Seconds
+                    )
                 };
 
                 //create questions
@@ -113,7 +118,12 @@ namespace Application.Practice
                         CreatedDate = qs.CreatedDate,
                         UpdatedDate = qs.UpdatedDate,
                         ImageUrl = _fileService.GetFileUrl(qs.ImageUrl),
-                        QuestionCount = qs.Questions.Count
+                        QuestionCount = qs.Questions.Count,
+                        TestTime = new TestTime
+                        {
+                            Minutes = qs.TestTime.Minutes,
+                            Seconds = qs.TestTime.Seconds
+                        }
                     }).ToListAsync();
 
                 return new ApiResult(questionSets);
@@ -141,7 +151,12 @@ namespace Application.Practice
                     CreatedDate = questionSet.CreatedDate,
                     UpdatedDate = questionSet.UpdatedDate,
                     ImageUrl = _fileService.GetFileUrl(questionSet.ImageUrl),
-                    QuestionCount = await _context.Questions.CountAsync(q => q.QuestionSetId == questionSet.Id)
+                    QuestionCount = await _context.Questions.CountAsync(q => q.QuestionSetId == questionSet.Id),
+                    TestTime = new TestTime
+                    {
+                        Minutes = questionSet.TestTime.Minutes,
+                        Seconds = questionSet.TestTime.Seconds
+                    }
                 });
             }
             catch (Exception e)
@@ -167,9 +182,14 @@ namespace Application.Practice
                 questionSet.Name = request.Name;
                 questionSet.Description = request.Description;
                 questionSet.UpdatedDate = DateTime.Now;
+                questionSet.TestTime = new TimeSpan(
+                        0,
+                        request.TestTime.Minutes,
+                        request.TestTime.Seconds
+                    );
 
                 //update image
-                if(request.Image != null)
+                if (request.Image != null)
                 {
                     await _fileService.DeleteFile(questionSet.ImageUrl);
                     questionSet.ImageUrl = await _fileService.SaveFile(request.Image);
