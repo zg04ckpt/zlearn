@@ -58,12 +58,21 @@
                 </div>
               </div>
 
+              <div class="mb-3 row">
+                <label for="min" class="col-2 col-form-label">Phút</label>
+                <div class="col-4">
+                  <input class="form-control" id="min" type="number" placeholder="Số phút" [(ngModel)]="qsCreateRequest.testTime.minutes">
+                </div>
+                <label for="sec" class="col-2 col-form-label">Giây</label>
+                <div class="col-4">
+                  <input class="form-control" id="sec" type="number" placeholder="Số giây" [(ngModel)]="qsCreateRequest.testTime.seconds">
+                </div>
+              </div>
+
               <div class="d-flex justify-content-center mt-5 ">
-                
                 <button (click)="checkValidAndConfirm()" type="button" class="btn btn-dark ms-1 " data-bs-toggle="modal" data-bs-target="#modalToggle">
                     Tạo mới
                 </button>
-
               </div>
             </div>
         </div>

@@ -40,6 +40,7 @@ namespace BE
 
             services.AddScoped<IQuestionSetService, QuestionSetService>();
             services.AddScoped<IQuestionServices, QuestionService>();
+            services.AddScoped<ITestResultService, TestResultService>();
             services.AddScoped<IFileService, FileService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>

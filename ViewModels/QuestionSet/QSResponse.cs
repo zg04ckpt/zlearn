@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,6 @@ namespace ViewModels.QuestionSet
         public DateTime UpdatedDate { get; set; }
         public string ImageUrl { get; set; }
         public int QuestionCount { get; set; }
+        public TestTime TestTime { get; set; }
     }
 }

@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { QuestionSetsUpdateComponent } from './components/question-sets-update/question-sets-update.component';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TestDetailsComponent } from './components/test-details/test-details.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FooterComponent,
     QuestionSetsComponent,
     QuestionSetsCreateComponent,
-    QuestionSetsUpdateComponent
+    QuestionSetsUpdateComponent,
+    TestDetailsComponent
   ],
   imports: [
     BrowserModule,

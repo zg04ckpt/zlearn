@@ -6,4 +6,8 @@ export interface QSCreateRequest {
     creator: string
     image: File
     questions: Question[]
+    testTime: {
+        minutes: number
+        seconds: number
+    }
 }

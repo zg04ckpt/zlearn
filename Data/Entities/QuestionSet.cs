@@ -15,6 +15,9 @@ namespace  Data.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public string ImageUrl { get; set; }
+        public TimeSpan TestTime { get; set; }
         public List<Question> Questions { get; set; }
+        public List<TestResult> TestResults { get; set; }
+        //--------------------------------------------
     }
 }

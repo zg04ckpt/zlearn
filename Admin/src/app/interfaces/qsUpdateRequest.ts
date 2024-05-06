@@ -6,4 +6,8 @@ export interface QSUpdateRequest {
     image: File | null
     questions: Question[]
     mark: boolean
+    testTime: {
+        minutes: number
+        seconds: number
+    }
 }

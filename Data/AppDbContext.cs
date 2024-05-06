@@ -21,6 +21,7 @@ namespace  Data
         #region DbSet
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionSet> QuestionSets { get; set; }
+        public DbSet<TestResult> TestResults { get; set; }
         #endregion
     }
 }

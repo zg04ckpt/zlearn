@@ -34,6 +34,10 @@ export class QuestionSetsUpdateComponent {
     createdDate: new Date(),
     updatedDate: new Date(),
     questionCount: 0,
+    testTime: {
+      minutes: 0,
+      seconds: 0
+    }
   }
 
   constructor(
@@ -143,7 +147,8 @@ export class QuestionSetsUpdateComponent {
             mark: false
           }
         }),
-        mark: false
+        mark: false,
+        testTime: this.questionSet.testTime
       }
       this.service.update(this.id, request)
       .subscribe(

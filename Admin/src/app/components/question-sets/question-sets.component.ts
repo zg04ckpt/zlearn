@@ -10,7 +10,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./question-sets.component.css']
 })
 export class QuestionSetsComponent {
-  questionSet: QuestionSetsModule = new QuestionSetsModule("", "", "", "", "", new Date(), new Date(), 0);
+  questionSet: QuestionSetsModule = new QuestionSetsModule(
+    "", "", "", "", "", new Date(), new Date(), 0, {minutes: 0, seconds: 0});
   questionSetsList: QuestionSetsModule[] = [];
 
   constructor(

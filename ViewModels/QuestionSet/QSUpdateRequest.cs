@@ -15,5 +15,6 @@ namespace ViewModels.QuestionSet
         public IFormFile Image { get; set; }
         public bool Mark { get; set; }
         public List<QuestionRequest> Questions { get; set; }
+        public TestTime TestTime { get; set; }
     }
 }

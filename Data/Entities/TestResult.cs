@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Data.Entities
+{
+    public class TestResult
+    {
+        public Guid Id { get; set; }
+        public decimal Score { get; set; }
+        public int CorrectsCount { get; set; }
+        public TimeSpan UsedTime { get; set; }
+        public DateTime StartTime { get; set; }
+        public string UserInfo { get; set; } //temporary
+        //----------------------------------------------
+        public Guid QuestionSetId { get; set; }
+        public QuestionSet QuestionSet { get; set; }
+    }
+}
