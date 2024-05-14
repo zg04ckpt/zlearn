@@ -8,6 +8,8 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionSetService } from 'src/app/services/question-set.service';
 import { QuestionService } from 'src/app/services/question.service';
+import { TestResultRequest } from 'src/app/models/test-result.request';
+import { TestResultService } from 'src/app/services/test-result.service';
 
 @Component({
   selector: 'app-test',
@@ -21,7 +23,6 @@ export class TestComponent {
     status: TestStatus.InProgress,
     result: null
   }
-
   qSet: QuestionSet = {
     id: '',
     name: '',
@@ -33,9 +34,8 @@ export class TestComponent {
     numberOfQuestions: 0,
     testTime: { minutes: 0, seconds: 0 }
   }
-
+  startTime: Date = new Date();
   questions: Question[] = []
-
   showSelectedTable: boolean = false;
   currentTime: TestTime = { minutes: 0, seconds: 0 }
   subscription: Subscription = new Subscription();
@@ -44,7 +44,8 @@ export class TestComponent {
     private location: Location,
     private route: ActivatedRoute,
     private questionSetService: QuestionSetService,
-    private questionService: QuestionService
+    private questionService: QuestionService,
+    private testResultService: TestResultService
   ) { }
 
   ngOnInit() {
@@ -92,7 +93,7 @@ export class TestComponent {
           } else {
             this.test.status = TestStatus.Completed;
             this.subscription.unsubscribe();
-            this.markTest();
+            this.showResult();
           }
         }
       }
@@ -122,15 +123,13 @@ export class TestComponent {
     this.location.back();
   }
 
-  markTest() {
+  showResult() {
     let corrects = 0;
     this.questions.forEach(q => {
       if (q.selectedAnswer === q.correctAnswer) {
         corrects++;
       }
     });
-
-    console.log(this.test.duration);
 
     let used_seconds = 
       this.test.duration.minutes * 60 + this.test.duration.seconds
@@ -144,13 +143,31 @@ export class TestComponent {
         seconds: used_seconds % 60
       }
     }
+
+    this.sendResultToServer();
+  }
+
+  sendResultToServer() {
+    let testResult: TestResultRequest = {
+      score: this.test.result!.score,
+      correctsCount: this.test.result!.corrects,
+      usedTime: this.test.result!.used_time,
+      startTime: this.startTime,
+      userInfo: 'Undefined',
+      questionSetId: this.qSet.id
+    }
+
+    this.testResultService.create(testResult).subscribe( response => {
+      if(response.code !== 200) 
+          console.log('Failed to send test result');
+    }); 
   }
 
   confirm() {
     if(confirm('Bạn có chắc chắn muốn kết thúc?')) {
       this.test.status = TestStatus.Completed;
       this.subscription.unsubscribe();
-      this.markTest();
+      this.showResult();
     }
   }
 }

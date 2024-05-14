@@ -5,7 +5,7 @@ export interface TestResultRequest {
         minutes: number
         seconds: number
     }
-    startTime: string
+    startTime: Date
     userInfo: string
     questionSetId: string
 }

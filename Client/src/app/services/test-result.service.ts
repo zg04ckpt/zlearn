@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
 import { TestResult } from '../models/test-result';
 import { TestResultRequest } from '../models/test-result.request';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,10 @@ export class TestResultService {
   constructor(private httpClient: HttpClient) { }
   baseUrl = environment.baseUrl;
 
-  create(data: TestResultRequest) {
+  create(data: TestResultRequest): Observable<any> {
     return this.httpClient.post<TestResult>(
       `${this.baseUrl}/api/test-results`,
       data
     );
   }
-  
 }

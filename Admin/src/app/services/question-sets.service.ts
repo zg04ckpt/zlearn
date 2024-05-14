@@ -16,7 +16,9 @@ export class QuestionSetsService {
   constructor(private httpClient: HttpClient) { }
 
   getAll() : Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/api/question-sets`);
+    return this.httpClient.get(
+      `${this.baseUrl}/api/question-sets`
+    );
   }
 
   getById(id: string): Observable<any> {
