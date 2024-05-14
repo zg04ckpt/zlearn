@@ -6,6 +6,8 @@ import { Test, TestStatus } from 'src/app/models/test';
 import { TestTime } from 'src/app/models/test-time';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { QuestionSetService } from 'src/app/services/question-set.service';
+import { QuestionService } from 'src/app/services/question.service';
 
 @Component({
   selector: 'app-test',
@@ -21,19 +23,19 @@ export class TestComponent {
   }
 
   qSet: QuestionSet = {
-    id: '1',
-    name: 'Đề 1',
-    description: 'Test 1 description',
+    id: '',
+    name: '',
+    description: '',
     imageUrl: '',
-    creator: 'admin',
+    creator: '',
     createdDate: new Date(),
     updatedDate: new Date(),
-    numberOfQuestions: 50
+    numberOfQuestions: 0,
+    testTime: { minutes: 0, seconds: 0 }
   }
 
   questions: Question[] = []
 
-  qTags: any[] = []
   showSelectedTable: boolean = false;
   currentTime: TestTime = { minutes: 0, seconds: 0 }
   subscription: Subscription = new Subscription();
@@ -41,18 +43,43 @@ export class TestComponent {
   constructor(
     private location: Location,
     private route: ActivatedRoute,
+    private questionSetService: QuestionSetService,
+    private questionService: QuestionService
   ) { }
 
   ngOnInit() {
     this.qSet.id = this.route.snapshot.paramMap.get('id')!;
 
+    this.questionSetService.getById(this.qSet.id).subscribe(response => {
+      if(response.code !== 200) 
+          return alert('Failed to fetch data');
+      this.qSet = {
+        id: response.data.id,
+        name: response.data.name,
+        description: response.data.description,
+        imageUrl: response.data.imageUrl,
+        creator: response.data.creator,
+        createdDate: response.data.createdDate,
+        updatedDate: response.data.updatedDate,
+        numberOfQuestions: response.data.questionCount,
+        testTime: { 
+          minutes: response.data.testTime.minutes, 
+          seconds: response.data.testTime.seconds 
+        }
+      };
+
+      this.test.duration = this.qSet.testTime;
+      this.currentTime = {...this.test.duration};
+    });
+
     this.test = {
-      duration: { minutes: 1, seconds: 15 },
+      duration: { 
+        minutes: 1, 
+        seconds: 15 
+      },
       status: TestStatus.InProgress,
       result: null
     }
-
-    this.currentTime = {...this.test.duration};
 
     this.subscription = interval(1000).subscribe(x => {
       if (this.test.status === TestStatus.InProgress) {
@@ -71,24 +98,24 @@ export class TestComponent {
       }
     });
 
-    for (let i=0; i<this.qSet.numberOfQuestions; i++) {
-      this.qTags.push(i+1);
-    }
-
-    //seed
-    for (let i=0; i<this.qSet.numberOfQuestions; i++) {
-      this.questions.push({
-        order: i+1,
-        content: `Câu ${i+1}: Nội dung câu hỏi ${i+1}`,
-        answerA: 'Đáp án A',
-        answerB: 'Đáp án B',
-        answerC: 'Đáp án C',
-        answerD: 'Đáp án D',
-        correctAnswer: 1,
-        selectedAnswer: 0,
-        mark: false
-      })
-    }
+    this.questionService.getAllById(this.qSet.id).subscribe(response => {
+      if(response.code !== 200) 
+          return alert('Failed to fetch data');
+      response.data.forEach(item => {
+        this.questions.push({
+          order: item.order,
+          content: item.content,
+          imageUrl: null,
+          answerA: item.answerA,
+          answerB: item.answerB,
+          answerC: item.answerC,
+          answerD: item.answerD,
+          correctAnswer: item.correctAnswer,
+          selectedAnswer: 0,
+          mark: item.mark
+        });
+      });
+    });
   }
 
   back() {

@@ -2,6 +2,7 @@ export interface Question
 {
     order: number
     content: string
+    imageUrl: string | null
     answerA: string
     answerB: string
     answerC: string
