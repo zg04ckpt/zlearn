@@ -51,6 +51,10 @@ namespace Application.Practice
         {
             try
             {
+                //chỉnh múi giờ
+                TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+                request.StartTime = TimeZoneInfo.ConvertTimeFromUtc(request.StartTime, cstZone);
+
                 var testResult = new TestResult
                 {
                     Id = Guid.NewGuid(),
@@ -62,6 +66,20 @@ namespace Application.Practice
                     QuestionSetId = request.QuestionSetId
                 };
                 await _context.TestResults.AddAsync(testResult);
+                await _context.SaveChangesAsync();
+                return new ApiResult();
+            }
+            catch (Exception e)
+            {
+                return new ApiResult(e.Message, System.Net.HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ApiResult> RemoveAll()
+        {
+            try
+            {
+                _context.TestResults.RemoveRange(_context.TestResults);
                 await _context.SaveChangesAsync();
                 return new ApiResult();
             }

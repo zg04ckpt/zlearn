@@ -29,13 +29,22 @@ namespace BE.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] TestResultCreateRequest request)
+        public async Task<IActionResult> Create([FromBody] TestResultCreateRequest request)
         {
             var result = await _testResultService.Create(request);
             if (result.Code == System.Net.HttpStatusCode.InternalServerError)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, result);
             }
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAll()
+        {
+            var result = await _testResultService.RemoveAll();
+            if(result.Code == System.Net.HttpStatusCode.InternalServerError)
+                return StatusCode(StatusCodes.Status500InternalServerError, result);
             return Ok(result);
         }
     }

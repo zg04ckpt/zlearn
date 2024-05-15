@@ -6,6 +6,10 @@ import { Test, TestStatus } from 'src/app/models/test';
 import { TestTime } from 'src/app/models/test-time';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { QuestionSetService } from 'src/app/services/question-set.service';
+import { QuestionService } from 'src/app/services/question.service';
+import { TestResultRequest } from 'src/app/models/test-result.request';
+import { TestResultService } from 'src/app/services/test-result.service';
 
 @Component({
   selector: 'app-test',
@@ -19,21 +23,19 @@ export class TestComponent {
     status: TestStatus.InProgress,
     result: null
   }
-
   qSet: QuestionSet = {
-    id: '1',
-    name: 'Đề 1',
-    description: 'Test 1 description',
+    id: '',
+    name: '',
+    description: '',
     imageUrl: '',
-    creator: 'admin',
+    creator: '',
     createdDate: new Date(),
     updatedDate: new Date(),
-    numberOfQuestions: 50
+    numberOfQuestions: 0,
+    testTime: { minutes: 0, seconds: 0 }
   }
-
+  startTime: Date = new Date();
   questions: Question[] = []
-
-  qTags: any[] = []
   showSelectedTable: boolean = false;
   currentTime: TestTime = { minutes: 0, seconds: 0 }
   subscription: Subscription = new Subscription();
@@ -41,18 +43,44 @@ export class TestComponent {
   constructor(
     private location: Location,
     private route: ActivatedRoute,
+    private questionSetService: QuestionSetService,
+    private questionService: QuestionService,
+    private testResultService: TestResultService
   ) { }
 
   ngOnInit() {
     this.qSet.id = this.route.snapshot.paramMap.get('id')!;
 
+    this.questionSetService.getById(this.qSet.id).subscribe(response => {
+      if(response.code !== 200) 
+          return alert('Failed to fetch data');
+      this.qSet = {
+        id: response.data.id,
+        name: response.data.name,
+        description: response.data.description,
+        imageUrl: response.data.imageUrl,
+        creator: response.data.creator,
+        createdDate: response.data.createdDate,
+        updatedDate: response.data.updatedDate,
+        numberOfQuestions: response.data.questionCount,
+        testTime: { 
+          minutes: response.data.testTime.minutes, 
+          seconds: response.data.testTime.seconds 
+        }
+      };
+
+      this.test.duration = this.qSet.testTime;
+      this.currentTime = {...this.test.duration};
+    });
+
     this.test = {
-      duration: { minutes: 1, seconds: 15 },
+      duration: { 
+        minutes: 1, 
+        seconds: 15 
+      },
       status: TestStatus.InProgress,
       result: null
     }
-
-    this.currentTime = {...this.test.duration};
 
     this.subscription = interval(1000).subscribe(x => {
       if (this.test.status === TestStatus.InProgress) {
@@ -65,45 +93,43 @@ export class TestComponent {
           } else {
             this.test.status = TestStatus.Completed;
             this.subscription.unsubscribe();
-            this.markTest();
+            this.showResult();
           }
         }
       }
     });
 
-    for (let i=0; i<this.qSet.numberOfQuestions; i++) {
-      this.qTags.push(i+1);
-    }
-
-    //seed
-    for (let i=0; i<this.qSet.numberOfQuestions; i++) {
-      this.questions.push({
-        order: i+1,
-        content: `Câu ${i+1}: Nội dung câu hỏi ${i+1}`,
-        answerA: 'Đáp án A',
-        answerB: 'Đáp án B',
-        answerC: 'Đáp án C',
-        answerD: 'Đáp án D',
-        correctAnswer: 1,
-        selectedAnswer: 0,
-        mark: false
-      })
-    }
+    this.questionService.getAllById(this.qSet.id).subscribe(response => {
+      if(response.code !== 200) 
+          return alert('Failed to fetch data');
+      response.data.forEach(item => {
+        this.questions.push({
+          order: item.order,
+          content: item.content,
+          imageUrl: null,
+          answerA: item.answerA,
+          answerB: item.answerB,
+          answerC: item.answerC,
+          answerD: item.answerD,
+          correctAnswer: item.correctAnswer,
+          selectedAnswer: 0,
+          mark: item.mark
+        });
+      });
+    });
   }
 
   back() {
     this.location.back();
   }
 
-  markTest() {
+  showResult() {
     let corrects = 0;
     this.questions.forEach(q => {
       if (q.selectedAnswer === q.correctAnswer) {
         corrects++;
       }
     });
-
-    console.log(this.test.duration);
 
     let used_seconds = 
       this.test.duration.minutes * 60 + this.test.duration.seconds
@@ -117,13 +143,31 @@ export class TestComponent {
         seconds: used_seconds % 60
       }
     }
+
+    this.sendResultToServer();
+  }
+
+  sendResultToServer() {
+    let testResult: TestResultRequest = {
+      score: this.test.result!.score,
+      correctsCount: this.test.result!.corrects,
+      usedTime: this.test.result!.used_time,
+      startTime: this.startTime,
+      userInfo: 'Undefined',
+      questionSetId: this.qSet.id
+    }
+
+    this.testResultService.create(testResult).subscribe( response => {
+      if(response.code !== 200) 
+          console.log('Failed to send test result');
+    }); 
   }
 
   confirm() {
     if(confirm('Bạn có chắc chắn muốn kết thúc?')) {
       this.test.status = TestStatus.Completed;
       this.subscription.unsubscribe();
-      this.markTest();
+      this.showResult();
     }
   }
 }

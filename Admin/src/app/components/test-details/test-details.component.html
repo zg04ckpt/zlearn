@@ -1,7 +1,11 @@
 <div class="card">
     <div class="row">
-      <div class="col-10">
+      <div class="col-12 d-flex justify-content-between">
         <h5 class="card-header">History</h5>
+        <div class="d-flex">
+          <button class="btn btn-outline-secondary m-3" (click)="saveDataAsExcel()">Tải xuống</button>
+          <button class="btn btn-danger my-3 me-3" (click)="deleteAll()">Xóa hết lịch sử</button>
+        </div>
       </div>
     </div>
     
@@ -25,7 +29,7 @@
             <td>{{item.correctsCount}}</td>
             <td>{{item.score}}</td>
             <td>{{item.startTime| date: "dd/MM/yyyy - HH:mm:ss"}}</td>
-            <td>{{item.usedTime.minutes}}:{{item.usedTime.seconds}}</td>
+            <td>{{item.usedTime.minutes.toString().padStart(2, '0')}}:{{item.usedTime.seconds.toString().padStart(2, '0')}}</td>
     
           </tr>
         </tbody>

@@ -18,4 +18,8 @@ export class TestResultDetailService {
       `${this.baseUrl}/api/test-results`
     );
   }
+
+  deleteAll(): Observable<any> {
+    return this.httpClient.delete(`${this.baseUrl}/api/test-results`);
+  }
 }

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { QuestionSet } from 'src/app/models/question-set';
+import { QuestionSetService } from 'src/app/services/question-set.service';
 
 @Component({
   selector: 'app-list-question-set',
@@ -6,30 +8,29 @@ import { Component } from '@angular/core';
   styleUrls: ['./list-question-set.component.css']
 })
 export class ListQuestionSetComponent {
-  list: any[] = [
-    { 
-      id: 1, 
-      name: 'Đề 1',
-      creator: 'Admin',
-      updated: '24/03/24',
-      desc: 'Đây là đề số 1',
-      numberOfQuestions: 10
-    },
-    { 
-      id: 2, 
-      name: 'Đề 2',
-      creator: 'Admin',
-      updated: '12/04/24',
-      desc: 'Đây là đề số 2',
-      numberOfQuestions: 20
-    },
-    { 
-      id: 3, 
-      name: 'Đề 3',
-      creator: 'Admin',
-      updated: '19/08/23',
-      desc: 'Đây là đề số 3',
-      numberOfQuestions: 40
-    },
-  ];
+  list: QuestionSet[] = [];
+
+  constructor(
+    private questionSetService: QuestionSetService
+  ) { }
+
+  ngOnInit() {
+    this.questionSetService.getAll().subscribe(response => {
+      if(response.code !== 200) 
+          return alert('Failed to fetch data');
+      response.data.forEach(item => {
+        this.list.push({
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          imageUrl: item.imageUrl,
+          creator: item.creator,
+          createdDate: item.createdDate,
+          updatedDate: item.updatedDate,
+          numberOfQuestions: item.questionCount,
+          testTime: item.testTime
+        });
+      });
+    });
+  }
 }

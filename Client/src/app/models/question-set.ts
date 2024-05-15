@@ -8,4 +8,8 @@ export interface QuestionSet
     createdDate: Date
     updatedDate: Date
     numberOfQuestions: number
+    testTime: {
+        minutes: number
+        seconds: number
+    }
 }
