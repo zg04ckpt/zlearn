@@ -9,11 +9,13 @@ import { FooterComponent } from './components/footer/footer.component';
 import { QuestionSetsComponent } from './components/question-sets/question-sets.component';
 import { QuestionSetsCreateComponent } from './components/question-sets-create/question-sets-create.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { QuestionSetsUpdateComponent } from './components/question-sets-update/question-sets-update.component';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TestDetailsComponent } from './components/test-details/test-details.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthInterceptor } from './services/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { TestDetailsComponent } from './components/test-details/test-details.com
     QuestionSetsComponent,
     QuestionSetsCreateComponent,
     QuestionSetsUpdateComponent,
-    TestDetailsComponent
+    TestDetailsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,9 @@ import { TestDetailsComponent } from './components/test-details/test-details.com
     CommonModule,
     NgbModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

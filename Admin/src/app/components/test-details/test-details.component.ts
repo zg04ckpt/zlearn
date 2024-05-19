@@ -37,6 +37,20 @@ export class TestDetailsComponent {
             questionSetId: item.questionSetId
           })
         })
+      },error => {
+        if(error.status == 401)
+        {
+          alert("You must login to do this action");
+          localStorage.removeItem('token');
+          window.location.href = "/login";``
+        }
+        else if(error.status == 403)
+        {
+          alert("You don't have permission to view this page");
+          window.location.href = "/";
+        }
+        else
+          alert("Error: " + JSON.stringify(error));
       }
     )
   }

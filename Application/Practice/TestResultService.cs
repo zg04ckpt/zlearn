@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels.Common;
@@ -43,7 +44,7 @@ namespace Application.Practice
             }
             catch (Exception e)
             {
-                return new ApiResult(e.Message, System.Net.HttpStatusCode.InternalServerError);
+                return new ApiResult(e.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -71,7 +72,7 @@ namespace Application.Practice
             }
             catch (Exception e)
             {
-                return new ApiResult(e.Message, System.Net.HttpStatusCode.InternalServerError);
+                return new ApiResult(e.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -85,7 +86,7 @@ namespace Application.Practice
             }
             catch (Exception e)
             {
-                return new ApiResult(e.Message, System.Net.HttpStatusCode.InternalServerError);
+                return new ApiResult(e.Message, HttpStatusCode.InternalServerError);
             }
         }
     }

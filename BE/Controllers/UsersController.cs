@@ -1,29 +1,32 @@
-﻿using Application.Practice;
+﻿using Application.System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Threading.Tasks;
 using ViewModels.Common;
+using ViewModels.System;
 
 namespace BE.Controllers
 {
-    [Route("api/questions")]
+    [Route("api/users")]
     [ApiController]
-    public class QuestionsController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly IQuestionServices _services;
-        private readonly ILogger<QuestionsController> _logger;
+        private readonly IUserService _userService;
+        private readonly ILogger<UsersController> _logger;
 
-        public QuestionsController(IQuestionServices services)
+        public UsersController(IUserService userService)
         {
-            _services = services;
+            _userService = userService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByQuestionSetId(string id)
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromForm]LoginRequest request)
         {
-            var result = await _services.GetByQuestionSetId(id);
+            var result = await _userService.Authenticate(request);
             return ApiResult(result);
         }
 
@@ -32,7 +35,6 @@ namespace BE.Controllers
             if (result.Code == HttpStatusCode.OK)
                 return Ok(result);
 
-            _logger.LogError(result.Message);
             if (result.Code == HttpStatusCode.BadRequest)
                 return BadRequest(result);
             if (result.Code == HttpStatusCode.NotFound)

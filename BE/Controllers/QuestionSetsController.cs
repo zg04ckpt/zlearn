@@ -1,5 +1,5 @@
 ﻿using Application.Practice;
-using Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -37,6 +37,7 @@ namespace ZG04.BE.Controllers
             return ApiResult(result);
         }
 
+        [Authorize(Roles = "Editor, Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] QSCreateRequest request)
         {
@@ -44,6 +45,7 @@ namespace ZG04.BE.Controllers
             return ApiResult(result);
         }
 
+        [Authorize(Roles = "Editor, Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromForm] QSUpdateRequest questionSet)
         {
@@ -51,6 +53,7 @@ namespace ZG04.BE.Controllers
             return ApiResult(result);
         }
 
+        [Authorize(Roles = "Editor, Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
