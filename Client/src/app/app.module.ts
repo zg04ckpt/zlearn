@@ -7,13 +7,15 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ListQuestionSetComponent } from './components/list-question-set/list-question-set.component';
 import { TestComponent } from './components/test/test.component';
 import { CommonModule } from '@angular/common';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     ListQuestionSetComponent,
-    TestComponent
+    TestComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

@@ -110,6 +110,7 @@ namespace Application.Practice
             {
                 var questionSets = await _context.QuestionSets
                     .Include(qs => qs.Questions)
+                    .Include(qs => qs.TestResults)
                     .Select(qs => new QSResponse
                     {
                         Id = qs.Id,
@@ -119,6 +120,7 @@ namespace Application.Practice
                         CreatedDate = qs.CreatedDate,
                         UpdatedDate = qs.UpdatedDate,
                         ImageUrl = _fileService.GetFileUrl(qs.ImageUrl),
+                        AttemptCount = qs.TestResults.Count,
                         QuestionCount = qs.Questions.Count,
                         TestTime = new TestTime
                         {
@@ -152,6 +154,7 @@ namespace Application.Practice
                     CreatedDate = questionSet.CreatedDate,
                     UpdatedDate = questionSet.UpdatedDate,
                     ImageUrl = _fileService.GetFileUrl(questionSet.ImageUrl),
+                    AttemptCount = await _context.TestResults.CountAsync(tr => tr.QuestionSetId == questionSet.Id),
                     QuestionCount = await _context.Questions.CountAsync(q => q.QuestionSetId == questionSet.Id),
                     TestTime = new TestTime
                     {

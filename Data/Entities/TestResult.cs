@@ -13,8 +13,8 @@ namespace Data.Entities
         public int CorrectsCount { get; set; }
         public TimeSpan UsedTime { get; set; }
         public DateTime StartTime { get; set; }
-        public string UserInfo { get; set; } //temporary
-        //----------------------------------------------
+        public string UserInfo { get; set; }
+        public string Detail { get; set; }
         public Guid QuestionSetId { get; set; }
         public QuestionSet QuestionSet { get; set; }
     }

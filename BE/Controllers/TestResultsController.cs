@@ -23,6 +23,7 @@ namespace BE.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _testResultService.GetAll();
@@ -32,7 +33,7 @@ namespace BE.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] TestResultCreateRequest request)
         {
-            var result = await _testResultService.Create(request);
+            var result = await _testResultService.Create(request, HttpContext.Connection);
             return ApiResult(result);
         }
 
