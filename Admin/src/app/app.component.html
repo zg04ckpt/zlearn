@@ -1,5 +1,5 @@
 <!-- Layout wrapper -->
-<div class="layout-wrapper layout-content-navbar">
+<div *ngIf="!isLogin" class="layout-wrapper layout-content-navbar">
   <div class="layout-container">
 
     <!--Left menu-->
@@ -30,4 +30,8 @@
     </div>
   </div>
 </div>
+
+<app-login *ngIf="isLogin"></app-login>
+
+
 

@@ -138,6 +138,15 @@ export class QuestionSetsCreateComponent {
         console.log(res.message);
         alert("Lưu thành công");
         this.location.back();
+      }, error => {
+        if(error.status == 401)
+        {
+          alert("You must login to do this action");
+          localStorage.removeItem('token');
+          window.location.href = "/login";``
+        }
+        else
+          alert("Error: " + JSON.stringify(error));
       })
     }
   }

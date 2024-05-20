@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { QuestionSet } from 'src/app/models/question-set';
 import { QuestionSetService } from 'src/app/services/question-set.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-list-question-set',
@@ -9,7 +10,7 @@ import { QuestionSetService } from 'src/app/services/question-set.service';
 })
 export class ListQuestionSetComponent {
   list: QuestionSet[] = [];
-
+  baseUrl: string = environment.baseUrl;
   constructor(
     private questionSetService: QuestionSetService
   ) { }
@@ -23,10 +24,11 @@ export class ListQuestionSetComponent {
           id: item.id,
           name: item.name,
           description: item.description,
-          imageUrl: item.imageUrl,
+          imageUrl: this.baseUrl + item.imageUrl,
           creator: item.creator,
           createdDate: item.createdDate,
           updatedDate: item.updatedDate,
+          attemptCount: item.attemptCount,
           numberOfQuestions: item.questionCount,
           testTime: item.testTime
         });

@@ -7,6 +7,7 @@ export interface QuestionSetResponse {
         createdDate: Date
         updatedDate: Date
         imageUrl: string
+        attemptCount: number
         questionCount: number
         testTime: {
             minutes: number

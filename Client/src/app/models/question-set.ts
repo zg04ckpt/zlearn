@@ -7,6 +7,7 @@ export interface QuestionSet
     creator: string
     createdDate: Date
     updatedDate: Date
+    attemptCount: number
     numberOfQuestions: number
     testTime: {
         minutes: number

@@ -31,6 +31,7 @@ export class TestComponent {
     creator: '',
     createdDate: new Date(),
     updatedDate: new Date(),
+    attemptCount: 0,
     numberOfQuestions: 0,
     testTime: { minutes: 0, seconds: 0 }
   }
@@ -62,6 +63,7 @@ export class TestComponent {
         creator: response.data.creator,
         createdDate: response.data.createdDate,
         updatedDate: response.data.updatedDate,
+        attemptCount: response.data.attemptCount,
         numberOfQuestions: response.data.questionCount,
         testTime: { 
           minutes: response.data.testTime.minutes, 

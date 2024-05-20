@@ -1,9 +1,11 @@
 ﻿using Data;
 using Data.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels.Common;
@@ -43,11 +45,11 @@ namespace Application.Practice
             }
             catch (Exception e)
             {
-                return new ApiResult(e.Message, System.Net.HttpStatusCode.InternalServerError);
+                return new ApiResult(e.Message, HttpStatusCode.InternalServerError);
             }
         }
 
-        public async Task<ApiResult> Create(TestResultCreateRequest request)
+        public async Task<ApiResult> Create(TestResultCreateRequest request, ConnectionInfo connectionInfo)
         {
             try
             {
@@ -63,6 +65,7 @@ namespace Application.Practice
                     UsedTime = new TimeSpan(0, request.UsedTime.Minutes, request.UsedTime.Seconds),
                     StartTime = request.StartTime,
                     UserInfo = request.UserInfo,
+                    Detail= $"IP: {connectionInfo.RemoteIpAddress}",
                     QuestionSetId = request.QuestionSetId
                 };
                 await _context.TestResults.AddAsync(testResult);
@@ -71,7 +74,7 @@ namespace Application.Practice
             }
             catch (Exception e)
             {
-                return new ApiResult(e.Message, System.Net.HttpStatusCode.InternalServerError);
+                return new ApiResult(e.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -85,7 +88,7 @@ namespace Application.Practice
             }
             catch (Exception e)
             {
-                return new ApiResult(e.Message, System.Net.HttpStatusCode.InternalServerError);
+                return new ApiResult(e.Message, HttpStatusCode.InternalServerError);
             }
         }
     }

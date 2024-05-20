@@ -27,7 +27,17 @@ export class QuestionSetsComponent {
         this.questionSetsList = this.service.convertToListQuestionSet(data)
         this.questionSetsList.forEach(x => x.imageUrl = environment.baseUrl + x.imageUrl)
       },
-      error => alert("Error: " + JSON.stringify(error))
+      error => 
+      {
+        if(error.status == 401)
+        {
+          alert("You must login to do this action");
+          localStorage.removeItem('token');
+          window.location.href = "/login";
+        }
+        else
+          alert("Error: " + JSON.stringify(error));
+      }
   )}
 
   deleteQuestionSet(id: string) 

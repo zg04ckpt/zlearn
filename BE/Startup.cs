@@ -1,9 +1,14 @@
-using Application.Common;
+﻿using Application.Common;
 using Application.Practice;
+using Application.System;
 using Data;
+using Data.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,12 +16,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Common;
 using ZG04.Utilities;
 
 namespace BE
@@ -38,14 +46,54 @@ namespace BE
                 options.UseSqlServer(Configuration.GetConnectionString(Constants.CONNECTION_STRING));
             });
 
+            services.AddIdentity<AppUser, AppRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddScoped<IQuestionSetService, QuestionSetService>();
             services.AddScoped<IQuestionServices, QuestionService>();
             services.AddScoped<ITestResultService, TestResultService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddTransient<IUserService, UserService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BE", Version = "v1" });
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration["Tokens:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["Tokens:Issuer"],
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])),
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                //cấu hình khi token hết hạn
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        if(context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             services.AddCors(options =>
@@ -81,16 +129,25 @@ namespace BE
                 RequestPath = FileService.REQUEST_PATH
             });
 
-            app.UseRouting();
+            
 
             app.UseCors("AllowAll");
 
+            app.UseAuthentication();
+            app.UseRouting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+                var services = scope.ServiceProvider;
+                SeedData.Initialize(services, userManager).Wait();
+            }
         }
     }
 }

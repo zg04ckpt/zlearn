@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace  Data
 {
@@ -13,7 +8,7 @@ namespace  Data
         public AppDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlServer("Data Source=ZG04-CKPT\\SQLEXPRESS;Initial Catalog=zg04web;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+            optionsBuilder.UseSqlServer("Server=tcp:zg04ckpt.database.windows.net,1433;Initial Catalog=zg04ckpt;Persist Security Info=False;User ID=zg04ckpt;Password=Hcn14022004!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             return new AppDbContext(optionsBuilder.Options);
         }
     }

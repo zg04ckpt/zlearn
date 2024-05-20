@@ -18,6 +18,5 @@ namespace  Data.Entities
         public TimeSpan TestTime { get; set; }
         public List<Question> Questions { get; set; }
         public List<TestResult> TestResults { get; set; }
-        //--------------------------------------------
     }
 }

@@ -156,7 +156,16 @@ export class QuestionSetsUpdateComponent {
           alert("Cập nhật bộ câu hỏi thành công")
           this.location.back();
         },
-        error => alert("Error: " + JSON.stringify(error))
+        error => {
+          if(error.status == 401)
+          {
+            alert("You must login to do this action");
+            localStorage.removeItem('token');
+            window.location.href = "/login";``
+          }
+          else
+            alert("Error: " + JSON.stringify(error));
+        }
       )
     }
   }
