@@ -48,6 +48,7 @@ export class QuestionSetsComponent {
         data => {
           this.questionSetsList = this.service.convertToListQuestionSet(data)
           alert("Delete successfully! Please reload the page to see the changes.")
+          window.location.reload();
         },
         error => alert("Error: " + JSON.stringify(error))
       )

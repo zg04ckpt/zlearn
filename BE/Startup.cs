@@ -1,6 +1,7 @@
 ﻿using Application.Common;
 using Application.Practice;
 using Application.System;
+using AspNetCoreRateLimit;
 using Data;
 using Data.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -56,10 +57,16 @@ namespace BE
             services.AddScoped<IFileService, FileService>();
             services.AddTransient<IUserService, UserService>();
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BE", Version = "v1" });
             });
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>(); // Đăng ký IProcessingStrategy
+            services.AddSingleton<IClientPolicyStore, MemoryCacheClientPolicyStore>(); // Đăng ký IClientPolicyStore
 
             services.AddAuthentication(options =>
             {
@@ -76,7 +83,7 @@ namespace BE
                     ValidIssuer = Configuration["Tokens:Issuer"],
                     ValidateAudience = true,
                     ValidAudience = Configuration["Tokens:Issuer"],
-                    ValidateLifetime = true,
+                    ValidateLifetime = false,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])),
                     ClockSkew = TimeSpan.Zero
@@ -105,49 +112,16 @@ namespace BE
                         .AllowAnyHeader();
                 });
             });
+            services.AddMemoryCache();
+            services.Configure<ClientRateLimitOptions>(Configuration.GetSection("ClientRateLimiting"));
+            services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BE v1"));
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseStaticFiles();
-
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                                       Path.Combine(Directory.GetCurrentDirectory(), 
-                                       FileService.FOLDER_NAME)),
-                RequestPath = FileService.REQUEST_PATH
-            });
-
             
-
-            app.UseCors("AllowAll");
-
-            app.UseAuthentication();
-            app.UseRouting();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-                var services = scope.ServiceProvider;
-                SeedData.Initialize(services, userManager).Wait();
-            }
         }
     }
 }

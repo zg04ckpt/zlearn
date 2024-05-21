@@ -118,6 +118,7 @@ export class TestComponent {
           mark: item.mark
         });
       });
+      this.questions.sort(() => Math.random() - 0.5);
     });
   }
 

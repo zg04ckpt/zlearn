@@ -1,0 +1,13 @@
+{
+  "region": "ap-southeast-1",
+  "configuration": "Release",
+  "framework": "net6.0",
+  "self-contained": false,
+  "application": "zg04be",
+  "environment": "zg04be-env",
+  "app-path": "/",
+  "iis-website": "Default Web Site",
+  "enable-xray": false,
+  "enhanced-health-type": "basic",
+  "additional-options": ""
+}

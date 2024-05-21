@@ -13,6 +13,7 @@ export class AppComponent {
   constructor() {
   }
   ngOnInit() {
-    this.isLogin = (localStorage.getItem('token') === null);
+
+    this.isLogin = (sessionStorage.getItem('token') === null);
   }
 }
