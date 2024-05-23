@@ -19,10 +19,10 @@
   </ItemGroup>
 
     <ItemGroup>
-	    <None Update="Images\">
+	    <Content Include="Images\**">
 		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	    </None>
+	    </Content>
     </ItemGroup>
 
 </Project>

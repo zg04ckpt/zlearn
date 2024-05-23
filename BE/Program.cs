@@ -26,7 +26,11 @@ var Configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(Configuration.GetConnectionString(Constants.CONNECTION_STRING));
+    options.UseSqlServer(Configuration.GetConnectionString(Constants.CONNECTION_STRING),
+        options => options.EnableRetryOnFailure()
+        );
+    options.EnableDetailedErrors();
+
 });
 
 builder.Services.AddIdentity<AppUser, AppRole>()
@@ -100,31 +104,24 @@ builder.Services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateL
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BE v1"));
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseClientRateLimiting();
 app.UseIpRateLimiting();
 
 string path = Path.Combine(Directory.GetCurrentDirectory(), FileService.FOLDER_NAME);
-if (!Directory.Exists(path))
-{
-    Directory.CreateDirectory(path);
-}
 
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(path),
     RequestPath = FileService.REQUEST_PATH
 });
-
-
 
 app.UseCors("AllowAll");
 

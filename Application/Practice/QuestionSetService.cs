@@ -124,7 +124,7 @@ namespace Application.Practice
                         QuestionCount = qs.Questions.Count,
                         TestTime = new TestTime
                         {
-                            Minutes = qs.TestTime.Minutes,
+                            Minutes = qs.TestTime.Minutes + qs.TestTime.Hours*60,
                             Seconds = qs.TestTime.Seconds
                         }
                     }).ToListAsync();
@@ -158,7 +158,7 @@ namespace Application.Practice
                     QuestionCount = await _context.Questions.CountAsync(q => q.QuestionSetId == questionSet.Id),
                     TestTime = new TestTime
                     {
-                        Minutes = questionSet.TestTime.Minutes,
+                        Minutes = questionSet.TestTime.Minutes + questionSet.TestTime.Hours * 60,
                         Seconds = questionSet.TestTime.Seconds
                     }
                 });

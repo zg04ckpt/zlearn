@@ -37,7 +37,7 @@
     <div class="card-body d-flex flex-column px-3 px-lg-5 pb-0">
       <div *ngFor="let item of questions; let i = index" class="d-flex flex-column mb-5"
       [class.unselected]="item.selectedAnswer==0 && test.status==3">
-          <h5><b>Câu {{i+1}}:</b> {{item.content}}</h5>
+          <h5><b>Câu {{i+1}}: {{item.content}}</b></h5>
           <div *ngIf="test.status != 3" class="list-group rounded-0">
               <div (click)="item.selectedAnswer=1" [class.active]="item.selectedAnswer==1" class="list-group-item answer">A. {{item.answerA}}</div>
               <div (click)="item.selectedAnswer=2" [class.active]="item.selectedAnswer==2" class="list-group-item answer">B. {{item.answerB}}</div>
