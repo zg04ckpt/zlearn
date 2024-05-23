@@ -2,17 +2,28 @@
     <div class="col-12">
         <div class="mb-3 d-flex justify-content-between">
             <h3 class="text-uppercase ">{{title}}</h3>
-            <label for="chooseFile" class="btn btn-dark ">
-              Chọn file excel
-              <input type="file" (change)="onExcelFileSelected($event)" hidden="" class="account-file-input" id="chooseFile">
-            </label>
-            
+            <div class="d-flex">
+              <label for="chooseFile" class="btn btn-dark ">
+                Chọn file excel
+                <input type="file" (change)="onExcelFileSelected($event)" hidden="" accept=".xlsx" class="account-file-input" id="chooseFile">
+              </label>
+              <div *ngIf="wb.SheetNames.length != 0" class="btn-group ms-3">
+                <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  Chọn sheet
+                </button>
+                <ul class="dropdown-menu">
+                  <li *ngFor="let item of wb.SheetNames">
+                    <a class="dropdown-item" (click)="readExcel(item)">{{item}}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-xl-6">
+    <div class="col-xl-5">
         <div class="card mb-4">
             <h5 class="card-header">Thông tin chung</h5>
             <div class="card-body">
@@ -77,7 +88,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-6">
+    <div class="col-xl-7">
         <div class="card mb-4 h-100">
             <div class="card-header d-flex justify-content-between">
                 <h5 class="my-auto ">Danh sách câu hỏi</h5>
@@ -113,7 +124,7 @@
 
             <div class="card-body overflow-auto vh-100" >
                 <div class="list-group">
-                    <div *ngFor="let item of questions" [ngClass]="{'border-4':item.selected, 'border-info':item.selected}" class="list-group-item mb-2 border-2 rounded-1 text-wrap">
+                    <div *ngFor="let item of questions; let stt = index" [ngClass]="{'border-4':item.selected, 'border-info':item.selected}" class="list-group-item mb-2 border-2 rounded-1 text-wrap">
                         <div class="row">
                             <div class="col-1">
                                 <input 
@@ -123,7 +134,7 @@
                                   (ngModelChange)="onSelectedChange()">
                             </div>
                             <label class="col-11">
-                                {{ item.content }}
+                                <b>Câu {{stt+1}}: {{ item.content }}</b>
                                 <ul class="list-group rounded-0 my-3">
 
                                     <li 

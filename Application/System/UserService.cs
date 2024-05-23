@@ -54,8 +54,7 @@ namespace Application.System
                     issuer: _config["Tokens:Issuer"],
                     audience: _config["Tokens:Issuer"],
                     claims: claims,
-                    signingCredentials: creds,
-                    expires: DateTime.Now.AddSeconds(30)
+                    signingCredentials: creds
                 );
 
                 var resultToken = new JwtSecurityTokenHandler().WriteToken(token);

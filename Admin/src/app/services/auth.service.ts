@@ -23,7 +23,7 @@ export class AuthService {
     ).pipe(tap(res => {
       if(res.code == 200)
       {
-        localStorage.setItem('token', res.data.token);
+        sessionStorage.setItem('token', res.data.token);
         window.location.href= "/";
       }
     }, error => {
@@ -32,10 +32,10 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
   }
 
   get token(): string | null {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
   }
 }

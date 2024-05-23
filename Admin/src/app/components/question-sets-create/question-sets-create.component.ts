@@ -168,16 +168,14 @@ export class QuestionSetsCreateComponent {
     }
   }
 
-  onExcelFileSelected(event: any)
-  {
-    const target: DataTransfer = <DataTransfer>(event.target);
-    if(target.files.length != 1) throw new Error("Không thể tải lên nhiều file");
-    const reader: FileReader = new FileReader();
-    reader.onload = (e: any) => {
-      const bstr: string = e.target.result;
-      const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
-      const wsname: string = wb.SheetNames[0];
-      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+  wb: XLSX.WorkBook = {
+    SheetNames: [],
+    Sheets: {}
+  }
+
+  readExcel(sheetName: string) {
+    this.questions = [];
+      const ws: XLSX.WorkSheet = this.wb.Sheets[sheetName];
       const range: XLSX.Range = XLSX.utils.decode_range(ws['!ref']!);
       for(let i=0; i<=range.e.r; i++)
       {
@@ -190,6 +188,17 @@ export class QuestionSetsCreateComponent {
         question.correctAnswer = Number(ws[XLSX.utils.encode_cell({c: 5, r: i})]?.v);
         this.questions.push(question);
       }
+  }
+
+  onExcelFileSelected(event: any)
+  {
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if(target.files.length != 1) throw new Error("Không thể tải lên nhiều file");
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      this.wb = XLSX.read(bstr, {type: 'binary'});
+      
     };
     reader.readAsBinaryString(target.files[0]);
   }
