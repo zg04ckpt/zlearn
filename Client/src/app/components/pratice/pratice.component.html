@@ -1,0 +1,91 @@
+<div class="row card p-1 z-1" id="test-header">
+    <div class="row">
+        <div class="col-12 d-none d-lg-block col-lg-5 overflow-hidden">
+            <h5 class="h-100 text-nowrap align-content-center ps-2 fw-bold">{{qSet.name}}</h5>
+        </div>
+        <div class="col-12 col-lg-7 d-flex justify-content-around ">
+          <h5 *ngIf="test.status == 1" class="my-auto fw-light">
+            <span class="d-none d-lg-inline">Chế độ luyện tập</span>
+          </h5>
+          <button *ngIf="test.status == 1" (click)="confirm()" class="btn btn-outline-danger">
+            Xem đáp án
+          </button>
+          <button *ngIf="test.status == 3" (click)="back()" class="btn btn-outline-danger">
+            Quay lại danh sách đề
+          </button>
+        </div>
+    </div>
+</div>
+
+<div class="card z-1 ms-0 me-0 ms-lg-2 me-lg-2 border-2 border-black" id="selected-table">
+  <div class="card-top text-center m-1 btn btn-link p-0"
+  (click)="showSelectedTable = !showSelectedTable">
+      Những câu đã chọn
+      <i *ngIf="!showSelectedTable" class='bx bx-chevron-right my-auto'></i>
+      <i *ngIf="showSelectedTable" class='bx bx-chevron-down'></i>
+  </div>
+  <div *ngIf="showSelectedTable" class="card-body d-flex justify-content- flex-wrap p-1" id="selected-table-content">
+      <div class="px-0 mb-1 text-center" style="margin: 0px 2px;" 
+      *ngFor="let item of questions; let i = index">
+          <span [class.active]="item.selectedAnswer!=0" 
+          class="btn btn-sm rounded-pill btn-icon btn-outline-secondary p-0">{{i+1}}</span>
+      </div>
+  </div>
+</div>
+
+<div class="card z-0 mb-2" id="content">
+    <div class="card-body d-flex flex-column px-3 px-lg-5 pb-0">
+      <div *ngFor="let item of questions; let i = index" class="d-flex flex-column mb-5"
+      [class.unselected]="item.selectedAnswer==0 && test.status==3">
+          <h5><b>Câu {{i+1}}: {{item.content}}</b></h5>
+          <div *ngIf="test.status != 3" class="list-group rounded-0">
+              <div (click)="item.selectedAnswer=1" [class.active]="item.selectedAnswer==1" class="list-group-item answer">A. {{item.answerA}}</div>
+              <div (click)="item.selectedAnswer=2" [class.active]="item.selectedAnswer==2" class="list-group-item answer">B. {{item.answerB}}</div>
+              <div (click)="item.selectedAnswer=3" [class.active]="item.selectedAnswer==3" class="list-group-item answer">C. {{item.answerC}}</div>
+              <div (click)="item.selectedAnswer=4" [class.active]="item.selectedAnswer==4" class="list-group-item answer">D. {{item.answerD}}</div>
+          </div>
+          <div *ngIf="test.status == 3" class="list-group rounded-0">
+            <div [class.wrong]="item.selectedAnswer==1 && item.selectedAnswer!=item.correctAnswer" [class.correct]="item.correctAnswer==1" class="list-group-item">{{item.answerA}}</div>
+            <div [class.wrong]="item.selectedAnswer==2 && item.selectedAnswer!=item.correctAnswer" [class.correct]="item.correctAnswer==2" class="list-group-item">{{item.answerB}}</div>
+            <div [class.wrong]="item.selectedAnswer==3 && item.selectedAnswer!=item.correctAnswer" [class.correct]="item.correctAnswer==3" class="list-group-item">{{item.answerC}}</div>
+            <div [class.wrong]="item.selectedAnswer==4 && item.selectedAnswer!=item.correctAnswer" [class.correct]="item.correctAnswer==4" class="list-group-item">{{item.answerD}}</div>
+        </div>
+      </div>
+
+    </div>
+</div>
+
+
+
+<!-- Final modal -->
+<div *ngIf="test.status == 2" class="modal modal-top show" style="display: block;">
+  <div class="modal-dialog">
+    <form class="modal-content">
+      <div class="modal-header p-2 d-flex ">
+        <h5 class="modal-title text-dark ms-3 fw-bold fs-4">Kết quả</h5>
+        <button type="button" class="btn-close my-auto me-1" (click)="test.status = 3"></button>
+      </div>
+      <div class="table-group-divider"></div>
+      <div class="modal-body">
+        <div class="row mb-1">
+          <div class="col d-flex justify-content-between">
+            <h4 class="fw-light">Điểm đạt được:</h4>
+            <h4 class="fw-bold">{{test.result!.score}}</h4>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col d-flex justify-content-between">
+            <h4 class="fw-light">Số câu đúng:</h4>
+            <h4>{{test.result!.corrects}}/{{qSet.numberOfQuestions}}</h4>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col d-flex justify-content-between">
+            <h4 class="fw-light">Thời gian làm bài:</h4>
+            <h4>{{test.result?.used_time!.minutes.toString().padStart(2, '0')}}:{{test.result?.used_time!.seconds.toString().padStart(2, '0')}}</h4>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

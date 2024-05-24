@@ -8,6 +8,7 @@ import { ListQuestionSetComponent } from './components/list-question-set/list-qu
 import { TestComponent } from './components/test/test.component';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './components/about/about.component';
+import { PraticeComponent } from './components/pratice/pratice.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { AboutComponent } from './components/about/about.component';
     NavbarComponent,
     ListQuestionSetComponent,
     TestComponent,
-    AboutComponent
+    AboutComponent,
+    PraticeComponent
   ],
   imports: [
     BrowserModule,
