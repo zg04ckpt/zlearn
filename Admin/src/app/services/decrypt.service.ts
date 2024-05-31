@@ -1,31 +1,13 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
-import { QuestionSetsResponse } from '../models/question-sets.reponse';
-import { QuestionSetResponse } from '../models/question-set.response';
 import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'
 })
-export class QuestionSetService {
-  constructor(private httpClient: HttpClient) { }
-  baseUrl = environment.baseUrl;
+export class DecryptService {
+  constructor() { }
   key = "12345678901234567890123456789012";
 
-  getAll() : Observable<any> {
-    return this.httpClient.get<any>(
-      `${this.baseUrl}/api/question-sets`
-    );
-  }
-
-  getById(id: string) : Observable<any> {
-    return this.httpClient.get<any>(
-      `${this.baseUrl}/api/question-sets/${id}`
-    );
-  }
-  
   decrypt(cipherText: string) : any {
     const rawData = CryptoJS.enc.Base64.parse(cipherText);
     const iv = rawData.words.slice(0, 4); // IV is the first 16 bytes of rawData
@@ -42,5 +24,5 @@ export class QuestionSetService {
     });
 
     return JSON.parse(CryptoJS.enc.Utf8.stringify(decrypted).toString());
-}
+  }
 }

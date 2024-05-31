@@ -9,6 +9,7 @@ import { TestComponent } from './components/test/test.component';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './components/about/about.component';
 import { PraticeComponent } from './components/pratice/pratice.component';
+import { SetScheduleComponent } from './components/set-schedule/set-schedule.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { PraticeComponent } from './components/pratice/pratice.component';
     ListQuestionSetComponent,
     TestComponent,
     AboutComponent,
-    PraticeComponent
+    PraticeComponent,
+    SetScheduleComponent
   ],
   imports: [
     BrowserModule,

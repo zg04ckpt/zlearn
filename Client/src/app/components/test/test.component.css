@@ -14,9 +14,8 @@
 
 
 .answer:hover {
-    opacity: 60%;
-    background-color: rgb(80, 35, 205);
-    color: #fff;
+    background-color: rgb(95, 92, 88);
+    color: aliceblue;
 }
 
 .modal {

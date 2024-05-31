@@ -26,16 +26,19 @@
   </div>
   <div *ngIf="showSelectedTable" class="card-body d-flex justify-content- flex-wrap p-1" id="selected-table-content">
       <div class="px-0 mb-1 text-center" style="margin: 0px 2px;" 
-      *ngFor="let item of questions; let i = index">
+      *ngFor="let item of questions; let i = index" (click)="scrollToItem(i+1)">
           <span [class.active]="item.selectedAnswer!=0" 
-          class="btn btn-sm rounded-pill btn-icon btn-outline-secondary p-0">{{i+1}}</span>
+          class="btn btn-sm rounded-pill btn-icon btn-outline-secondary p-0"
+          [ngClass]="{'btn-success': test.status==3 && item.selectedAnswer==item.correctAnswer, 'btn-danger': test.status==3 && item.selectedAnswer!=0 && item.selectedAnswer!=item.correctAnswer}">{{i+1}}</span>
       </div>
   </div>
 </div>
 
 <div class="card z-0 mb-2" id="content">
     <div class="card-body d-flex flex-column px-3 px-lg-5 pb-0">
-      <div *ngFor="let item of questions; let i = index" class="d-flex flex-column mb-5"
+      <div *ngFor="let item of questions; let i = index" 
+      [id]="i+1"
+      class="d-flex flex-column mb-5"
       [class.unselected]="item.selectedAnswer==0 && test.status==3">
           <h5><b>Câu {{i+1}}: {{item.content}}</b></h5>
           <div *ngIf="test.status != 3" class="list-group rounded-0">
@@ -76,7 +79,7 @@
         <div class="row mb-1">
           <div class="col d-flex justify-content-between">
             <h4 class="fw-light">Số câu đúng:</h4>
-            <h4>{{test.result!.corrects}}/{{qSet.numberOfQuestions}}</h4>
+            <h4>{{test.result!.corrects}}/{{qSet.questionCount}}</h4>
           </div>
         </div>
         <div class="row mb-1">

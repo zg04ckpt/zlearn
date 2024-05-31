@@ -128,6 +128,7 @@ namespace Application.Practice
                             Seconds = qs.TestTime.Seconds
                         }
                     }).ToListAsync();
+                questionSets.Sort((a, b) => a.Name.CompareTo(b.Name));
 
                 return new ApiResult(questionSets);
             }

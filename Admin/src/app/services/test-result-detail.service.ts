@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { TestResultDetail } from '../interfaces/test-result-detail';
 import { environment } from 'src/environments/environment';
 import { TestResultResponse } from '../interfaces/test-result-response';
+import { DecryptService } from './decrypt.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class TestResultDetailService {
 
   private baseUrl = environment.baseUrl
   
-  getAll(): Observable<TestResultResponse> {
+  getAll(): Observable<any> {
     return this.httpClient.get<TestResultResponse>(
       `${this.baseUrl}/api/test-results`
     );

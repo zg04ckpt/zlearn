@@ -111,6 +111,8 @@ if (!app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BE v1"));
 }
 
+app.UseCors("AllowAll");
+
 app.UseStaticFiles();
 app.UseClientRateLimiting();
 app.UseIpRateLimiting();
@@ -123,7 +125,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = FileService.REQUEST_PATH
 });
 
-app.UseCors("AllowAll");
+
 
 app.UseAuthentication();
 app.UseRouting();

@@ -32,12 +32,12 @@ export class TestComponent {
     createdDate: new Date(),
     updatedDate: new Date(),
     attemptCount: 0,
-    numberOfQuestions: 0,
+    questionCount: 0,
     testTime: { minutes: 0, seconds: 0 }
   }
   startTime: Date = new Date();
   questions: Question[] = []
-  showSelectedTable: boolean = false;
+  showSelectedTable: boolean = true;
   currentTime: TestTime = { minutes: 0, seconds: 0 }
   subscription: Subscription = new Subscription();
 
@@ -55,19 +55,20 @@ export class TestComponent {
     this.questionSetService.getById(this.qSet.id).subscribe(response => {
       if(response.code !== 200) 
           return alert('Failed to fetch data');
+      const res = this.questionSetService.decrypt(response.data) as any;
       this.qSet = {
-        id: response.data.id,
-        name: response.data.name,
-        description: response.data.description,
-        imageUrl: response.data.imageUrl,
-        creator: response.data.creator,
-        createdDate: response.data.createdDate,
-        updatedDate: response.data.updatedDate,
-        attemptCount: response.data.attemptCount,
-        numberOfQuestions: response.data.questionCount,
+        id: res.Id,
+        name: res.Name,
+        description: res.Description,
+        imageUrl: res.ImageUrl,
+        creator: res.Creator,
+        createdDate: res.CreatedDate,
+        updatedDate: res.UpdatedDate,
+        attemptCount: res.AttemptCount,
+        questionCount: res.QuestionCount,
         testTime: { 
-          minutes: response.data.testTime.minutes, 
-          seconds: response.data.testTime.seconds 
+          minutes: res.TestTime.Minutes, 
+          seconds: res.TestTime.Seconds 
         }
       };
 
@@ -104,18 +105,19 @@ export class TestComponent {
     this.questionService.getAllById(this.qSet.id).subscribe(response => {
       if(response.code !== 200) 
           return alert('Failed to fetch data');
-      response.data.forEach(item => {
+      const res = this.questionSetService.decrypt(response.data) as any[];
+      res.forEach(item => {
         this.questions.push({
-          order: item.order,
-          content: item.content,
+          order: item.Order,
+          content: item.Content,
           imageUrl: null,
-          answerA: item.answerA,
-          answerB: item.answerB,
-          answerC: item.answerC,
-          answerD: item.answerD,
-          correctAnswer: item.correctAnswer,
+          answerA: item.AnswerA,
+          answerB: item.AnswerB,
+          answerC: item.AnswerC,
+          answerD: item.AnswerD,
+          correctAnswer: item.CorrectAnswer,
           selectedAnswer: 0,
-          mark: item.mark
+          mark: item.Mark
         });
       });
       this.questions.sort(() => Math.random() - 0.5);
@@ -139,7 +141,7 @@ export class TestComponent {
       - this.currentTime.minutes * 60 - this.currentTime.seconds;
 
     this.test.result = {
-      score: parseFloat((10.0 * corrects / this.qSet.numberOfQuestions).toFixed(2)),
+      score: parseFloat((10.0 * corrects / this.qSet.questionCount).toFixed(2)),
       corrects: corrects,
       used_time: {
         minutes:  parseInt((used_seconds / 60).toString()),
@@ -147,7 +149,18 @@ export class TestComponent {
       }
     }
 
+    this.scrollToItem(1);
     this.sendResultToServer();
+  }
+
+  scrollToItem(index: number) {
+    const element = document.getElementById(index.toString());
+    const rect = element!.getBoundingClientRect();
+    const offset = 150; // Đổi số này để thay đổi độ lệch
+    window.scrollTo({
+      top: rect.top + window.pageYOffset - offset,
+      behavior: "smooth"
+    });
   }
 
   sendResultToServer() {

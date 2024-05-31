@@ -3,6 +3,7 @@ import { QuestionSetsModule } from 'src/app/models/question-sets.module';
 import { QuestionSetsService } from 'src/app/services/question-sets.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
+import { DecryptService } from 'src/app/services/decrypt.service';
 
 @Component({
   selector: 'question-sets',
@@ -16,7 +17,8 @@ export class QuestionSetsComponent {
 
   constructor(
     private service: QuestionSetsService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private decrypt: DecryptService
   ) { 
     
   }
