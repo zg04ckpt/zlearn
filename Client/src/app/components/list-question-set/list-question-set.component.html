@@ -1,0 +1,69 @@
+<div class="row mx-4 mx-md-0" style="margin-top: 15vh;">
+    <div class="col-md-8 offset-md-2 card">
+        <div class="navbar-nav align-items-center">
+            <div class="nav-item d-flex align-items-center">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 mx-3 mx-md-0">
+    <div class="col-12">
+        <h3 class="card-header text-center">DANH SÁCH ĐỀ</h3>
+    </div>
+</div>
+
+<div class="row card h-auto mt-3 mx-3 mx-md-0">
+    <div class="card-body col-12">
+        <div class="row">
+
+            <div *ngFor="let item of list" class="col-lg-6">
+                <div class="card rounded-0 border mb-4">
+                    <div class="row card-body p-3">
+                        <div class="col-12 col-sm-3 pe-2 pe-sm-0 ps-2 pb-2 pb-sm-0">
+                            <img [src]="item.imageUrl" 
+                            style="object-fit: cover;" height="100%" width="100%" alt="">
+                        </div>
+                        <div class="col-12 col-sm-9 d-flex flex-column">
+                            <h5 class="text-start fw-bold mb-2">{{item.name}}</h5>
+                            <div class="d-flex flex-column flex-sm-row justify-content-between ">
+                                <small class="text-secondary fw-light text-opacity-75">
+                                    Người đăng: <b>{{item.creator}}</b>
+                                </small>
+                                <small class="text-secondary fw-light text-opacity-75">
+                                    Cập nhật: <b>{{item.updatedDate | date: "dd-MM-yy"}}</b>
+                                </small>
+                            </div>
+                            <small class="text-secondary fw-light text-opacity-75">
+                                Mô tả: <b>{{item.description}}</b>
+                            </small>
+                            <div class="d-flex flex-column flex-sm-row justify-content-between ">
+                                <small class="text-secondary fw-light text-opacity-75">
+                                    Số câu: <b>{{item.questionCount}}</b>
+                                </small>
+                                <small class="text-secondary fw-light text-opacity-75">
+                                    Số lượt làm: <b>{{item.attemptCount}}</b>
+                                </small>
+                            </div>
+                            <div class="d-flex flex-column flex-lg-row-reverse">
+                                <button [routerLink]="['/practice', item.id]" class="btn btn-outline-info bg-white text-info mt-2 mt-lg-0">
+                                    Luyện tập
+                                </button>
+    
+                                <button [routerLink]="['/test', item.id]" class="btn btn-info mt-1 mt-lg-0 me-lg-2">
+                                    Thi thử
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+        
+    </div>
+</div>
+
+

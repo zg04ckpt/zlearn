@@ -1,0 +1,16 @@
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\ViewModels.deps.json
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\ViewModels.dll
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\ViewModels.pdb
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ViewModels.GeneratedMSBuildEditorConfig.editorconfig
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ViewModels.AssemblyInfoInputs.cache
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ViewModels.AssemblyInfo.cs
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ViewModels.csproj.CoreCompileInputs.cache
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ViewModels.sourcelink.json
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ViewModels.dll
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\refint\ViewModels.dll
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ViewModels.pdb
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ref\ViewModels.dll
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\Data.dll
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\Data.pdb
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ViewModels.csproj.AssemblyReference.cache
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ViewModels.csproj.Up2Date

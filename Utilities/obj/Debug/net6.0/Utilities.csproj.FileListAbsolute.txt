@@ -1,0 +1,12 @@
+D:\Code\Web\zg04web\Utilities\bin\Debug\net6.0\Utilities.deps.json
+D:\Code\Web\zg04web\Utilities\bin\Debug\net6.0\Utilities.dll
+D:\Code\Web\zg04web\Utilities\bin\Debug\net6.0\Utilities.pdb
+D:\Code\Web\zg04web\Utilities\obj\Debug\net6.0\Utilities.GeneratedMSBuildEditorConfig.editorconfig
+D:\Code\Web\zg04web\Utilities\obj\Debug\net6.0\Utilities.AssemblyInfoInputs.cache
+D:\Code\Web\zg04web\Utilities\obj\Debug\net6.0\Utilities.AssemblyInfo.cs
+D:\Code\Web\zg04web\Utilities\obj\Debug\net6.0\Utilities.csproj.CoreCompileInputs.cache
+D:\Code\Web\zg04web\Utilities\obj\Debug\net6.0\Utilities.sourcelink.json
+D:\Code\Web\zg04web\Utilities\obj\Debug\net6.0\Utilities.dll
+D:\Code\Web\zg04web\Utilities\obj\Debug\net6.0\refint\Utilities.dll
+D:\Code\Web\zg04web\Utilities\obj\Debug\net6.0\Utilities.pdb
+D:\Code\Web\zg04web\Utilities\obj\Debug\net6.0\ref\Utilities.dll

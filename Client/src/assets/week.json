@@ -1,0 +1,374 @@
+{
+    "data": {
+        "total_items": 29,
+        "total_pages": 1,
+        "ds_tiet_trong_ngay": [
+            {
+                "tiet": 1,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 2,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 3,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 4,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 5,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 6,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 7,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 8,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 9,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 10,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 11,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 12,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 13,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 14,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 15,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            },
+            {
+                "tiet": 16,
+                "gio_bat_dau": "",
+                "so_phut": 45,
+                "nhhk": 20241
+            }
+        ],
+        "ds_tuan_tkb": [
+            {
+                "tuan_hoc_ky": 1,
+                "tuan_tuyet_doi": 1285,
+                "thong_tin_tuan": "Tuần 1 [từ ngày 12/08/2024 đến ngày 18/08/2024]",
+                "ngay_bat_dau": "12/08/2024",
+                "ngay_ket_thuc": "18/08/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 2,
+                "tuan_tuyet_doi": 1286,
+                "thong_tin_tuan": "Tuần 2 [từ ngày 19/08/2024 đến ngày 25/08/2024]",
+                "ngay_bat_dau": "19/08/2024",
+                "ngay_ket_thuc": "25/08/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 3,
+                "tuan_tuyet_doi": 1287,
+                "thong_tin_tuan": "Tuần 3 [từ ngày 26/08/2024 đến ngày 01/09/2024]",
+                "ngay_bat_dau": "26/08/2024",
+                "ngay_ket_thuc": "01/09/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 4,
+                "tuan_tuyet_doi": 1288,
+                "thong_tin_tuan": "Tuần 4 [từ ngày 02/09/2024 đến ngày 08/09/2024]",
+                "ngay_bat_dau": "02/09/2024",
+                "ngay_ket_thuc": "08/09/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 5,
+                "tuan_tuyet_doi": 1289,
+                "thong_tin_tuan": "Tuần 5 [từ ngày 09/09/2024 đến ngày 15/09/2024]",
+                "ngay_bat_dau": "09/09/2024",
+                "ngay_ket_thuc": "15/09/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 6,
+                "tuan_tuyet_doi": 1290,
+                "thong_tin_tuan": "Tuần 6 [từ ngày 16/09/2024 đến ngày 22/09/2024]",
+                "ngay_bat_dau": "16/09/2024",
+                "ngay_ket_thuc": "22/09/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 7,
+                "tuan_tuyet_doi": 1291,
+                "thong_tin_tuan": "Tuần 7 [từ ngày 23/09/2024 đến ngày 29/09/2024]",
+                "ngay_bat_dau": "23/09/2024",
+                "ngay_ket_thuc": "29/09/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 8,
+                "tuan_tuyet_doi": 1292,
+                "thong_tin_tuan": "Tuần 8 [từ ngày 30/09/2024 đến ngày 06/10/2024]",
+                "ngay_bat_dau": "30/09/2024",
+                "ngay_ket_thuc": "06/10/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 9,
+                "tuan_tuyet_doi": 1293,
+                "thong_tin_tuan": "Tuần 9 [từ ngày 07/10/2024 đến ngày 13/10/2024]",
+                "ngay_bat_dau": "07/10/2024",
+                "ngay_ket_thuc": "13/10/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 10,
+                "tuan_tuyet_doi": 1294,
+                "thong_tin_tuan": "Tuần 10 [từ ngày 14/10/2024 đến ngày 20/10/2024]",
+                "ngay_bat_dau": "14/10/2024",
+                "ngay_ket_thuc": "20/10/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 11,
+                "tuan_tuyet_doi": 1295,
+                "thong_tin_tuan": "Tuần 11 [từ ngày 21/10/2024 đến ngày 27/10/2024]",
+                "ngay_bat_dau": "21/10/2024",
+                "ngay_ket_thuc": "27/10/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 12,
+                "tuan_tuyet_doi": 1296,
+                "thong_tin_tuan": "Tuần 12 [từ ngày 28/10/2024 đến ngày 03/11/2024]",
+                "ngay_bat_dau": "28/10/2024",
+                "ngay_ket_thuc": "03/11/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 13,
+                "tuan_tuyet_doi": 1297,
+                "thong_tin_tuan": "Tuần 13 [từ ngày 04/11/2024 đến ngày 10/11/2024]",
+                "ngay_bat_dau": "04/11/2024",
+                "ngay_ket_thuc": "10/11/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 14,
+                "tuan_tuyet_doi": 1298,
+                "thong_tin_tuan": "Tuần 14 [từ ngày 11/11/2024 đến ngày 17/11/2024]",
+                "ngay_bat_dau": "11/11/2024",
+                "ngay_ket_thuc": "17/11/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 15,
+                "tuan_tuyet_doi": 1299,
+                "thong_tin_tuan": "Tuần 15 [từ ngày 18/11/2024 đến ngày 24/11/2024]",
+                "ngay_bat_dau": "18/11/2024",
+                "ngay_ket_thuc": "24/11/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 16,
+                "tuan_tuyet_doi": 1300,
+                "thong_tin_tuan": "Tuần 16 [từ ngày 25/11/2024 đến ngày 01/12/2024]",
+                "ngay_bat_dau": "25/11/2024",
+                "ngay_ket_thuc": "01/12/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 17,
+                "tuan_tuyet_doi": 1301,
+                "thong_tin_tuan": "Tuần 17 [từ ngày 02/12/2024 đến ngày 08/12/2024]",
+                "ngay_bat_dau": "02/12/2024",
+                "ngay_ket_thuc": "08/12/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 18,
+                "tuan_tuyet_doi": 1302,
+                "thong_tin_tuan": "Tuần 18 [từ ngày 09/12/2024 đến ngày 15/12/2024]",
+                "ngay_bat_dau": "09/12/2024",
+                "ngay_ket_thuc": "15/12/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 19,
+                "tuan_tuyet_doi": 1303,
+                "thong_tin_tuan": "Tuần 19 [từ ngày 16/12/2024 đến ngày 22/12/2024]",
+                "ngay_bat_dau": "16/12/2024",
+                "ngay_ket_thuc": "22/12/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 20,
+                "tuan_tuyet_doi": 1304,
+                "thong_tin_tuan": "Tuần 20 [từ ngày 23/12/2024 đến ngày 29/12/2024]",
+                "ngay_bat_dau": "23/12/2024",
+                "ngay_ket_thuc": "29/12/2024",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 21,
+                "tuan_tuyet_doi": 1305,
+                "thong_tin_tuan": "Tuần 21 [từ ngày 30/12/2024 đến ngày 05/01/2025]",
+                "ngay_bat_dau": "30/12/2024",
+                "ngay_ket_thuc": "05/01/2025",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 22,
+                "tuan_tuyet_doi": 1306,
+                "thong_tin_tuan": "Tuần 22 [từ ngày 06/01/2025 đến ngày 12/01/2025]",
+                "ngay_bat_dau": "06/01/2025",
+                "ngay_ket_thuc": "12/01/2025",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 23,
+                "tuan_tuyet_doi": 1307,
+                "thong_tin_tuan": "Tuần 23 [từ ngày 13/01/2025 đến ngày 19/01/2025]",
+                "ngay_bat_dau": "13/01/2025",
+                "ngay_ket_thuc": "19/01/2025",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 24,
+                "tuan_tuyet_doi": 1308,
+                "thong_tin_tuan": "Tuần 24 [từ ngày 20/01/2025 đến ngày 26/01/2025]",
+                "ngay_bat_dau": "20/01/2025",
+                "ngay_ket_thuc": "26/01/2025",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 25,
+                "tuan_tuyet_doi": 1309,
+                "thong_tin_tuan": "Tuần 25 [từ ngày 27/01/2025 đến ngày 02/02/2025]",
+                "ngay_bat_dau": "27/01/2025",
+                "ngay_ket_thuc": "02/02/2025",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 26,
+                "tuan_tuyet_doi": 1310,
+                "thong_tin_tuan": "Tuần 26 [từ ngày 03/02/2025 đến ngày 09/02/2025]",
+                "ngay_bat_dau": "03/02/2025",
+                "ngay_ket_thuc": "09/02/2025",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 27,
+                "tuan_tuyet_doi": 1311,
+                "thong_tin_tuan": "Tuần 27 [từ ngày 10/02/2025 đến ngày 16/02/2025]",
+                "ngay_bat_dau": "10/02/2025",
+                "ngay_ket_thuc": "16/02/2025",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 28,
+                "tuan_tuyet_doi": 1312,
+                "thong_tin_tuan": "Tuần 28 [từ ngày 17/02/2025 đến ngày 23/02/2025]",
+                "ngay_bat_dau": "17/02/2025",
+                "ngay_ket_thuc": "23/02/2025",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            },
+            {
+                "tuan_hoc_ky": 29,
+                "tuan_tuyet_doi": 1313,
+                "thong_tin_tuan": "Tuần 29 [từ ngày 24/02/2025 đến ngày 02/03/2025]",
+                "ngay_bat_dau": "24/02/2025",
+                "ngay_ket_thuc": "02/03/2025",
+                "ds_thoi_khoa_bieu": [],
+                "ds_id_thoi_khoa_bieu_trung": []
+            }
+        ],
+        "is_duoc_diem_danh": false,
+        "is_duoc_dk_nghi_day": false,
+        "is_quan_ly_hoc_lieu": false,
+        "is_show_tiet": true,
+        "thong_bao": ""
+    },
+    "result": true,
+    "code": 200
+}

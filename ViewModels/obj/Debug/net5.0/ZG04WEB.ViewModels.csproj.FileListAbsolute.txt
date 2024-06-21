@@ -1,0 +1,16 @@
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\ZG04WEB.ViewModels.deps.json
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\ZG04WEB.ViewModels.dll
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\ZG04WEB.ViewModels.pdb
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\ZG04WEB.Data.dll
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net5.0\ZG04WEB.Data.pdb
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ZG04WEB.ViewModels.csproj.AssemblyReference.cache
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ZG04WEB.ViewModels.GeneratedMSBuildEditorConfig.editorconfig
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ZG04WEB.ViewModels.AssemblyInfoInputs.cache
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ZG04WEB.ViewModels.AssemblyInfo.cs
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ZG04WEB.ViewModels.csproj.CoreCompileInputs.cache
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ZG04WEB.ViewModels.sourcelink.json
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ZG04WEB.ViewModels.csproj.CopyComplete
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ZG04WEB.ViewModels.dll
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\refint\ZG04WEB.ViewModels.dll
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ZG04WEB.ViewModels.pdb
+D:\Code\Web\zg04web\ViewModels\obj\Debug\net5.0\ref\ZG04WEB.ViewModels.dll
