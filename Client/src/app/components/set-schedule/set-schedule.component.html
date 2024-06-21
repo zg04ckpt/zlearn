@@ -1,0 +1,183 @@
+<div class="row mx-2" style="margin-top: 8%;">
+    <div class="col-12">
+        <div class="d-flex justify-content-between mb-3">
+            <div class="d-flex">               
+                <button class="btn btn-outline-info me-1"(click)="load(-1)">Tuần trước</button>
+                <button class="btn btn-outline-info"(click)="load(1)">Tuần kế</button>
+            </div>
+            
+            <h5><b>Tuần {{currentWeek+1}} ({{listWeek[currentWeek].start.toLocaleDateString()}} - {{listWeek[currentWeek].end.toLocaleDateString()}})</b></h5>
+            <div class="d-flex">
+                <button class="btn btn-outline-info ms-2" data-bs-toggle="modal" data-bs-target="#addModal">
+                    Thêm môn học
+                </button>
+            </div>
+            
+        </div>
+        <table class="table table-bordered" style="font-size: x-small;">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 8%;">Start</th>
+                    <th class="text-center" style="width: 12%;">T2</th>
+                    <th class="text-center" style="width: 12%;">T3</th>
+                    <th class="text-center" style="width: 12%;">T4</th>
+                    <th class="text-center" style="width: 12%;">T5</th>
+                    <th class="text-center" style="width: 12%;">T6</th>
+                    <th class="text-center" style="width: 12%;">T7</th>
+                    <th class="text-center" style="width: 12%;">CN</th>
+                    <th class="text-center" style="width: 8%;">Tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let i of [].constructor(15); let index = index"
+                >
+                    <td class="text-center">{{index+7}}:00</td>
+                    
+                    <td *ngIf="table[currentWeek].span[index][0]!=0"
+                    [attr.rowspan]="table[currentWeek].span[index][0]"
+                    [ngClass]="{'bg-info text-white': table[currentWeek].check[index][0]}">
+                        {{table[currentWeek].check[index][0]}}
+                    </td>
+
+                    <td *ngIf="table[currentWeek].span[index][1]!=0"
+                    [attr.rowspan]="table[currentWeek].span[index][1]"
+                    [ngClass]="{'bg-info text-white': table [currentWeek].check[index][1]}">
+                        {{table[currentWeek].check[index][1]}}
+                    </td>
+
+                    <td *ngIf="table[currentWeek].span[index][2]!=0"
+                    [attr.rowspan]="table[currentWeek].span[index][2]"
+                    [ngClass]="{'bg-info text-white': table[currentWeek].check[index][2]}">
+                        {{table[currentWeek].check[index][2]}}
+                    </td>
+
+                    <td *ngIf="table[currentWeek].span[index][3]!=0"
+                    [attr.rowspan]="table[currentWeek].span[index][3]"
+                    [ngClass]="{'bg-info text-white': table [currentWeek].check[index][3]}">
+                        {{table[currentWeek].check[index][3]}}
+                    </td>
+
+                    <td *ngIf="table[currentWeek].span[index][4]!=0"
+                    [attr.rowspan]="table[currentWeek].span[index][4]"
+                    [ngClass]="{'bg-info text-white': table [currentWeek].check[index][4]}">
+                        {{table[currentWeek].check[index][4]}}
+                    </td>
+
+                    <td *ngIf="table[currentWeek].span[index][5]!=0"
+                    [attr.rowspan]="table[currentWeek].span[index][5]"
+                    [ngClass]="{'bg-info text-white': table [currentWeek].check[index][5]}">
+                        {{table[currentWeek].check[index][5]}}
+                    </td>
+
+                    <td *ngIf="table[currentWeek].span[index][6]!=0"
+                    [attr.rowspan]="table[currentWeek].span[index][6]"
+                    [ngClass]="{'bg-info text-white': table [currentWeek].check[index][6]}">
+                        {{table[currentWeek].check[index][6]}}
+                    </td>
+                    
+                    <td class="text-center">{{index+1}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-12 mb-5">
+        <div class="d-flex justify-content-between mb-2">
+            <span class="ps-1 pt-2">Môn học đã xếp:</span>
+            <button class="btn btn-outline-success" (click)="saveDataAsExcel()">
+                Tải xuống
+            </button>
+        </div>
+        
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 5%;">STT</th>
+                    <th class="text-center" style="width: 30%;">Tên môn học</th>
+                    <th class="text-center" style="width: 5%;">Nhóm</th>
+                    <th class="text-center" style="width: 10%;">Tổ TH</th>
+                    <th class="text-center" style="width: 10%;">Số tín</th>
+                    <th class="text-center" style="width: 15%;">Phòng</th>
+                    <th class="text-center">GV</th>
+                    <th class="text-center" style="width: 5%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of succeed; let i = index">
+                    <td class="text-center">{{i+1}}</td>
+                    <td class="text-center">{{item.subName}}</td>
+                    <td class="text-center">{{item.group}}</td>
+                    <td class="text-center">{{item.th}}</td>
+                    <td class="text-center">{{item.st}}</td>
+                    <td class="text-center">{{item.room}}</td>
+                    <td class="text-center">{{item.teacher}}</td>
+                    <td class="text-center">
+                        <button class="btn btn-close" (click)="remove(item.subName)"></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addModal" tabindex="-1" style="display: none; height: 100vh;" 
+aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+            <div class="d-flex" style="height: 30px; width: 50%;">
+                <span class="me-1 pt-1">Lọc</span>
+                <select class="me-2" (change)="onSelectChange($event)">
+                    <option *ngFor="let item of filter">{{item}}</option>
+                </select>
+                <input #inp class="form-control me-2" type="search" placeholder="Nhập mã lớp, tên môn học, tkb,..." aria-label="Search">
+                <button class="btn btn-outline-success" (click)="find(inp.value)">Tìm</button>
+            </div>
+            <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="ps-1 pt-1"><b>Môn học</b></span>
+                </div>
+                <table class="table table-bordered" style="height: 100px;">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Tên môn</th>
+                            <th class="text-center">Nhóm</th>
+                            <th class="text-center">Mã lớp</th>
+                            <th class="text-center" style="width: 8%;">Tổ TH</th>
+                            <th class="text-center" style="width: 40%;">TKB</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="overflow-y">
+                        <tr *ngFor="let item of showListSubjects">
+                            <td class="text-center">{{item.ten_mon}}</td>
+                            <td class="text-center">{{item.nhom_to}}</td>
+                            <td class="text-center">{{item.lop}}</td>
+                            <td class="text-center">{{item.to_th}}</td>
+                            <td style="font-size: small;" [innerHTML]="item.tkb"></td>
+                            <td class="text-center">
+                                <button *ngIf="item.isDup==0" (click)="add(item)">Thêm</button>
+                                <small *ngIf="item.isDup==1"><b>Trùng lịch</b></small>
+                                <small *ngIf="item.isDup==2"><b>Môn đã chọn</b></small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+</div>
+

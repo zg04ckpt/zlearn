@@ -6,6 +6,7 @@ import { QSCreateRequest } from '../interfaces/qsCreateRequest';
 import { QuestionSetsModule } from '../models/question-sets.module';
 import { QuestionModule } from '../models/question.module';
 import { QSUpdateRequest } from '../interfaces/qsUpdateRequest';
+import { DecryptService } from './decrypt.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import { QSUpdateRequest } from '../interfaces/qsUpdateRequest';
 export class QuestionSetsService {
   private baseUrl = environment.baseUrl;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private decryptService: DecryptService) { }
 
   getAll() : Observable<any> {
     return this.httpClient.get(
@@ -107,20 +108,20 @@ export class QuestionSetsService {
 
   //chuyển dữ liệu từ server thành dữ liệu dùng cho client
   convertToQuestions(data: any): QuestionModule[] {
-    data = data.data
+    data = this.decryptService.decrypt(data.data) as any;
     let questions: QuestionModule[] = [];
     data.forEach((element: any) => {
       let question: QuestionModule = {
-        order: element.order,
-        content: element.content,
-        imageUrl: element.image,
-        answerA: element.answerA,
-        answerB: element.answerB,
-        answerC: element.answerC,
-        answerD: element.answerD,
-        correctAnswer: element.correctAnswer,
+        order: element.Order,
+        content: element.Content,
+        imageUrl: element.Image,
+        answerA: element.AnswerA,
+        answerB: element.AnswerB,
+        answerC: element.AnswerC,
+        answerD: element.AnswerD,
+        correctAnswer: element.CorrectAnswer,
         selected: false,
-        mark: element.mark,
+        mark: element.Mark,
         changeCorrectAnswer: function (select: number): void {
           this.correctAnswer = select;
         }
@@ -131,19 +132,19 @@ export class QuestionSetsService {
   }
 
   convertToQuestionSet(data: any): QuestionSetsModule {
-    data = data.data
+    data = this.decryptService.decrypt(data.data) as any;
     let questionSet: QuestionSetsModule = {
-      id: data.id,
-      name: data.name,
-      description: data.description,
-      imageUrl: data.imageUrl,
-      creator: data.creator,
-      createdDate: data.createdDate,
-      updatedDate: data.createdDate,
-      questionCount: data.questionCount,
+      id: data.Id,
+      name: data.Name,
+      description: data.Description,
+      imageUrl: data.ImageUrl,
+      creator: data.Creator,
+      createdDate: data.CreatedDate,
+      updatedDate: data.UpdatedDate,
+      questionCount: data.QuestionCount,
       testTime: {
-        minutes: data.testTime.minutes,
-        seconds: data.testTime.seconds
+        minutes: data.TestTime.Minutes,
+        seconds: data.TestTime.Seconds
       }
     }
     return questionSet;
@@ -151,19 +152,20 @@ export class QuestionSetsService {
 
   convertToListQuestionSet(data: any): QuestionSetsModule[] {
     let questionSets: QuestionSetsModule[] = [];
-    data.data.forEach((element: any) => {
+    const res = this.decryptService.decrypt(data.data) as any[];
+    res.forEach((element: any) => {
       let questionSet: QuestionSetsModule = {
-        id: element.id,
-        name: element.name,
-        description: element.description,
-        imageUrl: element.imageUrl,
-        creator: element.creator,
-        createdDate: element.createdDate,
-        updatedDate: element.updatedDate,
-        questionCount: element.questionCount,
+        id: element.Id,
+        name: element.Name,
+        description: element.Description,
+        imageUrl: element.ImageUrl,
+        creator: element.Creator,
+        createdDate: element.CreatedDate,
+        updatedDate: element.UpdatedDate,
+        questionCount: element.QuestionCount,
         testTime: {
-          minutes: element.testTime.minutes,
-          seconds: element.testTime.seconds
+          minutes: element.TestTime.Minutes,
+          seconds: element.TestTime.Seconds
         }
       }
       questionSets.push(questionSet);

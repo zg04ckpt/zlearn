@@ -8,7 +8,7 @@ export interface QuestionSet
     createdDate: Date
     updatedDate: Date
     attemptCount: number
-    numberOfQuestions: number
+    questionCount: number
     testTime: {
         minutes: number
         seconds: number

@@ -1,7 +1,7 @@
 <div class="container-fluid px-0">
 
   <app-navbar/>
-
+  
   <div class="row w-100">
     <div class="col-lg-2"></div>
     <div class="col-12 col-lg-8 pe-0">
@@ -10,4 +10,17 @@
     <div class="col-lg-2"></div>
   </div>
 
+</div>
+
+<div class="bs-toast toast toast-placement-ex m-2 fade bg-white start-0" 
+[ngClass]="{'show': showMess, 'hide': !showMess}"
+style="top: 10%;"
+role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <i class="bx bx-bell me-2"></i>
+      <div class="me-auto fw-medium">Cập nhật</div>
+      <small>30/5/2024</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">Thêm chức năng cuộn trang theo câu</div>
 </div>

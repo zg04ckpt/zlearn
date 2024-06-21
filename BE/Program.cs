@@ -104,12 +104,14 @@ builder.Services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateL
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BE v1"));
 }
+
+app.UseCors("AllowAll");
 
 app.UseStaticFiles();
 app.UseClientRateLimiting();
@@ -123,7 +125,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = FileService.REQUEST_PATH
 });
 
-app.UseCors("AllowAll");
+
 
 app.UseAuthentication();
 app.UseRouting();

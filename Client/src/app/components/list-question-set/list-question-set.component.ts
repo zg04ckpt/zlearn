@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { Subscription, interval } from 'rxjs';
 import { QuestionSet } from 'src/app/models/question-set';
+import { QuestionSetResponse } from 'src/app/models/question-set.response';
 import { QuestionSetService } from 'src/app/services/question-set.service';
 import { environment } from 'src/environments/environment.development';
 
@@ -16,23 +18,30 @@ export class ListQuestionSetComponent {
   ) { }
 
   ngOnInit() {
+
     this.questionSetService.getAll().subscribe(response => {
       if(response.code !== 200) 
           return alert('Failed to fetch data');
-      response.data.forEach(item => {
+      const res = this.questionSetService.decrypt(response.data) as any[];
+
+      res.forEach(item => {
         this.list.push({
-          id: item.id,
-          name: item.name,
-          description: item.description,
-          imageUrl: this.baseUrl + item.imageUrl,
-          creator: item.creator,
-          createdDate: item.createdDate,
-          updatedDate: item.updatedDate,
-          attemptCount: item.attemptCount,
-          numberOfQuestions: item.questionCount,
-          testTime: item.testTime
+          id: item.Id,
+          name: item.Name,
+          description: item.Description,
+          imageUrl: this.baseUrl + item.ImageUrl,
+          creator: item.Creator,
+          createdDate: item.CreatedDate,
+          updatedDate: item.UpdatedDate,
+          attemptCount: item.AttemptCount,
+          questionCount: item.QuestionCount,
+          testTime: item.TestTime
         });
       });
+
+      
     });
   }
+
+  
 }

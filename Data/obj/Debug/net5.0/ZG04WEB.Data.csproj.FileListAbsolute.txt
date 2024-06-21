@@ -1,0 +1,16 @@
+D:\Code\Web\zg04web\Data\bin\Debug\net5.0\ZG04WEB.Data.deps.json
+D:\Code\Web\zg04web\Data\bin\Debug\net5.0\ZG04WEB.Data.runtimeconfig.json
+D:\Code\Web\zg04web\Data\bin\Debug\net5.0\ZG04WEB.Data.runtimeconfig.dev.json
+D:\Code\Web\zg04web\Data\bin\Debug\net5.0\ZG04WEB.Data.dll
+D:\Code\Web\zg04web\Data\bin\Debug\net5.0\ZG04WEB.Data.pdb
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ZG04WEB.Data.csproj.AssemblyReference.cache
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ZG04WEB.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ZG04WEB.Data.AssemblyInfoInputs.cache
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ZG04WEB.Data.AssemblyInfo.cs
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ZG04WEB.Data.csproj.CoreCompileInputs.cache
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ZG04WEB.Data.sourcelink.json
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ZG04WEB.Data.dll
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\refint\ZG04WEB.Data.dll
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ZG04WEB.Data.pdb
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ZG04WEB.Data.genruntimeconfig.cache
+D:\Code\Web\zg04web\Data\obj\Debug\net5.0\ref\ZG04WEB.Data.dll

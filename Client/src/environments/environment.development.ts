@@ -1,3 +1,3 @@
 export const environment = {
-    baseUrl: "http://zg04be.ap-southeast-1.elasticbeanstalk.com"
+    baseUrl: "http://localhost:5000"
 };

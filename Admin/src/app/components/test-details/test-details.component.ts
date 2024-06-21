@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TestResultDetail } from 'src/app/interfaces/test-result-detail';
+import { DecryptService } from 'src/app/services/decrypt.service';
 import { TestResultDetailService } from 'src/app/services/test-result-detail.service';
 import * as XLSX from 'xlsx';
 
@@ -13,6 +14,7 @@ export class TestDetailsComponent {
 
   constructor(
     private testResultDetailService: TestResultDetailService,
+    private decryptService: DecryptService
   ) {}
 
   ngOnInit(): void {
@@ -23,18 +25,19 @@ export class TestDetailsComponent {
     this.testResultDetailService.getAll().subscribe(
       (data) => {
         this.list = []
-        data.data.forEach((item) => {
+        const res = this.decryptService.decrypt(data.data) as any[];
+        res.forEach((item) => {
           this.list.push({
-            id: item.id,
-            score: item.score,
-            correctsCount: item.correctsCount,
+            id: item.Id,
+            score: item.Score,
+            correctsCount: item.CorrectsCount,
             usedTime: {
-              minutes: item.usedTime.minutes,
-              seconds: item.usedTime.seconds
+              minutes: item.UsedTime.Minutes,
+              seconds: item.UsedTime.Seconds
             },
-            startTime: item.startTime,
-            userInfo: item.userInfo,
-            questionSetId: item.questionSetId
+            startTime: item.StartTime,
+            userInfo: item.UserInfo,
+            questionSetId: item.QuestionSetId
           })
         })
       },error => {

@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { DecryptService } from './decrypt.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private decrypt : DecryptService) { }
   baseUrl: string = environment.baseUrl;
 
   login(userName: string, password: string, remember: boolean) {
@@ -23,7 +24,8 @@ export class AuthService {
     ).pipe(tap(res => {
       if(res.code == 200)
       {
-        sessionStorage.setItem('token', res.data.token);
+        const data = this.decrypt.decrypt(res.data);
+        sessionStorage.setItem('token', data.Token);
         window.location.href= "/";
       }
     }, error => {
