@@ -1,4 +1,6 @@
-﻿using Application.Practice;
+﻿using Application.Common;
+using Application.Practice;
+using BE.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,15 +14,19 @@ namespace ZG04.BE.Controllers
 {
     [Route("api/question-sets")]
     [ApiController]
-    public class QuestionSetsController : ControllerBase
+    public class QuestionSetsController : BaseController
     {
         private readonly IQuestionSetService _questionSetService;
         private readonly ILogger<QuestionSetsController> _logger;
 
-        public QuestionSetsController(IQuestionSetService questionSetService, ILogger<QuestionSetsController> logger)
+        //test
+        private readonly IEmailSender _emailSender;
+
+        public QuestionSetsController(IQuestionSetService questionSetService, ILogger<QuestionSetsController> logger, IEmailSender emailSender)
         {
             _questionSetService = questionSetService;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -59,19 +65,6 @@ namespace ZG04.BE.Controllers
         {
             var result = await _questionSetService.Delete(id);
             return ApiResult(result);
-        }
-
-        private IActionResult ApiResult(ApiResult result)
-        {
-            if (result.Code == HttpStatusCode.OK) 
-                return Ok(result);
-
-            _logger.LogError(result.Message);
-            if (result.Code == HttpStatusCode.BadRequest) 
-                return BadRequest(result);
-            if (result.Code == HttpStatusCode.NotFound)
-                return NotFound(result);
-            return StatusCode(StatusCodes.Status500InternalServerError, result);
         }
     }
 }

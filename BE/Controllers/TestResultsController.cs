@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Threading.Tasks;
+using Utilities;
 using ViewModels.Common;
 using ViewModels.Test;
 
@@ -12,7 +13,7 @@ namespace BE.Controllers
 {
     [Route("api/test-results")]
     [ApiController]
-    public class TestResultsController : ControllerBase
+    public class TestResultsController : BaseController
     {
         private readonly ITestResultService _testResultService;
         private readonly ILogger<TestResultsController> _logger;
@@ -23,7 +24,7 @@ namespace BE.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> GetAll()
         {
             var result = await _testResultService.GetAll();
@@ -37,25 +38,12 @@ namespace BE.Controllers
             return ApiResult(result);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         [HttpDelete]
         public async Task<IActionResult> DeleteAll()
         {
             var result = await _testResultService.RemoveAll();
             return ApiResult(result);
-        }
-
-        private IActionResult ApiResult(ApiResult result)
-        {
-            if (result.Code == HttpStatusCode.OK)
-                return Ok(result);
-
-            _logger.LogError(result.Message);
-            if (result.Code == HttpStatusCode.BadRequest)
-                return BadRequest(result);
-            if (result.Code == HttpStatusCode.NotFound)
-                return NotFound(result);
-            return StatusCode(StatusCodes.Status500InternalServerError, result);
         }
     }
 }

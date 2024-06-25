@@ -12,7 +12,7 @@ namespace BE.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
         private readonly IUserService _userService;
         private readonly ILogger<UsersController> _logger;
@@ -30,16 +30,20 @@ namespace BE.Controllers
             return ApiResult(result);
         }
 
-        private IActionResult ApiResult(ApiResult result)
+        [HttpPost("register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromForm]RegisterRequest request)
         {
-            if (result.Code == HttpStatusCode.OK)
-                return Ok(result);
+            var result = await _userService.Register(request, Request.Host.Value, Request.Scheme);
+            return ApiResult(result);
+        }
 
-            if (result.Code == HttpStatusCode.BadRequest)
-                return BadRequest(result);
-            if (result.Code == HttpStatusCode.NotFound)
-                return NotFound(result);
-            return StatusCode(StatusCodes.Status500InternalServerError, result);
+        [HttpPost("email-confirm")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ValidateEmail([FromQuery]string id, [FromQuery]string token)
+        {
+            var result = await _userService.EmailValidate(id, token);
+            return ApiResult(result);
         }
     }
 }

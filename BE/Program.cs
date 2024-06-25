@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using ZG04.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +18,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.Extensions.Hosting;
+using Utilities;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Routing;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -26,7 +28,7 @@ var Configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(Configuration.GetConnectionString(Constants.CONNECTION_STRING),
+    options.UseSqlServer(Configuration.GetConnectionString(Consts.CONNECTION_STRING),
         options => options.EnableRetryOnFailure()
         );
     options.EnableDetailedErrors();
@@ -42,7 +44,9 @@ builder.Services.AddScoped<IQuestionServices, QuestionService>();
 builder.Services.AddScoped<ITestResultService, TestResultService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -54,6 +58,13 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>(); // Đăng ký IProcessingStrategy
 builder.Services.AddSingleton<IClientPolicyStore, MemoryCacheClientPolicyStore>(); // Đăng ký IClientPolicyStore
 
+//cấu hình login
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = true;
+});
+
+//cấu hình xác thực
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -89,6 +100,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+//cấu hình cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
@@ -98,6 +110,8 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+
+//cấu hình giới hạn truy cập
 builder.Services.AddMemoryCache();
 builder.Services.Configure<ClientRateLimitOptions>(Configuration.GetSection("ClientRateLimiting"));
 builder.Services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));

@@ -10,7 +10,7 @@ namespace BE.Controllers
 {
     [Route("api/questions")]
     [ApiController]
-    public class QuestionsController : ControllerBase
+    public class QuestionsController : BaseController
     {
         private readonly IQuestionServices _services;
         private readonly ILogger<QuestionsController> _logger;
@@ -25,19 +25,6 @@ namespace BE.Controllers
         {
             var result = await _services.GetByQuestionSetId(id);
             return ApiResult(result);
-        }
-
-        private IActionResult ApiResult(ApiResult result)
-        {
-            if (result.Code == HttpStatusCode.OK)
-                return Ok(result);
-
-            _logger.LogError(result.Message);
-            if (result.Code == HttpStatusCode.BadRequest)
-                return BadRequest(result);
-            if (result.Code == HttpStatusCode.NotFound)
-                return NotFound(result);
-            return StatusCode(StatusCodes.Status500InternalServerError, result);
         }
     }
 }

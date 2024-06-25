@@ -14,3 +14,5 @@ D:\Code\Web\zg04web\ViewModels\obj\Debug\net6.0\ViewModels.dll
 D:\Code\Web\zg04web\ViewModels\obj\Debug\net6.0\refint\ViewModels.dll
 D:\Code\Web\zg04web\ViewModels\obj\Debug\net6.0\ViewModels.pdb
 D:\Code\Web\zg04web\ViewModels\obj\Debug\net6.0\ref\ViewModels.dll
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net6.0\Utilities.dll
+D:\Code\Web\zg04web\ViewModels\bin\Debug\net6.0\Utilities.pdb
