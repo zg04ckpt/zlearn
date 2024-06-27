@@ -12,10 +12,16 @@ namespace BE.Controllers
         {
             if (result.Code == HttpStatusCode.OK)
                 return Ok(result);
+
+            if( result.Code == HttpStatusCode.Unauthorized)
+                return Unauthorized(result);
+
             if (result.Code == HttpStatusCode.BadRequest)
                 return BadRequest(result);
+
             if (result.Code == HttpStatusCode.NotFound)
                 return NotFound(result);
+
             return StatusCode(StatusCodes.Status500InternalServerError, result);
         }
     }

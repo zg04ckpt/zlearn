@@ -12,9 +12,17 @@ namespace Utilities
         public const string DEFAULT_USER_ROLE = "User";
         public const string DEFAULT_ADMIN_ROLE = "Admin";
 
+        public class AppSettingsKey
+        {
+            public const string ISSUER = "JwtSettings:Issuer";
+            public const string AUDIENCE = "JwtSettings:Audience";
+            public const string ACCESS_LIFE_TIME = "JwtSettings:AccessLifeTime";
+            public const string REFRESH_LIFE_TIME = "JwtSettings:RefreshLifeTime";
+        }
+
         public class EnvKey
         {
-            public const string SECRET_KEY = "secret-key";
+            public const string SECRET_KEY = "SECRET_KEY";
             public const string SYSTEM_EMAIL = "SYSTEM_EMAIL";
             public const string SYSTEM_EMAIL_PASS = "SYSTEM_EMAIL_PASS";
         }

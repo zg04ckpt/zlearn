@@ -1,4 +1,5 @@
 ﻿using Application.System;
+using Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,14 @@ namespace BE.Controllers
         public async Task<IActionResult> ValidateEmail([FromQuery]string id, [FromQuery]string token)
         {
             var result = await _userService.EmailValidate(id, token);
+            return ApiResult(result);
+        }
+
+        [HttpPost("refresh-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken([FromForm]Token token)
+        {
+            var result = await _userService.RefreshToken(token);
             return ApiResult(result);
         }
     }

@@ -39,7 +39,7 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
+builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IQuestionServices, QuestionService>();
 builder.Services.AddScoped<ITestResultService, TestResultService>();
 builder.Services.AddScoped<IFileService, FileService>();
@@ -77,12 +77,12 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
-        ValidIssuer = Configuration["Tokens:Issuer"],
         ValidateAudience = true,
-        ValidAudience = Configuration["Tokens:Issuer"],
-        ValidateLifetime = false,
+        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])),
+        ValidIssuer = Configuration[Consts.AppSettingsKey.ISSUER],
+        ValidAudience = Configuration[Consts.AppSettingsKey.AUDIENCE],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY))),
         ClockSkew = TimeSpan.Zero
     };
 

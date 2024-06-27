@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Data.Entities;
 using System.Threading.Tasks;
-using System.Web.Http.Controllers;
 using ViewModels.Common;
 using ViewModels.System;
 
@@ -13,6 +9,7 @@ namespace Application.System
     {
         Task<ApiResult> Authenticate(LoginRequest request);
         Task<ApiResult> Register(RegisterRequest request, string host, string scheme);
+        Task<ApiResult> RefreshToken(Token token);
         Task<ApiResult> EmailValidate(string userId, string token);
     }
 }

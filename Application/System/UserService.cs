@@ -15,8 +15,6 @@ using ViewModels.System;
 using Utilities;
 using Application.Common;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.AspNetCore.Http;
-using System.Web.Http.Routing;
 using System.Security.Cryptography;
 
 namespace Application.System
@@ -50,40 +48,18 @@ namespace Application.System
                 if (!result.Succeeded)
                     return new ApiResult("Mật khẩu không đúng", HttpStatusCode.BadRequest);
 
-                var accessToken = await GenerateAccessToken(user);
-                var refreshToken = GenerateRefreshToken();
-                return new ApiResult(new Token
-                {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken
-                });
+                var token = await GenerateToken(user);
+                user.RefreshToken = token.RefreshToken;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(double.Parse(_config[Consts.AppSettingsKey.REFRESH_LIFE_TIME]));
+
+                await _userManager.UpdateAsync(user);
+                return new ApiResult(token);
             }
             catch (Exception ex)
             {
                 return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
-
-        public async Task<ApiResult> EmailValidate(string userId, string token)
-        {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null)
-                    return new ApiResult("Không tìm thấy user", HttpStatusCode.BadRequest);
-
-                var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
-                var checkResult = await _userManager.ConfirmEmailAsync(user, decodedToken);
-                if (checkResult.Succeeded)
-                    return new ApiResult();
-                return new ApiResult("Xác thực không thành công", HttpStatusCode.BadRequest);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-
         public async Task<ApiResult> Register(RegisterRequest request, string host, string scheme)
         {
             try
@@ -135,39 +111,119 @@ namespace Application.System
                 return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
-
-        private async Task<string> GenerateAccessToken(AppUser user)
+        public async Task<ApiResult> EmailValidate(string userId, string token)
         {
-            //create info inside token
-            var roles = await _userManager.GetRolesAsync(user);
-            var claims = new[]
+            try
             {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.GivenName, user.FirstName),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, string.Join(";", roles))
-            };
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    return new ApiResult("Không tìm thấy user", HttpStatusCode.BadRequest);
 
-            //api key
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                issuer: _config["Tokens:Issuer"],
-                audience: _config["Tokens:Issuer"],
-                claims: claims,
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-        private string GenerateRefreshToken() 
-        {
-            var randomNumber = new Byte[32];
-            using(var rng = RandomNumberGenerator.Create())
+                var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+                var checkResult = await _userManager.ConfirmEmailAsync(user, decodedToken);
+                if (checkResult.Succeeded)
+                    return new ApiResult();
+                return new ApiResult("Xác thực không thành công", HttpStatusCode.BadRequest);
+            }
+            catch (Exception ex)
             {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
+                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
+        public async Task<ApiResult> RefreshToken(Token token)
+        {
+            try
+            {
+                //validate access token
+                var principal = GetClaimsPrincipalFromExpiredToken(token.AccessToken);
+                if (principal is null)
+                    return new ApiResult("Invalid access token", HttpStatusCode.BadRequest);
+
+                //validate refresh token
+                var user = await _userManager.FindByNameAsync(principal.Identity.Name);
+                if (user is null || user.RefreshToken != token.RefreshToken)
+                    return new ApiResult("Invalid refresh token", HttpStatusCode.BadRequest);
+
+                //refresh token expired => login to generate new token
+                if(user.RefreshTokenExpiryTime <= DateTime.Now)
+                    return new ApiResult("Refresh token expired", HttpStatusCode.Unauthorized);
+
+                //refresh token didn't expired => update both access and refresh
+                var newToken = await GenerateToken(user);
+                user.RefreshToken = newToken.RefreshToken;
+                await _userManager.UpdateAsync(user);
+                return new ApiResult(newToken);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+        private async Task<Token> GenerateToken(AppUser user)
+        {
+            //generate access token
+            var roles = await _userManager.GetRolesAsync(user);
+            var publicClaims = new Claim[]
+            {
+                new (ClaimTypes.Name, user.UserName), //require for refresh
+                new (ClaimTypes.GivenName, user.FirstName),
+                new (ClaimTypes.Email, user.Email),
+                new (ClaimTypes.Role, string.Join(',', roles))
+            };
+            var secretKey = Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY);
+            var tokenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var token = new JwtSecurityToken
+            (
+                issuer: _config[Consts.AppSettingsKey.ISSUER],
+                audience: _config[Consts.AppSettingsKey.AUDIENCE],
+                claims: publicClaims,
+                signingCredentials: new SigningCredentials(tokenKey, SecurityAlgorithms.HmacSha256),
+                expires: DateTime.Now.AddMinutes(double.Parse(_config[Consts.AppSettingsKey.ACCESS_LIFE_TIME]))
+            );
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var accessToken = jwtTokenHandler.WriteToken(token);
+
+            //generate refresh token
+            string refreshToken;
+            var randomBytes = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomBytes);
+                refreshToken =  Convert.ToBase64String(randomBytes);
+            }  
+            
+            return new Token { 
+                AccessToken = accessToken,
+                RefreshToken = refreshToken 
+            };
+        }
+        private ClaimsPrincipal GetClaimsPrincipalFromExpiredToken(string expiredToken)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = false,
+
+                ValidIssuer = _config[Consts.AppSettingsKey.ISSUER],
+                ValidAudience = _config[Consts.AppSettingsKey.AUDIENCE],
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY)))
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(expiredToken, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if(jwtSecurityToken is null || !jwtSecurityToken.Header.Alg
+                .Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return null;
+            }    
+
+            return principal;
+        }
+        
     }
 }
