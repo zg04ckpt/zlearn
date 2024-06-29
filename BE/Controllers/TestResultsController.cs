@@ -27,8 +27,7 @@ namespace BE.Controllers
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _testResultService.GetAll();
-            return ApiResult(result);
+            return ApiResult(await _testResultService.GetAll());
         }
 
         [HttpPost]
@@ -42,8 +41,7 @@ namespace BE.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteAll()
         {
-            var result = await _testResultService.RemoveAll();
-            return ApiResult(result);
+            return ApiResult(await _testResultService.RemoveAll());
         }
     }
 }

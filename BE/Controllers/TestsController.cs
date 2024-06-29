@@ -33,39 +33,34 @@ namespace ZG04.BE.Controllers
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _questionSetService.GetAll();
-            return ApiResult(result);
+            return ApiResult(await _questionSetService.GetAll());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            var result = await _questionSetService.GetById(id);
-            return ApiResult(result);
+            return ApiResult(await _questionSetService.GetById(id));
         }
 
         [Authorize(Roles = "Editor, Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] QSCreateRequest request)
         {
-            var result = await _questionSetService.Create(request);
-            return ApiResult(result);
+            return ApiResult(await _questionSetService.Create(request));
         }
 
         [Authorize(Roles = "Editor, Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromForm] QSUpdateRequest questionSet)
         {
-            var result = await _questionSetService.Update(id, questionSet);
-            return ApiResult(result);
+            return ApiResult(await _questionSetService.Update(id, questionSet));
         }
 
         [Authorize(Roles = "Editor, Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await _questionSetService.Delete(id);
-            return ApiResult(result);
+            return ApiResult(await _questionSetService.Delete(id));
         }
     }
 }

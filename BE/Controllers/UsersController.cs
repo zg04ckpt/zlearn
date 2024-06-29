@@ -1,4 +1,4 @@
-﻿using Application.System;
+﻿using Application.System.Users;
 using Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Threading.Tasks;
+using Utilities;
 using ViewModels.Common;
-using ViewModels.System;
+using ViewModels.System.Users;
 
 namespace BE.Controllers
 {
@@ -27,8 +28,7 @@ namespace BE.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromForm]LoginRequest request)
         {
-            var result = await _userService.Authenticate(request);
-            return ApiResult(result);
+            return ApiResult(await _userService.Authenticate(request));
         }
 
         [HttpPost("register")]
@@ -43,16 +43,49 @@ namespace BE.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ValidateEmail([FromQuery]string id, [FromQuery]string token)
         {
-            var result = await _userService.EmailValidate(id, token);
-            return ApiResult(result);
+            return ApiResult(await _userService.EmailValidate(id, token));
         }
 
         [HttpPost("refresh-token")]
         [AllowAnonymous]
         public async Task<IActionResult> RefreshToken([FromForm]Token token)
         {
-            var result = await _userService.RefreshToken(token);
-            return ApiResult(result);
+            return ApiResult(await _userService.RefreshToken(token));
+        }
+
+        [HttpGet("paging")]
+        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
+        public async Task<IActionResult> GetUsers([FromQuery]PagingRequest request)
+        {
+            return ApiResult(await _userService.GetUsers(request));
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
+        public async Task<IActionResult> UpdateUser(string id, [FromForm]UserUpdateRequest request)
+        {
+            return ApiResult(await _userService.UpdateUser(id, request));
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
+        public async Task<IActionResult> GetUser(string id)
+        {
+            return ApiResult(await _userService.GetUserById(id));
+        }
+
+        [HttpGet("{userId}/roles")]
+        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
+        public async Task<IActionResult> GetAllRoles(string userId)
+        {
+            return ApiResult(await _userService.GetAllRoles(userId));
+        }
+
+        [HttpPost("{userId}/role-assign")]
+        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
+        public async Task<IActionResult> AssignRole(string userId, [FromBody]RoleAssignRequest request)
+        {
+            return ApiResult(await _userService.RoleAssign(userId, request));
         }
     }
 }

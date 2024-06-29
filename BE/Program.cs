@@ -1,6 +1,5 @@
 ﻿using Application.Common;
 using Application.Practice;
-using Application.System;
 using AspNetCoreRateLimit;
 using Data.Entities;
 using Data;
@@ -19,8 +18,8 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.Extensions.Hosting;
 using Utilities;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Routing;
+using Application.System.Users;
+using Application.System.Roles;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -45,6 +44,8 @@ builder.Services.AddScoped<ITestResultService, TestResultService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddTransient<IRoleService, RoleService>();
+
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 
@@ -138,8 +139,6 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(path),
     RequestPath = FileService.REQUEST_PATH
 });
-
-
 
 app.UseAuthentication();
 app.UseRouting();
