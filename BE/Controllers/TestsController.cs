@@ -30,7 +30,6 @@ namespace ZG04.BE.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             return ApiResult(await _questionSetService.GetAll());

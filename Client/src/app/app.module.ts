@@ -4,22 +4,22 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { ListQuestionSetComponent } from './components/list-question-set/list-question-set.component';
+import { TestListComponent } from './components/test-list/test-list.component';
 import { TestComponent } from './components/test/test.component';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './components/about/about.component';
-import { PraticeComponent } from './components/pratice/pratice.component';
-import { SetScheduleComponent } from './components/set-schedule/set-schedule.component';
+import { PracticeComponent } from './components/practice/practice.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    ListQuestionSetComponent,
+    TestListComponent,
     TestComponent,
     AboutComponent,
-    PraticeComponent,
-    SetScheduleComponent
+    PracticeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

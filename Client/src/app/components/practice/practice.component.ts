@@ -5,18 +5,17 @@ import { Question } from 'src/app/models/question';
 import { QuestionSet } from 'src/app/models/question-set';
 import { Test, TestStatus } from 'src/app/models/test';
 import { TestTime } from 'src/app/models/test-time';
-import { QuestionSetService } from 'src/app/services/question-set.service';
 import { QuestionService } from 'src/app/services/question.service';
 import { TestResultService } from 'src/app/services/test-result.service';
 import { Location } from '@angular/common';
-import { TestResultRequest } from 'src/app/models/test-result.request';
+import { QuestionSetService } from 'src/app/services/test.service';
 
 @Component({
-  selector: 'app-pratice',
-  templateUrl: './pratice.component.html',
-  styleUrls: ['./pratice.component.css']
+  selector: 'app-practice',
+  templateUrl: './practice.component.html',
+  styleUrls: ['./practice.component.css']
 })
-export class PraticeComponent {
+export class PracticeComponent {
   test: Test = {
     duration: { minutes: 0, seconds: 0 },
     status: TestStatus.InProgress,
@@ -43,7 +42,7 @@ export class PraticeComponent {
   constructor(
     private location: Location,
     private route: ActivatedRoute,
-    private questionSetService: QuestionSetService,
+    private testService: QuestionSetService,
     private questionService: QuestionService,
     private testResultService: TestResultService
   ) { }
@@ -51,10 +50,10 @@ export class PraticeComponent {
   ngOnInit() {
     this.qSet.id = this.route.snapshot.paramMap.get('id')!;
 
-    this.questionSetService.getById(this.qSet.id).subscribe(response => {
+    this.testService.getById(this.qSet.id).subscribe(response => {
       if(response.code !== 200) 
           return alert('Failed to fetch data');
-      const res = this.questionSetService.decrypt(response.data) as any;
+      const res = this.testService.decrypt(response.data) as any;
       this.qSet = {
         id: res.Id,
         name: res.Name,
@@ -104,7 +103,7 @@ export class PraticeComponent {
     this.questionService.getAllById(this.qSet.id).subscribe(response => {
       if(response.code !== 200) 
           return alert('Failed to fetch data');
-      const res = this.questionSetService.decrypt(response.data) as any[];
+      const res = this.testService.decrypt(response.data) as any[];
       res.forEach(item => {
         this.questions.push({
           order: item.Order,

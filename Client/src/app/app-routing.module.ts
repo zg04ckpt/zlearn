@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ListQuestionSetComponent } from './components/list-question-set/list-question-set.component';
+import { TestListComponent } from './components/test-list/test-list.component';
 import { TestComponent } from './components/test/test.component';
 import { AboutComponent } from './components/about/about.component';
-import { PraticeComponent } from './components/pratice/pratice.component';
-import { SetScheduleComponent } from './components/set-schedule/set-schedule.component';
+import { PracticeComponent } from './components/practice/practice.component';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
-  { path: '', component: ListQuestionSetComponent },
+  { path: '', component: TestListComponent },
   { path: 'test/:id', component: TestComponent },
-  { path: 'practice/:id', component: PraticeComponent },
+  { path: 'practice/:id', component: PracticeComponent },
   { path: 'about', component: AboutComponent },
-  { path: 'set-schedule', component: SetScheduleComponent}
+  { path: 'login', component: LoginComponent}
 ];
 
 @NgModule({
