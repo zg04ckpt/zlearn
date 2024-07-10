@@ -26,7 +26,7 @@ namespace Application.Practice
             _fileService = fileService;
         }
 
-        public async Task<ApiResult> Create(QSCreateRequest request)
+        public async Task<ApiResult> Create(CreateTestRequest request)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace Application.Practice
                 var questionSets = await _context.QuestionSets
                     .Include(qs => qs.Questions)
                     .Include(qs => qs.TestResults)
-                    .Select(qs => new QSResponse
+                    .Select(qs => new TestResponse
                     {
                         Id = qs.Id,
                         Name = qs.Name,
@@ -146,7 +146,7 @@ namespace Application.Practice
                 if (questionSet == null)
                     return new ApiResult("Not found", HttpStatusCode.NotFound);
 
-                return new ApiResult(new QSResponse
+                return new ApiResult(new TestResponse
                 {
                     Id = questionSet.Id,
                     Name = questionSet.Name,
@@ -170,7 +170,7 @@ namespace Application.Practice
             }
         }
 
-        public async Task<ApiResult> Update(string id, QSUpdateRequest request)
+        public async Task<ApiResult> Update(string id, TestUpdateRequest request)
         {
             try
             {

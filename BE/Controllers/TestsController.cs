@@ -2,12 +2,9 @@
 using Application.Practice;
 using BE.Controllers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Net;
 using System.Threading.Tasks;
-using ViewModels.Common;
 using ViewModels.QuestionSet;
 
 namespace ZG04.BE.Controllers
@@ -43,14 +40,14 @@ namespace ZG04.BE.Controllers
 
         [Authorize(Roles = "Editor, Admin")]
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] QSCreateRequest request)
+        public async Task<IActionResult> Create([FromForm] CreateTestRequest request)
         {
             return ApiResult(await _questionSetService.Create(request));
         }
 
         [Authorize(Roles = "Editor, Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromForm] QSUpdateRequest questionSet)
+        public async Task<IActionResult> Update(string id, [FromForm] TestUpdateRequest questionSet)
         {
             return ApiResult(await _questionSetService.Update(id, questionSet));
         }

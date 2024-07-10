@@ -1,0 +1,68 @@
+<div class="vh-100 vw-100 bg-dark position-fixed align-content-center">
+    <div class="container" style="transform: translateY(-20%);">
+        <div class="row">
+            <div class="col-md-4 offset-md-4 col-xs-12">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center fs-3 fw-bold">
+                        Đăng nhập
+                    </div>
+                    <div class="card-body mt-4">
+                        <p class="text-end">
+                            <a href="#">Quên mật khẩu ?</a>
+                        </p>
+
+                        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                            <fieldset [disabled]="isSubmitting">
+                                <fieldset class="form-group">
+                                    <input #input_email formControlName="email" type="email" placeholder="Nhập email"
+                                        class="form-control fs-5 fw-medium">
+                                    @if(form.controls['email'].invalid && (form.controls['email'].touched || form.controls['email'].dirty)) {
+                                        @if(form.controls['email'].errors?.['required']) {
+                                            <small class="text-danger">Email không được bỏ trống</small>
+                                        }
+                                        @else if(form.controls['email'].errors?.['email']) {
+                                            <small class="text-danger">Email không hợp lệ bỏ trống</small>
+                                        }
+                                    }
+                                </fieldset>
+
+                                <fieldset class="form-group mt-2">
+                                    <input 
+                                        formControlName="password" 
+                                        type="password" 
+                                        placeholder="Nhập mật khẩu"
+                                        class="form-control fs-5 fw-medium">
+                                    @if(form.controls['password'].invalid && (form.controls['password'].touched || form.controls['password'].dirty)) {
+                                        @if(form.controls['password'].errors?.['required']) {
+                                            <small class="text-danger">Mật khẩu không được bỏ trống</small>
+                                        }
+                                    }
+                                </fieldset>
+                                
+                                <label for="remember-me" class="fw-lighter ms-1 small mt-2">
+                                    <input 
+                                        formControlName="remember" 
+                                        class="form-check-label" 
+                                        type="checkbox">
+                                    Ghi nhớ đăng nhập
+                                </label>
+                                <!-- <app-list-errors [errors]="form.controls['email'].errors"></app-list-errors> -->
+                                <button [disabled]="form.invalid && (form.touched || form.dirty)" type="submit"
+                                    class="btn btn-success pull-xs-right form-control mt-4">
+                                    Đăng nhập
+                                </button>
+                            </fieldset>
+                        </form>
+
+                        <p class="text-center mt-2">
+                            <span>Chưa có tài khoản?</span>
+                            <a href="#">Tạo tài khoản</a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

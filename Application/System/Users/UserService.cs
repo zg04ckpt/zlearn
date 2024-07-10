@@ -57,7 +57,16 @@ namespace Application.System.Users
                 user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(double.Parse(_config[Consts.AppSettingsKey.REFRESH_LIFE_TIME]));
 
                 await _userManager.UpdateAsync(user);
-                return new ApiResult(token);
+
+                var response = new LoginResponse
+                {
+                    Id = user.Id.ToString(),
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    AccessToken = token.AccessToken,
+                    RefreshToken = token.RefreshToken
+                };
+                return new ApiResult(response);
             }
             catch (Exception ex)
             {

@@ -63,6 +63,13 @@ builder.Services.AddSingleton<IClientPolicyStore, MemoryCacheClientPolicyStore>(
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.SignIn.RequireConfirmedEmail = true;
+
+    //pass config
+    options.Password.RequireNonAlphanumeric = true; 
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
 });
 
 //cấu hình xác thực

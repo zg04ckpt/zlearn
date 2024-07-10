@@ -8,7 +8,7 @@ using ViewModels.Question;
 
 namespace ViewModels.QuestionSet
 {
-    public class QSUpdateRequest
+    public class TestUpdateRequest
     {
         public string Name { get; set; }
         public string Description { get; set; }

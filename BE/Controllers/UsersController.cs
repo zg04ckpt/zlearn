@@ -26,14 +26,14 @@ namespace BE.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromForm]LoginRequest request)
+        public async Task<IActionResult> Login([FromBody]LoginRequest request)
         {
             return ApiResult(await _userService.Authenticate(request));
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm]RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             var result = await _userService.Register(request, Request.Host.Value, Request.Scheme);
             return ApiResult(result);
@@ -48,7 +48,7 @@ namespace BE.Controllers
 
         [HttpPost("refresh-token")]
         [AllowAnonymous]
-        public async Task<IActionResult> RefreshToken([FromForm]Token token)
+        public async Task<IActionResult> RefreshToken([FromBody] Token token)
         {
             return ApiResult(await _userService.RefreshToken(token));
         }
@@ -62,7 +62,7 @@ namespace BE.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        public async Task<IActionResult> UpdateUser(string id, [FromForm]UserUpdateRequest request)
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserUpdateRequest request)
         {
             return ApiResult(await _userService.UpdateUser(id, request));
         }
@@ -83,7 +83,7 @@ namespace BE.Controllers
 
         [HttpPost("{userId}/role-assign")]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        public async Task<IActionResult> AssignRole(string userId, [FromBody]RoleAssignRequest request)
+        public async Task<IActionResult> AssignRole(string userId, [FromBody] RoleAssignRequest request)
         {
             return ApiResult(await _userService.RoleAssign(userId, request));
         }

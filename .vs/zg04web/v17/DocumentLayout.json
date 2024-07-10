@@ -3,8 +3,12 @@
   "WorkspaceRootPath": "D:\\Code\\Web\\zg04web\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|d:\\code\\web\\zg04web\\be\\controllers\\testscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|solutionrelative:be\\controllers\\testscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\system\\users\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\system\\users\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\system\\users\\loginresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\system\\users\\loginresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,14 +35,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "TestsController.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\TestsController.cs",
-              "RelativeDocumentMoniker": "BE\\Controllers\\TestsController.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\TestsController.cs",
-              "RelativeToolTip": "BE\\Controllers\\TestsController.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAAB8AAAARAAAA",
+              "Title": "UserService.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\System\\Users\\UserService.cs",
+              "RelativeDocumentMoniker": "Application\\System\\Users\\UserService.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\System\\Users\\UserService.cs",
+              "RelativeToolTip": "Application\\System\\Users\\UserService.cs",
+              "ViewState": "AQIAABgAAAAAAAAAAAAAwCQAAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T14:02:18.22Z",
+              "WhenOpened": "2024-07-10T08:37:15.078Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LoginResponse.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\System\\Users\\LoginResponse.cs",
+              "RelativeDocumentMoniker": "ViewModels\\System\\Users\\LoginResponse.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\ViewModels\\System\\Users\\LoginResponse.cs",
+              "RelativeToolTip": "ViewModels\\System\\Users\\LoginResponse.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-10T08:37:01.982Z",
               "EditorCaption": ""
             }
           ]

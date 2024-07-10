@@ -12,8 +12,8 @@ namespace Application.Practice
     {
         Task<ApiResult> GetAll();
         Task<ApiResult> GetById(string id);
-        Task<ApiResult> Create(QSCreateRequest request);
-        Task<ApiResult> Update(string id, QSUpdateRequest request);
+        Task<ApiResult> Create(CreateTestRequest request);
+        Task<ApiResult> Update(string id, TestUpdateRequest request);
         Task<ApiResult> Delete(string id);
     }
 }
