@@ -10,6 +10,7 @@ import { RegisterRequest } from "../models/register-request.model";
 import { RegisterResponse } from "../models/register-response.model";
 import { ConfirmEmailResponse } from "../models/confirm-email-response.model";
 import { RefreshTokenResponse } from "../models/refresh-token-response.model";
+import { environment } from "src/environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -33,13 +34,13 @@ export class UserService {
     login(
         request: LoginRequest
     ): Observable<LoginResponse> {
+        
+        //remove all token
+        this.purgeAuth();
+
         return this.http.post<LoginResponse>(
-            'users/login',
+            `users/login`,
             request,
-            // {
-            //     //send data as form
-            //     headers: {...({'Content-Type': 'application/x-www-form-urlencoded'})}
-            // }
         ).pipe(tap(res => {
             const data = res.data!;
 
@@ -61,6 +62,9 @@ export class UserService {
     register(
         request: RegisterRequest
     ): Observable<RegisterResponse> {
+        //remove all token
+        this.purgeAuth();
+
         return this.http.post<RegisterResponse>(
             'users/register',
             request
@@ -68,15 +72,13 @@ export class UserService {
     }
 
     confirmEmail(
-        userId: string, 
+        id: string, 
         token: string
     ): Observable<ConfirmEmailResponse> {
-        return this.http.post<ConfirmEmailResponse>(
-            'users/confirm-email',
-            {
-                userId: userId,
-                token: token
-            }
+        this.purgeAuth();
+
+        return this.http.get<ConfirmEmailResponse>(
+            `users/email-confirm?id=${id}&token=${token}`
         );
     }
 

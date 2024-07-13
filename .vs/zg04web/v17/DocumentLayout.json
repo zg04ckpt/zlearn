@@ -7,8 +7,35 @@
       "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\system\\users\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zg04web/True/SqlTable/dbo.AppUsers.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|d:\\code\\web\\zg04web\\be\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|solutionrelative:be\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\common\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\common\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\system\\users\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\system\\users\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\system\\users\\loginresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\system\\users\\loginresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC86CAFF-8D2E-4730-B4D0-34FA16C06BFD}|Data\\Data.csproj|d:\\code\\web\\zg04web\\data\\configurations\\appuserconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC86CAFF-8D2E-4730-B4D0-34FA16C06BFD}|Data\\Data.csproj|solutionrelative:data\\configurations\\appuserconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\system\\users\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\system\\users\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|d:\\code\\web\\zg04web\\be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|solutionrelative:be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +45,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 242,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,20 +61,101 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "EmailSender.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\Common\\EmailSender.cs",
+              "RelativeDocumentMoniker": "Application\\Common\\EmailSender.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\Common\\EmailSender.cs",
+              "RelativeToolTip": "Application\\Common\\EmailSender.cs",
+              "ViewState": "AQIAABkAAAAAAAAAAAAQwBQAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-12T14:37:23.156Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\System\\Users\\IUserService.cs",
+              "RelativeDocumentMoniker": "Application\\System\\Users\\IUserService.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\System\\Users\\IUserService.cs",
+              "RelativeToolTip": "Application\\System\\Users\\IUserService.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAhwA0AAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-12T13:54:38.993Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "dbo.AppUsers [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zg04web/True/SqlTable/dbo.AppUsers.sql",
+              "ToolTip": "dbo.AppUsers [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-07-12T00:19:27.751Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "BE\\Controllers\\UsersController.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "BE\\Controllers\\UsersController.cs",
+              "ViewState": "AQIAABYAAAAAAAAAAAAQwBwAAABFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-12T00:01:16.316Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AppUserConfig.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Data\\Configurations\\AppUserConfig.cs",
+              "RelativeDocumentMoniker": "Data\\Configurations\\AppUserConfig.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Data\\Configurations\\AppUserConfig.cs",
+              "RelativeToolTip": "Data\\Configurations\\AppUserConfig.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAABAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-11T23:31:38.728Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\BE\\Program.cs",
+              "RelativeDocumentMoniker": "BE\\Program.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\BE\\Program.cs",
+              "RelativeToolTip": "BE\\Program.cs",
+              "ViewState": "AQIAADYAAAAAAAAAAAAAAEcAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-11T23:23:42.628Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "RegisterRequest.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\System\\Users\\RegisterRequest.cs",
+              "RelativeDocumentMoniker": "ViewModels\\System\\Users\\RegisterRequest.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\ViewModels\\System\\Users\\RegisterRequest.cs",
+              "RelativeToolTip": "ViewModels\\System\\Users\\RegisterRequest.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAsAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-11T23:22:50.482Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "UserService.cs",
               "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\System\\Users\\UserService.cs",
               "RelativeDocumentMoniker": "Application\\System\\Users\\UserService.cs",
               "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\System\\Users\\UserService.cs",
               "RelativeToolTip": "Application\\System\\Users\\UserService.cs",
-              "ViewState": "AQIAABgAAAAAAAAAAAAAwCQAAAAnAAAA",
+              "ViewState": "AQIAACgAAAAAAAAAAAAUwDYAAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-10T08:37:15.078Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "LoginResponse.cs",
               "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\System\\Users\\LoginResponse.cs",
               "RelativeDocumentMoniker": "ViewModels\\System\\Users\\LoginResponse.cs",
@@ -55,8 +163,7 @@
               "RelativeToolTip": "ViewModels\\System\\Users\\LoginResponse.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-10T08:37:01.982Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-10T08:37:01.982Z"
             }
           ]
         },

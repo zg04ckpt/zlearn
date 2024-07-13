@@ -6,8 +6,7 @@
                     {{data.title}}
                     <button class="btn btn-close" (click)="data.show = false"></button>
                 </div>
-                <div class="card-body">
-                    {{data.msg}}
+                <div class="card-body" [innerHTML]="data.msg">
                 </div>
                 <div class="card-footer d-flex justify-content-center">
                     @for (btn of data.acts; track $index) {

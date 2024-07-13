@@ -35,11 +35,11 @@ namespace BE.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            var result = await _userService.Register(request, Request.Host.Value, Request.Scheme);
+            var result = await _userService.Register(request, Request.Headers.Origin.ToString());
             return ApiResult(result);
         }
 
-        [HttpPost("email-confirm")]
+        [HttpGet("email-confirm")]
         [AllowAnonymous]
         public async Task<IActionResult> ValidateEmail([FromQuery]string id, [FromQuery]string token)
         {

@@ -9,7 +9,7 @@ namespace Application.System.Users
     public interface IUserService
     {
         Task<ApiResult> Authenticate(LoginRequest request);
-        Task<ApiResult> Register(RegisterRequest request, string host, string scheme);
+        Task<ApiResult> Register(RegisterRequest request, string origin);
         Task<ApiResult> RefreshToken(Token token);
         Task<ApiResult> EmailValidate(string userId, string token);
         Task<ApiResult> GetUsers(PagingRequest request);

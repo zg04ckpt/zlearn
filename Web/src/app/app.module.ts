@@ -11,11 +11,12 @@ import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { ApiInterceptor } from './core/interceptors/api.interceptor';
 import { MessageComponent } from "./shared/components/message/message.component";
 import { ToastComponent } from './shared/components/toast/toast.component';
+import { LoadingComponent } from './shared/components/loading/loading.component';
+import { EmailConfirmComponent } from './core/auth/components/email-confirm/email-confirm.component';
 
 @NgModule({
     declarations: [
-        AppComponent,
-        ToastComponent
+        AppComponent
     ],
     providers: [
         {
@@ -36,12 +37,13 @@ import { ToastComponent } from './shared/components/toast/toast.component';
     ],
     bootstrap: [AppComponent],
     imports: [
-        BrowserModule,
-        AppRoutingModule,
-        HeaderComponent,
-        FooterComponent,
-        HttpClientModule,
-        MessageComponent
-    ]
+    BrowserModule,
+    AppRoutingModule,
+    HeaderComponent,
+    FooterComponent,
+    HttpClientModule,
+    MessageComponent,
+    ToastComponent
+]
 })
 export class AppModule { }

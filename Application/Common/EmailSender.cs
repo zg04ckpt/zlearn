@@ -23,7 +23,7 @@ namespace Application.Common
                 string password = Environment.GetEnvironmentVariable(Consts.EnvKey.SYSTEM_EMAIL_PASS);
 
                 var mail = new MimeMessage();
-                mail.From.Add(new MailboxAddress("ZG04", email));
+                mail.From.Add(new MailboxAddress("CodeAndLife", email));
                 mail.To.Add(MailboxAddress.Parse(receiver));
                 mail.Subject = subject;
                 mail.Body = new TextPart(MimeKit.Text.TextFormat.Html)

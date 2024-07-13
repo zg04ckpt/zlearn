@@ -33,6 +33,7 @@ export class MessageComponent implements OnInit {
 
   redirect(url: string) {
     this.route.navigate([url]);
+    this.data.show = false;
   }
 }
 

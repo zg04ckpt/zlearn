@@ -73,41 +73,39 @@ namespace Application.System.Users
                 return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
-        public async Task<ApiResult> Register(RegisterRequest request, string host, string scheme)
+        public async Task<ApiResult> Register(RegisterRequest request, string origin)
         {
             try
             {
+                if (request.Password != request.ConfirmPassword)
+                    return new ApiResult("Confirm password does not match!", HttpStatusCode.BadRequest);
+
                 //check user existed
-                if (await _userManager.FindByEmailAsync(request.Email) != null)
+                if ((await _userManager.FindByEmailAsync(request.Email)) != null)
                     return new ApiResult("Email existed!", HttpStatusCode.BadRequest);
 
                 //create new user
                 var newUser = new AppUser
                 {
                     UserName = request.Email,
-                    Email = request.Email,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    PhoneNumber = request.PhoneNumber,
-                    Address = request.Address,
-                    Gender = request.Gender,
-                    DateOfBirth = request.DateOfBirth
+                    Email = request.Email
                 };
 
                 //save user to db
                 var createProcess = await _userManager.CreateAsync(newUser, request.Password);
                 if (createProcess.Succeeded)
                 {
-                    if ((await _userManager.AddToRoleAsync(newUser, Consts.DEFAULT_USER_ROLE)).Succeeded)
+                    var roleAssignResult = await _userManager.AddToRoleAsync(newUser, Consts.DEFAULT_USER_ROLE);
+                    if (roleAssignResult.Succeeded)
                     {
                         //email confirm
                         var validateCode = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                         validateCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(validateCode));
-                        var url = $"{scheme}://{host}/api/users/email-confirm?id={newUser.Id}&token={validateCode}";
+                        var url = $"{origin}/user/email-confirm?id={newUser.Id}&token={validateCode}";
                         var sendMailResult = await _emailSender.SendTo(
                             newUser.Email,
                             "Xác thực email của bạn",
-                            $"Bạn đã hoàn tất đăng kí tài khoản tại zg04, nhất vào <a href=\"{url}\">đây</a> để xác thực email của bạn."
+                            $"Bạn đã hoàn tất đăng kí tài khoản tại CodeAndLife, nhất vào <a href=\"{url}\">đây</a> để xác thực email của bạn."
                         );
                         if (sendMailResult)
                             return new ApiResult();
@@ -115,7 +113,10 @@ namespace Application.System.Users
                             return new ApiResult("Lỗi gửi mail xác thực", HttpStatusCode.InternalServerError);
                     }
                     else
+                    {
                         return new ApiResult("Lỗi gán quyền user!", HttpStatusCode.InternalServerError);
+                    }    
+                        
                 }
                 return new ApiResult("Đăng kí không thành công!", HttpStatusCode.BadRequest);
             }
@@ -189,7 +190,6 @@ namespace Application.System.Users
             var publicClaims = new Claim[]
             {
                 new (ClaimTypes.Name, user.UserName), //require for refresh
-                new (ClaimTypes.GivenName, user.FirstName),
                 new (ClaimTypes.Email, user.Email),
                 new (ClaimTypes.Role, string.Join(',', roles))
             };
