@@ -46,6 +46,13 @@ namespace BE.Controllers
             return ApiResult(await _userService.EmailValidate(id, token));
         }
 
+        [HttpGet("logout")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> Logout()
+        {
+            return ApiResult(await _userService.Logout());
+        }
+
         [HttpPost("refresh-token")]
         [AllowAnonymous]
         public async Task<IActionResult> RefreshToken([FromBody] Token token)

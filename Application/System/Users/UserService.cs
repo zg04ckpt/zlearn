@@ -340,5 +340,17 @@ namespace Application.System.Users
                 return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
+        public async Task<ApiResult> Logout()
+        {
+            try
+            {
+                await _signInManager.SignOutAsync();
+                return new ApiResult();
+            }
+            catch(Exception ex)
+            {
+                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }

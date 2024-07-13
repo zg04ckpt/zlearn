@@ -90,6 +90,10 @@ export class UserService {
         );
     }
 
+    logout() {
+        return this.http.get('users/logout');
+    }
+
     //remove authenticated status
     purgeAuth() {
         this.jwtService.remove();
