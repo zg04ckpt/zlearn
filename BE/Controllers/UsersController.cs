@@ -68,10 +68,10 @@ namespace BE.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserUpdateRequest request)
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> UpdateUserDetail(string id, [FromBody] UserDetailModel request)
         {
-            return ApiResult(await _userService.UpdateUser(id, request));
+            return ApiResult(await _userService.UpdateUserDetail(id, request));
         }
 
         [HttpGet("{id}")]
@@ -79,6 +79,13 @@ namespace BE.Controllers
         public async Task<IActionResult> GetUser(string id)
         {
             return ApiResult(await _userService.GetUserById(id));
+        }
+
+        [HttpGet("{id}/detail")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> GetUserDetail(string id)
+        {
+            return ApiResult(await _userService.GetUserDetail(id));
         }
 
         [HttpGet("{userId}/roles")]

@@ -13,6 +13,7 @@ namespace ViewModels.System.Users
         public string Email { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+        public List<string> Roles { get; set; }
         //public DateTime ExpirationTime { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from "@angular/common";
-import { Component, DestroyRef, inject } from "@angular/core";
+import { Component, DestroyRef, EventEmitter, inject, OnDestroy, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import { MessageComponent } from "src/app/shared/components/message/message.component";
@@ -27,11 +27,13 @@ interface LoginForm {
         NgClass
     ]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
     isSubmitting: boolean = false;
     form: FormGroup<LoginForm>;
     destroyRef = inject(DestroyRef);
     showPass: boolean = false;
+    @Output() initEvent = new EventEmitter();
+
     constructor(
         private userService: UserService,
         private msgService: MessageService,
@@ -65,6 +67,10 @@ export class LoginComponent {
         });
     }
 
+    ngOnInit(): void {
+        this.initEvent.emit();
+    }
+
     onSubmit() {
         this.isSubmitting = true;
         this.userService.login({
@@ -77,7 +83,7 @@ export class LoginComponent {
             next: res => {
                 this.isSubmitting = false;
                 this.router.navigate([""]);
-                this.toast.showToast(`Xin chào, ${res.data?.userName}`)
+                this.toast.showToast(`Xin chào, ${res.data?.userName}`);
             },
             error: res => {
                 this.isSubmitting = false;

@@ -15,7 +15,8 @@ namespace Application.System.Users
         Task<ApiResult> EmailValidate(string userId, string token);
         Task<ApiResult> GetUsers(PagingRequest request);
         Task<ApiResult> GetUserById(string id);
-        Task<ApiResult> UpdateUser(string id, UserUpdateRequest request);
+        Task<ApiResult> GetUserDetail(string id);
+        Task<ApiResult> UpdateUserDetail(string id, UserDetailModel request);
         Task<ApiResult> GetAllRoles(string userId);
         Task<ApiResult> RoleAssign(string userId, RoleAssignRequest request);
     }

@@ -30,19 +30,14 @@ export class MessageComponent implements OnInit {
   ngOnInit(): void {
     this.msgService.displayStatus.subscribe(data => this.data = data);
   }
-
-  redirect(url: string) {
-    this.route.navigate([url]);
-    this.data.show = false;
-  }
 }
 
 export interface MessageManageModule {
   show: boolean
-  title: string,
-  msg: string,
+  title: string;
+  msg: string;
   acts: {
-    label: string,
-    url: string
-  }[]
+    label: string;
+    act: () => void;
+  }[];
 }

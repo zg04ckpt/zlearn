@@ -1,0 +1,53 @@
+<nav class="navbar navbar-dark bg-dark w-100" 
+style="position: fixed; top: 0; height: 50px; z-index: 102;">
+<!-- [ngStyle]="{'padding-left': sidebarIsShowing? '220px':'0px'}" -->
+
+    <a href="#" class="fw-bold text-white fs-5 text-center text-decoration-none"
+    style="width: 220px;"
+    >
+        PTITCommunity
+    </a>
+
+    <div class="justify-content-end me-2">
+        <div class="d-flex end-0">
+            @if (!user) {
+                <a href="user/login" class="btn btn-sm btn-light me-1">
+                    Đăng nhập
+                </a>
+                <a href="user/register" class="btn btn-sm btn-outline-light">
+                    Đăng kí
+                </a>
+            }
+            @else {
+                <div class="d-flex end-0">
+                    <span class="me-2" id="notification" title="Thông báo">
+                        <i class='bx bxs-bell'></i>
+                    </span>
+                    <small class="d-none d-sm-block text-light me-2 align-content-center my-auto fw-bold fst-italic">
+                        {{user!.email}}
+                    </small>
+                    <div class="dropdown position-relative">
+                        <img class="dropdown-toggle" data-bs-toggle="dropdown" src="assets\images\default-avt.png" alt="" id="avt">
+                        <ul class="dropdown-menu position-absolute mt-2 p-2 border-2 border-black shadow-sm" 
+                            style="left: 100%; transform: translateX(-100%);">
+                            <li><a class="dropdown-item my-1" [routerLink]="['/user/detail', user?.id]">Tài khoản</a></li>
+                            <li><button class="btn btn-outline-dark w-100 mt-1">
+                                Manage
+                            </button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item align-content-center fw-bold text-center" href="#">
+                                    Đăng xuất
+                                    <i class='bx bx-log-out fw-bold'></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            }
+        </div>
+
+        
+    </div>
+</nav>

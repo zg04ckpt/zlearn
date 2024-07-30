@@ -4,7 +4,8 @@ export interface LoginResponse {
         userName: string,
         email: string,
         accessToken: string,
-        refreshToken: string
+        refreshToken: string,
+        roles: string[]
     } | null,
     code: number,
     message: string | null

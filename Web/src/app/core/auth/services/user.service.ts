@@ -11,6 +11,8 @@ import { RegisterResponse } from "../models/register-response.model";
 import { ConfirmEmailResponse } from "../models/confirm-email-response.model";
 import { RefreshTokenResponse } from "../models/refresh-token-response.model";
 import { environment } from "src/environments/environment";
+import { BaseResponse } from "../../models/base-response.model";
+import { UserDetail } from "../models/user-detail.model";
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -54,7 +56,8 @@ export class UserService {
             this.currentUserSubject.next({
                 id: data.id,
                 username: data.userName,
-                email: data.email
+                email: data.email,
+                roles: data.roles
             } as User);
         }));
     }
@@ -87,6 +90,19 @@ export class UserService {
         return this.http.post<RefreshTokenResponse>(
             'users/refresh-token',
             this.jwtService.get()
+        );
+    }
+
+    getDetail(id: string): Observable<BaseResponse<UserDetail>> {
+        return this.http.get<BaseResponse<UserDetail>>(
+            `users/${id}/detail`
+        );
+    }
+
+    updateDetail(id: string, data: UserDetail): Observable<BaseResponse<null>> {
+        return this.http.put<BaseResponse<null>>(
+            `users/${id}`,
+            data
         );
     }
 

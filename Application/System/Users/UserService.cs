@@ -18,6 +18,7 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using ViewModels.System.Users;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Data;
 
 namespace Application.System.Users
 {
@@ -26,16 +27,18 @@ namespace Application.System.Users
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly AppDbContext _context;
         private readonly IConfiguration _config;
         private readonly IEmailSender _emailSender;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config, IEmailSender emailSender, RoleManager<AppRole> roleManager)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config, IEmailSender emailSender, RoleManager<AppRole> roleManager, AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _context = context;
         }
 
         public async Task<ApiResult> Authenticate(LoginRequest request)
@@ -64,7 +67,8 @@ namespace Application.System.Users
                     UserName = user.UserName,
                     Email = user.Email,
                     AccessToken = token.AccessToken,
-                    RefreshToken = token.RefreshToken
+                    RefreshToken = token.RefreshToken,
+                    Roles = (await _userManager.GetRolesAsync(user)).ToList(),
                 };
                 return new ApiResult(response);
             }
@@ -250,7 +254,7 @@ namespace Application.System.Users
         }
         #endregion
 
-        public async Task<ApiResult> UpdateUser(string id, UserUpdateRequest request)
+        public async Task<ApiResult> UpdateUserDetail(string id, UserDetailModel request)
         {
             try
             {
@@ -263,11 +267,11 @@ namespace Application.System.Users
                 user.LastName = request.LastName;
                 user.Address = request.Address;
                 user.Gender = request.Gender;
-                user.DateOfBirth = request.DateOfBirth;
+                user.DateOfBirth = request.Dob;
                 user.Email = request.Email;
-                user.PhoneNumber = request.PhoneNumber;
-                user.EmailConfirmed = request.EmailConfirmed;
-                user.PhoneNumberConfirmed = request.PhoneNumberConfirmed;
+                user.PhoneNumber = request.Phone;
+                user.Description = request.Description;
+                user.UserLinks = request.Links;
 
                 await _userManager.UpdateAsync(user);
                 return new ApiResult();
@@ -346,6 +350,33 @@ namespace Application.System.Users
             {
                 await _signInManager.SignOutAsync();
                 return new ApiResult();
+            }
+            catch(Exception ex)
+            {
+                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ApiResult> GetUserDetail(string id)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                    return new ApiResult("Người dùng không tồn tại", HttpStatusCode.NotFound);
+
+                return new ApiResult(new UserDetailModel
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Phone = user.PhoneNumber,
+                    Gender = user.Gender,
+                    Dob = user.DateOfBirth,
+                    Address = user.Address,
+                    Description = user.Description,
+                    Links = user.UserLinks
+                });
             }
             catch(Exception ex)
             {

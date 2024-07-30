@@ -3,20 +3,24 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './core/layout/header.component';
-import { FooterComponent } from './core/layout/footer.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { ApiInterceptor } from './core/interceptors/api.interceptor';
-import { MessageComponent } from "./shared/components/message/message.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { ToastComponent } from './shared/components/toast/toast.component';
-import { LoadingComponent } from './shared/components/loading/loading.component';
-import { EmailConfirmComponent } from './core/auth/components/email-confirm/email-confirm.component';
+import { MessageComponent } from './shared/components/message/message.component';
+import { SidebarComponent } from './core/layout/sidebar/sidebar.component';
+import { FooterComponent } from './core/layout/footer/footer.component';
+import { HeaderComponent } from './core/layout/header/header.component';
+import { DetailComponent } from './core/auth/components/detail/detail.component';
+import { LoginComponent } from './core/auth/components/login/login.component';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     providers: [
         {
@@ -39,11 +43,15 @@ import { EmailConfirmComponent } from './core/auth/components/email-confirm/emai
     imports: [
     BrowserModule,
     AppRoutingModule,
-    HeaderComponent,
-    FooterComponent,
     HttpClientModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    ToastComponent,
     MessageComponent,
-    ToastComponent
+    SidebarComponent,
+    FooterComponent,
+    HeaderComponent,
+    CommonModule,
 ]
 })
 export class AppModule { }

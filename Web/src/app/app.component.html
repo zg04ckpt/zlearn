@@ -1,10 +1,16 @@
-<app-layout-header/>
+<app-layout-header [sidebarIsShowing]="showSidebar"/>
 
-<router-outlet></router-outlet>
+<app-layout-sidebar [show]="showSidebar" (toggle)="toggleStatus($event)"/>
+
+<!-- phần bù cho header -->
+<div style="display: block; height: 50px;"></div>
+
+<div [@toggleLayout]="showSidebar? 'no-expand':'expanded'" class="position-relative">
+    <router-outlet/>
+</div>
+
 
 <app-layout-footer/>
-
 <app-message></app-message>
-
 <app-toast></app-toast>
 

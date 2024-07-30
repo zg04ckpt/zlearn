@@ -1,20 +1,24 @@
-import { Component } from "@angular/core";
-import { UserService } from "../auth/services/user.service";
-import { User } from "../auth/models/user.model";
+import { Component, Input } from "@angular/core";
+import { UserService } from "../../auth/services/user.service";
+import { User } from "../../auth/models/user.model";
 import { MessageService } from "src/app/shared/services/message.service";
 import { ToastService } from "src/app/shared/services/toast.service";
-import { Route, Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
+import { NgStyle } from "@angular/common";
 
 @Component({
     selector: "app-layout-header",
     templateUrl: "./header.component.html",
+    styleUrl: "./header.component.css",
     imports: [
-
+        NgStyle,
+        RouterLink
     ],
     standalone: true
 })
 export class HeaderComponent {
     user: User|null = null;
+    @Input() sidebarIsShowing: boolean = true;
 
     constructor(
         private readonly userService: UserService,
@@ -25,7 +29,7 @@ export class HeaderComponent {
         this.userService.currentUser.subscribe(
             user => {
                 this.user = user
-                console.log(this.user);
+                // console.log(this.user);
             }
         );
     }

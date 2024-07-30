@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from "@angular/common";
-import { Component, DestroyRef, inject } from "@angular/core";
+import { Component, DestroyRef, EventEmitter, inject, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import { MessageComponent } from "src/app/shared/components/message/message.component";
@@ -26,12 +26,13 @@ interface RegisterForm {
         LoadingComponent
     ]
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
     showPass: boolean = false;
     showConfirmPass: boolean = false;
     isSubmitting: boolean = false;
     form: FormGroup<RegisterForm>;
     destroyRef = inject(DestroyRef);
+    @Output() initEvent = new EventEmitter();
 
     constructor(
         private userService: UserService,
@@ -75,6 +76,10 @@ export class RegisterComponent {
                 }
             ),
         });
+    }
+
+    ngOnInit(): void {
+        this.initEvent.emit();
     }
 
     emailError() {
@@ -167,7 +172,7 @@ export class RegisterComponent {
                     title: "Hoàn tất đăng kí tài khoản",
                     msg: `<div class="test-center fs-6">Vui lòng kiểm tra <b>${this.form.controls.email.value}</b> để nhận được link xác thực email.</div>`,
                     acts: [
-                        { label: "Trang chủ", url: "" }
+                        { label: "Trang chủ", act: () => this.router.navigate([''])}
                     ]
                 });
             },

@@ -20,6 +20,8 @@ namespace Data.Entities
 
         #region full information
 
+        public string Description { get; set; }
+        public string UserLinks { get; set; }
 
         #endregion
     }
