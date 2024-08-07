@@ -8,7 +8,7 @@ namespace Data.Migrations
         {
             migrationBuilder.RenameColumn(
                 name: "Image",
-                table: "QuestionSets",
+                table: "Tests",
                 newName: "ImageUrl");
         }
 
@@ -16,7 +16,7 @@ namespace Data.Migrations
         {
             migrationBuilder.RenameColumn(
                 name: "ImageUrl",
-                table: "QuestionSets",
+                table: "Tests",
                 newName: "Image");
         }
     }

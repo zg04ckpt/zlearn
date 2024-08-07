@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,9 @@ namespace Application.System.Roles
 {
     public interface IRoleService
     {
-        Task<ApiResult> GetAll();
-        Task<ApiResult> Add(string roleName, string desc);
-        Task<ApiResult> Update(string id, string newRoleName, string newDesc);
-        Task<ApiResult> Delete(string roleName);
+        Task<List<AppRole>> GetAll();
+        Task Add(string roleName, string desc);
+        Task Update(string id, string newRoleName, string newDesc);
+        Task Delete(string roleName);
     }
 }

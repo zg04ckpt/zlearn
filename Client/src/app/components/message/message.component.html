@@ -1,0 +1,16 @@
+@if(show) {
+    <div class="position-fixed shadow-lg start-50 translate-middle-x card card-body"
+    style="width: 460px; top: 100px; z-index: 3;">
+        <button class="btn btn-close position-absolute top-0 end-0 m-1" (click)="show = false"></button>
+        <p class="mt-2 mb-2">{{module.message}}</p>
+        @if(module.buttons.length != 0) {
+            <div class="d-flex justify-content-center">
+                @for (btn of module.buttons; track $index) {
+                    <button class="btn btn-sm btn-outline-dark mx-1" (click)="btn.action(); show = false;">
+                        {{btn.name}}
+                    </button>
+                }
+            </div>
+        }
+    </div>
+}

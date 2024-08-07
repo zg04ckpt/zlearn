@@ -1,0 +1,55 @@
+#sidebar-menu li a{
+    color: white;
+}
+
+#sidebar-menu li :hover {
+    background-color: yellow;
+    color: black;
+}
+
+#toggle-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    height: 100px;
+    z-index: 2;
+}
+
+#toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-visible {
+    transform: translate(-100%, -50%);
+}
+
+.btn-hidden {
+    transform: translate(0%, -50%);
+}
+
+.visible {
+    transform: translateX(0%);
+    animation: appearing 0.3s ease;
+}
+
+.hidden {
+    transform: translateX(-100%);
+    animation: hiding 0.3s ease;
+}
+
+@keyframes appearing {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes hiding {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+

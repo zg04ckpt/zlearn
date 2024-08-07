@@ -8,16 +8,11 @@ namespace Application.System.Users
 {
     public interface IUserService
     {
-        Task<ApiResult> Authenticate(LoginRequest request);
-        Task<ApiResult> Register(RegisterRequest request, string origin);
-        Task<ApiResult> Logout();
-        Task<ApiResult> RefreshToken(Token token);
-        Task<ApiResult> EmailValidate(string userId, string token);
-        Task<ApiResult> GetUsers(PagingRequest request);
-        Task<ApiResult> GetUserById(string id);
-        Task<ApiResult> GetUserDetail(string id);
-        Task<ApiResult> UpdateUserDetail(string id, UserDetailModel request);
-        Task<ApiResult> GetAllRoles(string userId);
-        Task<ApiResult> RoleAssign(string userId, RoleAssignRequest request);
+        Task<List<AppUser>> GetUsers(PagingRequest request);
+        Task<AppUser> GetUserById(string id);
+        Task<UserDetailModel> GetUserDetail(string id);
+        Task UpdateUserDetail(string id, UserDetailModel request);
+        Task<List<string>> GetAllRoles(string userId);
+        Task RoleAssign(string userId, RoleAssignRequest request);
     }
 }

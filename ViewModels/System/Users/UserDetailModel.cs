@@ -12,12 +12,12 @@ namespace ViewModels.System.Users
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime Dob { get; set; }
+        public DateTime DayOfBirth { get; set; }
         public Gender Gender { get; set; }
         public string Email { get; set; }
-        public string Phone { get; set; }
+        public string PhoneNum { get; set; }
         public string Address { get; set; }
-        public string Description { get; set; }
-        public string Links { get; set; }
+        public string Intro { get; set; }
+        public string SocialLinks { get; set; }
     }
 }

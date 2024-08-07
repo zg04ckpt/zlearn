@@ -1,4 +1,3 @@
 export const environment = {
-    development: true,
-    baseUrl: "http://localhost:5000"
-};
+    baseUrl: 'http://localhost:5000'
+}

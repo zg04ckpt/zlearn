@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Utilities;
 using Application.System.Users;
 using Application.System.Roles;
+using Application.System.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -39,10 +40,9 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<ITestService, TestService>();
-builder.Services.AddScoped<IQuestionServices, QuestionService>();
-builder.Services.AddScoped<ITestResultService, TestResultService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 
@@ -136,8 +136,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 
 app.UseStaticFiles();
-app.UseClientRateLimiting();
-app.UseIpRateLimiting();
+//app.UseClientRateLimiting();
+//app.UseIpRateLimiting();
 
 string path = Path.Combine(Directory.GetCurrentDirectory(), FileService.FOLDER_NAME);
 

@@ -15,7 +15,7 @@ namespace Data.Entities
         public DateTime StartTime { get; set; }
         public string UserInfo { get; set; }
         public string Detail { get; set; }
-        public Guid QuestionSetId { get; set; }
-        public QuestionSet QuestionSet { get; set; }
+        public Guid TestId { get; set; }
+        public Test Test { get; set; }
     }
 }

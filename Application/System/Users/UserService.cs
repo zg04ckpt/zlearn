@@ -19,6 +19,8 @@ using Microsoft.EntityFrameworkCore;
 using ViewModels.System.Users;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Data;
+using Utilities.Exceptions;
+using ViewModels.System.Auth;
 
 namespace Application.System.Users
 {
@@ -41,149 +43,89 @@ namespace Application.System.Users
             _context = context;
         }
 
-        public async Task<ApiResult> Authenticate(LoginRequest request)
+        public async Task<List<AppUser>> GetUsers(PagingRequest request)
         {
-            try
-            {
-                //check valid login
-                var user = await _userManager.FindByNameAsync(request.UserName);
-                if (user == null)
-                    return new ApiResult("Tài khoản không tồn tại", HttpStatusCode.BadRequest);
-                var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.Remember, false);
-                if (result.IsNotAllowed)
-                    return new ApiResult("Email chưa xác thực, vui lòng kiểm tra email đăng kí để lấy link xác thực", HttpStatusCode.BadRequest);
-                if (!result.Succeeded)
-                    return new ApiResult("Mật khẩu không đúng", HttpStatusCode.BadRequest);
-
-                var token = await GenerateToken(user);
-                user.RefreshToken = token.RefreshToken;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(double.Parse(_config[Consts.AppSettingsKey.REFRESH_LIFE_TIME]));
-
-                await _userManager.UpdateAsync(user);
-
-                var response = new LoginResponse
-                {
-                    Id = user.Id.ToString(),
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    AccessToken = token.AccessToken,
-                    RefreshToken = token.RefreshToken,
-                    Roles = (await _userManager.GetRolesAsync(user)).ToList(),
-                };
-                return new ApiResult(response);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-        public async Task<ApiResult> Register(RegisterRequest request, string origin)
-        {
-            try
-            {
-                if (request.Password != request.ConfirmPassword)
-                    return new ApiResult("Confirm password does not match!", HttpStatusCode.BadRequest);
-
-                //check user existed
-                if ((await _userManager.FindByEmailAsync(request.Email)) != null)
-                    return new ApiResult("Email existed!", HttpStatusCode.BadRequest);
-
-                //create new user
-                var newUser = new AppUser
-                {
-                    UserName = request.Email,
-                    Email = request.Email
-                };
-
-                //save user to db
-                var createProcess = await _userManager.CreateAsync(newUser, request.Password);
-                if (createProcess.Succeeded)
-                {
-                    var roleAssignResult = await _userManager.AddToRoleAsync(newUser, Consts.DEFAULT_USER_ROLE);
-                    if (roleAssignResult.Succeeded)
-                    {
-                        //email confirm
-                        var validateCode = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
-                        validateCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(validateCode));
-                        var url = $"{origin}/user/email-confirm?id={newUser.Id}&token={validateCode}";
-                        var sendMailResult = await _emailSender.SendTo(
-                            newUser.Email,
-                            "Xác thực email của bạn",
-                            $"Bạn đã hoàn tất đăng kí tài khoản tại CodeAndLife, nhất vào <a href=\"{url}\">đây</a> để xác thực email của bạn."
-                        );
-                        if (sendMailResult)
-                            return new ApiResult();
-                        else
-                            return new ApiResult("Lỗi gửi mail xác thực", HttpStatusCode.InternalServerError);
-                    }
-                    else
-                    {
-                        return new ApiResult("Lỗi gán quyền user!", HttpStatusCode.InternalServerError);
-                    }    
-                        
-                }
-                return new ApiResult("Đăng kí không thành công!", HttpStatusCode.BadRequest);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-        public async Task<ApiResult> EmailValidate(string userId, string token)
-        {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null)
-                    return new ApiResult("Không tìm thấy user", HttpStatusCode.BadRequest);
-
-                var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
-                var checkResult = await _userManager.ConfirmEmailAsync(user, decodedToken);
-                if (checkResult.Succeeded)
-                    return new ApiResult();
-                return new ApiResult("Xác thực không thành công", HttpStatusCode.BadRequest);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-        public async Task<ApiResult> RefreshToken(Token token)
-        {
-            try
-            {
-                //validate access token
-                var principal = GetClaimsPrincipalFromExpiredToken(token.AccessToken);
-                if (principal is null)
-                    return new ApiResult("Invalid access token", HttpStatusCode.BadRequest);
-
-                //validate refresh token
-                var user = await _userManager.FindByNameAsync(principal.Identity.Name);
-                if (user is null || user.RefreshToken != token.RefreshToken)
-                    return new ApiResult("Invalid refresh token", HttpStatusCode.BadRequest);
-
-                //refresh token expired => login to generate new token
-                if (user.RefreshTokenExpiryTime <= DateTime.Now)
-                    return new ApiResult("Refresh token expired", HttpStatusCode.Unauthorized);
-
-                //refresh token didn't expired => update both access and refresh
-                var newToken = await GenerateToken(user);
-                user.RefreshToken = newToken.RefreshToken;
-                await _userManager.UpdateAsync(user);
-                return new ApiResult(newToken);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-        public async Task<ApiResult> GetUsers(PagingRequest request)
-        {
-            var users = await _userManager.Users
+            return await _userManager.Users
                 .Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync();
-            return new ApiResult(users);
+        }
+        public async Task<AppUser> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                throw new NotFoundException("User không tồn tại");
+            return user;
+        }
+        public async Task<UserDetailModel> GetUserDetail(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                throw new NotFoundException("User không tồn tại");
+
+            return new UserDetailModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNum = user.PhoneNumber,
+                Gender = user.Gender,
+                DayOfBirth = user.DateOfBirth,
+                Address = user.Address,
+                Intro = user.Description,
+                SocialLinks = user.UserLinks
+            };
+        }
+        public async Task UpdateUserDetail(string id, UserDetailModel request)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                throw new NotFoundException("User không tồn tại");
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Address = request.Address;
+            user.Gender = request.Gender;
+            user.DateOfBirth = request.DayOfBirth;
+            user.Email = request.Email;
+            user.PhoneNumber = request.PhoneNum;
+            user.Description = request.Intro;
+            user.UserLinks = request.SocialLinks;
+
+            await _userManager.UpdateAsync(user);
+        }
+        public async Task<List<string>> GetAllRoles(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new NotFoundException("User không tồn tại"); ;
+
+            return (await _userManager.GetRolesAsync(user)).ToList();
+        }
+        public async Task RoleAssign(string userId, RoleAssignRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new NotFoundException("User không tồn tại");
+
+            var userRoles = new HashSet<string>(await _userManager.GetRolesAsync(user));
+            foreach (var role in request.Roles)
+            {
+                if (!role.Selected)
+                {
+                    if (userRoles.Contains(role.Name))
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, role.Name);
+                    }
+                }
+                else
+                {
+                    if (!userRoles.Contains(role.Name))
+                    {
+                        await _userManager.AddToRoleAsync(user, role.Name);
+                    }
+                }
+            }
         }
 
         #region private
@@ -244,7 +186,7 @@ namespace Application.System.Users
             SecurityToken securityToken;
             var principal = tokenHandler.ValidateToken(expiredToken, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg
                 .Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             {
                 return null;
@@ -253,135 +195,5 @@ namespace Application.System.Users
             return principal;
         }
         #endregion
-
-        public async Task<ApiResult> UpdateUserDetail(string id, UserDetailModel request)
-        {
-            try
-            {
-                //find user
-                var user = await _userManager.FindByIdAsync(id);
-                if (user == null)
-                    return new ApiResult("Người dùng không tồn tại", HttpStatusCode.BadRequest);
-
-                user.FirstName = request.FirstName;
-                user.LastName = request.LastName;
-                user.Address = request.Address;
-                user.Gender = request.Gender;
-                user.DateOfBirth = request.Dob;
-                user.Email = request.Email;
-                user.PhoneNumber = request.Phone;
-                user.Description = request.Description;
-                user.UserLinks = request.Links;
-
-                await _userManager.UpdateAsync(user);
-                return new ApiResult();
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-        public async Task<ApiResult> GetUserById(string id)
-        {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(id);
-                if (user == null)
-                    return new ApiResult("Người dùng không tồn tại", HttpStatusCode.NotFound);
-                return new ApiResult(user);
-            }
-            catch(Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-        public async Task<ApiResult> RoleAssign(string userId, RoleAssignRequest request)
-        {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null)
-                    return new ApiResult("Người dùng không tồn tại", HttpStatusCode.NotFound);
-
-                var userRoles = new HashSet<string>(await _userManager.GetRolesAsync(user));
-                foreach (var role in request.Roles)
-                {
-                    if (!role.Selected)
-                    {
-                        if (userRoles.Contains(role.Name))
-                        {
-                            await _userManager.RemoveFromRoleAsync(user, role.Name);
-                        }
-                    }
-                    else
-                    {
-                        if (!userRoles.Contains(role.Name))
-                        {
-                            await _userManager.AddToRoleAsync(user, role.Name);
-                        }
-                    }
-                }
-
-                return new ApiResult();
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-        public async Task<ApiResult> GetAllRoles(string userId)
-        {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null)
-                    return new ApiResult("Người dùng không tồn tại", HttpStatusCode.NotFound);
-
-                return new ApiResult(await _userManager.GetRolesAsync(user));
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-        public async Task<ApiResult> Logout()
-        {
-            try
-            {
-                await _signInManager.SignOutAsync();
-                return new ApiResult();
-            }
-            catch(Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-
-        public async Task<ApiResult> GetUserDetail(string id)
-        {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(id);
-                if (user == null)
-                    return new ApiResult("Người dùng không tồn tại", HttpStatusCode.NotFound);
-
-                return new ApiResult(new UserDetailModel
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    Phone = user.PhoneNumber,
-                    Gender = user.Gender,
-                    Dob = user.DateOfBirth,
-                    Address = user.Address,
-                    Description = user.Description,
-                    Links = user.UserLinks
-                });
-            }
-            catch(Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
     }
 }

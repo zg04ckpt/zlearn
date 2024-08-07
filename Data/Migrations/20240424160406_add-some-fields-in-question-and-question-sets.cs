@@ -9,13 +9,13 @@ namespace Data.Migrations
         {
             migrationBuilder.AddColumn<string>(
                 name: "Creator",
-                table: "QuestionSets",
+                table: "Tests",
                 type: "nvarchar(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "UpdatedDate",
-                table: "QuestionSets",
+                table: "Tests",
                 type: "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
@@ -32,11 +32,11 @@ namespace Data.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Creator",
-                table: "QuestionSets");
+                table: "Tests");
 
             migrationBuilder.DropColumn(
                 name: "UpdatedDate",
-                table: "QuestionSets");
+                table: "Tests");
 
             migrationBuilder.DropColumn(
                 name: "Order",

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
+using System.Web.Http.Results;
+using Utilities.Exceptions;
 using ViewModels.Common;
 
 namespace BE.Controllers
@@ -8,21 +11,21 @@ namespace BE.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-        protected IActionResult ApiResult(ApiResult result)
+        protected IActionResult HandleException(Exception ex)
         {
-            if (result.Code == HttpStatusCode.OK)
-                return Ok(result);
+            var error = new
+            {
+                status = "error",
+                message = ex.Message
+            };
 
-            if( result.Code == HttpStatusCode.Unauthorized)
-                return Unauthorized(result);
+            if(ex is BadRequestException)
+                return BadRequest(error);
 
-            if (result.Code == HttpStatusCode.BadRequest)
-                return BadRequest(result);
+            if (ex is NotFoundException)
+                return NotFound(error);
 
-            if (result.Code == HttpStatusCode.NotFound)
-                return NotFound(result);
-
-            return StatusCode(StatusCodes.Status500InternalServerError, result);
+            return StatusCode(StatusCodes.Status500InternalServerError, error);
         }
     }
 }

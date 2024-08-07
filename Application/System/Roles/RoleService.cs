@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities.Exceptions;
 using ViewModels.Common;
 
 namespace Application.System.Roles
@@ -19,70 +20,45 @@ namespace Application.System.Roles
         {
             _roleManager = roleManager;
         }
+
+        public async Task<List<AppRole>> GetAll()
+        {
+            return await _roleManager.Roles.ToListAsync();
+        }
+
+        public async Task Add(string roleName, string desc)
+        {
+            if (await _roleManager.RoleExistsAsync(roleName))
+                throw new BadRequestException("Tên vai trò đã tồn tại");
+
+            await _roleManager.CreateAsync(new AppRole
+            {
+                Name = roleName,
+                Description = desc
+            });
+        }
+        public async Task Update(string id, string newRoleName, string newDesc)
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+            if (role == null)
+                throw new NotFoundException("Vai trò không tồn tại");
+
+            if (role.Name.ToLower() != newRoleName.ToLower() && (await _roleManager.RoleExistsAsync(newRoleName)))
+                throw new BadRequestException("Tên vai trò đã tồn tại");
+
+            role.Name = newRoleName;
+            role.Description = newDesc;
+            await _roleManager.UpdateAsync(role);
+        }
+        public async Task Delete(string id)
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+            if (role == null)
+                throw new NotFoundException("Vai trò không tồn tại");
+
+            await _roleManager.DeleteAsync(role);
+        }
+
         
-        public async Task<ApiResult> Add(string roleName, string desc)
-        {
-            try
-            {
-                if (await _roleManager.RoleExistsAsync(roleName))
-                    return new ApiResult("Tên vai trò đã tồn tại", HttpStatusCode.BadRequest);
-
-                await _roleManager.CreateAsync(new AppRole
-                {
-                    Name = roleName,
-                    Description = desc
-                });
-                return new ApiResult();
-            }
-            catch(Exception ex) 
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-
-        public async Task<ApiResult> Delete(string id)
-        {
-            try
-            {
-                var role = await _roleManager.FindByIdAsync(id);
-                if (role == null)
-                    return new ApiResult("Vai trò không tồn tại", HttpStatusCode.NotFound);
-
-                await _roleManager.DeleteAsync(role);
-                return new ApiResult();
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-
-        public async Task<ApiResult> GetAll()
-        {
-            var roles = await _roleManager.Roles.ToListAsync();
-            return new ApiResult(roles);
-        }
-
-        public async Task<ApiResult> Update(string id, string newRoleName, string newDesc)
-        {
-            try
-            {
-                var role = await _roleManager.FindByIdAsync(id);
-                if(role == null) 
-                    return new ApiResult("Vai trò không tồn tại", HttpStatusCode.NotFound);
-
-                if (role.Name.ToLower()!=newRoleName.ToLower() && (await _roleManager.RoleExistsAsync(newRoleName)))
-                    return new ApiResult("Tên vai trò đã tồn tại", HttpStatusCode.BadRequest);
-
-                role.Name = newRoleName;
-                role.Description = newDesc;
-                await _roleManager.UpdateAsync(role);
-                return new ApiResult();
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
     }
 }

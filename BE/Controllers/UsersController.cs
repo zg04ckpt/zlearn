@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using Utilities;
@@ -24,82 +27,90 @@ namespace BE.Controllers
             _userService = userService;
         }
 
-        [HttpPost("login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]LoginRequest request)
-        {
-            return ApiResult(await _userService.Authenticate(request));
-        }
-
-        [HttpPost("register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
-        {
-            var result = await _userService.Register(request, Request.Headers.Origin.ToString());
-            return ApiResult(result);
-        }
-
-        [HttpGet("email-confirm")]
-        [AllowAnonymous]
-        public async Task<IActionResult> ValidateEmail([FromQuery]string id, [FromQuery]string token)
-        {
-            return ApiResult(await _userService.EmailValidate(id, token));
-        }
-
-        [HttpGet("logout")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
-        public async Task<IActionResult> Logout()
-        {
-            return ApiResult(await _userService.Logout());
-        }
-
-        [HttpPost("refresh-token")]
-        [AllowAnonymous]
-        public async Task<IActionResult> RefreshToken([FromBody] Token token)
-        {
-            return ApiResult(await _userService.RefreshToken(token));
-        }
-
         [HttpGet("paging")]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> GetUsers([FromQuery]PagingRequest request)
         {
-            return ApiResult(await _userService.GetUsers(request));
+            try
+            {
+                return Ok(await _userService.GetUsers(request));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/profile")]
         [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> UpdateUserDetail(string id, [FromBody] UserDetailModel request)
         {
-            return ApiResult(await _userService.UpdateUserDetail(id, request));
+            try
+            {
+                await _userService.UpdateUserDetail(id, request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
         }
 
         [HttpGet("{id}")]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> GetUser(string id)
         {
-            return ApiResult(await _userService.GetUserById(id));
+            try
+            {
+                return Ok(await _userService.GetUserById(id));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
         }
 
-        [HttpGet("{id}/detail")]
+        [HttpGet("{id}/profile")]
         [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> GetUserDetail(string id)
         {
-            return ApiResult(await _userService.GetUserDetail(id));
+            try
+            {
+                return Ok(await _userService.GetUserDetail(id));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
         }
 
         [HttpGet("{userId}/roles")]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> GetAllRoles(string userId)
         {
-            return ApiResult(await _userService.GetAllRoles(userId));
+            try
+            {
+                return Ok(await _userService.GetAllRoles(userId));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
         }
 
         [HttpPost("{userId}/role-assign")]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> AssignRole(string userId, [FromBody] RoleAssignRequest request)
         {
-            return ApiResult(await _userService.RoleAssign(userId, request));
+            try
+            {
+                await _userService.RoleAssign(userId, request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
         }
     }
 }

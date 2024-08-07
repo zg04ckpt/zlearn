@@ -9,7 +9,7 @@ namespace Data.Migrations
         {
             migrationBuilder.AddColumn<TimeSpan>(
                 name: "TestTime",
-                table: "QuestionSets",
+                table: "Tests",
                 type: "time",
                 nullable: false,
                 defaultValue: new TimeSpan(0, 0, 0, 0, 0));
@@ -32,7 +32,7 @@ namespace Data.Migrations
                     table.ForeignKey(
                         name: "FK_TestResults_QuestionSets_QuestionSetId",
                         column: x => x.QuestionSetId,
-                        principalTable: "QuestionSets",
+                        principalTable: "Tests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -40,7 +40,7 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_TestResults_QuestionSetId",
                 table: "TestResults",
-                column: "QuestionSetId");
+                column: "TestId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -50,7 +50,7 @@ namespace Data.Migrations
 
             migrationBuilder.DropColumn(
                 name: "TestTime",
-                table: "QuestionSets");
+                table: "Tests");
         }
     }
 }

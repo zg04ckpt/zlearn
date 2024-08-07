@@ -1,0 +1,69 @@
+@if (show) {
+    <div class="position-fixed vw-100 vh-100 top-0 shadow-sm" style="background-color: #7f7f7f7f; z-index: 2;">
+        <div class="card card-body text-center start-50 translate-middle-x" style="width: 400px; margin-top: 100px;">
+            <span class="btn btn-close position-absolute top-0 end-0 m-1" id="close-btn" (click)="show = false"></span>
+            <h3 class="fw-bold">Đăng kí</h3>
+            <p>Vui lòng điền đầy đủ thông tin!</p>
+            <form class="mt-3" [formGroup]="form" (ngSubmit)="register()">
+
+                <fieldset class="position-relative">
+                    <input 
+                        type="text" formControlName="userName" 
+                        (focus)="showUserNameError = true" (blur)="showUserNameError = false" 
+                        class="form-control" placeholder="Tên người dùng"
+                        [ngClass]="(form.touched && userNameInvalidMessage())? 'border-danger':''">
+                    @if(showUserNameError && userNameInvalidMessage()) {
+                        <small class="position-absolute shadow-sm invalid-mess bottom-100 text-danger py-1">
+                            {{userNameInvalidMessage()}}
+                        </small>
+                    }
+                </fieldset>
+
+                <fieldset class="position-relative mt-2">
+                    <input 
+                        type="email" formControlName="email" 
+                        (focus)="showEmailError = true" (blur)="showEmailError = false" 
+                        class="form-control" placeholder="Email"
+                        [ngClass]="(form.touched && emailInvalidMessage())? 'border-danger':''">
+                    @if(showEmailError && emailInvalidMessage()) {
+                        <small class="position-absolute shadow-sm invalid-mess bottom-100 text-danger py-1">
+                            {{emailInvalidMessage()}}
+                        </small>
+                    }
+                </fieldset>
+
+                <fieldset class="position-relative mt-2">
+                    <input 
+                        type="password" formControlName="password" 
+                        (focus)="showPasswordError = true" (blur)="showPasswordError = false" 
+                        class="form-control" placeholder="Mật khẩu"
+                        [ngClass]="(form.touched && passwordInvalidMessage())? 'border-danger':''">
+                    @if(showPasswordError && passwordInvalidMessage()) {
+                        <small class="position-absolute shadow-sm invalid-mess bottom-100 text-danger py-1">
+                            {{passwordInvalidMessage()}}
+                        </small>
+                    }
+                </fieldset>
+
+                <fieldset class="position-relative mt-2">
+                    <input 
+                        type="password" formControlName="confirmPassword" 
+                        (focus)="showConfirmPasswordError = true" (blur)="showConfirmPasswordError = false" 
+                        class="form-control" placeholder="Xác nhận mật khẩu"
+                        [ngClass]="(form.touched && confirmPasswordInvalidMessage())? 'border-danger':''">
+                    @if(showConfirmPasswordError && confirmPasswordInvalidMessage()) {
+                        <small class="position-absolute shadow-sm invalid-mess bottom-100 text-danger py-1">
+                            {{confirmPasswordInvalidMessage()}}
+                        </small>
+                    }
+                </fieldset>
+
+                <button type="submit" class="btn btn-outline-success mt-3 form-control">Đăng kí</button>
+            </form>
+            <p class="text-center mt-2">
+                <span>Đã có tài khoản? </span>
+                <a class="text-decoration-none link-info" style="cursor: pointer;" (click)="redirectToLogin()">Đăng nhập</a>
+            </p>
+        </div>
+    </div>
+}
