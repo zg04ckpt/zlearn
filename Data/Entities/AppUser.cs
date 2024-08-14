@@ -14,15 +14,14 @@ namespace Data.Entities
         public string LastName { get; set; }
         public string Address { get; set; }
         public Gender Gender { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
+        public string CreatedDate { get; set; }
         public string RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
 
         #region full information
-
         public string Description { get; set; }
         public string UserLinks { get; set; }
-
         #endregion
     }
 }

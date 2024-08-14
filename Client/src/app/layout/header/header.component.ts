@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router, RouterLink } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
-import { User } from '../../entities/user.entity';
+import { User } from '../../entities/user/user.entity';
 import { AuthService } from '../../services/auth.service';
 import { ComponentService } from '../../services/component.service';
 
@@ -21,7 +21,8 @@ export class HeaderComponent {
   constructor(
       private userService: UserService,
       private authService: AuthService,
-      private componentService: ComponentService
+      private componentService: ComponentService,
+      private router: Router
   ) {
       userService.$currentUser.subscribe(next => this.user = next);
   }
@@ -42,10 +43,17 @@ export class HeaderComponent {
         debugger;
         this.componentService.$showToast.next("Đã đăng xuất");
         this.authService.purgeAuth();
+        this.router.navigateByUrl("");
       },
       error: res => {
         // this.componentService.displayMessage(res.error?.message || res.statusText);
       }
     });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    console.log('Screen width:', window.innerWidth);
+    // Thực hiện các hành động khác khi kích thước màn hình thay đổi
   }
 }

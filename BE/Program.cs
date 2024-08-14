@@ -21,6 +21,7 @@ using Utilities;
 using Application.System.Users;
 using Application.System.Roles;
 using Application.System.Auth;
+using Application.System.Manage;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -42,6 +43,7 @@ builder.Services.AddIdentity<AppUser, AppRole>()
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddTransient<IRoleService, RoleService>();

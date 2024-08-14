@@ -1,14 +1,11 @@
 ﻿using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
-using ViewModels.Common;
+using ViewModels.System.Roles;
 
 namespace Application.System.Roles
 {
@@ -21,34 +18,40 @@ namespace Application.System.Roles
             _roleManager = roleManager;
         }
 
-        public async Task<List<AppRole>> GetAll()
+        public async Task<List<RoleModel>> GetAll()
         {
-            return await _roleManager.Roles.ToListAsync();
+            return await _roleManager.Roles
+                .Select(r => new RoleModel
+                {
+                    Id = r.Id.ToString(),
+                    Name = r.Name, 
+                    Description = r.Description
+                })
+                .ToListAsync();
         }
-
-        public async Task Add(string roleName, string desc)
+        public async Task Add(string name, string description)
         {
-            if (await _roleManager.RoleExistsAsync(roleName))
+            if (await _roleManager.RoleExistsAsync(name))
                 throw new BadRequestException("Tên vai trò đã tồn tại");
 
             await _roleManager.CreateAsync(new AppRole
             {
-                Name = roleName,
-                Description = desc
+                Name = name,
+                Description = description
             });
         }
-        public async Task Update(string id, string newRoleName, string newDesc)
+        public async Task Update(RoleModel role)
         {
-            var role = await _roleManager.FindByIdAsync(id);
-            if (role == null)
+            var oldRole = await _roleManager.FindByIdAsync(role.Id);
+            if (oldRole == null)
                 throw new NotFoundException("Vai trò không tồn tại");
 
-            if (role.Name.ToLower() != newRoleName.ToLower() && (await _roleManager.RoleExistsAsync(newRoleName)))
+            if (oldRole.Name.ToLower() != role.Name.ToLower() && (await _roleManager.RoleExistsAsync(role.Name)))
                 throw new BadRequestException("Tên vai trò đã tồn tại");
 
-            role.Name = newRoleName;
-            role.Description = newDesc;
-            await _roleManager.UpdateAsync(role);
+            oldRole.Name = role.Name;
+            oldRole.Description = role.Description;
+            await _roleManager.UpdateAsync(oldRole);
         }
         public async Task Delete(string id)
         {

@@ -145,6 +145,7 @@ namespace Application.System.Auth
             {
                 UserName = request.UserName,
                 Email = request.Email,
+                CreatedDate = DateOnly.FromDateTime(DateTime.Today).ToString()
             };
 
             //save user to db

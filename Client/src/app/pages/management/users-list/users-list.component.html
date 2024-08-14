@@ -1,0 +1,267 @@
+<div class="card m-3">
+
+    <div class="card-header">
+        <h5>Quản lý user</h5>
+    </div>
+    
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex" height="30px">
+                <label for="sl-user">SL hiển thị/trang:</label>
+                <select [(ngModel)]="pageSize" class="ms-1 text-dark" (change)=" pageIndex = 1;get(pageIndex);">
+                    <option value="3" selected>3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+
+            <!--Start Search  -->
+            <div class="d-flex align-items-center">
+                <span>Tìm kiếm theo:</span>
+                <select #url class="ms-1">
+                    <option value="filter-by-username">username</option>
+                    <option value="filter-by-name">tên</option>
+                    <option value="filter-by-email">email</option>
+                    <option value="filter-by-phone-num">SĐT</option>
+                    <option value="filter-by-role">role</option>
+                </select>
+                <input #key type="text">
+                <button (click)="getByKey(url.value, key.value); isFiltering = true"><i class='bx bx-search fw-bold'></i></button>
+                @if(isFiltering)  {
+                    <button (click)="isFiltering = false; get(1); key.value = ''"><i class='bx bx-x fw-bold'></i></button>
+                }
+            </div>
+            <!-- End Search  -->
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <button [disabled]="pageIndex == 1" class="page-link btn"(click)="switchPage(-1)">Previous</button>
+                    </li>
+                    @for (item of pagination; track $index) {
+                        <li class="page-item">
+                            <a class="page-link btn" [ngClass]="item == pageIndex? 'bg-dark text-white':''" (click)="get(item);">
+                                {{item}}
+                            </a>
+                        </li>
+                    }
+                    <li class="page-item">
+                        <button [disabled]="pageIndex == pagination.length" class="page-link btn" (click)="switchPage(1)">Next</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <table class="table table-group-divider">
+            <thead>
+                <tr>
+                    <th style="width: 5%;" class="text-center">STT</th>
+                    <th style="width: 20%;">Username</th>
+                    <th style="width: 20%;">Tên</th>
+                    <th style="width: 20%;">Email</th>
+                    <th style="width: 20%;">Vai trò</th>
+                    <th style="width: 15%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (user of users; track $index;) {
+                    <tr>
+                        <td class="text-center">{{$index+1 + pageSize*(pageIndex-1)}}</td>
+                        <td>{{user.userName}}</td>
+                        <td>{{user.lastName + " " + user.firstName}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.roles.join(',')}}</td>
+                        <td>
+                            <i class='btn bx bx-dots-vertical' data-bs-toggle="dropdown"></i>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item btn" (click)="getUserRoles(user)">Gán quyền</a>
+                                <a class="dropdown-item btn" (click)="selectUser(user)">Chi tiết</a>
+                                <a class="dropdown-item btn" (click)="deleteUser(user!.id)">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Detail -->
+@if(selectedUser) {
+    <div class="position-absolute top-0 card card-body start-50 translate-middle-x shadow-lg" 
+    style="width: 800px; margin-top: 20px; margin-bottom: 50px; z-index: 3;">
+        <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="selectedUser = null"></button>
+        <div class="d-flex">
+            @if(updating) {
+                <button class="btn btn-outline-success mx-1" (click)="saveDetail()">Lưu</button>
+                <button class="btn btn-outline-danger mx-1" (click)="resetDetail()">Hủy</button>
+            }
+            @else {
+                <button class="btn btn-outline-info" (click)="updating = true">Cập nhật</button>
+            }
+        </div>
+        <form action="" class="m-3">
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Username:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="text" class="form-control" [(ngModel)]="selectedUser!.userName" name="1">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Họ đệm:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="text" class="form-control" [(ngModel)]="selectedUser!.lastName" name="2">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Tên:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="text" class="form-control" [(ngModel)]="selectedUser!.firstName" name="3">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Email:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="text" class="form-control" [(ngModel)]="selectedUser!.email" name="4">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Xác nhận email:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="checkbox" class="form-check-input" [(ngModel)]="selectedUser!.emailConfirmed" name="5">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Địa chỉ:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="text" class="form-control" [(ngModel)]="selectedUser!.address" name="6">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Giới tính:</label>
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <select [disabled]="!updating" [(ngModel)]="selectedUser!.gender" name="gender" class="form-select">
+                            <option [ngValue]="null">--</option>
+                            <option [ngValue]="0">Nam</option>
+                            <option [ngValue]="1">Nữ</option>
+                            <option [ngValue]="2">Khác</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Ngày sinh:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="date" class="form-control" [(ngModel)]="selectedUser!.dateOfBirth" name="8">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Mô tả:</label>
+                </div>
+                <div class="col-lg-8">
+                    <textarea [disabled]="!updating" class="form-control" [(ngModel)]="selectedUser!.description" name="9"></textarea>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Thời điểm hết hạn token:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="date" class="form-control" [(ngModel)]="selectedUser!.refreshTokenExpiryTime" name="10">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Liên kết xã hội:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="text" class="form-control" [(ngModel)]="selectedUser!.userLinks" name="11" placeholder="name1,link1|name2,link2...">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Số điện thoại:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="number" class="form-control" [(ngModel)]="selectedUser!.phoneNumber" name="12">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Xác nhận số điện thoại:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="checkbox" class="form-check-input" [(ngModel)]="selectedUser!.phoneNumberConfirmed" name="13">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Bật xác thực 2 yếu tố:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="checkbox" class="form-check-input" [(ngModel)]="selectedUser!.twoFactorEnabled" name="14">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <label>Số lần truy cập thất bại:</label>
+                </div>
+                <div class="col-lg-8">
+                    <input [disabled]="!updating" type="number" class="form-control" [(ngModel)]="selectedUser!.accessFailedCount" name="15">
+                </div>
+            </div>
+        </form>
+    </div>
+}
+<!--End detail -->
+
+
+<!--Role assign-->
+@if(showAssignRole) {
+    <div class="position-absolute top-0 card card-body start-50 translate-middle-x shadow-lg" 
+    style="width: 300px; margin-top: 20px; margin-bottom: 50px; z-index: 3;">
+        <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="showAssignRole = false"></button>
+        
+        @for(role of defaultRoles; track $index) {
+            <div class="row mt-3">
+                <label class="col-4">{{role.name}}</label>
+                <input type="checkbox" class="col-6 form-check-input" [(ngModel)]="role.selected">
+            </div>
+        }
+
+        <button class="btn btn-success btn-sm mt-3" (click)="assignRole();">Lưu</button>
+    </div>
+}

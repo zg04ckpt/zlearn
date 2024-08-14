@@ -65,7 +65,7 @@ namespace BE.Controllers
         }
 
         [HttpPost("logout")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             try

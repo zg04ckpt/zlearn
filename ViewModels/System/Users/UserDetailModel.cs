@@ -1,10 +1,6 @@
-﻿using Data.Entities;
+﻿
 using Data.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ViewModels.System.Users
 {
@@ -12,7 +8,7 @@ namespace ViewModels.System.Users
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime DayOfBirth { get; set; }
+        public string DayOfBirth { get; set; }
         public Gender Gender { get; set; }
         public string Email { get; set; }
         public string PhoneNum { get; set; }

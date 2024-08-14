@@ -31,4 +31,18 @@ export class ComponentService {
     ) {
         this.$showMessage.next({message: msg, buttons: buttons});
     }
+
+    public displayConfirmMessage(msg: string, onConfirm: () => void) {
+        this.displayMessageWithActions(
+            msg,
+            [
+              { name: "Hủy", action: () => {} },
+              { name: "Xác nhận", action: onConfirm }
+            ]
+          );
+    }
+
+    public displayAPIError(err: any) {
+        this.displayMessage(err.error?.message || err.statusText);
+    }
 }

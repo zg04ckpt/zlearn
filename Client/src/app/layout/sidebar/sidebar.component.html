@@ -12,29 +12,36 @@ style="width: 220px; z-index: 2; margin-top: 50px; padding-bottom: 50px;">
     </button>
     
     <ul class="nav nav-fill mb-auto flex-column mt-2" id="sidebar-menu">
-        <li class="nav-item">
-            <a href="#" class="nav-link active text-start">
-                <i class='bx bxs-home me-2'></i>
-                Trang chủ
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link active  text-start">
-                <i class='bx bxs-home me-2'></i>
-                Trang chủ
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link active text-start">
-                <i class='bx bxs-home me-2'></i>
-                Trang chủ
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link active text-start">
-                <i class='bx bxs-home me-2'></i>
-                Trang chủ
-            </a>
-        </li>
+        @if(user?.roles?.includes('Admin'))
+        {
+            <li class="nav-item">
+                <a routerLink="management" class="nav-link active text-start">
+                    <i class='bx bxs-home me-2'></i>
+                    Tổng quan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a routerLink="management/users" class="nav-link active text-start">
+                    <i class='bx bxs-user me-2'></i>
+                    Quản lí user
+                </a>
+            </li>
+            <li class="nav-item">
+                <a routerLink="management/roles" class="nav-link active text-start">
+                    <i class='bx bxs-lock-alt me-2'></i>
+                    Quản lí quyền
+                </a>
+            </li>
+        }
+        @else 
+        {
+            <li class="nav-item">
+                <a href="#" class="nav-link active text-start">
+                    <i class='bx bxs-home me-2'></i>
+                    Trang chủ
+                </a>
+            </li>
+        }
+        
     </ul>
 </div>

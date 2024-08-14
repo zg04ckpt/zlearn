@@ -1,10 +1,10 @@
 ﻿using Application.System.Roles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Threading.Tasks;
 using Utilities;
+using ViewModels.System.Roles;
 
 namespace BE.Controllers
 {
@@ -19,27 +19,32 @@ namespace BE.Controllers
             _roleService = roleService;
         }
 
+
+
+
         [HttpGet]
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> GetAll()
         {
             try
             {
-                return Ok(_roleService.GetAll());
+                return Ok(await _roleService.GetAll());
             }
             catch (Exception ex)
             {
                 return HandleException(ex);
             }
         }
+
+
+
 
         [HttpPost]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        public async Task<IActionResult> CreateRole([FromForm]string name, [FromForm]string desc)
+        public async Task<IActionResult> CreateRole([FromBody]RoleCreateRequest request)
         {
             try
             {
-                await _roleService.Add(name, desc);
+                await _roleService.Add(request.Name, request.Description);
                 return Ok();
             }
             catch (Exception ex)
@@ -48,13 +53,15 @@ namespace BE.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+
+
+        [HttpPut]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        public async Task<IActionResult> UpdateRole(string id, [FromForm] string name, [FromForm] string desc)
+        public async Task<IActionResult> UpdateRole([FromBody]RoleModel role)
         {
             try
             {
-                await _roleService.Update(id, name, desc);
+                await _roleService.Update(role);
                 return Ok();
             }
             catch (Exception ex)
@@ -62,6 +69,8 @@ namespace BE.Controllers
                 return HandleException(ex);
             }
         }
+
+
 
         [HttpDelete("{id}")]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]

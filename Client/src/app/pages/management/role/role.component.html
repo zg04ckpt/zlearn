@@ -1,0 +1,72 @@
+<div class="card m-3">
+
+    <div class="card-header">
+        <h5>Quản lý quyền</h5>
+    </div>
+    
+    <div class="card-body">
+
+        <div class="d-flex">
+            <button class="btn btn-outline-dark" (click)="add.hidden = false">
+                <i class='bx bx-plus-medical'></i>
+                Thêm
+            </button>
+        </div>
+
+        <table class="table table-group-divider">
+            <thead>
+                <tr>
+                    <th style="width: 5%;" class="text-center">STT</th>
+                    <th style="width: 20%;">Tên</th>
+                    <th style="width: 20%;">Mô tả</th>
+                    <th style="width: 15%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (role of roles; track $index;) {
+                    <tr>
+                        <td class="text-center">{{$index+1}}</td>
+                        <td>{{role.name}}</td>
+                        <td>{{role.description}}</td>
+                        <td>
+                            <i class='btn bx bx-dots-vertical' data-bs-toggle="dropdown"></i>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item btn" (click)="deleteRole(role.id)">Xóa quyền</a>
+                                <a class="dropdown-item btn" (click)="selectRole(role)">Chỉnh sửa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--start add-->
+<div #add class="position-absolute top-0 card card-body start-50 translate-middle-x shadow-lg" 
+style="width: 200px; margin-top: 20px; margin-bottom: 50px; z-index: 3;" hidden="">
+    <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="add.hidden = true"></button>
+    <input #addName class="form-control mt-3" type="text" placeholder="Tên">
+    <input #addDesc class="form-control mt-2" type="text" placeholder="Mô tả">
+    <button class="btn btn-outline-success mt-3" 
+    (click)="addRole(addName.value, addDesc.value); add.hidden = true; addName.value = ''; addDesc.value = ''">
+        Thêm quyền
+    </button>
+</div>
+<!--end add-->
+
+<!--start update-->
+@if(selectedRole) {
+    <div class="position-absolute top-0 card card-body start-50 translate-middle-x shadow-lg" 
+    style="width: 300px; margin-top: 20px; margin-bottom: 50px; z-index: 3;">
+        <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="selectedRole= null"></button>
+        <input class="form-control mt-3" type="text" [(ngModel)]="selectedRole!.name" placeholder="Tên">
+        <input class="form-control mt-2" type="text" [(ngModel)]="selectedRole!.description" placeholder="Mô tả">
+        <button class="btn btn-outline-success mt-3" 
+        (click)="updateRole();">
+            Cập nhật
+        </button>
+    </div>
+}
+<!--end update-->
+

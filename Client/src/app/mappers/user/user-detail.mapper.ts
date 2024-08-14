@@ -1,7 +1,7 @@
-import { UserDetailDTO } from "../dtos/user-detail.dto";
-import { UserDetail } from "../entities/user-detail.entity";
-import { Gender } from "../enums/gender.enum";
-import { Mapper } from "./base.mapper";
+import { UserDetailDTO } from "../../dtos/user/user-detail.dto";
+import { UserDetail } from "../../entities/user/user-detail.entity";
+import { Gender } from "../../enums/gender.enum";
+import { Mapper } from "../base.mapper";
 
 export class UserDetailMapper extends Mapper<UserDetailDTO, UserDetail> {
     override map(param: UserDetailDTO): UserDetail {
@@ -22,7 +22,7 @@ export class UserDetailMapper extends Mapper<UserDetailDTO, UserDetail> {
             email: param.email,
             phoneNum: param.phoneNum,
             gender: param.gender as Gender,
-            dayOfBirth: param.dayOfBirth.split("T")[0],
+            dayOfBirth: param.dayOfBirth,
             address: param.address,
             intro: param.intro,
             socialLinks: list

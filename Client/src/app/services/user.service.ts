@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserDetailMapper } from '../mappers/user-detail.mapper';
-import { UserDetail } from '../entities/user-detail.entity';
+import { UserDetailMapper } from '../mappers/user/user-detail.mapper';
+import { UserDetail } from '../entities/user/user-detail.entity';
 import { map, Observable, Subject } from 'rxjs';
-import { UserDetailDTO } from '../dtos/user-detail.dto';
+import { UserDetailDTO } from '../dtos/user/user-detail.dto';
 import { StorageKey, StorageService } from './storage.service';
-import { User } from '../entities/user.entity';
+import { User } from '../entities/user/user.entity';
 
 @Injectable({
   providedIn: 'root'

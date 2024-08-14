@@ -1,6 +1,6 @@
-import { UserDTO } from "../dtos/user.dto";
-import { User } from "../entities/user.entity";
-import { Mapper } from "./base.mapper";
+import { UserDTO } from "../../dtos/user/user.dto";
+import { User } from "../../entities/user/user.entity";
+import { Mapper } from "../base.mapper";
 
 export class UserMapper extends Mapper<UserDTO, User> {
     override map(param: UserDTO): User {

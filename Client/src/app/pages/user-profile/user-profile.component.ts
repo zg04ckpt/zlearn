@@ -1,9 +1,9 @@
 import { Component, NgModule, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { StorageKey, StorageService } from '../../services/storage.service';
-import { User } from '../../entities/user.entity';
+import { User } from '../../entities/user/user.entity';
 import { ComponentService } from '../../services/component.service';
-import { UserDetail } from '../../entities/user-detail.entity';
+import { UserDetail } from '../../entities/user/user-detail.entity';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -28,9 +28,7 @@ export class UserProfileComponent implements OnInit {
     private userService: UserService,
     private componentService: ComponentService,
     private authService: AuthService
-  ) {
-    
-  }
+  ) { }
 
   ngOnInit(): void {
     debugger;

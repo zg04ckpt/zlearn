@@ -1,7 +1,10 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule, NgClass, NgStyle } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '../../services/layout.service';
+import { User } from '../../entities/user/user.entity';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,15 +13,26 @@ import { LayoutService } from '../../services/layout.service';
     NgStyle,
     NgClass,
     CommonModule,
+    RouterLink
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   show: boolean = true;
+  user: User|null = null;
 
-  constructor(private layoutService: LayoutService) {
+  constructor(
+    private layoutService: LayoutService,
+    private userService: UserService
+  ) {
     layoutService.$showSidebar.subscribe(next => this.show = next);
+    userService.$currentUser.subscribe(next => this.user = next);
+  }
+
+  ngOnInit(): void {
+    if(window.innerWidth < 600)
+      this.show = false;
   }
 
   toggleStatus() {

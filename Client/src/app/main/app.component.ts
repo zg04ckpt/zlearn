@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../layout/header/header.component';
 import { FooterComponent } from '../layout/footer/footer.component';
@@ -7,13 +7,10 @@ import { LoginComponent } from "../components/login/login.component";
 import { RegisterComponent } from "../components/register/register.component";
 import { LayoutService } from '../services/layout.service';
 import { CommonModule } from '@angular/common';
-import { state, style, trigger } from '@angular/animations';
 import { LoadingComponent } from '../components/loading/loading.component';
 import { MessageComponent } from '../components/message/message.component';
 import { ToastComponent } from '../components/toast/toast.component';
 import { UserService } from '../services/user.service';
-import { StorageKey, StorageService } from '../services/storage.service';
-import { ComponentService } from '../services/component.service';
 import { AuthService } from '../services/auth.service';
 import { ApiNotResponseComponent } from '../pages/errors/api-not-response/api-not-response.component';
 
@@ -44,17 +41,25 @@ export class AppComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService
   ) {
-    this.layoutService.$showSidebar.subscribe(value => this.showSidebar = value);
-
-    
+    this.layoutService.$showSidebar.subscribe(value => {
+      if(window.innerWidth >= 600)
+        this.showSidebar = value;
+    });
   }
   
   ngOnInit(): void {
     this.userService.$currentUser.next(this.userService.getLoggedInUser());
 
+    if(window.innerWidth < 600)
+      this.showSidebar = false;
+
     //show end session message when refresh token expired
     this.authService.setLoginSessionTimer();
   }
   
-
+  @HostListener("window:resize", ['$event'])
+  onResize(event: Event) {
+    if(window.innerWidth < 600)
+      this.showSidebar = false;
+  }
 }

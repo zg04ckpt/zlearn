@@ -62,8 +62,11 @@ namespace Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("CreatedDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateOfBirth")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
