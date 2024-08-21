@@ -1,0 +1,119 @@
+<div class="row mt-5">
+    <div class="col-lg-9">
+        <div class="card card-body ms-3">
+
+            <h5 class="">
+                <i class='bx bx-label fw-bold'></i>
+                Chi tiết
+            </h5>
+
+            <div class="d-flex mt-3">
+                <img src="" alt="" width="150px" height="200px">
+                <div class="d-flex flex-column ms-3 w-100">
+
+                    <div class="row">
+                        <div class="col-2 fw-light">Tên:</div>
+                        <div class="col-10"><b>Pháp luật đại cương II</b></div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-2">Người đăng:</div>
+                        <div class="col-10"><b>Admin</b></div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-2">Ngày đăng:</div>
+                        <div class="col-10"><b>14/02/2004</b></div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-2">Cập nhật:</div>
+                        <div class="col-10"><b>14/02/2004</b></div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-2">Số câu:</div>
+                        <div class="col-10"><b>40</b></div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-2">Lượt làm:</div>
+                        <div class="col-10"><b>3</b></div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-2">Mô tả:</div>
+                        <div class="col-10"><b>Mặc định</b></div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-2">Nguồn:</div>
+                        <div class="col-10"><b>Internet</b></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-row-reverse mt-3">
+                <a class="btn btn-outline-secondary"
+                [routerLink]="['/tests', 'test-id', 'try60p']">
+                    Thi thử(60p)
+                </a>
+                <a class="btn btn-outline-success me-2"
+                [routerLink]="['/tests', 'test-id', 'practice']">
+                    Luyện tập(Không giới hạn time)
+                </a>
+            </div>
+
+            <button class="position-absolute top-0 end-0 btn btn-outline-secondary btn-sm rounded-0 m-3">
+                <i class='bx bx-bookmark fw-lighter'></i>
+                Lưu
+            </button>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="card me-3" style="height: 500px;">
+            <span class="position-absolute top-0 end-0 m-2" (click)="add_comment.hidden = false" id="add">
+                <i class='bx bx-plus-medical' ></i>
+            </span>
+            <div class="card-header text-center">Bình luận</div>
+            <div class="card-body">
+
+                <!--Add comment-->
+                <div #add_comment hidden="" class="mb-3">
+                    <textarea type="text" class="form-control border-2 border-secondary overflow-hidden" placeholder="Bình luận ..."
+                    style="font-size: 14px;"></textarea>
+                    <div class="d-flex flex-row-reverse mt-1">
+                        <button class="btn btn-sm btn-success rounded-0 py-0 shadow-sm" style="font-size: 12px;">Gửi</button>
+                        <button class="btn btn-sm btn-danger rounded-0 py-0 me-1 shadow-sm" style="font-size: 12px;"
+                        (click)="add_comment.hidden = true">Hủy</button>
+                    </div>
+                </div>
+
+                <!--Comment-->
+                <div class="card card-body px-2 py-1 mb-2">
+                    <div class="d-flex mb-1">
+                        <img src="" alt="" class="avt mt-1">
+                        <div class="d-flex flex-column ms-2">
+                            <small class="fw-bold align-text-top">Tên người dùng</small>
+                            <p class="mb-1" style="font-size: 14px;">Đề như con cặc, mẹ toàn bị sai làm cái éo gì ??!!</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between p-0">
+                        <small class="text-secondary" style="font-size: 12px;">12:56 - 19/08/24</small>
+                        <div class="d-flex align-content-center">
+                            <i class='bx bx-heart fw-bold heart-btn'></i>
+                            <div class="me-1" style="font-size: 12px;">34</div>
+                            <i class='bx bx-reply fw-bold reply-btn'></i>
+                            <div style="font-size: 12px;">34</div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+            
+        </div>
+    </div>
+</div>

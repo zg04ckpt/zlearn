@@ -1,0 +1,66 @@
+<div class="container-lg px-3">
+
+    <h3 class="text-center mt-4">Danh sách các bài trắc nghiệm</h3>
+
+    <div class="d-flex mt-5 justify-content-center">
+        <div class="input-group me-1 w-50">
+            <label class="input-group-text">Danh mục</label>
+            <select class="form-select">
+                <option selected>Tất cả</option>
+            </select>
+        </div>
+
+        <div class="input-group ms-1 w-25">
+            <input type="text" class="form-control" placeholder="Từ khóa...">
+            <button class="btn btn-outline-dark">
+                <i class='bx bx-search fs-6 py-1'></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-10 offset-1">
+            <div class="card card-body mx-5">
+
+                <!--top-->
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6>Tìm thấy: <b class="text-info">245</b> kết quả</h6>
+
+                    <div class="btn-group" style="width: auto;">
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class='bx bxs-chevrons-left py-1'></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary">Trang 4/5</button>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class='bx bxs-chevrons-right py-1'></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!--content-->
+                <div class="mt-4 mx-2">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card card-body d-flex flex-row p-2 test" (click)="navigate('test-id')">
+                                <img src="" alt="" width="50px" height="50px">
+                                <div class="d-flex flex-column ms-2 flex-fill">
+                                    <h6 class="fs-6 fw-bold mt-1">Pháp luật đại cương</h6>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <small class="fw-medium text-secondary">SL câu hỏi: 40</small>
+                                        <small class="fw-medium text-secondary">Số lượt làm: 32</small>
+                                    </div>
+                                </div>
+                                <span class="position-absolute top-0 end-0 m-1">
+                                    <i class='bx bx-bookmark fw-lighter fs-4'></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    
+</div>

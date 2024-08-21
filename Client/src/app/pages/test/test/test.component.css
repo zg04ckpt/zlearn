@@ -1,0 +1,46 @@
+.status-btn {
+    border: 1px black solid;
+}
+
+.status-btn:hover {
+    transform: translateY(-3%);
+    box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.5);
+    border: 1px rgb(7, 213, 244) solid;
+}
+
+#status-box {
+    width: 300px;
+    right: 0px;
+    top: 100px;
+    right: 20px;
+}
+
+.disable {
+    pointer-events: none;
+}
+
+.blur {
+    opacity: 0.5;
+}
+
+.question-image {
+    width: 300px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+.ans-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px rgb(80, 79, 79) solid;
+    border-radius: 50%;
+    align-content: center;
+    text-align: center;
+    font-weight: bold;
+}
+
+.ans-btn:hover {
+    cursor: pointer;
+    transform: translateY(-3%);
+    box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.5);
+}

@@ -1,5 +1,5 @@
 ﻿using Application.Common;
-using Application.Practice;
+using Application.Features.Learn;
 using BE.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,8 +9,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Threading.Tasks;
 using Utilities;
-using ViewModels.QuestionSet;
-using ViewModels.Test;
+using ViewModels.Features.Learn.Test;
 
 namespace ZG04.BE.Controllers
 {
@@ -21,14 +20,10 @@ namespace ZG04.BE.Controllers
         private readonly ITestService _testService;
         private readonly ILogger<TestsController> _logger;
 
-        //test
-        private readonly IEmailSender _emailSender;
-
-        public TestsController(ITestService testService, ILogger<TestsController> logger, IEmailSender emailSender)
+        public TestsController(ITestService testService, ILogger<TestsController> logger)
         {
             _testService = testService;
             _logger = logger;
-            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -59,7 +54,7 @@ namespace ZG04.BE.Controllers
 
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CreateTestRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateTestRequest request)
         {
             try
             {
@@ -74,7 +69,7 @@ namespace ZG04.BE.Controllers
 
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromForm] TestUpdateRequest questionSet)
+        public async Task<IActionResult> Update(string id, [FromBody] TestUpdateRequest questionSet)
         {
             try
             {
@@ -136,7 +131,7 @@ namespace ZG04.BE.Controllers
         {
             try
             {
-                await _testService.SaveResult(request, HttpContext.Connection);
+                await _testService.SaveResult(request);
                 return Ok();
             }
             catch (Exception ex)

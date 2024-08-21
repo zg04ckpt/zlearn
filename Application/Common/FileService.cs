@@ -29,6 +29,7 @@ namespace Application.Common
 
         public async Task<string> SaveFile(IFormFile file)
         {
+            if (file == null) return null;
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             var filePath = Path.Combine(_folderPath, fileName);
             using var output = new FileStream(filePath, FileMode.Create);

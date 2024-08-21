@@ -1,5 +1,4 @@
 ﻿using Application.Common;
-using Application.Practice;
 using AspNetCoreRateLimit;
 using Data.Entities;
 using Data;
@@ -22,6 +21,7 @@ using Application.System.Users;
 using Application.System.Roles;
 using Application.System.Auth;
 using Application.System.Manage;
+using Application.Features.Learn;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;

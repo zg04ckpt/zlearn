@@ -12,7 +12,6 @@ import { MessageComponent } from '../components/message/message.component';
 import { ToastComponent } from '../components/toast/toast.component';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
-import { ApiNotResponseComponent } from '../pages/errors/api-not-response/api-not-response.component';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +26,6 @@ import { ApiNotResponseComponent } from '../pages/errors/api-not-response/api-no
     LoadingComponent,
     MessageComponent,
     ToastComponent,
-    ApiNotResponseComponent,
     CommonModule
   ],
   templateUrl: './app.component.html',
