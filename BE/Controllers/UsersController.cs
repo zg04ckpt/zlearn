@@ -1,18 +1,23 @@
-﻿using Application.System;
+﻿using Application.System.Users;
+using Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System;
 using System.Net;
 using System.Threading.Tasks;
+using Utilities;
 using ViewModels.Common;
-using ViewModels.System;
+using ViewModels.System.Users;
 
 namespace BE.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
         private readonly IUserService _userService;
         private readonly ILogger<UsersController> _logger;
@@ -22,24 +27,33 @@ namespace BE.Controllers
             _userService = userService;
         }
 
-        [HttpPost("login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromForm]LoginRequest request)
+        [HttpPut("{id}/profile")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> UpdateUserDetail(string id, [FromBody] UserDetailModel request)
         {
-            var result = await _userService.Authenticate(request);
-            return ApiResult(result);
+            try
+            {
+                await _userService.UpdateUserDetail(id, request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
         }
 
-        private IActionResult ApiResult(ApiResult result)
+        [HttpGet("{id}/profile")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> GetUserDetail(string id)
         {
-            if (result.Code == HttpStatusCode.OK)
-                return Ok(result);
-
-            if (result.Code == HttpStatusCode.BadRequest)
-                return BadRequest(result);
-            if (result.Code == HttpStatusCode.NotFound)
-                return NotFound(result);
-            return StatusCode(StatusCodes.Status500InternalServerError, result);
+            try
+            {
+                return Ok(await _userService.GetUserDetail(id));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
         }
     }
 }

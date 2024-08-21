@@ -13,3 +13,6 @@ D:\Code\Web\zg04web\Data\obj\Debug\net6.0\refint\Data.dll
 D:\Code\Web\zg04web\Data\obj\Debug\net6.0\Data.pdb
 D:\Code\Web\zg04web\Data\obj\Debug\net6.0\Data.genruntimeconfig.cache
 D:\Code\Web\zg04web\Data\obj\Debug\net6.0\ref\Data.dll
+D:\Code\Web\zg04web\Data\bin\Debug\net6.0\Utilities.dll
+D:\Code\Web\zg04web\Data\bin\Debug\net6.0\Utilities.pdb
+D:\Code\Web\zg04web\Data\obj\Debug\net6.0\Data.csproj.Up2Date

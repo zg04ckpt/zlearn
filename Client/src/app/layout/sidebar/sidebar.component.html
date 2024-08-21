@@ -1,0 +1,47 @@
+<div 
+[ngClass]="show? 'visible':'hidden'"
+class="d-flex flex-column flex-shrink-0 bg-dark px-1 vh-100 position-fixed top-0" 
+style="width: 220px; z-index: 2; margin-top: 50px; padding-bottom: 50px;">
+
+    <button 
+    class="btn rounded-0 border-1 border-secondary shadow-sm position-absolute top-50 start-100 p-0" 
+    id="toggle-btn"
+    [ngClass]="show? 'btn-visible':'btn-hidden'"
+    (click)="toggleStatus()">
+        <i class='bx fw-bolder fs-2' [ngClass]="{'bx-chevron-left': show, 'bx-chevron-right': !show}"></i>
+    </button>
+    
+    <ul class="nav nav-fill mb-auto flex-column mt-2" id="sidebar-menu">
+        @if(user?.roles?.includes('Admin'))
+        {
+            <li class="nav-item">
+                <a routerLink="management" class="nav-link active text-start">
+                    <i class='bx bxs-home me-2'></i>
+                    Tổng quan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a routerLink="management/users" class="nav-link active text-start">
+                    <i class='bx bxs-user me-2'></i>
+                    Quản lí user
+                </a>
+            </li>
+            <li class="nav-item">
+                <a routerLink="management/roles" class="nav-link active text-start">
+                    <i class='bx bxs-lock-alt me-2'></i>
+                    Quản lí quyền
+                </a>
+            </li>
+        }
+        @else 
+        {
+            <li class="nav-item">
+                <a href="#" class="nav-link active text-start">
+                    <i class='bx bxs-home me-2'></i>
+                    Trang chủ
+                </a>
+            </li>
+        }
+        
+    </ul>
+</div>

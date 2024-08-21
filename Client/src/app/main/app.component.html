@@ -1,0 +1,13 @@
+<app-header/>
+<app-sidebar/>
+
+<div class="main-content" [ngClass]="showSidebar? 'with-sidebar':'without-sidebar'">
+    <router-outlet/>
+</div>
+
+<app-footer/>
+<app-login/>
+<app-register/>
+<app-loading/>
+<app-message/>
+<app-toast/>

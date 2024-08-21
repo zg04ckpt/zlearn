@@ -899,13 +899,24 @@
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.30",
           "Microsoft.EntityFrameworkCore": "6.0.30",
-          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.30"
+          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.30",
+          "Utilities": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Data.dll": {}
         },
         "runtime": {
           "bin/placeholder/Data.dll": {}
+        }
+      },
+      "Utilities/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Utilities.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Utilities.dll": {}
         }
       }
     }
@@ -2275,6 +2286,11 @@
       "type": "project",
       "path": "../Data/Data.csproj",
       "msbuildProject": "../Data/Data.csproj"
+    },
+    "Utilities/1.0.0": {
+      "type": "project",
+      "path": "../Utilities/Utilities.csproj",
+      "msbuildProject": "../Utilities/Utilities.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -2282,7 +2298,8 @@
       "Data >= 1.0.0",
       "Microsoft.AspNetCore.Http.Abstractions >= 2.1.1",
       "Microsoft.AspNetCore.Http.Features >= 5.0.17",
-      "Newtonsoft.Json >= 13.0.3"
+      "Newtonsoft.Json >= 13.0.3",
+      "Utilities >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -2314,6 +2331,9 @@
           "projectReferences": {
             "D:\\Code\\Web\\zg04web\\Data\\Data.csproj": {
               "projectPath": "D:\\Code\\Web\\zg04web\\Data\\Data.csproj"
+            },
+            "D:\\Code\\Web\\zg04web\\Utilities\\Utilities.csproj": {
+              "projectPath": "D:\\Code\\Web\\zg04web\\Utilities\\Utilities.csproj"
             }
           }
         }

@@ -1,0 +1,36 @@
+.main-content {
+    top: 50px;
+    position: fixed;
+    right: 0px;
+    bottom: 0;
+    overflow: auto;
+}
+
+.with-sidebar {
+    left: 220px;
+    animation: rightShift 0.3s ease;
+}
+
+.without-sidebar {
+    left: 0px;
+    animation: leftShift 0.3s ease;
+}
+
+@keyframes rightShift {
+    from {
+        left: 0px;
+    }
+    to {
+        left: 220px;
+    }
+}
+
+@keyframes leftShift {
+    from {
+        left: 220px;
+    }
+    to {
+        left: 0px;
+    }
+}
+

@@ -11,7 +11,8 @@
           "Data": "1.0.0",
           "Microsoft.AspNetCore.Http.Abstractions": "2.1.1",
           "Microsoft.AspNetCore.Http.Features": "5.0.17",
-          "Newtonsoft.Json": "13.0.3"
+          "Newtonsoft.Json": "13.0.3",
+          "Utilities": "1.0.0"
         },
         "runtime": {
           "ViewModels.dll": {}
@@ -567,10 +568,16 @@
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.30",
           "Microsoft.EntityFrameworkCore": "6.0.30",
-          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.30"
+          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.30",
+          "Utilities": "1.0.0"
         },
         "runtime": {
           "Data.dll": {}
+        }
+      },
+      "Utilities/1.0.0": {
+        "runtime": {
+          "Utilities.dll": {}
         }
       }
     }
@@ -932,6 +939,11 @@
       "hashPath": "system.windows.extensions.4.7.0.nupkg.sha512"
     },
     "Data/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Utilities/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

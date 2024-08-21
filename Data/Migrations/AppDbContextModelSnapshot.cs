@@ -17,7 +17,7 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.0")
+                .HasAnnotation("ProductVersion", "6.0.30")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -56,7 +56,19 @@ namespace Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateOfBirth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -66,12 +78,13 @@ namespace Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -96,11 +109,20 @@ namespace Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<string>("UserLinks")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
@@ -151,20 +173,20 @@ namespace Data.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("QuestionSetId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionSetId");
+                    b.HasIndex("TestId");
 
                     b.ToTable("Questions", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Entities.QuestionSet", b =>
+            modelBuilder.Entity("Data.Entities.Test", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -197,7 +219,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuestionSets", (string)null);
+                    b.ToTable("Tests", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.TestResult", b =>
@@ -209,14 +231,17 @@ namespace Data.Migrations
                     b.Property<int>("CorrectsCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("QuestionSetId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Detail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Score")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<TimeSpan>("UsedTime")
                         .HasColumnType("time");
@@ -227,7 +252,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionSetId");
+                    b.HasIndex("TestId");
 
                     b.ToTable("TestResults", (string)null);
                 });
@@ -331,27 +356,27 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Question", b =>
                 {
-                    b.HasOne("Data.Entities.QuestionSet", "QuestionSet")
+                    b.HasOne("Data.Entities.Test", "Test")
                         .WithMany("Questions")
-                        .HasForeignKey("QuestionSetId")
+                        .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("QuestionSet");
+                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Data.Entities.TestResult", b =>
                 {
-                    b.HasOne("Data.Entities.QuestionSet", "QuestionSet")
+                    b.HasOne("Data.Entities.Test", "Test")
                         .WithMany("TestResults")
-                        .HasForeignKey("QuestionSetId")
+                        .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("QuestionSet");
+                    b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("Data.Entities.QuestionSet", b =>
+            modelBuilder.Entity("Data.Entities.Test", b =>
                 {
                     b.Navigation("Questions");
 

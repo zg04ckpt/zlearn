@@ -8,7 +8,7 @@ namespace  Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "QuestionSets",
+                name: "Tests",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -45,14 +45,14 @@ namespace  Data.Migrations
                     table.ForeignKey(
                         name: "FK_Questions_QuestionSets_QuestionSetId",
                         column: x => x.QuestionSetId,
-                        principalTable: "QuestionSets",
+                        principalTable: "Tests",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_QuestionSetId",
                 table: "Questions",
-                column: "QuestionSetId");
+                column: "TestId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -61,7 +61,7 @@ namespace  Data.Migrations
                 name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "QuestionSets");
+                name: "Tests");
         }
     }
 }

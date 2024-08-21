@@ -61,7 +61,7 @@ namespace Data.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("QuestionSetId")
+                    b.Property<Guid>("TestId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Score")
@@ -69,12 +69,12 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionSetId");
+                    b.HasIndex("TestId");
 
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("Data.Entities.QuestionSet", b =>
+            modelBuilder.Entity("Data.Entities.Test", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,21 +104,21 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuestionSets");
+                    b.ToTable("Tests");
                 });
 
             modelBuilder.Entity("Data.Entities.Question", b =>
                 {
-                    b.HasOne("Data.Entities.QuestionSet", "QuestionSet")
+                    b.HasOne("Data.Entities.Test", "Test")
                         .WithMany("Questions")
-                        .HasForeignKey("QuestionSetId")
+                        .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("QuestionSet");
+                    b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("Data.Entities.QuestionSet", b =>
+            modelBuilder.Entity("Data.Entities.Test", b =>
                 {
                     b.Navigation("Questions");
                 });

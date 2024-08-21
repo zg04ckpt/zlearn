@@ -62,5 +62,7 @@ baseline.json
 .angular/
 
 # .NET
-*/appsettings.Development.json
 */appsettings.Production.json
+
+# Angular
+*/environment.pro.ts

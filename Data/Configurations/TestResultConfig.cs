@@ -21,9 +21,9 @@ namespace Data.Configurations
             builder.Property(x => x.StartTime).IsRequired();
             builder.Property(x => x.UserInfo).HasMaxLength(200);
 
-            builder.HasOne(x => x.QuestionSet)
+            builder.HasOne(x => x.Test)
                 .WithMany(x => x.TestResults)
-                .HasForeignKey(x => x.QuestionSetId)
+                .HasForeignKey(x => x.TestId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

@@ -19,7 +19,7 @@ namespace  Data.Entities
         public int CorrectAnswer { get; set; }
         public int Score { get; set; } = 1;
         public bool Mark { get; set; }
-        public Guid QuestionSetId { get; set; }
-        public QuestionSet QuestionSet { get; set; }
+        public Guid TestId { get; set; }
+        public Test Test { get; set; }
     }
 }

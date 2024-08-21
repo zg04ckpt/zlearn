@@ -13,8 +13,8 @@ namespace  Data.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Questions_QuestionSets_QuestionSetId",
                 table: "Questions",
-                column: "QuestionSetId",
-                principalTable: "QuestionSets",
+                column: "TestId",
+                principalTable: "Tests",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -28,8 +28,8 @@ namespace  Data.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Questions_QuestionSets_QuestionSetId",
                 table: "Questions",
-                column: "QuestionSetId",
-                principalTable: "QuestionSets",
+                column: "TestId",
+                principalTable: "Tests",
                 principalColumn: "Id");
         }
     }

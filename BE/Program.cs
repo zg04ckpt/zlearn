@@ -1,6 +1,5 @@
 ﻿using Application.Common;
 using Application.Practice;
-using Application.System;
 using AspNetCoreRateLimit;
 using Data.Entities;
 using Data;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using ZG04.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +17,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.Extensions.Hosting;
+using Utilities;
+using Application.System.Users;
+using Application.System.Roles;
+using Application.System.Auth;
+using Application.System.Manage;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -26,7 +29,7 @@ var Configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(Configuration.GetConnectionString(Constants.CONNECTION_STRING),
+    options.UseSqlServer(Configuration.GetConnectionString(Consts.CONNECTION_STRING),
         options => options.EnableRetryOnFailure()
         );
     options.EnableDetailedErrors();
@@ -37,12 +40,16 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
-builder.Services.AddScoped<IQuestionServices, QuestionService>();
-builder.Services.AddScoped<ITestResultService, TestResultService>();
+builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAdminService, AdminService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddTransient<IRoleService, RoleService>();
+
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -54,6 +61,20 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>(); // Đăng ký IProcessingStrategy
 builder.Services.AddSingleton<IClientPolicyStore, MemoryCacheClientPolicyStore>(); // Đăng ký IClientPolicyStore
 
+//cấu hình login
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = true;
+
+    //pass config
+    options.Password.RequireNonAlphanumeric = true; 
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+});
+
+//cấu hình xác thực
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -66,12 +87,12 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
-        ValidIssuer = Configuration["Tokens:Issuer"],
         ValidateAudience = true,
-        ValidAudience = Configuration["Tokens:Issuer"],
-        ValidateLifetime = false,
+        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])),
+        ValidIssuer = Configuration[Consts.AppSettingsKey.ISSUER],
+        ValidAudience = Configuration[Consts.AppSettingsKey.AUDIENCE],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY))),
         ClockSkew = TimeSpan.Zero
     };
 
@@ -89,6 +110,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+//cấu hình cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
@@ -98,6 +120,8 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+
+//cấu hình giới hạn truy cập
 builder.Services.AddMemoryCache();
 builder.Services.Configure<ClientRateLimitOptions>(Configuration.GetSection("ClientRateLimiting"));
 builder.Services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
@@ -114,8 +138,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 
 app.UseStaticFiles();
-app.UseClientRateLimiting();
-app.UseIpRateLimiting();
+//app.UseClientRateLimiting();
+//app.UseIpRateLimiting();
 
 string path = Path.Combine(Directory.GetCurrentDirectory(), FileService.FOLDER_NAME);
 
@@ -124,8 +148,6 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(path),
     RequestPath = FileService.REQUEST_PATH
 });
-
-
 
 app.UseAuthentication();
 app.UseRouting();

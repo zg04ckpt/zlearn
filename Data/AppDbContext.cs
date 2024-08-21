@@ -17,7 +17,7 @@ namespace Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new QuestionConfig());
-            modelBuilder.ApplyConfiguration(new QuestionSetConfig());
+            modelBuilder.ApplyConfiguration(new TestConfig());
             modelBuilder.ApplyConfiguration(new TestResultConfig());
             modelBuilder.ApplyConfiguration(new AppUserConfig());
             modelBuilder.ApplyConfiguration(new AppRoleConfig());
@@ -38,7 +38,7 @@ namespace Data
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<QuestionSet> QuestionSets { get; set; }
+        public DbSet<Test> Tests { get; set; }
         public DbSet<TestResult> TestResults { get; set; }
         #endregion
     }

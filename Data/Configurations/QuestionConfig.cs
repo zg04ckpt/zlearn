@@ -23,9 +23,9 @@ namespace  Data.Configurations
             builder.Property(x => x.AnswerD).HasMaxLength(500);
             builder.Property(x => x.CorrectAnswer).IsRequired();
 
-            builder.HasOne(x => x.QuestionSet)
+            builder.HasOne(x => x.Test)
                 .WithMany(x => x.Questions)
-                .HasForeignKey(x => x.QuestionSetId)
+                .HasForeignKey(x => x.TestId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

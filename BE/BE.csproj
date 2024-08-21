@@ -18,15 +18,8 @@
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
 
-    <ItemGroup>
-	    <Content Include="Images\**">
-		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	    </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Images\" />
-    </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
 
 </Project>
