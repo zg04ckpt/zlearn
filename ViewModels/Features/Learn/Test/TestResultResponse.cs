@@ -8,12 +8,11 @@ namespace ViewModels.Features.Learn.Test
 {
     public class TestResultResponse
     {
-        public Guid Id { get; set; }
-        public decimal Score { get; set; }
-        public int CorrectsCount { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
-        public string Detail { get; set; } //temporary
-        public Guid QuestionSetId { get; set; }
+        public int Total { get; set; }
+        public double Score { get; set; }
+        public int Correct { get; set; }
+        public int Unselected { get; set; }
+        public int UsedTime { get; set; }
+        public List<int> Detail { get; set; } 
     }
 }

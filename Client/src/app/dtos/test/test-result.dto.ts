@@ -1,8 +1,8 @@
 export interface TestResultDTO {
     total: number;
+    score: number;
     correct: number;
     unselected: number;
-    score: number;
     usedTime: number;
-    detail: number[];
+    detail: [];
 }

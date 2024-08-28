@@ -9,6 +9,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Threading.Tasks;
 using Utilities;
+using ViewModels.Common;
 using ViewModels.Features.Learn.Test;
 
 namespace ZG04.BE.Controllers
@@ -26,12 +27,14 @@ namespace ZG04.BE.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] CreateTestRequest request)
         {
             try
             {
-                return Ok(await _testService.GetAll());
+                await _testService.Create(request);
+                return Ok();
             }
             catch(Exception ex)
             {
@@ -39,50 +42,7 @@ namespace ZG04.BE.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
-        {
-            try
-            {
-                return Ok(await _testService.GetById(id));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
 
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTestRequest request)
-        {
-            try
-            {
-                await _testService.Create(request);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
-
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody] TestUpdateRequest questionSet)
-        {
-            try
-            {
-                await _testService.Update(id, questionSet);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
-
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -97,13 +57,14 @@ namespace ZG04.BE.Controllers
             }
         }
 
-        [HttpGet("{id}/questions")]
+
+        [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllQuestionsByTestId(string id)
+        public async Task<IActionResult> GetAll([FromQuery] PagingRequest request)
         {
             try
             {
-                return Ok(await _testService.GetAllQuestionByTestId(id));
+                return Ok(await _testService.GetAll(request));
             }
             catch (Exception ex)
             {
@@ -111,13 +72,15 @@ namespace ZG04.BE.Controllers
             }
         }
 
+
+        
         [HttpGet("results")]
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        public async Task<IActionResult> GetAllResults()
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllResults([FromQuery] PagingRequest request)
         {
             try
             {
-                return Ok(await _testService.GetAllResults());
+                return Ok(await _testService.GetAllResults(request));
             }
             catch (Exception ex)
             {
@@ -125,13 +88,58 @@ namespace ZG04.BE.Controllers
             }
         }
 
-        [HttpPost("results")]
+
+        [HttpGet("{id}/content")]
         [AllowAnonymous]
-        public async Task<IActionResult> SaveResult([FromBody] SaveTestResultRequest request)
+        public async Task<IActionResult> GetTestContent(string id)
         {
             try
             {
-                await _testService.SaveResult(request);
+                return Ok(await _testService.GetTestContentById(id));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpGet("{id}/detail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTestDetail(string id)
+        {
+            try
+            {
+                return Ok(await _testService.GetDetailById(id));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpPost("mark-test")]
+        [AllowAnonymous]
+        public async Task<IActionResult> MarkTest([FromBody]MarkTestRequest request)
+        {
+            try
+            {
+                return Ok(await _testService.MarkTest(request));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpDelete("results")]
+        public async Task<IActionResult> RemoveAllResults()
+        {
+            try
+            {
+                await _testService.RemoveAllResults();
                 return Ok();
             }
             catch (Exception ex)
@@ -140,13 +148,13 @@ namespace ZG04.BE.Controllers
             }
         }
 
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        [HttpDelete("results")]
-        public async Task<IActionResult> DeleteAll()
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody]TestUpdateRequest request)
         {
             try
             {
-                await _testService.RemoveAllResults();
+                await _testService.Update(id, request);
                 return Ok();
             }
             catch (Exception ex)

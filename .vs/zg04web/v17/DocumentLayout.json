@@ -1,15 +1,72 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\Code\\Web\\zg04web\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|d:\\code\\web\\zg04web\\be\\controllers\\testscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|solutionrelative:be\\controllers\\testscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\features\\learn\\testservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\features\\learn\\testservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\features\\learn\\test\\testresultresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\features\\learn\\test\\testresultresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\features\\learn\\test\\marktestrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\features\\learn\\test\\marktestrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\NGUYEN\\AppData\\Local\\Temp\\.vsdbgsrc\\631d7a9f8209d151f68bb6c4b41478f392ac57b345296e4740818ad4c37b871e\\AwaitTaskContinuation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zlearn/True/SqlTable/dbo.TestResults.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zlearn/True/SqlTable/dbo.Questions.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zlearn/True/SqlTable/dbo.AppUsers.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\system\\management\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\system\\management\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\system\\auth\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\system\\auth\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E5DAA483-E71D-48F4-9196-29A89C63DDA0}|Data\\Data.csproj|d:\\code\\web\\zg04web\\data\\configs\\testconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E5DAA483-E71D-48F4-9196-29A89C63DDA0}|Data\\Data.csproj|solutionrelative:data\\configs\\testconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\features\\learn\\test\\createtestrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\features\\learn\\test\\createtestrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|d:\\code\\web\\zg04web\\be\\controllers\\managementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|solutionrelative:be\\controllers\\managementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E5DAA483-E71D-48F4-9196-29A89C63DDA0}|Data\\Data.csproj|d:\\code\\web\\zg04web\\data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E5DAA483-E71D-48F4-9196-29A89C63DDA0}|Data\\Data.csproj|solutionrelative:data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|d:\\code\\web\\zg04web\\be\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|solutionrelative:be\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
-      "Orientation": 1,
+      "Orientation": 0,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 82,
-          "SelectedChildIndex": -1,
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,11 +79,183 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AwaitTaskContinuation.cs",
+              "DocumentMoniker": "C:\\Users\\NGUYEN\\AppData\\Local\\Temp\\.vsdbgsrc\\631d7a9f8209d151f68bb6c4b41478f392ac57b345296e4740818ad4c37b871e\\AwaitTaskContinuation.cs",
+              "ToolTip": "C:\\Users\\NGUYEN\\AppData\\Local\\Temp\\.vsdbgsrc\\631d7a9f8209d151f68bb6c4b41478f392ac57b345296e4740818ad4c37b871e\\AwaitTaskContinuation.cs [Read Only]",
+              "ViewState": "AQIAAI8AAAAAAAAAAAAmwKEAAAADAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T11:36:43.895Z",
+              "EditorCaption": " [Read Only]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "dbo.TestResults [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zlearn/True/SqlTable/dbo.TestResults.sql",
+              "ToolTip": "dbo.TestResults [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-08-25T11:35:44.3Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "dbo.Questions [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zlearn/True/SqlTable/dbo.Questions.sql",
+              "ToolTip": "dbo.Questions [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-08-25T10:59:52.922Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TestsController.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\TestsController.cs",
+              "RelativeDocumentMoniker": "BE\\Controllers\\TestsController.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\TestsController.cs",
+              "RelativeToolTip": "BE\\Controllers\\TestsController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB8AAAA5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T08:26:05.729Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "TestConfig.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Data\\Configs\\TestConfig.cs",
+              "RelativeDocumentMoniker": "Data\\Configs\\TestConfig.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Data\\Configs\\TestConfig.cs",
+              "RelativeToolTip": "Data\\Configs\\TestConfig.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAACAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T08:22:31.758Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TestService.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\Features\\Learn\\TestService.cs",
+              "RelativeDocumentMoniker": "Application\\Features\\Learn\\TestService.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\Features\\Learn\\TestService.cs",
+              "RelativeToolTip": "Application\\Features\\Learn\\TestService.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAAAkAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T08:20:16.151Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TestResultResponse.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\TestResultResponse.cs",
+              "RelativeDocumentMoniker": "ViewModels\\Features\\Learn\\Test\\TestResultResponse.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\TestResultResponse.cs",
+              "RelativeToolTip": "ViewModels\\Features\\Learn\\Test\\TestResultResponse.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-26T07:27:32.918Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MarkTestRequest.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\MarkTestRequest.cs",
+              "RelativeDocumentMoniker": "ViewModels\\Features\\Learn\\Test\\MarkTestRequest.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\MarkTestRequest.cs",
+              "RelativeToolTip": "ViewModels\\Features\\Learn\\Test\\MarkTestRequest.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAAsAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-26T07:31:59.495Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CreateTestRequest.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\CreateTestRequest.cs",
+              "RelativeDocumentMoniker": "ViewModels\\Features\\Learn\\Test\\CreateTestRequest.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\CreateTestRequest.cs",
+              "RelativeToolTip": "ViewModels\\Features\\Learn\\Test\\CreateTestRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T08:17:00.148Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ManagementsController.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\ManagementsController.cs",
+              "RelativeDocumentMoniker": "BE\\Controllers\\ManagementsController.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\ManagementsController.cs",
+              "RelativeToolTip": "BE\\Controllers\\ManagementsController.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAACUAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T07:48:14.054Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "BE\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\BE\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "BE\\Controllers\\AuthController.cs",
+              "ViewState": "AQIAADcAAAAAAAAAAAAkwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T07:47:58.468Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "dbo.AppUsers [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zlearn/True/SqlTable/dbo.AppUsers.sql",
+              "ToolTip": "dbo.AppUsers [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-08-25T07:46:51.916Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "SeedData.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Data\\SeedData.cs",
+              "RelativeDocumentMoniker": "Data\\SeedData.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Data\\SeedData.cs",
+              "RelativeToolTip": "Data\\SeedData.cs",
+              "ViewState": "AQIAACIAAAAAAAAAAAAQwDwAAABIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T07:45:42.692Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\System\\Auth\\AuthService.cs",
+              "RelativeDocumentMoniker": "Application\\System\\Auth\\AuthService.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\System\\Auth\\AuthService.cs",
+              "RelativeToolTip": "Application\\System\\Auth\\AuthService.cs",
+              "ViewState": "AQIAAI4AAAAAAAAAAAAswHEAAABKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T07:45:06.065Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AdminService.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\System\\Management\\AdminService.cs",
+              "RelativeDocumentMoniker": "Application\\System\\Management\\AdminService.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\System\\Management\\AdminService.cs",
+              "RelativeToolTip": "Application\\System\\Management\\AdminService.cs",
+              "ViewState": "AQIAAF0AAAAAAAAAAAAowHMAAABFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-25T07:44:59.774Z"
             }
           ]
         },
         {
-          "DockedHeight": 262,
+          "DockedWidth": 200,
           "SelectedChildIndex": -1,
           "Children": [
             {

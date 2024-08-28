@@ -13,55 +13,58 @@
 
                     <div class="row">
                         <div class="col-2 fw-light">Tên:</div>
-                        <div class="col-10"><b>Pháp luật đại cương II</b></div>
+                        <div class="col-10"><b>{{data!.name}}</b></div>
                     </div>
 
                     <div class="row mt-1">
                         <div class="col-2">Người đăng:</div>
-                        <div class="col-10"><b>Admin</b></div>
-                    </div>
-
-                    <div class="row mt-1">
-                        <div class="col-2">Ngày đăng:</div>
-                        <div class="col-10"><b>14/02/2004</b></div>
+                        <div class="col-10"><b>{{data!.authorName}}</b></div>
                     </div>
 
                     <div class="row mt-1">
                         <div class="col-2">Cập nhật:</div>
-                        <div class="col-10"><b>14/02/2004</b></div>
+                        <div class="col-10"><b>{{data!.updatedDate}}</b></div>
                     </div>
 
                     <div class="row mt-1">
                         <div class="col-2">Số câu:</div>
-                        <div class="col-10"><b>40</b></div>
+                        <div class="col-10"><b>{{data!.numberOfQuestions}}</b></div>
                     </div>
 
                     <div class="row mt-1">
                         <div class="col-2">Lượt làm:</div>
-                        <div class="col-10"><b>3</b></div>
-                    </div>
-
-                    <div class="row mt-1">
-                        <div class="col-2">Mô tả:</div>
-                        <div class="col-10"><b>Mặc định</b></div>
+                        <div class="col-10"><b>{{data!.numberOfAttempts}}</b></div>
                     </div>
 
                     <div class="row mt-1">
                         <div class="col-2">Nguồn:</div>
-                        <div class="col-10"><b>Internet</b></div>
+                        <div class="col-10"><b>{{data!.source}}</b></div>
                     </div>
+
+                    <div class="row mt-1">
+                        <div class="col-2">Danh mục:</div>
+                        <div class="col-10"><b>Chưa code</b></div>
+                    </div>
+
                 </div>
             </div>
 
             <div class="d-flex flex-row-reverse mt-3">
-                <a class="btn btn-outline-secondary"
-                [routerLink]="['/tests', 'test-id', 'try60p']">
-                    Thi thử(60p)
+
+                <a class="btn btn-outline-success btn-sm"
+                [routerLink]="['/tests', data!.id, mode]">
+                    Bắt đầu
                 </a>
-                <a class="btn btn-outline-success me-2"
-                [routerLink]="['/tests', 'test-id', 'practice']">
-                    Luyện tập(Không giới hạn time)
-                </a>
+
+                <div class="align-content-center me-3">
+                    <label class="me-1">Chế độ</label>
+                    <select [(ngModel)]="mode" class="rounded-0 p-1">
+                        <option value="practice">Luyện tập</option>
+                        <option value="testing">Thi</option>
+                    </select>
+                </div>
+
+                
             </div>
 
             <button class="position-absolute top-0 end-0 btn btn-outline-secondary btn-sm rounded-0 m-3">

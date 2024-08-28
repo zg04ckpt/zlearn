@@ -8,6 +8,7 @@ import { RoleComponent } from '../pages/management/role/role.component';
 import { ListTestComponent } from '../pages/test/list-test/list-test.component';
 import { TestDetailComponent } from '../pages/test/test-detail/test-detail.component';
 import { TestComponent } from '../pages/test/test/test.component';
+import { CreateTestComponent } from '../pages/test/create-test/create-test.component';
 export const routes: Routes = [
     { path: "", component: HomeComponent },
     { path: "user/profile", component: UserProfileComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
     { path: "management/users", component: UsersListComponent },
     { path: "management/roles", component: RoleComponent },
     { path: "tests", component: ListTestComponent },
+    { path: "tests/create", component: CreateTestComponent },
     { path: "tests/:id", component: TestDetailComponent },
-    { path: "tests/:id/:type", component: TestComponent },
+    { path: "tests/:id/:option", component: TestComponent },
 ];

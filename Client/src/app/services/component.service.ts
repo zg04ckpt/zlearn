@@ -42,6 +42,16 @@ export class ComponentService {
           );
     }
 
+    public displayYesNoConfirmMessage(msg: string, onConfirm: () => void, onCancel: () => void) {
+        this.displayMessageWithActions(
+            msg,
+            [
+              { name: "Không", action: onCancel },
+              { name: "OK", action: onConfirm }
+            ]
+          );
+    }
+
     public displayAPIError(err: any) {
         this.displayMessage(err.error?.message || err.statusText);
     }

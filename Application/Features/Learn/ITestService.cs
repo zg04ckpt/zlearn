@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Data.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +13,14 @@ namespace Application.Features.Learn
 {
     public interface ITestService
     {
-        Task<List<TestResponse>> GetAll();
-        Task<TestResponse> GetById(string id);
-        Task<List<QuestionModel>> GetAllQuestionByTestId(string id);
+        Task<PagingResponse<TestItem>> GetAll(PagingRequest request);
+        Task<TestDetailResponse> GetDetailById(string id);
+        Task<TestResponse> GetTestContentById(string id);
         Task Create(CreateTestRequest request);
         Task Update(string id, TestUpdateRequest request);
         Task Delete(string id);
-        Task<List<TestResultResponse>> GetAllResults();
-        Task SaveResult(SaveTestResultRequest request);
+        Task<PagingResponse<TestResult>> GetAllResults(PagingRequest request);
+        Task<TestResultResponse> MarkTest(MarkTestRequest request);
         Task RemoveAllResults();
     }
 }

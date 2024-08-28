@@ -20,6 +20,7 @@ namespace Application.Common
 
         public async Task DeleteFile(string fileName)
         {
+            if (fileName == null) return;
             var filePath = Path.Combine(_folderPath, fileName);
             if (File.Exists(filePath))
             {
@@ -39,6 +40,7 @@ namespace Application.Common
 
         public string GetFileUrl(string fileName)
         {
+            if(fileName == null) return null;
             return REQUEST_PATH + "/" + fileName;
         }
     }

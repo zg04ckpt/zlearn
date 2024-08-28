@@ -1,26 +1,11 @@
 ﻿using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using ViewModels.Common;
-using Utilities;
 using Application.Common;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Security.Cryptography;
-using Microsoft.EntityFrameworkCore;
 using ViewModels.System.Users;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Data;
 using Utilities.Exceptions;
-using ViewModels.System.Auth;
 
 namespace Application.System.Users
 {

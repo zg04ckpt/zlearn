@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../layout/header/header.component';
 import { FooterComponent } from '../layout/footer/footer.component';
@@ -12,6 +12,9 @@ import { MessageComponent } from '../components/message/message.component';
 import { ToastComponent } from '../components/toast/toast.component';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
+import { ComponentService } from '../services/component.service';
+import { CommonService } from '../services/common.service';
+import { CommaExpr } from '@angular/compiler';
 
 @Component({
   selector: 'app-root',
@@ -53,6 +56,7 @@ export class AppComponent implements OnInit {
 
     //show end session message when refresh token expired
     this.authService.setLoginSessionTimer();
+    
   }
   
   @HostListener("window:resize", ['$event'])

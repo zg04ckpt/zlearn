@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentService } from '../../../services/component.service';
-import { TestType } from '../../../enums/test.enum';
+import { TestStatus } from '../../../enums/test.enum';
 import { Test } from '../../../entities/test/test.entity';
 import { Subject } from 'rxjs';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { TestResultDTO } from '../../../dtos/test/test-result.dto';
+import { TestService } from '../../../services/test.service';
+import { MarkTestDTO } from '../../../dtos/test/mark-test.dto';
+import { CommonService } from '../../../services/common.service';
+import { UserService } from '../../../services/user.service';
+
 
 @Component({
   selector: 'app-test-content',
@@ -18,95 +23,125 @@ import { TestResultDTO } from '../../../dtos/test/test-result.dto';
   styleUrl: './test.component.css'
 })
 export class TestComponent implements OnInit {
-  type: TestType|null = null;
+  status: TestStatus = TestStatus.Loading;
   testId: string|null = null;
-  test: Test|null = {
-    name: "Tên bài kiểm tra",
-    duration: 1,
-    questions: [
-      {
-        content: "Câu hỏi thứ 1",
-        imageUrl: null,
-        answerA: "Đáp án 1",
-        answerB: "Đáp án 2",
-        answerC: "Đáp án 3",
-        answerD: "Đáp án 4",
-        selectedAnswer: 0
-      },
-      {
-        content: "Câu hỏi thứ 2",
-        imageUrl: null,
-        answerA: "Đáp án 1",
-        answerB: "Đáp án 2",
-        answerC: null,
-        answerD: null,
-        selectedAnswer: 0
-      },
-      {
-        content: "Câu hỏi thứ 3",
-        imageUrl: "https://images2.thanhnien.vn/528068263637045248/2024/1/25/e093e9cfc9027d6a142358d24d2ee350-65a11ac2af785880-17061562929701875684912.jpg",
-        answerA: "Đáp án 1",
-        answerB: "Đáp án 2",
-        answerC: "Đáp án 3",
-        answerD: null,
-        selectedAnswer: 0
-      },
-      {
-        content: "Câu hỏi thứ 4",
-        imageUrl: null,
-        answerA: "Đáp án 1",
-        answerB: "Đáp án 2",
-        answerC: "Đáp án 3",
-        answerD: "Đáp án 4",
-        selectedAnswer: 0
-      },
-    ]
-  }
+  test: Test|null = null;
   remainder: Subject<number>|null = null; //sec
   remainderTime: number = 0; //sec
+  answer: MarkTestDTO|null = null;
+  result: TestResultDTO|null = null;
+  start: Date|null = null;
+  end: Date|null = null;
+
+  //define
+  TestStatus: any = TestStatus;
   Math: any = Math;
   Array: any = Array;
-  result: TestResultDTO|null = null;
+
   constructor(
     private activatedRoute: ActivatedRoute,
-    private componentService: ComponentService
+    private componentService: ComponentService,
+    private testService: TestService,
+    private commonService: CommonService,
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.testId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.type = this.activatedRoute.snapshot.paramMap.get('type') as TestType|null;
-    if(!this.type || !this.testId) {
+    const option = this.activatedRoute.snapshot.paramMap.get('option');
+    if(!option || !this.testId) {
       this.componentService.displayMessage("Đã có lỗi xảy ra");
+      return;
     }
 
-    //countDown
-    this.remainder = new Subject<number>();
-    this.remainderTime = this.test!.duration * 60;
-    this.remainder.next(this.remainderTime);
-    const subscribeId = setInterval(() => {
-      this.remainderTime--;
-      this.remainder!.next(this.remainderTime);
-    }, 1000);
-    this.remainder.subscribe(next => {
-      if(next == 0) {
-        clearInterval(subscribeId);
-        this.result = {
-          total: 40,
-          correct: 30,
-          unselected: 2,
-          score: 7.5,
-          usedTime: 126,
-          detail: [1, 1, 3, 2]
-        };
+    this.componentService.$showLoadingStatus.next(true);
+    this.testService.getContent(this.testId).subscribe({
+      next: res => {
+        this.componentService.$showLoadingStatus.next(false);
+        this.test = res;
+        this.test.questions.forEach(x => x.selectedAnswer = 0);
+
+        //start
+        this.start = new Date;
+        this.status = TestStatus.Testing;
+
+        //countDown
+        if(option == "testing") {
+          this.remainder = new Subject<number>();
+          this.remainderTime = this.test!.duration * 60;
+          this.remainder.next(this.remainderTime);
+          const subscribeId = setInterval(() => {
+            this.remainderTime--;
+            this.remainder!.next(this.remainderTime);
+          }, 1000);
+
+          //when complete
+          this.remainder.subscribe(next => {
+            if(next == 0) {
+              clearInterval(subscribeId);
+              this.endTest();
+            }
+          });
+        }
+
+        debugger;
+      },
+
+      error: res => {
+        this.componentService.$showLoadingStatus.next(false);
+        this.componentService.displayAPIError(res);
       }
     });
-
-    
   }
 
-  end() {
-    this.remainderTime = 0;
-    this.remainder!.next(0);
+  endTest() {
+    if(this.remainderTime != 0) {
+      this.componentService.displayConfirmMessage("Xác nhận kết thúc?", () => {
+        this.end = new Date;
+        this.status = TestStatus.Completed;
+      });
+    } else {
+      this.end = new Date;
+      this.status = TestStatus.Completed;
+    }
+  }
+
+  markTest() {
+    this.componentService.$showLoadingStatus.next(true);
+
+    const user = this.userService.getLoggedInUser();
+    this.answer = {
+      answers: this.test!.questions.map(x => ({
+        id: x.id,
+        selected: x.selectedAnswer
+      })),
+      startTime: this.commonService.getDateTimeString(this.start!),
+      endTime: this.commonService.getDateTimeString(this.end!),
+      testId: this.testId!,
+      testName: this.test!.name,
+      userId: user? user.id : null,
+      userName: user? user.userName : "undefined"
+    };
+    
+    this.testService.markTest(this.answer).subscribe({
+      next: res=> {
+        debugger;
+        this.componentService.$showLoadingStatus.next(false);
+        this.result = res;
+        this.status = TestStatus.ShowAnswer;
+      },
+
+      error: res => {
+        debugger;
+        this.componentService.$showLoadingStatus.next(false);
+        this.componentService.displayAPIError(res);
+      }
+    })
+  }
+
+  navigate(url: string) {
+    this.router.navigateByUrl(url);
   }
 
   scrollTo(id: number) {

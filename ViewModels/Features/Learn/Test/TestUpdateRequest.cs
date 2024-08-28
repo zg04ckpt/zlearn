@@ -11,10 +11,10 @@ namespace ViewModels.Features.Learn.Test
     public class TestUpdateRequest
     {
         public string Name { get; set; }
-        public string Description { get; set; }
         public IFormFile Image { get; set; }
-        public bool Mark { get; set; }
+        public string Description { get; set; }
+        public string Source { get; set; }
+        public int Duration { get; set; }
         public List<QuestionCreateRequest> Questions { get; set; }
-        public int TestTime { get; set; }
     }
 }
