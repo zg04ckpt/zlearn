@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { Question } from '../../../entities/test/question.entity';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateTestDTO } from '../../../dtos/test/create-test.dto';
@@ -8,6 +8,10 @@ import * as XLSX from 'xlsx';
 import { TestService } from '../../../services/test.service';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-create-test',
@@ -19,7 +23,7 @@ import { AuthService } from '../../../services/auth.service';
   templateUrl: './create-test.component.html',
   styleUrl: './create-test.component.css'
 })
-export class CreateTestComponent {
+export class CreateTestComponent implements CanComponentDeactivate{
   selectedCount: number = 0;
   questionManager: {
     previewImageUrl: string|null;
@@ -30,9 +34,8 @@ export class CreateTestComponent {
     image: null,
     description: "",
     source: "",
-    authorName: "",
-    authorId: "",
     duration: 0,
+    isPrivate: false,
     questions: []
   };
   adding: boolean = true;
@@ -50,13 +53,27 @@ export class CreateTestComponent {
     answerD: string|null,
     correctAnswer: number
   }|null = null;
+  isSuccess: boolean = false;
+  destroyRef = inject(DestroyRef);
 
   constructor(
     private componentService: ComponentService,
     private testService: TestService,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
+
+  canDeactivate = () => {
+    if(!this.isSuccess) {
+      return confirm("Test chưa được tạo, rời khỏi sẽ mất bản nháp, xác nhận?");
+    }
+    return true;
+  };
+
+  backToList() {
+    this.router.navigateByUrl("/tests/my-tests");
+  }
 
   saveTest() {
     //check valid before send
@@ -81,24 +98,32 @@ export class CreateTestComponent {
       return;
     }
 
+    debugger
+
     const currentUser = this.userService.getLoggedInUser();
     if(currentUser == null) {
       this.authService.showLoginRequirement();
     } else {
-      this.data.authorId = currentUser.id;
-      this.data.authorName = currentUser.userName;
-      this.componentService.$showLoadingStatus.next(true);
-      this.testService.create(this.data).subscribe({
-        next: res => {
-          this.componentService.$showLoadingStatus.next(false);
-          this.componentService.displayMessage("Tạo test thành công");
-        },
+      this.componentService.displayConfirmMessage("Xác nhận tạo test mới?", () => {
+        this.componentService.$showLoadingStatus.next(true);
+        this.testService.create(this.data)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: res => {
+            this.componentService.$showLoadingStatus.next(false);
+            this.componentService.displayMessage("Tạo test thành công");
+            this.isSuccess = true;
+          },
+  
+          error: res => {
+            this.componentService.$showLoadingStatus.next(false);
+            this.isSuccess = false;
+            this.componentService.displayAPIError(res);
+          },
 
-        error: res => {
-          this.componentService.$showLoadingStatus.next(false);
-          this.componentService.displayAPIError(res);
-        }
-      })
+          complete: () => this.componentService.$showLoadingStatus.next(false)
+        });
+      });
     }
   }
 
@@ -217,10 +242,6 @@ export class CreateTestComponent {
     }
   }
 
-  edit() {
-    this.showEditQuestionModal(this.questionManager.findIndex(x => x.selected));
-  }
-
   showAddQuestionModal() {
     this.isAdding = true;
     this.editQuestion = {
@@ -240,6 +261,14 @@ export class CreateTestComponent {
     this.isAdding = false;
     this.editQuestion = {... this.data.questions[i]};
     this.questionImagePreviewUrl = this.questionManager[i].previewImageUrl;
+  }
+
+  scrollToTop() {
+    const element = document.getElementById("test-create-form");
+    console.log(element);
+    if(element != null) {
+        element.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   convertExcelFileToData(event: Event) {
@@ -269,7 +298,7 @@ export class CreateTestComponent {
               const byteArray = new Uint8Array(byteNumbers);
               imageFile = new File([byteArray], `image_${i}.png`, { type: 'image/png' });
           }
-
+          
           this.data.questions.push({
             content: ws[XLSX.utils.encode_cell({c: 0, r: i})]?.v,
             answerA: ws[XLSX.utils.encode_cell({c: 1, r: i})]?.v,
@@ -283,6 +312,7 @@ export class CreateTestComponent {
           this.questionManager.push({ previewImageUrl: null, selected: false});
           this.getImageUrl(this.data.questions.length-1);
         }
+        debugger
       }
     };
 

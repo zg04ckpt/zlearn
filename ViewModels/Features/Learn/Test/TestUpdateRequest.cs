@@ -15,6 +15,7 @@ namespace ViewModels.Features.Learn.Test
         public string Description { get; set; }
         public string Source { get; set; }
         public int Duration { get; set; }
-        public List<QuestionCreateRequest> Questions { get; set; }
+        public bool IsPrivate { get; set; }
+        public List<QuestionUpdateRequest> Questions { get; set; }
     }
 }

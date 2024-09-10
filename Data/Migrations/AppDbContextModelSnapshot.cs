@@ -182,6 +182,25 @@ namespace Data.Migrations
                     b.ToTable("Questions", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.SavedTest", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MarkedAt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "TestId");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("SavedTests", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.Test", b =>
                 {
                     b.Property<Guid>("Id")
@@ -209,6 +228,9 @@ namespace Data.Migrations
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPrivate")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -243,9 +265,6 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Correct")
                         .HasColumnType("int");
 
@@ -270,16 +289,15 @@ namespace Data.Migrations
                     b.Property<int>("UsedTime")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.ToTable("TestResults", (string)null);
                 });
@@ -392,6 +410,25 @@ namespace Data.Migrations
                     b.Navigation("Test");
                 });
 
+            modelBuilder.Entity("Data.Entities.SavedTest", b =>
+                {
+                    b.HasOne("Data.Entities.Test", "Test")
+                        .WithMany("UserInTests")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.AppUser", "User")
+                        .WithMany("UserInTests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Data.Entities.Test", b =>
                 {
                     b.HasOne("Data.Entities.AppUser", "Author")
@@ -403,23 +440,18 @@ namespace Data.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("Data.Entities.TestResult", b =>
-                {
-                    b.HasOne("Data.Entities.AppUser", null)
-                        .WithMany("TestResults")
-                        .HasForeignKey("AppUserId");
-                });
-
             modelBuilder.Entity("Data.Entities.AppUser", b =>
                 {
-                    b.Navigation("TestResults");
-
                     b.Navigation("Tests");
+
+                    b.Navigation("UserInTests");
                 });
 
             modelBuilder.Entity("Data.Entities.Test", b =>
                 {
                     b.Navigation("Questions");
+
+                    b.Navigation("UserInTests");
                 });
 #pragma warning restore 612, 618
         }

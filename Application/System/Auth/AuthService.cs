@@ -398,12 +398,18 @@ namespace Application.System.Auth
         {
             //generate access token
             var roles = await _userManager.GetRolesAsync(user);
-            var publicClaims = new Claim[]
+            var publicClaims = new List<Claim>
             {
+                new (ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new (ClaimTypes.GivenName, user.LastName + " " + user.FirstName),
                 new (ClaimTypes.Name, user.UserName), //require for refresh
                 new (ClaimTypes.Email, user.Email),
-                new (ClaimTypes.Role, string.Join(',', roles))
+                
             };
+            foreach (var role in roles) 
+            {
+                publicClaims.Add(new(ClaimTypes.Role, role));
+            }
             var secretKey = Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY);
             var tokenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var token = new JwtSecurityToken

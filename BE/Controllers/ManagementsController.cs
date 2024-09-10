@@ -1,9 +1,9 @@
 ﻿using Application.System.Manage;
-using Data.Entities;
+using BE.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System;
+using System.Data;
 using System.Threading.Tasks;
 using Utilities;
 using ViewModels.Common;
@@ -24,7 +24,7 @@ namespace BE.Controllers
 
 
         [HttpGet("users")]
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllUsers([FromQuery]PagingRequest request)
         {
             try
@@ -36,6 +36,7 @@ namespace BE.Controllers
                 return HandleException(ex);
             }
         }
+
 
         [HttpGet("users/filter-by-username/{key}")]
         [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
@@ -157,9 +158,8 @@ namespace BE.Controllers
         }
 
 
-
+        [Authorize()]
         [HttpGet("users/{id}/roles")]
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> GetAllRolesOfUser(string id)
         {
             try

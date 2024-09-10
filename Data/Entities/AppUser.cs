@@ -25,6 +25,6 @@ namespace Data.Entities
         #endregion
 
         public List<Test> Tests { get; set; }
-        public List<TestResult> TestResults { get; set; }
+        public List<SavedTest> UserInTests { get; set; }
     }
 }

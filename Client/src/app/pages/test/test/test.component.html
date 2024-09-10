@@ -102,7 +102,7 @@
         
                                 <tr>
                                     <td>Điểm:</td>
-                                    <td class="fw-bold">{{result!.score}}</td>
+                                    <td class="fw-bold">{{result!.score | number: '.2'}}</td>
                                 </tr>
         
                                 <tr>
@@ -196,7 +196,7 @@
         <button class="btn btn-danger btn-sm mt-2" (click)="endTest()">Kết thúc</button>
     }
     @else if(status == TestStatus.Completed) {
-        <button class="btn btn-success btn-sm m-0" (click)="markTest()">Xem kết quả</button>
+        <button class="btn btn-success btn-sm m-0" (click)="markTest()">Nộp bài và xem kết quả</button>
     }
     @else if(status == TestStatus.ShowAnswer) {
         <button class="btn btn-secondary btn-sm m-0" (click)="navigate('tests')">Quay lại danh sách</button>

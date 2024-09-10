@@ -10,4 +10,5 @@ export interface TestDetail {
     numberOfAttempts: number;
     description: string;
     source: string;
+    isPrivate: boolean;
 }

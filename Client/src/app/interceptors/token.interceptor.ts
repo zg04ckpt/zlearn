@@ -1,7 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { StorageKey, StorageService } from '../services/storage.service';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { catchError, EMPTY, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
@@ -26,7 +26,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
       const userData = storageService.get(StorageKey.user);
       if(userData == null) {
         authService.showLoginRequirement();
-        return throwError(() => null);
+        return EMPTY;
       } 
       else { //if user isn't null, try refresh access token
         return authService.refreshToken().pipe(

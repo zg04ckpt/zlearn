@@ -14,9 +14,8 @@ namespace ViewModels.Features.Learn.Test
         public IFormFile Image { get; set; }
         public string Description { get; set; }
         public string Source { get; set; }
-        public string AuthorName { get; set; }
-        public string AuthorId { get; set; }
         public int Duration { get; set; }
+        public bool IsPrivate { get; set; }
         public List<QuestionCreateRequest> Questions { get; set; }
     }
 }

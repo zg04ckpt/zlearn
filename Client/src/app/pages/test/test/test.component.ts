@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentService } from '../../../services/component.service';
 import { TestStatus } from '../../../enums/test.enum';
 import { Test } from '../../../entities/test/test.entity';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { TestResultDTO } from '../../../dtos/test/test-result.dto';
 import { TestService } from '../../../services/test.service';
 import { MarkTestDTO } from '../../../dtos/test/mark-test.dto';
 import { CommonService } from '../../../services/common.service';
 import { UserService } from '../../../services/user.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
 
 
 @Component({
@@ -22,7 +24,7 @@ import { UserService } from '../../../services/user.service';
   templateUrl: './test.component.html',
   styleUrl: './test.component.css'
 })
-export class TestComponent implements OnInit {
+export class TestComponent implements OnInit, CanComponentDeactivate {
   status: TestStatus = TestStatus.Loading;
   testId: string|null = null;
   test: Test|null = null;
@@ -37,6 +39,7 @@ export class TestComponent implements OnInit {
   TestStatus: any = TestStatus;
   Math: any = Math;
   Array: any = Array;
+  destroyRef = inject(DestroyRef);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -47,6 +50,13 @@ export class TestComponent implements OnInit {
     private router: Router
   ) {}
 
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if(this.test && this.status != TestStatus.ShowAnswer) {
+      return confirm("Bạn chưa nộp bài thi, rời đi sẽ hủy bỏ trạng thái làm bài, xác nhận rời khỏi?");
+    }
+    return true;
+  }
+
   ngOnInit(): void {
     this.testId = this.activatedRoute.snapshot.paramMap.get('id');
     const option = this.activatedRoute.snapshot.paramMap.get('option');
@@ -56,7 +66,9 @@ export class TestComponent implements OnInit {
     }
 
     this.componentService.$showLoadingStatus.next(true);
-    this.testService.getContent(this.testId).subscribe({
+    this.testService.getContent(this.testId)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
       next: res => {
         this.componentService.$showLoadingStatus.next(false);
         this.test = res;
@@ -91,7 +103,9 @@ export class TestComponent implements OnInit {
       error: res => {
         this.componentService.$showLoadingStatus.next(false);
         this.componentService.displayAPIError(res);
-      }
+      },
+
+      complete: () => this.componentService.$showLoadingStatus.next(false)
     });
   }
 
@@ -120,8 +134,6 @@ export class TestComponent implements OnInit {
       endTime: this.commonService.getDateTimeString(this.end!),
       testId: this.testId!,
       testName: this.test!.name,
-      userId: user? user.id : null,
-      userName: user? user.userName : "undefined"
     };
     
     this.testService.markTest(this.answer).subscribe({

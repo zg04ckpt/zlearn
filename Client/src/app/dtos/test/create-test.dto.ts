@@ -4,9 +4,8 @@ export interface CreateTestDTO
     image: File|null,
     description: string,
     source: string,
-    authorName: string,
-    authorId: string,
     duration: number,
+    isPrivate: boolean,
     questions: {
         content: string,
         image: File|null,

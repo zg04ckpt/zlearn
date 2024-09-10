@@ -13,6 +13,9 @@ export class ComponentService {
     public $showLoadingStatus = new Subject<boolean>();
     public $showMessage = new Subject<MessageModule>();
     public $showToast = new Subject<string>();
+    public $show503 = new Subject<boolean>();
+    public $show403 = new Subject<boolean>();
+    public $show404 = new Subject<boolean>();
 
     constructor(
         private router: Router,

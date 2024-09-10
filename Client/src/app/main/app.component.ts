@@ -15,6 +15,9 @@ import { AuthService } from '../services/auth.service';
 import { ComponentService } from '../services/component.service';
 import { CommonService } from '../services/common.service';
 import { CommaExpr } from '@angular/compiler';
+import { Forbidden403Component } from '../pages/others/forbidden403/forbidden403.component';
+import { Notfound404Component } from '../pages/others/notfound404/notfound404.component';
+import { ServiceUnavailable503Component } from '../pages/others/service-unavailable503/service-unavailable503.component';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +32,10 @@ import { CommaExpr } from '@angular/compiler';
     LoadingComponent,
     MessageComponent,
     ToastComponent,
-    CommonModule
+    CommonModule,
+    Forbidden403Component,
+    Notfound404Component,
+    ServiceUnavailable503Component
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

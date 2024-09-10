@@ -58,7 +58,11 @@ namespace Data
                 var createdAdmin = await userManager.CreateAsync(admin, adminPassword);
                 if (createdAdmin.Succeeded)
                 {
-                    await userManager.AddToRolesAsync(admin, roleNames);
+                    var result = await userManager.AddToRolesAsync(admin, roleNames);
+                    if(!result.Succeeded)
+                    {
+                        return;
+                    }
                 }
                 else
                 {

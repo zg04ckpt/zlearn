@@ -1,0 +1,16 @@
+@if(show) {
+    <div class="position-absolute w-100 h-100 top-0 text-center text-white" 
+    style="background-color: rgb(170, 2, 2); z-index: 4;">
+        <div class="d-flex flex-column position-absolute top-50 start-50 translate-middle">
+            <span style="font-size: 180px; font-weight: 600;">403</span>
+            <p class="text-center pt-0" style="font-size: 30px;">You Are Not Allow To Do This Action</p>
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-outline-light mx-1 btn-sm rounded-0"
+                (click)="back()">Quay lại</button>
+                <button class="btn btn-outline-light mx-1 btn-sm rounded-0"
+                (click)="goToHome()">Trang chủ</button>
+            </div>
+        </div>
+    </div>
+}
+

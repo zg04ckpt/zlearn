@@ -7,6 +7,4 @@ export interface MarkTestDTO {
     endTime: string;
     testId: string;
     testName: string;
-    userId: string|null;
-    userName: string;
 }

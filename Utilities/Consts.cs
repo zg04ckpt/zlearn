@@ -12,6 +12,13 @@ namespace Utilities
         public const string DEFAULT_USER_ROLE = "User";
         public const string DEFAULT_ADMIN_ROLE = "Admin";
 
+        public class RoleName
+        {
+            public const string USER = "User";
+            public const string ADMIN = "Admin";
+
+        }
+
         public class AppSettingsKey
         {
             public const string ISSUER = "JwtSettings:Issuer";

@@ -19,5 +19,6 @@ namespace ViewModels.Features.Learn.Test
         public string AuthorId { get; set; }
         public int NumberOfQuestions { get; set; }
         public int NumberOfAttempts { get; set; }
+        public bool IsPrivate { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Data;
-
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,8 @@ using Utilities.Exceptions;
 using ViewModels.Features.Learn.Test;
 using ViewModels.Features.Learn.Test.Question;
 using ViewModels.Common;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Application.Features.Learn
 {
@@ -25,7 +26,8 @@ namespace Application.Features.Learn
             _fileService = fileService;
         }
 
-        public async Task Create(CreateTestRequest request)
+        #region main
+        public async Task Create(CreateTestRequest request, ClaimsPrincipal user)
         {
             //check if test name existed
             var check = await _context.Tests.AnyAsync(x => x.Name == request.Name);
@@ -38,8 +40,8 @@ namespace Application.Features.Learn
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 Description = request.Description,
-                AuthorName = request.AuthorName,
-                AuthorId = Guid.Parse(request.AuthorId),
+                AuthorName = user.FindFirst(ClaimTypes.GivenName).Value,
+                AuthorId = Guid.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value),
                 CreatedDate = DateOnly.FromDateTime(DateTime.Now).ToString(),
                 UpdatedDate = DateOnly.FromDateTime(DateTime.Now).ToString(),
                 Source = request.Source,
@@ -47,6 +49,7 @@ namespace Application.Features.Learn
                 Duration = request.Duration,
                 NumberOfAttempts = 0,
                 NumberOfQuestions = request.Questions.Count,
+                IsPrivate = request.IsPrivate,
             };
 
             //create questions
@@ -75,11 +78,15 @@ namespace Application.Features.Learn
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(string id)
+        public async Task Delete(string testId, string userId)
         {
-            var test = await _context.Tests.FindAsync(Guid.Parse(id));
-            if (test == null)
-                throw new NotFoundException("Test không tồn tại");
+            var test = await _context.Tests.FindAsync(Guid.Parse(testId))
+            ?? throw new BadRequestException("Test không tồn tại");
+
+            if(test.AuthorId.ToString() != userId)
+            {
+                throw new ForbiddenException();
+            }
 
             await _fileService.DeleteFile(test.ImageUrl);
             _context.Tests.Remove(test);
@@ -96,7 +103,8 @@ namespace Application.Features.Learn
                     Name = x.Name,
                     ImageUrl = _fileService.GetFileUrl(x.ImageUrl),
                     NumberOfAttempts = x.NumberOfAttempts,
-                    NumberOfQuestions = x.NumberOfQuestions
+                    NumberOfQuestions = x.NumberOfQuestions,
+                    IsPrivate = x.IsPrivate,
                 }).ToListAsync();
 
             return new PagingResponse<TestItem>
@@ -108,30 +116,20 @@ namespace Application.Features.Learn
             };
         }
 
-        public async Task<PagingResponse<TestResult>> GetAllResults(PagingRequest request)
+        public async Task<TestResponse> GetTestContentById(ClaimsPrincipal user, string testId)
         {
-            var results = await _context.TestResults
-                .Where(
-                x => request.Key == null ||
-                x.TestName.Contains(request.Key) ||
-                x.UserName.Contains(request.Key))
-                .ToListAsync();
+            var test = await _context.Tests.FindAsync(Guid.Parse(testId)) 
+                ?? throw new BadRequestException("Test không tồn tại");
 
-            return new PagingResponse<TestResult>
+            if(test.IsPrivate)
             {
-                Total = results.Count,
-                Data = results
-                .Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize).ToList()
-            };
-        }
-
-        public async Task<TestResponse> GetTestContentById(string id)
-        {
-            var test = await _context.Tests.FindAsync(Guid.Parse(id));
-            if (test == null)
-            {
-                throw new BadRequestException("Test không tồn tại");
+                //check if user hasn't owner this test
+                var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (test.AuthorId.ToString() != userId)
+                {
+                    throw new ForbiddenException();
+                }   
+                // next update: can allow user to access with link
             }
 
             var questions = await _context.Questions
@@ -158,17 +156,14 @@ namespace Application.Features.Learn
 
         public async Task<TestDetailResponse> GetDetailById(string id)
         {
-            var test = await _context.Tests.FindAsync(Guid.Parse(id));
-            if (test == null)
-            {
-                throw new BadRequestException("Test không tồn tại");
-            }
+            var test = await _context.Tests.FindAsync(Guid.Parse(id))
+                ?? throw new BadRequestException("Test không tồn tại");
 
             return new TestDetailResponse
             {
                 Id = test.Id.ToString(),
                 Name = test.Name,
-                ImageUrl = test.ImageUrl,
+                ImageUrl = _fileService.GetFileUrl(test.ImageUrl),
                 UpdatedDate = test.UpdatedDate,
                 CreatedDate = test.CreatedDate,
                 Description = test.Description,
@@ -176,12 +171,17 @@ namespace Application.Features.Learn
                 AuthorName = test.AuthorName,
                 AuthorId = test.AuthorId.ToString(),
                 NumberOfAttempts = test.NumberOfAttempts,
-                NumberOfQuestions = test.NumberOfQuestions
+                NumberOfQuestions = test.NumberOfQuestions,
+                IsPrivate = test.IsPrivate
             };
         }
 
-        public async Task<TestResultResponse> MarkTest(MarkTestRequest request)
+        public async Task<TestResultResponse> MarkTest(MarkTestRequest request, string ip, ClaimsPrincipal user)
         {
+            var test = await _context.Tests.FindAsync(Guid.Parse(request.TestId))
+                ?? throw new BadRequestException("Test không tồn tại");
+            test.NumberOfAttempts++;
+
             var questions = await _context.Questions
                 .Where(x => x.TestId.ToString() == request.TestId)
                 .ToListAsync();
@@ -228,9 +228,9 @@ namespace Application.Features.Learn
                 UsedTime = (int)duration.TotalSeconds,
                 TestId = Guid.Parse(request.TestId),
                 TestName = request.TestName,
-                UserId = Guid.Parse(request.UserId),
-                UserName = request.UserName
-            });
+                UserId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? ip,
+                UserName = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "undefined"
+            }) ;
             await _context.SaveChangesAsync();
 
             //return result to user
@@ -245,18 +245,40 @@ namespace Application.Features.Learn
             };
         }
 
-        public async Task RemoveAllResults()
+        public async Task<PagingResponse<TestResult>> GetAllResults(string userId, PagingRequest request)
         {
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM TestResults");
+            var results = await _context.TestResults
+                .Where(
+                x => x.UserId == userId &&
+                (request.Key == null ||
+                x.TestName.Contains(request.Key) ||
+                x.UserName.Contains(request.Key)))
+                .ToListAsync();
+
+            return new PagingResponse<TestResult>
+            {
+                Total = results.Count,
+                Data = results
+                .Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize).ToList()
+            };
         }
 
-        public async Task Update(string id, TestUpdateRequest request)
+        public Task RemoveAllResults()
+        {
+            //await _context.Database.ExecuteSqlRawAsync("DELETE FROM TestResults");
+            throw new BadRequestException("This feature is unavailable");
+        }
+
+        public async Task Update(string userId, string testId, TestUpdateRequest request)
         {
             //check if test existed
-            var test = await _context.Tests.FindAsync(id);
-            if (test == null)
-                throw new BadRequestException("Test không tồn tại");
-
+            var test = await _context.Tests.FindAsync(Guid.Parse(testId)) 
+                ?? throw new BadRequestException("Test không tồn tại");
+            if (test.AuthorId.ToString() != userId)
+            {
+                throw new ForbiddenException();
+            }
 
             //update
             test.Name = request.Name;
@@ -266,38 +288,164 @@ namespace Application.Features.Learn
             test.Source = request.Source;
             test.Duration = request.Duration;
             test.UpdatedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
+            test.IsPrivate = request.IsPrivate;
+            _context.Tests.Update(test);
 
-            //remove all old question associate with this test
+            //update question
+            Dictionary<string, QuestionUpdateRequest> map = new();
+            foreach(var e in request.Questions)
+            {
+                if(e.Id == null)
+                {
+                    var newQ = new Question
+                    {
+                        Id = Guid.NewGuid(),
+                        ImageUrl = await _fileService.SaveFile(e.Image),
+                        Content = e.Content,
+                        AnswerA = e.AnswerA,
+                        AnswerB = e.AnswerB,
+                        AnswerC = e.AnswerC,
+                        AnswerD = e.AnswerD,
+                        CorrectAnswer = e.CorrectAnswer,
+                        TestId = test.Id,
+                    };
+                    await _context.Questions.AddAsync(newQ);
+                } 
+                else
+                {
+                    map.Add(e.Id, e);
+                }
+            }
             var oldQuestions = await _context.Questions
                 .Where(q => q.TestId == test.Id)
                 .ToListAsync();
             foreach (var e in oldQuestions)
             {
-                await _fileService.DeleteFile(e.ImageUrl);
-            }
-            _context.Questions.RemoveRange(oldQuestions);
-
-            //add new questions
-            var newQuestions = new List<Question>();
-            foreach (var question in request.Questions)
-            {
-                var newQuestion = new Question
+                if(map.TryGetValue(e.Id.ToString(), out var updated))
                 {
-                    Content = question.Content,
-                    ImageUrl = await _fileService.SaveFile(question.Image),
-                    AnswerA = question.AnswerA,
-                    AnswerB = question.AnswerB,
-                    AnswerC = question.AnswerC,
-                    AnswerD = question.AnswerD,
-                    CorrectAnswer = question.CorrectAnswer,
-                    TestId = test.Id,
-                };
-                newQuestions.Add(newQuestion);
+                    await _fileService.DeleteFile(e.ImageUrl);
+                    e.ImageUrl = await _fileService.SaveFile(updated.Image);
+                    e.Content = updated.Content;
+                    e.AnswerA = updated.AnswerA;
+                    e.AnswerB = updated.AnswerB;
+                    e.AnswerC = updated.AnswerC;
+                    e.AnswerD = updated.AnswerD;
+                    e.CorrectAnswer = updated.CorrectAnswer;
+                    _context.Questions.Update(e);
+                }
+                else
+                {
+                    _context.Questions.Remove(e);
+                }    
             }
-            test.Questions = newQuestions;
 
-            _context.Tests.Update(test);
+            //save all changes
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<TestDetailResponse>> GetTestsByUserId(string userId)
+        {
+            return await _context.Tests
+                .Where(x => x.AuthorId.ToString() == userId)
+                .Select(test => new TestDetailResponse
+                {
+                    Id = test.Id.ToString(),
+                    Name = test.Name,
+                    ImageUrl = _fileService.GetFileUrl(test.ImageUrl),
+                    UpdatedDate = test.UpdatedDate,
+                    CreatedDate = test.CreatedDate,
+                    Description = test.Description,
+                    Source = test.Source,
+                    AuthorName = test.AuthorName,
+                    AuthorId = test.AuthorId.ToString(),
+                    NumberOfAttempts = test.NumberOfAttempts,
+                    NumberOfQuestions = test.NumberOfQuestions
+                }).ToListAsync();
+
+        }
+
+        public async Task SaveTest(string userId, string testId)
+        {
+            var test = await _context.Tests.FindAsync(Guid.Parse(testId))
+                ?? throw new BadRequestException("Test không tồn tại");
+
+            await _context.SavedTest.AddAsync(new SavedTest
+            {
+                UserId = Guid.Parse(userId),
+                TestId = Guid.Parse(testId),
+                MarkedAt = DateOnly.FromDateTime(DateTime.Now).ToString()
+            });
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<TestItem>> GetSavedTestsByUserId(string userId)
+        {
+            return await (from test in _context.Tests
+                          join uit in _context.SavedTest on test.Id equals uit.TestId
+                          where uit.UserId.ToString() == userId
+                          select new TestItem
+                          {
+                              Id = test.Id.ToString().ToLower(),
+                              Name = test.Name,
+                              ImageUrl = _fileService.GetFileUrl(test.ImageUrl),
+                              NumberOfAttempts = test.NumberOfAttempts,
+                              NumberOfQuestions = test.NumberOfQuestions,
+                              IsPrivate = test.IsPrivate,
+                          }).ToListAsync();
+                
+        } 
+        
+        public async Task<TestUpdateContent> GetTestUpdateContent(string userId, string testId)
+        {
+            var test = await _context.Tests.FindAsync(Guid.Parse(testId)) 
+                ?? throw new BadRequestException("Test không tồn tại");
+
+            if(test.AuthorId.ToString() != userId)
+            {
+                throw new ForbiddenException();
+            }
+
+            var question = await _context.Questions
+                .Where(x => x.TestId.ToString() == testId)
+                .Select(x => new QuestionUpdateContent
+                {
+                    Id = x.Id.ToString().ToLower(),
+                    Content = x.Content,
+                    ImageUrl = _fileService.GetFileUrl(x.ImageUrl),
+                    AnswerA = x.AnswerA,
+                    AnswerB = x.AnswerB,
+                    AnswerC = x.AnswerC,
+                    AnswerD = x.AnswerD,
+                    CorrectAnswer = x.CorrectAnswer
+                }).ToListAsync();
+
+            return new TestUpdateContent
+            {
+                Name = test.Name,
+                ImageUrl = _fileService.GetFileUrl(test.ImageUrl),
+                Description = test.Description,
+                Source = test.Source,
+                Duration = test.Duration,
+                IsPrivate = test.IsPrivate,
+                Questions = question,
+            };
+        }
+
+        public async Task DeleteFromSaved(string userId, string testId)
+        {
+            var uit = await _context.SavedTest
+                .Where(x => x.UserId.ToString() == userId && x.TestId.ToString() == testId)
+                .FirstOrDefaultAsync() ?? throw new BadRequestException("Không tìm thấy item");
+            _context.SavedTest.Remove(uit);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsSaved(string userId, string testId)
+        {
+            return await _context.SavedTest
+                .AnyAsync(x => x.UserId.ToString() == userId && x.TestId.ToString() == testId);
+        }
+        #endregion
     }
 }

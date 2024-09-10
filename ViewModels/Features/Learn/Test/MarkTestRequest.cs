@@ -13,8 +13,6 @@ namespace ViewModels.Features.Learn.Test
         public string EndTime { get; set; }
         public string TestId { get; set; }
         public string TestName { get; set; }
-        public string UserId { get; set; }
-        public string UserName { get; set; }
     }
 
     public class QuestionAnswer
