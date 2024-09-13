@@ -1,16 +1,18 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, Observable, tap } from "rxjs";
+import { finalize, map, Observable, tap } from "rxjs";
 import { PagingResultDTO } from "../dtos/common/paging-result.dto";
 import { TestItem } from "../entities/test/test-item.entity";
 import { TestDetail } from "../entities/test/test-detail.entity";
 import { Test } from "../entities/test/test.entity";
 import { MarkTestDTO } from "../dtos/test/mark-test.dto";
-import { TestResultDTO } from "../dtos/test/test-result.dto";
+import { MarkTestResultDTO } from "../dtos/test/test-result.dto";
 import { CreateTestDTO } from "../dtos/test/create-test.dto";
 import { environment } from "../../environments/environment";
 import { TestUpdateContent } from "../dtos/test/update-test-content.dto";
 import { UpdateTestDTO } from "../dtos/test/update-test.dts";
+import { ComponentService } from "./component.service";
+import { TestResult } from "../entities/test/test-result.entity";
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +20,8 @@ import { UpdateTestDTO } from "../dtos/test/update-test.dts";
 export class TestService {
     baseUrl: string = environment.baseUrl;
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private componentService: ComponentService
     ) {}
 
     getAll(
@@ -61,14 +64,15 @@ export class TestService {
         }));
     }
 
-    markTest(data: MarkTestDTO): Observable<TestResultDTO> {
-        return this.http.post<TestResultDTO>(
+    markTest(data: MarkTestDTO): Observable<MarkTestResultDTO> {
+        return this.http.post<MarkTestResultDTO>(
             `tests/mark-test`,
             data
         );
     }
     
     create(data: CreateTestDTO): Observable<void> {
+        this.componentService.$showLoadingStatus.next(true);
         const formData = new FormData();
         formData.append('name', data.name);
         if (data.image !== null) {
@@ -93,7 +97,8 @@ export class TestService {
             formData.append(`questions[${index}].correctAnswer`, value.correctAnswer.toString());
         });
 
-        return this.http.post<void>(`tests`, formData);
+        return this.http.post<void>(`tests`, formData)
+        .pipe(finalize(() => this.componentService.$showLoadingStatus.next(false)));
     }
 
     update(id: string, data: UpdateTestDTO): Observable<void> {
@@ -177,5 +182,11 @@ export class TestService {
               return new File([blob], fileName, { type: blob.type });
             })
         );
+    }
+
+    getResultsByUserId(): Observable<TestResult[]> {
+        this.componentService.$showLoadingStatus.next(true);
+        return this.http.get<TestResult[]>('tests/my-results')
+        .pipe(finalize(() => this.componentService.$showLoadingStatus.next(false)));
     }
 }

@@ -7,12 +7,15 @@ import { ComponentService } from '../../../services/component.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import moment from 'moment';
 import { concatMap } from 'rxjs';
+import { TestResult } from '../../../entities/test/test-result.entity';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-my-tests',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    DatePipe
   ],
   templateUrl: './my-tests.component.html',
   styleUrl: './my-tests.component.css'
@@ -20,7 +23,7 @@ import { concatMap } from 'rxjs';
 export class MyTestsComponent implements OnInit {
   list1: TestDetail[] = [];
   list2: TestItem[] = [];
-  list3: TestDetail[] = [];
+  list3: TestResult[] = [];
   destroyRef = inject(DestroyRef)
 
   constructor(
@@ -31,6 +34,15 @@ export class MyTestsComponent implements OnInit {
 
   ngOnInit(): void {
     this.showCreatedTests();
+  }
+
+  timeFormat(duration: number): string {
+    return Math.floor(duration/60).toString().padStart(2, '0') + 'm:'
+    + Math.floor(duration%60).toString().padStart(2, '0') + 's';
+  } 
+
+  back() {
+    history.back();
   }
 
   showCreatedTests() {
@@ -73,6 +85,21 @@ export class MyTestsComponent implements OnInit {
       },
 
       complete: () => this.componentService.$showLoadingStatus.next(false)
+    });
+  }
+
+  showTestResults() {
+    this.list1 = [];
+    this.list2 = [];
+    this.testService.getResultsByUserId()
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe(next => {
+      this.list3 = next;
+      this.list3.sort((a, b) => {
+        const d1 = new Date(a.startTime);
+        const d2 = new Date(b.startTime);
+        return d2.getTime() - d1.getTime();
+      })
     });
   }
 

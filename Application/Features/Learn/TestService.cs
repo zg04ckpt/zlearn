@@ -446,6 +446,12 @@ namespace Application.Features.Learn
             return await _context.SavedTest
                 .AnyAsync(x => x.UserId.ToString() == userId && x.TestId.ToString() == testId);
         }
+
+        public async Task<List<TestResult>> GetResultsByUserId(string userId)
+        {
+            return await _context.TestResults
+                .Where(x => x.UserId == userId).ToListAsync();
+        }
         #endregion
     }
 }

@@ -105,23 +105,19 @@ export class CreateTestComponent implements CanComponentDeactivate{
       this.authService.showLoginRequirement();
     } else {
       this.componentService.displayConfirmMessage("Xác nhận tạo test mới?", () => {
-        this.componentService.$showLoadingStatus.next(true);
         this.testService.create(this.data)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: res => {
-            this.componentService.$showLoadingStatus.next(false);
             this.componentService.displayMessage("Tạo test thành công");
             this.isSuccess = true;
+            history.back();
           },
   
           error: res => {
-            this.componentService.$showLoadingStatus.next(false);
             this.isSuccess = false;
             this.componentService.displayAPIError(res);
-          },
-
-          complete: () => this.componentService.$showLoadingStatus.next(false)
+          }
         });
       });
     }

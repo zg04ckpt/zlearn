@@ -6,6 +6,8 @@ import { ComponentService } from '../../../services/component.service';
 import { environment } from '../../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { UserService } from '../../../services/user.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-list-test',
@@ -24,16 +26,21 @@ export class ListTestComponent implements OnInit {
   totalPage: number = 0;
   total: number = 0;
   key: string = "";
-  destroyRef = inject(DestroyRef)
+  destroyRef = inject(DestroyRef);
 
   constructor(
     private router: Router,
     private testService: TestService,
-    private componentService: ComponentService
+    private componentService: ComponentService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.search();
+  }
+
+  isLoggedIn(): boolean {
+    return this.userService.getLoggedInUser() != null;
   }
 
   search() {

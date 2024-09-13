@@ -1,13 +1,7 @@
-﻿using Application.Common;
+﻿using API.Authorization;
 using Application.Features.Learn;
 using BE.Controllers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System;
-using System.Threading.Tasks;
 using Utilities;
 using ViewModels.Common;
 using ViewModels.Features.Learn.Test;
@@ -27,7 +21,7 @@ namespace ZG04.BE.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> Create([FromForm] CreateTestRequest request)
         {
             try
@@ -43,7 +37,7 @@ namespace ZG04.BE.Controllers
 
 
         [HttpDelete("{testId}")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> Delete(string testId)
         {
             try
@@ -73,7 +67,7 @@ namespace ZG04.BE.Controllers
         }
 
         [HttpGet("my-tests")]
-        [Authorize(Roles = $"{Consts.DEFAULT_USER_ROLE}")]
+        [Authorize]
         public async Task<IActionResult> GetAllMyTests()
         {
             try
@@ -88,12 +82,27 @@ namespace ZG04.BE.Controllers
 
 
         [HttpGet("results")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> GetAllResults([FromQuery] PagingRequest request)
         {
             try
             {
                 return Ok(await _testService.GetAllResults(GetUserIdFromClaimPrincipal(), request));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpGet("my-results")]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> GetResultsByUserId()
+        {
+            try
+            {
+                return Ok(await _testService.GetResultsByUserId(GetUserIdFromClaimPrincipal()));
             }
             catch (Exception ex)
             {
@@ -166,7 +175,7 @@ namespace ZG04.BE.Controllers
 
 
         [HttpPut("{testId}")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> Update(string testId, [FromForm] TestUpdateRequest request)
         {
             try
@@ -182,7 +191,7 @@ namespace ZG04.BE.Controllers
 
 
         [HttpGet("{testId}/update-content")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> GetUpdateContent(string testId)
         {
             try
@@ -198,7 +207,7 @@ namespace ZG04.BE.Controllers
 
 
         [HttpPost("save")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> SaveTest([FromQuery] string testId)
         {
             try
@@ -214,7 +223,7 @@ namespace ZG04.BE.Controllers
 
 
         [HttpGet("save")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> GetSavedTest()
         {
             try
@@ -229,7 +238,7 @@ namespace ZG04.BE.Controllers
 
 
         [HttpGet("save/isSaved")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> IsSaved([FromQuery] string testId)
         {
             try
@@ -244,7 +253,7 @@ namespace ZG04.BE.Controllers
 
 
         [HttpDelete("save")]
-        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.DEFAULT_USER_ROLE)]
         public async Task<IActionResult> RemoveSavedTest([FromQuery]string testId)
         {
             try

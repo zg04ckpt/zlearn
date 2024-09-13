@@ -22,10 +22,14 @@ namespace API.Authorization
                 return;
 
             var user = context.HttpContext.User;
-            if(user == null)
+            if(user == null || !user.Claims.Any())
             {
                 context.Result = new UnauthorizedResult();
             }
+            else if(!_roles.Any())
+            {
+                return;
+            }    
             else
             {
                 var canAccess = false;

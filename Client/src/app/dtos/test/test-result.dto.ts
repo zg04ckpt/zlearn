@@ -1,4 +1,4 @@
-export interface TestResultDTO {
+export interface MarkTestResultDTO {
     total: number;
     score: number;
     correct: number;

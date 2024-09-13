@@ -1,10 +1,6 @@
-﻿using Application.System.Auth;
-using Microsoft.AspNetCore.Http;
+﻿using API.Authorization;
+using Application.System.Auth;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System;
-using Utilities;
-using Microsoft.AspNetCore.Authorization;
 using ViewModels.System.Auth;
 
 namespace BE.Controllers
@@ -65,7 +61,7 @@ namespace BE.Controllers
         }
 
         [HttpPost("logout")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
             try

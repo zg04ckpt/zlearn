@@ -22,6 +22,7 @@ namespace Application.Features.Learn
         //------------------------
         Task<TestResultResponse> MarkTest(MarkTestRequest request, string ip, ClaimsPrincipal user);
         Task<PagingResponse<TestResult>> GetAllResults(string userId, PagingRequest request);
+        Task<List<TestResult>> GetResultsByUserId(string userId);
         Task RemoveAllResults();
 
         //------------------------

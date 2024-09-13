@@ -1,5 +1,11 @@
 <div class="row mt-5">
     <div class="col-lg-8 offset-lg-2">
+        <div class="d-flex mb-2">
+            <button class="btn btn-sm btn-outline-secondary px-3"
+            (click)="back()"
+            >Quay lại</button>
+        </div>
+
         <div class="card card-body">
             <div class="">
                 <ul class="nav nav-tabs" role="tablist">
@@ -16,7 +22,8 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#history">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#history"
+                        (click)="showTestResults()">
                             Lịch sử làm test
                         </button>
                     </li>
@@ -73,8 +80,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--2. saved-->
+                    <!-- 2. saved -->
                     <div class="tab-pane fade" id="saved" role="tabpanel">
                         
                         <!--content-->
@@ -112,16 +118,49 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 3. history -->
                     <div class="tab-pane fade" id="history" role="tabpanel">
-                        <p>
-                        Oat cake chupa chups dragée donut toffee. Sweet cotton candy jelly beans macaroon gummies
-                        cupcake gummi bears cake chocolate.
-                        </p>
-                        <p class="mb-0">
-                        Cake chocolate bar cotton candy apple pie tootsie roll ice cream apple pie brownie cake. Sweet
-                        roll icing sesame snaps caramels danish toffee. Brownie biscuit dessert dessert. Pudding jelly
-                        jelly-o tart brownie jelly.
-                        </p>
+                        <!--action-->
+                        <div class="d-flex mt-3 flex-row">
+                            <div class="flex-fill">
+                                <button class="btn btn-sm btn-outline-info" title="Chưa code">Phân tích</button>
+                            </div>
+
+                            <button class="btn btn-sm btn-outline-secondary flex" title="Chưa code">Tải xuống dữ liệu</button>
+                        </div>
+
+                        <table class="mt-2 table" style="font-size: 14px;">
+                            <thead>
+                                <tr>
+                                    <th>Điểm</th>
+                                    <th>Tên bài TN</th>
+                                    <th>Ngày làm</th>
+                                    <th>Thời gian</th>
+                                    <th>Câu đúng</th>
+                                    <th>Tùy chọn</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (item of list3; track $index) {
+                                    <tr>
+                                        <td>{{item.score}}</td>
+                                        <td >
+                                            <a class="text-decoration-none" [routerLink]="['tests', item.id]">{{item.testName}}</a>
+                                        </td>
+                                        <td>{{item.startTime | date: 'dd/MM/yyyy'}}</td>
+                                        <td>{{timeFormat(item.usedTime)}}</td>
+                                        <td>{{item.correct}}</td>
+                                        <td> 
+                                            <i class='bx bx-dots-vertical-rounded' data-bs-toggle="dropdown"></i>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item btn" style="font-size: 13px;">Chi tiết</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
               </div>

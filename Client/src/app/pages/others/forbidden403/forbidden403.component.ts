@@ -26,6 +26,6 @@ export class Forbidden403Component {
 
   back() {
     this.show = false;
-    history.go(-2);
+    history.go(-1);
   }
 }

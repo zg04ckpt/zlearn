@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
     private authService: AuthService
   ) {
     this.layoutService.$showSidebar.subscribe(value => {
-      if(window.innerWidth >= 600)
+      if(window.innerWidth >= 800)
         this.showSidebar = value;
     });
   }
@@ -57,8 +57,11 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.userService.$currentUser.next(this.userService.getLoggedInUser());
 
-    if(window.innerWidth < 600)
+    if(window.innerWidth < 800)
+    {
+      this.layoutService.$showSidebar.next(false);
       this.showSidebar = false;
+    }
 
     //show end session message when refresh token expired
     this.authService.setLoginSessionTimer();
@@ -67,7 +70,10 @@ export class AppComponent implements OnInit {
   
   @HostListener("window:resize", ['$event'])
   onResize(event: Event) {
-    if(window.innerWidth < 600)
+    if(window.innerWidth < 1000)
+    {
+      this.layoutService.$showSidebar.next(false);
       this.showSidebar = false;
+    }
   }
 }

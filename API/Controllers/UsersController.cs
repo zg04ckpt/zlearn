@@ -1,16 +1,7 @@
 ﻿using API.Authorization;
 using Application.System.Users;
-using Data.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 using Utilities;
-using ViewModels.Common;
 using ViewModels.System.Users;
 
 namespace BE.Controllers

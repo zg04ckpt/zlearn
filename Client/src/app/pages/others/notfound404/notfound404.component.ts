@@ -20,6 +20,6 @@ export class Notfound404Component {
   }
 
   back() {
-    history.go(-2);
+    history.back();
   }
 }

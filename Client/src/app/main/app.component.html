@@ -4,6 +4,7 @@
 <div class="main-content" [ngClass]="showSidebar? 'with-sidebar':'without-sidebar'">
     <router-outlet/>
     <app-service-unavailable503/>
+    <app-forbidden403/>
 </div>
 
 <app-footer/>
@@ -13,5 +14,4 @@
 <app-message/>
 <app-toast/>
 
-<app-forbidden403/>
 

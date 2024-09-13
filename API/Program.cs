@@ -22,7 +22,7 @@ using Application.System.Roles;
 using Application.System.Auth;
 using Application.System.Manage;
 using Application.Features.Learn;
-using Microsoft.AspNetCore.Http;
+using System.Web.Http.Results;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -103,7 +103,8 @@ builder.Services.AddAuthentication(options =>
         {
             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
             {
-                context.Response.Headers.Add("Token-Expired", "true");
+                //context.Response.Headers.Add("Token-Expired", "true");
+                context.Request.HttpContext.User = null;
             }
             return Task.CompletedTask;
         }
@@ -161,9 +162,8 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = FileService.REQUEST_PATH
 });
 
-app.UseRouting();
 app.UseAuthentication();
-
+app.UseRouting();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

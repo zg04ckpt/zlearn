@@ -1,5 +1,5 @@
-﻿using Application.System.Roles;
-using Microsoft.AspNetCore.Authorization;
+﻿using API.Authorization;
+using Application.System.Roles;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -39,7 +39,7 @@ namespace BE.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
+        [Authorize(Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> CreateRole([FromBody]RoleCreateRequest request)
         {
             try
@@ -56,7 +56,7 @@ namespace BE.Controllers
 
 
         [HttpPut]
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
+        [Authorize(Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> UpdateRole([FromBody]RoleModel role)
         {
             try
@@ -73,7 +73,7 @@ namespace BE.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
+        [Authorize(Consts.DEFAULT_ADMIN_ROLE)]
         public async Task<IActionResult> Delete(string id)
         {
             try

@@ -49,7 +49,6 @@ namespace Application.System.Auth
             if (!checkResult.Succeeded)
                 throw new BadRequestException("Xác thực email không thành công");
         }
-
         public async Task<LoginResponse> Login(LoginRequest request)
         {
             //check valid login
@@ -110,7 +109,6 @@ namespace Application.System.Auth
             await _userManager.UpdateAsync(user);
             return newToken;
         }
-
         public async Task Register(RegisterRequest request, string origin)
         {
             if (request.Password != request.ConfirmPassword)
@@ -183,7 +181,6 @@ namespace Application.System.Auth
                 throw new BadRequestException("Đăng kí không thành công!");
             }    
         }
-
         #region private
         private string GetValidationEmailHtml(string confirmUrl)
         {

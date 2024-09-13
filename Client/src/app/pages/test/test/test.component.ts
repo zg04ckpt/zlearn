@@ -5,7 +5,7 @@ import { TestStatus } from '../../../enums/test.enum';
 import { Test } from '../../../entities/test/test.entity';
 import { Observable, Subject } from 'rxjs';
 import { DecimalPipe, NgClass } from '@angular/common';
-import { TestResultDTO } from '../../../dtos/test/test-result.dto';
+import { MarkTestResultDTO } from '../../../dtos/test/test-result.dto';
 import { TestService } from '../../../services/test.service';
 import { MarkTestDTO } from '../../../dtos/test/mark-test.dto';
 import { CommonService } from '../../../services/common.service';
@@ -31,7 +31,7 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
   remainder: Subject<number>|null = null; //sec
   remainderTime: number = 0; //sec
   answer: MarkTestDTO|null = null;
-  result: TestResultDTO|null = null;
+  result: MarkTestResultDTO|null = null;
   start: Date|null = null;
   end: Date|null = null;
 
