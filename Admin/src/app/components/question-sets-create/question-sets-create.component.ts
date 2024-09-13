@@ -179,6 +179,7 @@ export class QuestionSetsCreateComponent {
       const range: XLSX.Range = XLSX.utils.decode_range(ws['!ref']!);
       for(let i=0; i<=range.e.r; i++)
       {
+        this.questions = [];
         let question: QuestionModule = new QuestionModule(i+1, "", "", " ", "", "", "", 1, false);
         question.content = ws[XLSX.utils.encode_cell({c: 0, r: i})]?.v;
         question.answerA = ws[XLSX.utils.encode_cell({c: 1, r: i})]?.v;
@@ -201,5 +202,6 @@ export class QuestionSetsCreateComponent {
       
     };
     reader.readAsBinaryString(target.files[0]);
+    
   }
 }

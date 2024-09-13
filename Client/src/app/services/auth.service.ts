@@ -50,6 +50,7 @@ export class AuthService {
     }
 
     logout(): Observable<void> {
+        this.purgeAuth();
         return this.http.post<void>(`auth/logout`, null);
     }
 
@@ -106,7 +107,7 @@ export class AuthService {
             "Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!",
             [
               { name: "Đăng nhập", action: () => this.componentService.$showLoginDialog.next(true) },
-              { name: "Về trang chủ", action: () => this.router.navigateByUrl("/home") }
+              { name: "Về trang chủ", action: () => this.router.navigateByUrl("/") }
             ]
         );
     }
@@ -116,7 +117,7 @@ export class AuthService {
             "Vui lòng đăng nhập để tiếp tục!",
             [
               { name: "Đăng nhập", action: () => this.componentService.$showLoginDialog.next(true) },
-              { name: "Quay lại", action: () => this.location.back() }
+              { name: "Trang chủ", action: () => this.router.navigateByUrl('/') }
             ]
         );
     }

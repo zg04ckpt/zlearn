@@ -4,6 +4,7 @@ using Data.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using Microsoft.AspNetCore.Identity;
+using Data.Configs;
 
 namespace Data
 {
@@ -19,6 +20,7 @@ namespace Data
             modelBuilder.ApplyConfiguration(new QuestionConfig());
             modelBuilder.ApplyConfiguration(new TestConfig());
             modelBuilder.ApplyConfiguration(new TestResultConfig());
+            modelBuilder.ApplyConfiguration(new SavedTestConfig());
             modelBuilder.ApplyConfiguration(new AppUserConfig());
             modelBuilder.ApplyConfiguration(new AppRoleConfig());
 
@@ -37,9 +39,10 @@ namespace Data
         #region DbSet
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
-        public DbSet<Question> Questions { get; set; }
         public DbSet<Test> Tests { get; set; }
+        public DbSet<Question> Questions { get; set; }
         public DbSet<TestResult> TestResults { get; set; }
+        public DbSet<SavedTest> SavedTest { get; set; }
         #endregion
     }
 }

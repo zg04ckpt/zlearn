@@ -1,5 +1,5 @@
 ﻿using Application.Common;
-using Application.Practice;
+using Application.Features.Learn;
 using BE.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,8 +9,8 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Threading.Tasks;
 using Utilities;
-using ViewModels.QuestionSet;
-using ViewModels.Test;
+using ViewModels.Common;
+using ViewModels.Features.Learn.Test;
 
 namespace ZG04.BE.Controllers
 {
@@ -19,24 +19,192 @@ namespace ZG04.BE.Controllers
     public class TestsController : BaseController
     {
         private readonly ITestService _testService;
-        private readonly ILogger<TestsController> _logger;
 
-        //test
-        private readonly IEmailSender _emailSender;
-
-        public TestsController(ITestService testService, ILogger<TestsController> logger, IEmailSender emailSender)
+        public TestsController(ITestService testService, ILogger<TestsController> logger)
         {
             _testService = testService;
-            _logger = logger;
-            _emailSender = emailSender;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+
+        [HttpPost]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> Create([FromForm] CreateTestRequest request)
         {
             try
             {
-                return Ok(await _testService.GetAll());
+                await _testService.Create(request, User);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpDelete("{testId}")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> Delete(string testId)
+        {
+            try
+            {
+                await _testService.Delete(testId, GetUserIdFromClaimPrincipal());
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAll([FromQuery] PagingRequest request)
+        {
+            try
+            {
+                return Ok(await _testService.GetAll(request));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+        [HttpGet("my-tests")]
+        [Authorize(Roles = $"{Consts.DEFAULT_USER_ROLE}")]
+        public async Task<IActionResult> GetAllMyTests()
+        {
+            try
+            {
+                return Ok(await _testService.GetTestsByUserId(GetUserIdFromClaimPrincipal()));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpGet("results")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> GetAllResults([FromQuery] PagingRequest request)
+        {
+            try
+            {
+                return Ok(await _testService.GetAllResults(GetUserIdFromClaimPrincipal(), request));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpGet("{id}/content")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTestContent(string id)
+        {
+            try
+            {
+                return Ok(await _testService.GetTestContentById(User, id));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpGet("{id}/detail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTestDetail(string id)
+        {
+            try
+            {
+                return Ok(await _testService.GetDetailById(id));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpPost("mark-test")]
+        [AllowAnonymous]
+        public async Task<IActionResult> MarkTest([FromBody]MarkTestRequest request)
+        {
+            try
+            {
+                return Ok(await _testService.MarkTest(
+                    request, 
+                    HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    User));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpDelete("results")]
+        public async Task<IActionResult> RemoveAllResults()
+        {
+            try
+            {
+                await _testService.RemoveAllResults();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpPut("{testId}")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> Update(string testId, [FromForm] TestUpdateRequest request)
+        {
+            try
+            {
+                await _testService.Update(GetUserIdFromClaimPrincipal(), testId, request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpGet("{testId}/update-content")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> GetUpdateContent(string testId)
+        {
+            try
+            {
+                return Ok(
+                    await _testService.GetTestUpdateContent(GetUserIdFromClaimPrincipal(), testId));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
+        [HttpPost("save")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> SaveTest([FromQuery] string testId)
+        {
+            try
+            {
+                await _testService.SaveTest(GetUserIdFromClaimPrincipal(), testId);
+                return Ok();
             }
             catch(Exception ex)
             {
@@ -44,12 +212,14 @@ namespace ZG04.BE.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
+
+        [HttpGet("save")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> GetSavedTest()
         {
             try
             {
-                return Ok(await _testService.GetById(id));
+                return Ok(await _testService.GetSavedTestsByUserId(GetUserIdFromClaimPrincipal()));
             }
             catch (Exception ex)
             {
@@ -57,14 +227,14 @@ namespace ZG04.BE.Controllers
             }
         }
 
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CreateTestRequest request)
+
+        [HttpGet("save/isSaved")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> IsSaved([FromQuery] string testId)
         {
             try
             {
-                await _testService.Create(request);
-                return Ok();
+                return Ok(await _testService.IsSaved(GetUserIdFromClaimPrincipal(), testId));
             }
             catch (Exception ex)
             {
@@ -72,86 +242,14 @@ namespace ZG04.BE.Controllers
             }
         }
 
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromForm] TestUpdateRequest questionSet)
-        {
-            try
-            {
-                await _testService.Update(id, questionSet);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
 
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("save")]
+        [Authorize(Roles = Consts.DEFAULT_USER_ROLE)]
+        public async Task<IActionResult> RemoveSavedTest([FromQuery]string testId)
         {
             try
             {
-                await _testService.Delete(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
-
-        [HttpGet("{id}/questions")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAllQuestionsByTestId(string id)
-        {
-            try
-            {
-                return Ok(await _testService.GetAllQuestionByTestId(id));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
-
-        [HttpGet("results")]
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        public async Task<IActionResult> GetAllResults()
-        {
-            try
-            {
-                return Ok(await _testService.GetAllResults());
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
-
-        [HttpPost("results")]
-        [AllowAnonymous]
-        public async Task<IActionResult> SaveResult([FromBody] SaveTestResultRequest request)
-        {
-            try
-            {
-                await _testService.SaveResult(request, HttpContext.Connection);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
-
-        [Authorize(Roles = Consts.DEFAULT_ADMIN_ROLE)]
-        [HttpDelete("results")]
-        public async Task<IActionResult> DeleteAll()
-        {
-            try
-            {
-                await _testService.RemoveAllResults();
+                await _testService.DeleteFromSaved(GetUserIdFromClaimPrincipal(), testId);
                 return Ok();
             }
             catch (Exception ex)

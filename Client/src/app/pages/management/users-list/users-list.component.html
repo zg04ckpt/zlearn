@@ -76,7 +76,7 @@
                             <i class='btn bx bx-dots-vertical' data-bs-toggle="dropdown"></i>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item btn" (click)="getUserRoles(user)">Gán quyền</a>
-                                <a class="dropdown-item btn" (click)="selectUser(user)">Chi tiết</a>
+                                <a class="dropdown-item btn" (click)="selectUser(user); showUserDetail = true;">Chi tiết</a>
                                 <a class="dropdown-item btn" (click)="deleteUser(user!.id)">Xóa</a>
                             </div>
                         </td>
@@ -88,10 +88,10 @@
 </div>
 
 <!-- Detail -->
-@if(selectedUser) {
+@if(showUserDetail) {
     <div class="position-absolute top-0 card card-body start-50 translate-middle-x shadow-lg" 
     style="width: 800px; margin-top: 20px; margin-bottom: 50px; z-index: 3;">
-        <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="selectedUser = null"></button>
+        <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="selectedUser = null; showUserDetail = false"></button>
         <div class="d-flex">
             @if(updating) {
                 <button class="btn btn-outline-success mx-1" (click)="saveDetail()">Lưu</button>

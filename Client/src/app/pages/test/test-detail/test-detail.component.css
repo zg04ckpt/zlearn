@@ -1,0 +1,29 @@
+.avt {
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    border: 1px solid;
+    object-fit: cover;
+}
+
+.avt:hover {
+    cursor: pointer;
+    border: 2px solid rgb(16, 197, 229);
+}
+
+.heart-btn:hover {
+    cursor: pointer;
+    color: red;
+}
+
+.reply-btn:hover {
+    cursor: pointer;
+    color: rgb(0, 191, 255);
+}
+
+#add:hover {
+    color: rgb(0, 191, 255);
+    cursor: pointer;
+}
+
+

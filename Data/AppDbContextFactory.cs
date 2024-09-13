@@ -8,7 +8,7 @@ namespace  Data
         public AppDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlServer("Data Source=ZG04-CKPT\\SQLEXPRESS;Initial Catalog=zg04web;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+            optionsBuilder.UseSqlServer("Data Source=ZG04-CKPT\\SQLEXPRESS;Initial Catalog=zlearn;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
             return new AppDbContext(optionsBuilder.Options);
         }
     }

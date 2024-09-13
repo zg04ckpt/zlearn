@@ -6,7 +6,8 @@
         @if(module.buttons.length != 0) {
             <div class="d-flex justify-content-center">
                 @for (btn of module.buttons; track $index) {
-                    <button class="btn btn-sm btn-outline-dark mx-1" (click)="btn.action(); show = false;">
+                    <button class="btn btn-sm btn-outline-dark mx-1" 
+                    (click)="btn.action(); show = false;">
                         {{btn.name}}
                     </button>
                 }

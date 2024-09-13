@@ -15,4 +15,10 @@ namespace Utilities.Exceptions
     {
         public NotFoundException(string message) : base(message) { }
     }
+
+    public class ForbiddenException : Exception
+    {
+        public ForbiddenException(): base() { }
+        public ForbiddenException(string message) : base(message) { }
+    }
 }

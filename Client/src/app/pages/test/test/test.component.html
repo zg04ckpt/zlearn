@@ -1,0 +1,239 @@
+<!--Content-->
+@if(status == TestStatus.Testing || status == TestStatus.Completed) {
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="card card-body m-4">
+    
+                <h5 class="text-center fw-bold">{{test!.name}}</h5>
+    
+                <div class="d-flex flex-column mt-4">
+                    @for (item of test!.questions; track $index) {
+                        <div class="d-flex flex-column mb-2 pt-3" [id]="$index+1">
+                            <p><b>Câu {{$index + 1}}: </b>{{item.content}}</p>
+                            @if(item.imageUrl) {
+                                <img [src]="item.imageUrl" alt="" class="mt-2 mb-3 question-image">
+                            }
+                            <div class="row">
+    
+                                <div class="col-lg-6 d-flex">
+                                    <span class="ans-btn"
+                                    [ngClass]="{
+                                        'bg-secondary text-white': item.selectedAnswer == 1, 
+                                        'disable': status == TestStatus.Completed
+                                    }"
+                                    (click)="item.selectedAnswer = 1">A</span>
+                                    <p class="ms-2 mt-1">{{item.answerA}}</p>
+                                </div>
+    
+    
+                                <div class="col-lg-6 d-flex">
+                                    <span class="ans-btn"
+                                    [ngClass]="{
+                                        'bg-secondary text-white': item.selectedAnswer == 2, 
+                                        'disable': status == TestStatus.Completed
+                                    }"
+                                    (click)="item.selectedAnswer = 2">B</span>
+                                    <p class="ms-2 mt-1">{{item.answerB}}</p>
+                                </div>
+    
+    
+                                @if(item.answerC) {
+                                    <div class="col-lg-6 d-flex">
+                                        <span class="ans-btn"
+                                        [ngClass]="{
+                                            'bg-secondary text-white': item.selectedAnswer == 3, 
+                                            'disable': status == TestStatus.Completed
+                                        }"
+                                        (click)="item.selectedAnswer = 3">C</span>
+                                        <p class="ms-2 mt-1">{{item.answerC}}</p>
+                                    </div>
+                                }
+                                
+    
+                                @if(item.answerD) {
+                                    <div class="col-lg-6 d-flex">
+                                        <span class="ans-btn"
+                                        [ngClass]="{
+                                            'bg-secondary text-white': item.selectedAnswer == 4, 
+                                            'disable': status == TestStatus.Completed
+                                        }"
+                                        (click)="item.selectedAnswer = 4">D</span>
+                                        <p class="ms-2 mt-1">{{item.answerD}}</p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@else if(status == TestStatus.ShowAnswer) {
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="card card-body m-4">
+    
+                <h5 class="text-center fw-bold">KẾT QUẢ</h5>
+                <span class="text-center fw-bold fs-4">- - - - - - - - - -</span>
+                <div class="row">
+                    <div class="offset-lg-3 col-lg-6">
+                        <table class="table fs-5 table-borderless mt-2">
+                            <tbody>
+                                <tr>
+                                    <td width="200">Tên bài test:</td>
+                                    <td class="fw-bold">{{test!.name}}</td>
+                                </tr>
+        
+                                <tr>
+                                    <td>Tổng số câu:</td>
+                                    <td class="fw-bold">{{result!.total}}</td>
+                                </tr>
+        
+                                <tr>
+                                    <td>Số câu đúng:</td>
+                                    <td class="fw-bold">{{result!.correct}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Số câu bỏ:</td>
+                                    <td class="fw-bold">{{result!.unselected}}</td>
+                                </tr>
+        
+                                <tr>
+                                    <td>Điểm:</td>
+                                    <td class="fw-bold">{{result!.score | number: '.2'}}</td>
+                                </tr>
+        
+                                <tr>
+                                    <td>Thời gian làm bài:</td>
+                                    <td class="fw-bold">{{Math.floor(result!.usedTime / 60) | number: '2.0'}}m:{{result!.usedTime % 60 | number: '2.0'}}s</td>
+                                </tr>
+        
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <h5 class="text-center fw-bold">CHI TIẾT</h5>
+                <span class="text-center fw-bold fs-4">- - - - - - - - - -</span>
+    
+                <div class="d-flex flex-column mt-4">
+                    @for (item of test!.questions; track $index) {
+                        <div class="d-flex flex-column mb-2 pt-3" [id]="$index+1"
+                        [ngClass]="{'blur': item.selectedAnswer == 0}">
+                            <p><b>Câu {{$index + 1}}: </b>{{item.content}}</p>
+                            @if(item.imageUrl) {
+                                <img [src]="item.imageUrl" alt="" class="mt-2 mb-3 question-image">
+                            }
+                            <div class="row">
+    
+                                <div class="col-lg-6 d-flex">
+                                    <span class="ans-btn"
+                                    [ngClass]="{ 
+                                        'disable': true,
+                                        'correct': result!.detail[$index] == 1,
+                                        'wrong': item.selectedAnswer == 1 && result!.detail[$index] != 1
+                                    }">A</span>
+                                    <p class="ms-2 mt-1">{{item.answerA}}</p>
+                                </div>
+    
+    
+                                <div class="col-lg-6 d-flex">
+                                    <span class="ans-btn"
+                                    [ngClass]="{ 
+                                        'disable': true,
+                                        'correct': result!.detail[$index] == 2,
+                                        'wrong': item.selectedAnswer == 2 && result!.detail[$index] != 2
+                                    }">B</span>
+                                    <p class="ms-2 mt-1">{{item.answerB}}</p>
+                                </div>
+    
+    
+                                @if(item.answerC) {
+                                    <div class="col-lg-6 d-flex">
+                                        <span class="ans-btn"
+                                        [ngClass]="{ 
+                                            'disable': true,
+                                            'correct': result!.detail[$index] == 3,
+                                            'wrong': item.selectedAnswer == 3 && result!.detail[$index] != 3
+                                        }">C</span>
+                                        <p class="ms-2 mt-1">{{item.answerC}}</p>
+                                    </div>
+                                }
+                                
+    
+                                @if(item.answerD) {
+                                    <div class="col-lg-6 d-flex">
+                                        <span class="ans-btn"
+                                        [ngClass]="{ 
+                                            'disable': true,
+                                            'correct': result!.detail[$index] == 4,
+                                            'wrong': item.selectedAnswer == 4 && result!.detail[$index] != 4
+                                        }">D</span>
+                                        <p class="ms-2 mt-1">{{item.answerD}}</p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+    
+            </div>
+        </div>
+    </div>
+}
+
+
+<!--Status bar-->
+<div class="position-fixed card card-body me-3 d-flex flex-column p-3" id="status-box">
+    @if(status == TestStatus.Testing) {
+        @if(remainder) {
+            <span class="fw-bold fw-light text-center">
+                Thời gian còn lại: <b class="text-info">{{(Math.floor(remainderTime / 60) | number: '2.0-0')}}m:{{remainderTime % 60| number: '2.0-0'}}s</b>
+            </span>
+        }
+        <button class="btn btn-danger btn-sm mt-2" (click)="endTest()">Kết thúc</button>
+    }
+    @else if(status == TestStatus.Completed) {
+        <button class="btn btn-success btn-sm m-0" (click)="markTest()">Nộp bài và xem kết quả</button>
+    }
+    @else if(status == TestStatus.ShowAnswer) {
+        <button class="btn btn-secondary btn-sm m-0" (click)="navigate('tests')">Quay lại danh sách</button>
+    }
+
+    <hr>
+
+    @if(status == TestStatus.Testing || status == TestStatus.Completed) {
+        <div class="row mx-0 overflow-auto" style="max-height: 70vh;">
+            @for (item of test?.questions; track $index) {
+                <div class="col-3 text-center p-1">
+                    <div class="btn w-100 btn-sm status-btn fw-bolder"
+                    [ngClass]="{'bg-secondary text-white': item.selectedAnswer != 0}"
+                    (click)="scrollTo($index+1)">
+                        {{$index + 1}}
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    @else if(status == TestStatus.ShowAnswer) {
+        <div class="row mx-0">
+            @for (item of test!.questions; track $index) {
+                <div class="col-3 text-center p-1">
+                    <div class="btn w-100 btn-sm status-btn fw-bolder"
+                    [ngClass]="{
+                        'bg-white text-dark': item.selectedAnswer == 0,
+                        'correct': item.selectedAnswer != 0 && item.selectedAnswer == result!.detail[$index],
+                        'wrong': item.selectedAnswer != 0 && item.selectedAnswer != result!.detail[$index],
+                    }"
+                    (click)="scrollTo($index+1)">
+                        {{$index + 1}}
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    
+    
+</div>

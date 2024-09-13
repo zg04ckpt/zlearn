@@ -23,5 +23,8 @@ namespace Data.Entities
         public string Description { get; set; }
         public string UserLinks { get; set; }
         #endregion
+
+        public List<Test> Tests { get; set; }
+        public List<SavedTest> UserInTests { get; set; }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Entities
 {
@@ -10,12 +6,13 @@ namespace Data.Entities
     {
         public Guid Id { get; set; }
         public decimal Score { get; set; }
-        public int CorrectsCount { get; set; }
-        public TimeSpan UsedTime { get; set; }
-        public DateTime StartTime { get; set; }
-        public string UserInfo { get; set; }
-        public string Detail { get; set; }
+        public int Correct { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public int UsedTime { get; set; }
         public Guid TestId { get; set; }
-        public Test Test { get; set; }
+        public string TestName { get; set; }
+        public string UserId { get; set; }
+        public string UserName { get; set; }
     }
 }

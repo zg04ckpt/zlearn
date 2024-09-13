@@ -1,5 +1,4 @@
 ﻿using Application.Common;
-using Application.Practice;
 using AspNetCoreRateLimit;
 using Data.Entities;
 using Data;
@@ -22,6 +21,9 @@ using Application.System.Users;
 using Application.System.Roles;
 using Application.System.Auth;
 using Application.System.Manage;
+using Application.Features.Learn;
+using Microsoft.AspNetCore.Http;
+using BE.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -29,16 +31,16 @@ var Configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(Configuration.GetConnectionString(Consts.CONNECTION_STRING),
-        options => options.EnableRetryOnFailure()
-        );
+    options.UseSqlServer(
+        Configuration.GetConnectionString(Consts.CONNECTION_STRING),
+        options => options.EnableRetryOnFailure());
     options.EnableDetailedErrors();
-
 });
 
 builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
 
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IFileService, FileService>();
@@ -65,7 +67,6 @@ builder.Services.AddSingleton<IClientPolicyStore, MemoryCacheClientPolicyStore>(
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.SignIn.RequireConfirmedEmail = true;
-
     //pass config
     options.Password.RequireNonAlphanumeric = true; 
     options.Password.RequireDigit = true;
@@ -110,21 +111,35 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy",policy => policy.RequireRole(Consts.DEFAULT_ADMIN_ROLE));
+});
+
 //cấu hình cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
         builder.AllowAnyOrigin()
-        .AllowAnyMethod()
+            .AllowAnyMethod()
             .AllowAnyHeader();
     });
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+    });
 });
+
 
 //cấu hình giới hạn truy cập
 builder.Services.AddMemoryCache();
 builder.Services.Configure<ClientRateLimitOptions>(Configuration.GetSection("ClientRateLimiting"));
 builder.Services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
+
 
 var app = builder.Build();
 
@@ -135,9 +150,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BE v1"));
 }
 
-app.UseCors("AllowAll");
-
-app.UseStaticFiles();
+app.UseCors("AllowSpecificOrigin");
 //app.UseClientRateLimiting();
 //app.UseIpRateLimiting();
 
@@ -149,8 +162,9 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = FileService.REQUEST_PATH
 });
 
-app.UseAuthentication();
 app.UseRouting();
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

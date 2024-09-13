@@ -49,7 +49,6 @@ namespace Application.System.Auth
             if (!checkResult.Succeeded)
                 throw new BadRequestException("Xác thực email không thành công");
         }
-
         public async Task<LoginResponse> Login(LoginRequest request)
         {
             //check valid login
@@ -110,7 +109,6 @@ namespace Application.System.Auth
             await _userManager.UpdateAsync(user);
             return newToken;
         }
-
         public async Task Register(RegisterRequest request, string origin)
         {
             if (request.Password != request.ConfirmPassword)
@@ -183,7 +181,6 @@ namespace Application.System.Auth
                 throw new BadRequestException("Đăng kí không thành công!");
             }    
         }
-
         #region private
         private string GetValidationEmailHtml(string confirmUrl)
         {
@@ -398,12 +395,18 @@ namespace Application.System.Auth
         {
             //generate access token
             var roles = await _userManager.GetRolesAsync(user);
-            var publicClaims = new Claim[]
+            var publicClaims = new List<Claim>
             {
+                new (ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new (ClaimTypes.GivenName, user.LastName + " " + user.FirstName),
                 new (ClaimTypes.Name, user.UserName), //require for refresh
                 new (ClaimTypes.Email, user.Email),
-                new (ClaimTypes.Role, string.Join(',', roles))
+                
             };
+            foreach (var role in roles) 
+            {
+                publicClaims.Add(new(ClaimTypes.Role, role));
+            }
             var secretKey = Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY);
             var tokenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var token = new JwtSecurityToken

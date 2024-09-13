@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using ViewModels.Features.Learn.Test;
 
 namespace Application.Common
 {
@@ -20,6 +22,7 @@ namespace Application.Common
 
         public async Task DeleteFile(string fileName)
         {
+            if (fileName == null) return;
             var filePath = Path.Combine(_folderPath, fileName);
             if (File.Exists(filePath))
             {
@@ -29,6 +32,7 @@ namespace Application.Common
 
         public async Task<string> SaveFile(IFormFile file)
         {
+            if (file == null) return null;
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             var filePath = Path.Combine(_folderPath, fileName);
             using var output = new FileStream(filePath, FileMode.Create);
@@ -38,6 +42,7 @@ namespace Application.Common
 
         public string GetFileUrl(string fileName)
         {
+            if(fileName == null) return null;
             return REQUEST_PATH + "/" + fileName;
         }
     }

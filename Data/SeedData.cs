@@ -42,21 +42,27 @@ namespace Data
                 throw new Exception("Admin email and password must be configured in environment variables.");
             }
 
-            var admin = new AppUser
-            {
-                UserName = adminEmail,
-                Email = adminEmail,
-                FirstName = "Nguyên",
-                LastName = "Hoàng"
-            };
-
             var user = await userManager.FindByEmailAsync(adminEmail);
             if (user == null)
             {
+                var admin = new AppUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    FirstName = "Nguyên",
+                    LastName = "Hoàng",
+                    CreatedDate = DateOnly.FromDateTime(DateTime.Today).ToString(),
+                    EmailConfirmed = true,
+                };
+
                 var createdAdmin = await userManager.CreateAsync(admin, adminPassword);
                 if (createdAdmin.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(admin, Consts.DEFAULT_ADMIN_ROLE);
+                    var result = await userManager.AddToRolesAsync(admin, roleNames);
+                    if(!result.Succeeded)
+                    {
+                        return;
+                    }
                 }
                 else
                 {

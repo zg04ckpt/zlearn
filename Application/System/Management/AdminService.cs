@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Application.Common;
+using Data;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
 using ViewModels.Common;
+using ViewModels.Features.Learn.Test.Question;
 using ViewModels.System.Manage;
 
 namespace Application.System.Manage
@@ -17,12 +19,16 @@ namespace Application.System.Manage
     {
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IFileService _fileService;
 
-        public AdminService(AppDbContext context, UserManager<AppUser> userManager)
+        public AdminService(AppDbContext context, UserManager<AppUser> userManager, IFileService fileService)
         {
             _context = context;
             _userManager = userManager;
+            _fileService = fileService;
         }
+
+        #region manage users
 
         public async Task AssignRole(string userId, RoleAssignRequest request)
         {
@@ -412,5 +418,104 @@ namespace Application.System.Manage
                 Data = userModels
             };
         }
+
+
+        #endregion
+
+        #region manage tests
+        public async Task<PagingResponse<TestManagementModel>> GetTests(PagingRequest request)
+        {
+            var tests = await _context.Tests.ToListAsync();
+            return new PagingResponse<TestManagementModel>
+            {
+                Total = tests.Count,
+                Data = tests
+                .Skip(request.PageSize * (request.PageIndex - 1))
+                .Take(request.PageSize)
+                .Select(x => new TestManagementModel
+                {
+                    Id = x.Id.ToString(),
+                    Name = x.Name,
+                    ImageUrl = _fileService.GetFileUrl(x.ImageUrl),
+                    UpdatedDate = x.UpdatedDate,
+                    CreatedDate = x.CreatedDate,
+                    Description = x.Description,
+                    Source = x.Source,
+                    Duration = x.Duration,
+                    AuthorName = x.AuthorName,
+                    NumberOfAttempts = x.NumberOfAttempts,
+                    NumberOfQuestions = x.NumberOfQuestions,
+                    IsPrivate = x.IsPrivate,
+                    AuthorId = x.AuthorId.ToString(),
+                }).ToList()
+            };
+        }
+
+        public async Task<PagingResponse<TestManagementModel>> GetTestsByUserId(string userId, PagingRequest request)
+        {
+            var tests = await _context.Tests
+                .Where(x => x.AuthorId.ToString() == userId)
+                .ToListAsync();
+            return new PagingResponse<TestManagementModel>
+            {
+                Total = tests.Count,
+                Data = tests
+                .Skip(request.PageSize * (request.PageIndex - 1))
+                .Take(request.PageSize)
+                .Select(x => new TestManagementModel
+                {
+                    Id = x.Id.ToString(),
+                    Name = x.Name,
+                    ImageUrl = _fileService.GetFileUrl(x.ImageUrl),
+                    UpdatedDate = x.UpdatedDate,
+                    CreatedDate = x.CreatedDate,
+                    Description = x.Description,
+                    Source = x.Source,
+                    Duration = x.Duration,
+                    AuthorName = x.AuthorName,
+                    NumberOfAttempts = x.NumberOfAttempts,
+                    NumberOfQuestions = x.NumberOfQuestions,
+                    IsPrivate = x.IsPrivate,
+                    AuthorId = x.AuthorId.ToString(),
+                }).ToList()
+            };
+        }
+
+        public async Task<List<QuestionUpdateContent>> GetQuestions(string testId)
+        {
+            return await _context.Questions
+                .Where(x => x.TestId.ToString() == testId)
+                .Select(x => new QuestionUpdateContent
+                {
+                    Id = x.Id.ToString(),
+                    Content = x.Content,
+                    AnswerA = x.AnswerA,
+                    AnswerB = x.AnswerB,
+                    AnswerC = x.AnswerC,
+                    AnswerD = x.AnswerD,
+                    CorrectAnswer = x.CorrectAnswer
+                })
+                .ToListAsync();
+        }
+
+        public async Task UpdateTest(TestManagementModel request)
+        {
+            var oldTest = await _context.Tests.FindAsync(Guid.Parse(request.Id))
+                ?? throw new BadRequestException("Không tìm thấy test");
+            oldTest.Name = request.Name;
+            oldTest.Description = request.Description;
+
+        }
+
+        public Task UpdateQuestions(string testId, QuestionUpdateRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteTest(string testId)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }
