@@ -1,10 +1,10 @@
-﻿using Data.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Data.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using Microsoft.AspNetCore.Identity;
 using Data.Configs;
+using Data.Entities;
 
 namespace Data
 {

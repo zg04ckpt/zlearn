@@ -6,7 +6,8 @@ export class UserMapper extends Mapper<UserDTO, User> {
     override map(param: UserDTO): User {
         return {
             id: param.id,
-            userName: param.userName,
+            userName: param.username,
+            fullName: param.fullName,
             roles: param.roles
         }
     }

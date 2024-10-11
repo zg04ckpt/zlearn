@@ -1,5 +1,5 @@
 ﻿
-using Data.Enums;
+using Data.Entities.Enums;
 using System;
 
 namespace ViewModels.System.Users

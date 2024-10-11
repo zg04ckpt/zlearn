@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Data.Entities;
 using Application.Common;
 using Utilities.Exceptions;
 using ViewModels.Features.Learn.Test;
@@ -12,6 +11,7 @@ using ViewModels.Features.Learn.Test.Question;
 using ViewModels.Common;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Data.Entities;
 
 namespace Application.Features.Learn
 {

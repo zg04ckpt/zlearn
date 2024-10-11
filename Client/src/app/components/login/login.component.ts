@@ -87,15 +87,12 @@ export class LoginComponent {
       remember: this.form.controls.remember.value
     }).subscribe({
       next: res => {
+        debugger
         this.componentService.$showLoadingStatus.next(false);
         this.componentService.$showLoginDialog.next(false);
-        this.componentService.$showToast.next(`Xin chào ${res.userName}!`);
+        this.componentService.$showToast.next(`Xin chào ${res.fullName || res.userName}!`);
         this.userService.$currentUser.next(res);
         this.authService.setLoginSessionTimer();
-      },
-      error: res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.componentService.displayMessage(`${res.error.message}`)
       }
     });
   }

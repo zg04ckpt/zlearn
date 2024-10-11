@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿
+using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

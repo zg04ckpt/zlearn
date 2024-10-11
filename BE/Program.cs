@@ -28,7 +28,7 @@ using BE.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
 
-// Add services to the container.
+// AddRole services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(

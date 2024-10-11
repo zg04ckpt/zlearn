@@ -1,33 +1,33 @@
-﻿using Application.Common;
+﻿
 using AspNetCoreRateLimit;
 using Data.Entities;
 using Data;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
-using System.IO;
-using Microsoft.Extensions.Hosting;
 using Utilities;
 using Application.System.Users;
 using Application.System.Roles;
-using Application.System.Auth;
 using Application.System.Manage;
 using Application.Features.Learn;
-using System.Web.Http.Results;
+using Core.Interfaces.IServices.Management;
+using Core.Services.Management;
+using Core.Interfaces.IRepositories;
+using Core.Repositories;
+using API.Middlewares;
+using Core.Interfaces.IServices.System;
+using Core.Services.System;
+using Core.Interfaces.IServices.Common;
+using Core.Services.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
 
-// Add services to the container.
+// AddRole services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(
@@ -41,13 +41,21 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddDefaultTokenProviders();
 
 
-builder.Services.AddScoped<ITestService, TestService>();
-builder.Services.AddScoped<IFileService, FileService>();
-builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ITestService, TestService>();
+builder.Services.AddSingleton<Application.Common.IFileService, Application.Common.FileService>();
+builder.Services.AddTransient<Application.System.Users.IUserService, UserService>();
 builder.Services.AddTransient<IAdminService, AdminService>();
-builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddTransient<IEmailSender, EmailSender>();
+//builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddSingleton<Application.Common.IEmailSender, Application.Common.EmailSender>();
 builder.Services.AddTransient<IRoleService, RoleService>();
+
+builder.Services.AddTransient<IRoleManagementService, RoleManagementService>();
+builder.Services.AddTransient<IUserManagementService, UserManagementService>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<IFileService, FileService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
@@ -103,7 +111,7 @@ builder.Services.AddAuthentication(options =>
         {
             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
             {
-                //context.Response.Headers.Add("Token-Expired", "true");
+                //context.Response.Headers.AddRole("Token-Expired", "true");
                 context.Request.HttpContext.User = null;
             }
             return Task.CompletedTask;
@@ -149,6 +157,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BE v1"));
 }
+
+app.UseMiddleware<HandleExceptionMiddleware>();
 
 app.UseCors("AllowSpecificOrigin");
 //app.UseClientRateLimiting();

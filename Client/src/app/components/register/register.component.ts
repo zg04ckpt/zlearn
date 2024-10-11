@@ -31,6 +31,8 @@ export class RegisterComponent {
   showEmailError: boolean = false;
   userNameRegex: string = "^[a-zA-Z0-9]+$";
   passwordRegex: string = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.@!#*]).+$";
+  
+  showErrorBorder: boolean = false;
 
   constructor(
     private componentService: ComponentService,
@@ -43,7 +45,7 @@ export class RegisterComponent {
         [
           Validators.required,
           Validators.minLength(2),
-          Validators.maxLength(8),
+          Validators.maxLength(16),
           Validators.pattern(this.userNameRegex)
         ]
       ),
@@ -81,7 +83,7 @@ export class RegisterComponent {
       return "Tên người dùng không thể bỏ trống";
 
     if(userNameProp.errors['maxlength'] || userNameProp.errors['minlength'])
-      return "Độ dài phải từ 2 đến 8 kí tự";
+      return "Độ dài phải từ 2 đến 16 kí tự";
 
     if(userNameProp.errors['pattern'].requiredPattern === this.userNameRegex)
       return "Tên người dùng không chứa kí tự đặc biệt (kể cả có dấu)";
@@ -131,25 +133,17 @@ export class RegisterComponent {
   }
 
   register() {
-    this.componentService.$showLoadingStatus.next(true);
     this.authService.register({
       userName: this.form.controls.userName.value,
       email: this.form.controls.email.value,
       password: this.form.controls.password.value,
       confirmPassword: this.form.controls.confirmPassword.value
     }).subscribe({
-
       next: res => {
         this.componentService.$showLoadingStatus.next(false);
         this.componentService.$showRegisterDialog.next(false);
         this.componentService.displayMessage("Đăng kí thành công! Để đăng nhập, vui lòng kiểm tra email để nhận link xác thực");
-      },
-
-      error: res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.componentService.displayMessage(res.error.message || res.statusText);
       }
-
     });
   }
 

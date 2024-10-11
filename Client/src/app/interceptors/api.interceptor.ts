@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ComponentService } from '../services/component.service';
 import { AuthService } from '../services/auth.service';
 import { StorageKey, StorageService } from '../services/storage.service';
+import { APIError } from '../dtos/common/api-result.dto';
 
 export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   if(!req.url.includes('images')) {
@@ -17,23 +18,26 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   const commonService = inject(ComponentService);
   const authService = inject(AuthService);
   const storageService = inject(StorageService);
+  const componentService = inject(ComponentService);
 
   commonService.$show503.next(false);
   commonService.$show403.next(false);
   commonService.$show404.next(false);
-  return next(req).pipe(catchError(err => {
+  return next(req).pipe(catchError(res => {
+    componentService.$showLoadingStatus.next(false);
     //api not response
-    if(err.status == 0) {
+    if(res.status == 0) {
       commonService.$show503.next(true);
+      componentService.closeAllComponent();
       return EMPTY;
     }
     //forbidden
-    if(err.status == 403) {
+    if(res.status == 403) {
       commonService.$show403.next(true);
       return EMPTY;
     }
     //unauthorized
-    if(err.status === 401) {
+    if(res.status === 401) {
       //if user is null, login to continue
       const userData = storageService.get(StorageKey.user);
       if(userData == null) {
@@ -41,7 +45,6 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
         return EMPTY;
       } 
       else { //if user isn't null, try refresh access token
-        commonService.$showToast.next("Try refresh token");
         return authService.refreshToken().pipe(
 
           switchMap(res => {
@@ -58,13 +61,15 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
             //error => login or redirect to home
             debugger;
             authService.showEndLoginSessionMessage();
+            componentService.$showLoadingStatus.next(false);
             return EMPTY;
           })
         );
       }
     }
     //other
-    commonService.displayAPIError(err);
+    debugger
+    commonService.displayAPIError(res.error);
     return EMPTY;
   }));
 };

@@ -11,7 +11,7 @@ using ViewModels.System.Manage;
 
 namespace BE.Controllers
 {
-    [Route("api/managements")]
+    [Route("api/V1/managements")]
     [ApiController]
     [Authorize(RoleName.Admin)]
     public class ManagementsController : BaseController

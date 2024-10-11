@@ -97,3 +97,11 @@ D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.d
 D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
 D:\Code\Web\zg04web\API\obj\Debug\net6.0\API.RazorAssemblyInfo.cache
 D:\Code\Web\zg04web\API\obj\Debug\net6.0\API.RazorAssemblyInfo.cs
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Serilog.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\AutoMapper.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\EntityFramework.SqlServer.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\EntityFramework.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.AspNet.Identity.Core.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Core.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Core.pdb

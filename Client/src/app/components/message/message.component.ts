@@ -12,6 +12,7 @@ export class MessageComponent {
   show: boolean = false;
   module: MessageModule = {
     message: "",
+    isInfo: true,
     buttons: []
   };
 
@@ -25,6 +26,7 @@ export class MessageComponent {
 
 export interface MessageModule {
   message: string;
+  isInfo: boolean;
   buttons: {
     name: string,
     action: () => void

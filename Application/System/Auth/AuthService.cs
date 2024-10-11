@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
 using Utilities;
-using Data.Entities;
 using Application.Common;
 using Data;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +16,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text.RegularExpressions;
 using ViewModels.System.Auth;
+using Data.Entities;
 
 namespace Application.System.Auth
 {

@@ -43,10 +43,8 @@ export class HeaderComponent {
         debugger;
         this.componentService.$showToast.next("Đã đăng xuất");
         this.authService.purgeAuth();
+        this.componentService.$showLoadingStatus.next(false);
         this.router.navigateByUrl("");
-      },
-      error: res => {
-        // this.componentService.displayMessage(res.error?.message || res.statusText);
       }
     });
   }

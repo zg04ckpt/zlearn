@@ -5,8 +5,7 @@ export interface UserManagement
     address: string;
     gender: number;
     dateOfBirth: string;
-    refreshToken: string;
-    refreshTokenExpiryTime: string;
+    createdDate: string;
     description: string;
     userLinks: string;
     id: string;
