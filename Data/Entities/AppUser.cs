@@ -1,4 +1,5 @@
-﻿using Data.Enums;
+﻿
+using Data.Entities.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Data.Entities
         public string DateOfBirth { get; set; }
         public string CreatedDate { get; set; }
         public string RefreshToken { get; set; }
+        public string ImageUrl { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
 
         #region full information

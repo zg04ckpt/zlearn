@@ -62,8 +62,8 @@
                         <div class="mb-3">
                             <label class="form-label">Chế độ riêng tư</label>
                             <select [(ngModel)]="data.isPrivate" class="form-select" name="5">
-                                <option [value]="true">Riêng tư(Chỉ mình tôi)</option>
-                                <option [value]="false">Công khai</option>
+                                <option [ngValue]="true">Riêng tư(Chỉ mình tôi)</option>
+                                <option [ngValue]="false">Công khai</option>
                             </select>
                         </div>
                       </form>

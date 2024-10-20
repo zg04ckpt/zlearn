@@ -1,12 +1,11 @@
 ﻿using API.Authorization;
-using Application.Features.Learn;
 using BE.Controllers;
+using Core.Common;
+using Core.DTOs;
+using Core.Interfaces.IServices.Features;
 using Microsoft.AspNetCore.Mvc;
-using Utilities;
-using ViewModels.Common;
-using ViewModels.Features.Learn.Test;
 
-namespace ZG04.BE.Controllers
+namespace API.Controllers
 {
     [Route("api/tests")]
     [ApiController]
@@ -21,93 +20,81 @@ namespace ZG04.BE.Controllers
 
 
         [HttpPost]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
-        public async Task<IActionResult> Create([FromForm] CreateTestRequest request)
+        [Authorize(Consts.USER_ROLE)]
+        public async Task<IActionResult> Create([FromBody] CreateTestDTO dto)
         {
-            try
-            {
-                await _testService.Create(request, User);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.CreateTest(User, dto));
         }
 
 
         [HttpDelete("{testId}")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.USER_ROLE)]
         public async Task<IActionResult> Delete(string testId)
         {
-            try
-            {
-                await _testService.Delete(testId, GetUserIdFromClaimPrincipal());
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.DeleteTest(User, testId));
         }
 
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAll([FromQuery] PagingRequest request)
+        public async Task<IActionResult> GetAll(int pageIndex, int pageSize, [FromQuery] TestSearchDTO dto)
         {
-            try
+            List<ExpressionFilter> filters = new();
+            var properties = typeof(TestSearchDTO).GetProperties();
+            foreach (var property in properties)
             {
-                return Ok(await _testService.GetAll(request));
+                var value = property.GetValue(dto);
+                if(value != null)
+                {
+                    filters.Add(new ExpressionFilter
+                    {
+                        Property = property.Name,
+                        Value = value,
+                        Comparison = Comparison.Contains
+                    });
+                }
             }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+
+            return Ok(await _testService.GetTestsAsListItems(pageIndex, pageSize, filters));
         }
 
         [HttpGet("my-tests")]
         [Authorize]
         public async Task<IActionResult> GetAllMyTests()
         {
-            try
-            {
-                return Ok(await _testService.GetTestsByUserId(GetUserIdFromClaimPrincipal()));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.GetTestInfosOfUser(User));
         }
 
 
         [HttpGet("results")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
-        public async Task<IActionResult> GetAllResults([FromQuery] PagingRequest request)
+        [Authorize(Consts.USER_ROLE)]
+        public async Task<IActionResult> GetAllResults(int pageIndex, int pageSize, [FromQuery] TestResultSearchDTO dto)
         {
-            try
+            List<ExpressionFilter> filters = new List<ExpressionFilter>();
+            var properties = typeof(TestSearchDTO).GetProperties();
+            foreach (var property in properties)
             {
-                return Ok(await _testService.GetAllResults(GetUserIdFromClaimPrincipal(), request));
+                var value = property.GetValue(dto);
+                if (value != null)
+                {
+                    filters.Add(new ExpressionFilter
+                    {
+                        Property = property.Name,
+                        Value = value,
+                        Comparison = Comparison.Contains
+                    });
+                }
             }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+
+            return Ok(await _testService.GetAllResults(pageSize, pageIndex, filters));
         }
 
 
         [HttpGet("my-results")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.USER_ROLE)]
         public async Task<IActionResult> GetResultsByUserId()
         {
-            try
-            {
-                return Ok(await _testService.GetResultsByUserId(GetUserIdFromClaimPrincipal()));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.GetTestResultsOfUser(User));
         }
 
 
@@ -115,156 +102,71 @@ namespace ZG04.BE.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetTestContent(string id)
         {
-            try
-            {
-                return Ok(await _testService.GetTestContentById(User, id));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.GetTestContent(User, id));
         }
 
 
         [HttpGet("{id}/detail")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetTestDetail(string id)
+        public async Task<IActionResult> GetTestInfo(string id)
         {
-            try
-            {
-                return Ok(await _testService.GetDetailById(id));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.GetTestInfo(id));
         }
 
 
         [HttpPost("mark-test")]
         [AllowAnonymous]
-        public async Task<IActionResult> MarkTest([FromBody]MarkTestRequest request)
+        public async Task<IActionResult> MarkTest([FromBody]MarkTestDTO dto)
         {
-            try
-            {
-                return Ok(await _testService.MarkTest(
-                    request, 
-                    HttpContext.Connection.RemoteIpAddress?.ToString(),
-                    User));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
-
-
-        [HttpDelete("results")]
-        public async Task<IActionResult> RemoveAllResults()
-        {
-            try
-            {
-                await _testService.RemoveAllResults();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.MarkTest(User, dto, HttpContext.Connection.RemoteIpAddress!.ToString()));
         }
 
 
         [HttpPut("{testId}")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
-        public async Task<IActionResult> Update(string testId, [FromForm] TestUpdateRequest request)
+        [Authorize(Consts.USER_ROLE)]
+        public async Task<IActionResult> Update(string testId, [FromBody] UpdateTestDTO dto)
         {
-            try
-            {
-                await _testService.Update(GetUserIdFromClaimPrincipal(), testId, request);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.UpdateTest(User, testId, dto));
         }
 
 
         [HttpGet("{testId}/update-content")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.USER_ROLE)]
         public async Task<IActionResult> GetUpdateContent(string testId)
         {
-            try
-            {
-                return Ok(
-                    await _testService.GetTestUpdateContent(GetUserIdFromClaimPrincipal(), testId));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.GetTestUpdateContent(User, testId));
         }
 
 
         [HttpPost("save")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.USER_ROLE)]
         public async Task<IActionResult> SaveTest([FromQuery] string testId)
         {
-            try
-            {
-                await _testService.SaveTest(GetUserIdFromClaimPrincipal(), testId);
-                return Ok();
-            }
-            catch(Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.SaveTest(User, testId));
         }
 
 
         [HttpGet("save")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.USER_ROLE)]
         public async Task<IActionResult> GetSavedTest()
         {
-            try
-            {
-                return Ok(await _testService.GetSavedTestsByUserId(GetUserIdFromClaimPrincipal()));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.GetSavedTestsOfUser(User));
         }
 
 
         [HttpGet("save/isSaved")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.USER_ROLE)]
         public async Task<IActionResult> IsSaved([FromQuery] string testId)
         {
-            try
-            {
-                return Ok(await _testService.IsSaved(GetUserIdFromClaimPrincipal(), testId));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.IsSaved(User, testId));
         }
 
 
         [HttpDelete("save")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.USER_ROLE)]
         public async Task<IActionResult> RemoveSavedTest([FromQuery]string testId)
         {
-            try
-            {
-                await _testService.DeleteFromSaved(GetUserIdFromClaimPrincipal(), testId);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _testService.DeleteFromSaved(User, testId));
         }
     }
 }

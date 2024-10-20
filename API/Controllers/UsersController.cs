@@ -1,8 +1,8 @@
 ﻿using API.Authorization;
-using Application.System.Users;
+using Core.Common;
+using Core.DTOs;
+using Core.Interfaces.IServices.System;
 using Microsoft.AspNetCore.Mvc;
-using Utilities;
-using ViewModels.System.Users;
 
 namespace BE.Controllers
 {
@@ -19,32 +19,17 @@ namespace BE.Controllers
         }
 
         [HttpPut("{id}/profile")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
-        public async Task<IActionResult> UpdateUserDetail(string id, [FromBody] UserDetailModel request)
+        [Authorize(Consts.USER_ROLE)]
+        public async Task<IActionResult> UpdateUserDetail(string id, [FromBody] UserProfileDTO dto)
         {
-            try
-            {
-                await _userService.UpdateUserDetail(id, request);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _userService.UpdateProfile(id, dto));
         }
 
         [HttpGet("{id}/profile")]
-        [Authorize(Consts.DEFAULT_USER_ROLE)]
+        [Authorize(Consts.USER_ROLE)]
         public async Task<IActionResult> GetUserDetail(string id)
         {
-            try
-            {
-                return Ok(await _userService.GetUserDetail(id));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _userService.GetProfile(id));
         }
     }
 }

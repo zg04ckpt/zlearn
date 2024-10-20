@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
 using System.Security.Claims;
-using System.Web.Http.Results;
 using Utilities.Exceptions;
-using ViewModels.Common;
 
 namespace BE.Controllers
 {

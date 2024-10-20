@@ -1,37 +1,34 @@
-﻿using Application.Common;
+﻿
+using API.Middlewares;
 using AspNetCoreRateLimit;
-using Data.Entities;
+using Core.Common;
+using Core.Interfaces.IRepositories;
+using Core.Interfaces.IServices.Common;
+using Core.Interfaces.IServices.Features;
+using Core.Interfaces.IServices.Management;
+using Core.Interfaces.IServices.System;
+using Core.Repositories;
+using Core.Services.Common;
+using Core.Services.Features;
+using Core.Services.Management;
+using Core.Services.System;
 using Data;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.OpenApi.Models;
+using Data.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using System.IO;
-using Microsoft.Extensions.Hosting;
-using Utilities;
-using Application.System.Users;
-using Application.System.Roles;
-using Application.System.Auth;
-using Application.System.Manage;
-using Application.Features.Learn;
-using System.Web.Http.Results;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var Configuration = builder.Configuration;
+var configuration = builder.Configuration;
 
-// Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(
-        Configuration.GetConnectionString(Consts.CONNECTION_STRING),
+        configuration.GetConnectionString("DefaultConnection"),
         options => options.EnableRetryOnFailure());
     options.EnableDetailedErrors();
 });
@@ -41,13 +38,17 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddDefaultTokenProviders();
 
 
-builder.Services.AddScoped<ITestService, TestService>();
-builder.Services.AddScoped<IFileService, FileService>();
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IAdminService, AdminService>();
+builder.Services.AddTransient<IRoleManagementService, RoleManagementService>();
+builder.Services.AddTransient<IUserManagementService, UserManagementService>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ITestRepository, TestRepository>();
 builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddTransient<IEmailSender, EmailSender>();
-builder.Services.AddTransient<IRoleService, RoleService>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<IFileService, FileService>();
+builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.AddTransient<ITestService, TestService>();
+builder.Services.AddTransient<IUserService, UserService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
@@ -90,9 +91,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = Configuration[Consts.AppSettingsKey.ISSUER],
-        ValidAudience = Configuration[Consts.AppSettingsKey.AUDIENCE],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY))),
+        ValidIssuer = configuration.GetSection(Consts.JWT_SECTION)["Issuer"],
+        ValidAudience = configuration.GetSection(Consts.JWT_SECTION)["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(Consts.SECRET_KEY))),
         ClockSkew = TimeSpan.Zero
     };
 
@@ -103,17 +104,12 @@ builder.Services.AddAuthentication(options =>
         {
             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
             {
-                //context.Response.Headers.Add("Token-Expired", "true");
+                //context.Response.Headers.AddRole("Token-Expired", "true");
                 context.Request.HttpContext.User = null;
             }
             return Task.CompletedTask;
         }
     };
-});
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole(Consts.DEFAULT_ADMIN_ROLE));
 });
 
 //cấu hình cors
@@ -137,8 +133,8 @@ builder.Services.AddCors(options =>
 
 //cấu hình giới hạn truy cập
 builder.Services.AddMemoryCache();
-builder.Services.Configure<ClientRateLimitOptions>(Configuration.GetSection("ClientRateLimiting"));
-builder.Services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
+builder.Services.Configure<ClientRateLimitOptions>(configuration.GetSection("ClientRateLimiting"));
+builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
 
 
 var app = builder.Build();
@@ -150,16 +146,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BE v1"));
 }
 
-app.UseCors("AllowSpecificOrigin");
+app.UseMiddleware<HandleExceptionMiddleware>();
+
+app.UseCors("AllowAll");
 //app.UseClientRateLimiting();
 //app.UseIpRateLimiting();
 
-string path = Path.Combine(Directory.GetCurrentDirectory(), FileService.FOLDER_NAME);
+string path = Path.Combine(Directory.GetCurrentDirectory(), FileService.IMAGE_FOLDER_NAME);
 
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(path),
-    RequestPath = FileService.REQUEST_PATH
+    RequestPath = FileService.IMAGE_PATH
 });
 
 app.UseAuthentication();

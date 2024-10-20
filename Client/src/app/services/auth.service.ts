@@ -13,6 +13,7 @@ import { UserService } from "./user.service";
 import { ComponentService } from "./component.service";
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
+import { APIResult } from "../dtos/common/api-result.dto";
 
 @Injectable({
     providedIn: 'root'
@@ -31,27 +32,34 @@ export class AuthService {
         this.purgeAuth();
         const userMapper = new UserMapper;
         return this.http
-            .post<UserDTO>(`auth/login`, data)
+            .post<APIResult<UserDTO>>(`auth/login`, data)
             .pipe(
                 tap(res => {
-                    this.storageService.save(StorageKey.accessToken, res.accessToken);
-                    this.storageService.save(StorageKey.refreshToken, res.refreshToken);
-                    this.storageService.save(StorageKey.expirationTime, res.expirationTime);
-                    this.storageService.save(StorageKey.user, JSON.stringify(userMapper.map(res)));
+                    debugger
+                    this.storageService.save(StorageKey.accessToken, res.data!.accessToken);
+                    this.storageService.save(StorageKey.refreshToken, res.data!.refreshToken);
+                    this.storageService.save(StorageKey.expirationTime, res.data!.expirationTime);
+                    this.storageService.save(StorageKey.user, JSON.stringify(userMapper.map(res.data!)));
                     return res;
                 }),
-                map(userMapper.map)
+                map(res => {
+                    return userMapper.map(res.data!);
+                })
             );
     }
 
     register(data: RegisterDTO): Observable<void> {
         this.purgeAuth();
-        return this.http.post<void>(`auth/register`, data);
+        return this.http
+            .post<APIResult<void>>(`auth/register`, data)
+            .pipe(map(res => res.data!));
     }
 
     logout(): Observable<void> {
         this.purgeAuth();
-        return this.http.post<void>(`auth/logout`, null);
+        return this.http
+            .post<APIResult<void>>(`auth/logout`, null)
+            .pipe(map(res => res.data!));;
     }
 
     refreshToken(): Observable<TokenDTO> {
@@ -59,13 +67,17 @@ export class AuthService {
         const refToken = this.storageService.get(StorageKey.refreshToken);
 
         return this.http
-        .post<TokenDTO>(`auth/refresh-token`, {
+        .post<APIResult<TokenDTO>>(`auth/refresh-token`, {
             accessToken: accToken,
             refreshToken: refToken
         })
-        .pipe(tap(res => {
+        .pipe(
+            map(res => res.data!),
+            tap(res => {
+            debugger
             this.storageService.save(StorageKey.accessToken, res.accessToken);
             this.storageService.save(StorageKey.refreshToken, res.refreshToken);
+            this.componentService.$showLoadingStatus.next(false);
         }));
     }
 

@@ -1,13 +1,15 @@
 ﻿using API.Authorization;
-using Application.System.Auth;
+using Core.Common;
+using Core.DTOs;
+using Core.Interfaces.IServices.System;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.System.Auth;
 
-namespace BE.Controllers
+namespace API.Controllers
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthController : BaseController
+    [AllowAnonymous]
+    public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
 
@@ -17,76 +19,33 @@ namespace BE.Controllers
         }
 
         [HttpPost("login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginDTO dto)
         {
-            try
-            {
-                return Ok(await _authService.Login(request));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _authService.Login(dto));
         }
 
         [HttpPost("register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
         {
-            try
-            {
-                await _authService.Register(request, Request.Headers.Origin.ToString());
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _authService.Register(dto, Request.Headers.Origin.ToString()));
         }
 
         [HttpGet("email-confirm")]
-        [AllowAnonymous]
         public async Task<IActionResult> ValidateEmail([FromQuery] string id, [FromQuery] string token)
         {
-            try
-            {
-                await _authService.EmailValidate(id, token);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _authService.ValidateEmail(id, token));
         }
 
         [HttpPost("logout")]
-        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
-            try
-            {
-                await _authService.Logout();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _authService.Logout());
         }
 
         [HttpPost("refresh-token")]
-        [AllowAnonymous]
-        public async Task<IActionResult> RefreshToken([FromBody] Token token)
+        public async Task<IActionResult> RefreshToken([FromBody] TokenDTO token)
         {
-            try
-            {
-                return Ok(await _authService.RefreshToken(token));
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            return Ok(await _authService.RefreshToken(token));
         }
     }
 }

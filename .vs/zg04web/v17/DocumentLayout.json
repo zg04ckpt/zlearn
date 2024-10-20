@@ -3,83 +3,28 @@
   "WorkspaceRootPath": "D:\\Code\\Web\\zg04web\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\system\\manage\\testmanagementmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\system\\manage\\testmanagementmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\system\\management\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\system\\management\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\system\\management\\iadminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\system\\management\\iadminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\system\\manage\\usermanagementmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\system\\manage\\usermanagementmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\features\\learn\\test\\question\\questionupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\features\\learn\\test\\question\\questionupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\system\\auth\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\system\\auth\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|d:\\code\\web\\zg04web\\viewmodels\\features\\learn\\test\\question\\questionupdatecontent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A5E11AFA-C73E-4483-8D22-1371F16989B8}|ViewModels\\ViewModels.csproj|solutionrelative:viewmodels\\features\\learn\\test\\question\\questionupdatecontent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E5DAA483-E71D-48F4-9196-29A89C63DDA0}|Data\\Data.csproj|d:\\code\\web\\zg04web\\data\\entities\\test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E5DAA483-E71D-48F4-9196-29A89C63DDA0}|Data\\Data.csproj|solutionrelative:data\\entities\\test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\authorization\\authorizeattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\authorization\\authorizeattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|d:\\code\\web\\zg04web\\application\\features\\learn\\itestservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD90D8B6-9FDD-4CFB-AEE6-075CD8DD18AC}|Application\\Application.csproj|solutionrelative:application\\features\\learn\\itestservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\controllers\\testscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\controllers\\testscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\controllers\\managementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\controllers\\managementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|d:\\code\\web\\zg04web\\be\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{77230E4B-F8A9-4118-86AC-E5396AB2DB6D}|BE\\BE.csproj|solutionrelative:be\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E5DAA483-E71D-48F4-9196-29A89C63DDA0}|Data\\Data.csproj|d:\\code\\web\\zg04web\\data\\entities\\testresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E5DAA483-E71D-48F4-9196-29A89C63DDA0}|Data\\Data.csproj|solutionrelative:data\\entities\\testresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zlearn/True/SqlTable/dbo.TestResults.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -88,8 +33,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "DockedWidth": 224,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -105,246 +50,86 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TestManagementModel.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\System\\Manage\\TestManagementModel.cs",
-              "RelativeDocumentMoniker": "ViewModels\\System\\Manage\\TestManagementModel.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\ViewModels\\System\\Manage\\TestManagementModel.cs",
-              "RelativeToolTip": "ViewModels\\System\\Manage\\TestManagementModel.cs",
-              "ViewState": "AQIAAA4AAAAAAAAAAAA3wAoAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-12T12:55:19.429Z",
+              "DocumentIndex": 3,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "API\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Properties\\launchSettings.json",
+              "RelativeToolTip": "API\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABIAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-20T02:36:36.587Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "UserManagementModel.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\System\\Manage\\UserManagementModel.cs",
-              "RelativeDocumentMoniker": "ViewModels\\System\\Manage\\UserManagementModel.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\ViewModels\\System\\Manage\\UserManagementModel.cs",
-              "RelativeToolTip": "ViewModels\\System\\Manage\\UserManagementModel.cs",
-              "ViewState": "AQIAABMAAAAAAAAAAAA/wCEAAAAvAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-12T13:23:58.507Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "QuestionUpdateRequest.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\Question\\QuestionUpdateRequest.cs",
-              "RelativeDocumentMoniker": "ViewModels\\Features\\Learn\\Test\\Question\\QuestionUpdateRequest.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\Question\\QuestionUpdateRequest.cs",
-              "RelativeToolTip": "ViewModels\\Features\\Learn\\Test\\Question\\QuestionUpdateRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-12T13:17:57.503Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "IAdminService.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\System\\Management\\IAdminService.cs",
-              "RelativeDocumentMoniker": "Application\\System\\Management\\IAdminService.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\System\\Management\\IAdminService.cs",
-              "RelativeToolTip": "Application\\System\\Management\\IAdminService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwCAAAAAYAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-12T12:48:34.594Z"
+              "Title": "appsettings.Production.json",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\appsettings.Production.json",
+              "RelativeDocumentMoniker": "API\\appsettings.Production.json",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\appsettings.Production.json",
+              "RelativeToolTip": "API\\appsettings.Production.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-20T02:36:30.688Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AdminService.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\System\\Management\\AdminService.cs",
-              "RelativeDocumentMoniker": "Application\\System\\Management\\AdminService.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\System\\Management\\AdminService.cs",
-              "RelativeToolTip": "Application\\System\\Management\\AdminService.cs",
-              "ViewState": "AQIAALABAAAAAAAAAAAqwPgBAAAoAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-10T23:58:38.83Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "QuestionUpdateContent.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\Question\\QuestionUpdateContent.cs",
-              "RelativeDocumentMoniker": "ViewModels\\Features\\Learn\\Test\\Question\\QuestionUpdateContent.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\ViewModels\\Features\\Learn\\Test\\Question\\QuestionUpdateContent.cs",
-              "RelativeToolTip": "ViewModels\\Features\\Learn\\Test\\Question\\QuestionUpdateContent.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAArAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-12T13:10:10.092Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "ITestService.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\Features\\Learn\\ITestService.cs",
-              "RelativeDocumentMoniker": "Application\\Features\\Learn\\ITestService.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\Features\\Learn\\ITestService.cs",
-              "RelativeToolTip": "Application\\Features\\Learn\\ITestService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-11T01:25:40.256Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "AuthorizeAttribute.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Authorization\\AuthorizeAttribute.cs",
-              "RelativeDocumentMoniker": "API\\Authorization\\AuthorizeAttribute.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Authorization\\AuthorizeAttribute.cs",
-              "RelativeToolTip": "API\\Authorization\\AuthorizeAttribute.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABkAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-10T22:57:21.739Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Application\\System\\Auth\\AuthService.cs",
-              "RelativeDocumentMoniker": "Application\\System\\Auth\\AuthService.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Application\\System\\Auth\\AuthService.cs",
-              "RelativeToolTip": "Application\\System\\Auth\\AuthService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADIAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-10T23:58:41.558Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Test.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Data\\Entities\\Test.cs",
-              "RelativeDocumentMoniker": "Data\\Entities\\Test.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Data\\Entities\\Test.cs",
-              "RelativeToolTip": "Data\\Entities\\Test.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAzwBYAAAArAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-12T12:55:45.437Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "API\\Controllers\\AuthController.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "API\\Controllers\\AuthController.cs",
-              "ViewState": "AQIAAEAAAAAAAAAAAIA2wFAAAAAIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-11T00:01:51.674Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Program.cs",
               "RelativeDocumentMoniker": "API\\Program.cs",
               "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Program.cs",
               "RelativeToolTip": "API\\Program.cs",
-              "ViewState": "AQIAAFoAAAAAAAAAAAAjwGcAAAAMAAAA",
+              "ViewState": "AgIAABcAAAAAAAAAAAAowB0AAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-11T01:30:46.33Z"
+              "WhenOpened": "2024-10-20T02:34:49.386Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "API\\Controllers\\UsersController.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "API\\Controllers\\UsersController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAxAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-11T01:18:53.963Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "BaseController.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Controllers\\BaseController.cs",
-              "RelativeDocumentMoniker": "API\\Controllers\\BaseController.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Controllers\\BaseController.cs",
-              "RelativeToolTip": "API\\Controllers\\BaseController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-10T23:35:57.078Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "ManagementsController.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Controllers\\ManagementsController.cs",
-              "RelativeDocumentMoniker": "API\\Controllers\\ManagementsController.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Controllers\\ManagementsController.cs",
-              "RelativeToolTip": "API\\Controllers\\ManagementsController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-11T01:18:03.305Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "TestsController.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Controllers\\TestsController.cs",
-              "RelativeDocumentMoniker": "API\\Controllers\\TestsController.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Controllers\\TestsController.cs",
-              "RelativeToolTip": "API\\Controllers\\TestsController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEUAAAATAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-10T22:46:15.963Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 2,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\appsettings.Development.json",
               "RelativeDocumentMoniker": "API\\appsettings.Development.json",
               "ToolTip": "D:\\Code\\Web\\zg04web\\API\\appsettings.Development.json",
               "RelativeToolTip": "API\\appsettings.Development.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAYAAAA",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-09-10T23:02:23.938Z"
+              "WhenOpened": "2024-10-20T02:35:17.872Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\BE\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "BE\\appsettings.Development.json",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\BE\\appsettings.Development.json",
-              "RelativeToolTip": "BE\\appsettings.Development.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\appsettings.json",
+              "RelativeDocumentMoniker": "API\\appsettings.json",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\appsettings.json",
+              "RelativeToolTip": "API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-09-11T00:04:50.025Z"
+              "WhenOpened": "2024-10-20T02:35:15.26Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "TestResult.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Data\\Entities\\TestResult.cs",
-              "RelativeDocumentMoniker": "Data\\Entities\\TestResult.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Data\\Entities\\TestResult.cs",
-              "RelativeToolTip": "Data\\Entities\\TestResult.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAsAAAA",
+              "DocumentIndex": 5,
+              "Title": "BaseController.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Controllers\\BaseController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\BaseController.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Controllers\\BaseController.cs",
+              "RelativeToolTip": "API\\Controllers\\BaseController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-10T22:34:38.346Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "dbo.TestResults [Data]",
-              "DocumentMoniker": "ViewDataWindow_MSSQL__/ZG04_CKPT_SQLEXPRESS/zlearn/True/SqlTable/dbo.TestResults.sql",
-              "ToolTip": "dbo.TestResults [Data]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2024-09-10T22:33:45.656Z"
+              "WhenOpened": "2024-10-20T02:34:33.143Z",
+              "EditorCaption": ""
             }
           ]
         },
         {
-          "DockedWidth": 200,
+          "DockedWidth": 176,
           "SelectedChildIndex": -1,
           "Children": [
             {

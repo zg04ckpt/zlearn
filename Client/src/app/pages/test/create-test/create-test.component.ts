@@ -32,6 +32,7 @@ export class CreateTestComponent implements CanComponentDeactivate{
   data: CreateTestDTO = {
     name: "",
     image: null,
+    imageUrl: "",
     description: "",
     source: "",
     duration: 0,
@@ -47,14 +48,15 @@ export class CreateTestComponent implements CanComponentDeactivate{
   editQuestion: {
     content: string,
     image: File|null,
+    imageUrl: string,
     answerA: string,
     answerB: string,
     answerC: string|null,
     answerD: string|null,
     correctAnswer: number
   }|null = null;
-  isSuccess: boolean = false;
   destroyRef = inject(DestroyRef);
+  isCreatedTest:boolean = false;
 
   constructor(
     private componentService: ComponentService,
@@ -65,10 +67,8 @@ export class CreateTestComponent implements CanComponentDeactivate{
   ) {}
 
   canDeactivate = () => {
-    if(!this.isSuccess) {
-      return confirm("Test chưa được tạo, rời khỏi sẽ mất bản nháp, xác nhận?");
-    }
-    return true;
+    if(this.isCreatedTest) return true;
+    return confirm("Đề chưa được tạo, rời khỏi sẽ mất bản nháp, xác nhận?");
   };
 
   backToList() {
@@ -78,19 +78,19 @@ export class CreateTestComponent implements CanComponentDeactivate{
   saveTest() {
     //check valid before send
     if(this.data.name.trim() == "") {
-      this.componentService.displayMessage("Tên bài test trống!");
+      this.componentService.displayMessage("Tên bài đề trống!");
       return;
     }
     if(this.data.description.trim() == "") {
-      this.componentService.displayMessage("Mô tả test trống!");
+      this.componentService.displayMessage("Mô tả đề trống!");
       return;
     }
     if(this.data.source.trim() == "") {
-      this.componentService.displayMessage("Nguồn test trống!");
+      this.componentService.displayMessage("Nguồn đề trống!");
       return;
     }
     if(this.data.duration <= 0) {
-      this.componentService.displayMessage("Thời gian làm test không hợp lệ!");
+      this.componentService.displayMessage("Thời gian làm đề không hợp lệ!");
       return;
     }
     if(this.data.questions.length == 0) {
@@ -104,21 +104,11 @@ export class CreateTestComponent implements CanComponentDeactivate{
     if(currentUser == null) {
       this.authService.showLoginRequirement();
     } else {
-      this.componentService.displayConfirmMessage("Xác nhận tạo test mới?", () => {
-        this.testService.create(this.data)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: res => {
-            this.componentService.displayMessage("Tạo test thành công");
-            this.isSuccess = true;
-            history.back();
-          },
-  
-          error: res => {
-            this.isSuccess = false;
-            this.componentService.displayAPIError(res);
-          }
-        });
+      this.componentService.displayConfirmMessage("Xác nhận tạo mới?", async () => {
+        await this.testService.create(this.data);
+        this.componentService.$showToast.next("Tạo thành công");
+        this.isCreatedTest = true;
+        history.back();
       });
     }
   }
@@ -243,6 +233,7 @@ export class CreateTestComponent implements CanComponentDeactivate{
     this.editQuestion = {
       content: "",
       image: null,
+      imageUrl: "",
       answerA: "",
       answerB: "",
       answerC: null,
@@ -302,7 +293,8 @@ export class CreateTestComponent implements CanComponentDeactivate{
             answerC: ws[XLSX.utils.encode_cell({c: 3, r: i})]?.v,
             answerD: ws[XLSX.utils.encode_cell({c: 4, r: i})]?.v,
             correctAnswer: ws[XLSX.utils.encode_cell({c: 5, r: i})]?.v,
-            image: imageFile
+            image: imageFile,
+            imageUrl: ""
           });
 
           this.questionManager.push({ previewImageUrl: null, selected: false});

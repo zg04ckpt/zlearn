@@ -95,11 +95,14 @@ export class MyTestsComponent implements OnInit {
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(next => {
       this.list3 = next;
+      console.log(this.list3);
+      
       this.list3.sort((a, b) => {
         const d1 = new Date(a.startTime);
         const d2 = new Date(b.startTime);
         return d2.getTime() - d1.getTime();
-      })
+      });
+      this.componentService.$showLoadingStatus.next(false);
     });
   }
 

@@ -1,6 +1,7 @@
 export interface UserDTO {
     id: string;
-    userName: string;
+    username: string;
+    fullName: string;
     roles: string[];
     accessToken: string;
     refreshToken: string;

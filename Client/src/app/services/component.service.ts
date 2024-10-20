@@ -3,6 +3,7 @@ import { Subject } from "rxjs";
 import { MessageModule } from "../components/message/message.component";
 import { Route, Router } from "@angular/router";
 import { AuthService } from "./auth.service";
+import { APIError } from "../dtos/common/api-result.dto";
 
 @Injectable({
     providedIn: 'root'
@@ -21,8 +22,16 @@ export class ComponentService {
         private router: Router,
     ) { }
 
+    public closeAllComponent() {
+        this.$showLoginDialog.next(false);
+        this.$showRegisterDialog.next(false);
+        this.$showLoadingStatus.next(false);
+    }
+
     public displayMessage(msg: string) {
-        this.$showMessage.next({message: msg, buttons: []});
+        this.$showMessage.next({message: msg, isInfo: true, buttons: [
+            { name: "OK", action: () => {} }
+        ]});
     }
 
     public displayMessageWithActions(
@@ -32,7 +41,7 @@ export class ComponentService {
             action: () => void
         }[]
     ) {
-        this.$showMessage.next({message: msg, buttons: buttons});
+        this.$showMessage.next({message: msg, isInfo: true, buttons: buttons});
     }
 
     public displayConfirmMessage(msg: string, onConfirm: () => void) {
@@ -52,10 +61,27 @@ export class ComponentService {
               { name: "Không", action: onCancel },
               { name: "OK", action: onConfirm }
             ]
-          );
+        );
     }
 
-    public displayAPIError(err: any) {
-        this.displayMessage(err.error?.message || err.statusText);
+    public displayAPIError(error: any) {
+        debugger
+        this.$showMessage.next({
+            message: error.Message || Object.values(error.errors).flat().join(', ') || "Lỗi không xác định", 
+            isInfo: false, 
+            buttons: [
+                { name: "Đóng", action: () => {} }
+            ]
+        });
+    }
+
+    public displayError(
+        msg: string,
+        buttons: {
+            name: string,
+            action: () => void
+        }[]
+    ) {
+        this.$showMessage.next({message: msg, isInfo: false, buttons: buttons});
     }
 }

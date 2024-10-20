@@ -88,6 +88,9 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(2);
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -135,6 +138,20 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.Image", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Question", b =>

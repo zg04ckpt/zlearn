@@ -29,8 +29,8 @@ export class RoleComponent implements OnInit {
 
   load() {
     this.managementService.getAllRoles().subscribe({
-      next: res => this.roles = res,
-      error: res => this.componentService.displayAPIError(res)
+      next: res => this.roles = res.data!,
+      complete: () => this.componentService.$showLoadingStatus.next(false)
     });
   }
 
@@ -42,16 +42,11 @@ export class RoleComponent implements OnInit {
     this.componentService.displayConfirmMessage(
       "Xác nhận tạo quyền mới?",
       () => {
-        this.componentService.$showLoadingStatus.next(true);
         this.managementService.createRole(name, desc).subscribe({
           next: res => {
             this.componentService.displayMessage("Thêm thành công!");
             this.load();
             this.componentService.$showLoadingStatus.next(false);
-          },
-          error: res => {
-            this.componentService.$showLoadingStatus.next(false);
-            this.componentService.displayAPIError(res);
           }
         })
       }
@@ -68,10 +63,6 @@ export class RoleComponent implements OnInit {
             this.componentService.displayMessage("Xóa thành công!");
             this.load();
             this.componentService.$showLoadingStatus.next(false);
-          },
-          error: res => {
-            this.componentService.$showLoadingStatus.next(false);
-            this.componentService.displayAPIError(res);
           }
         })
       }
@@ -89,10 +80,6 @@ export class RoleComponent implements OnInit {
             this.load();
             this.componentService.$showLoadingStatus.next(false);
             this.selectedRole = null;
-          },
-          error: res => {
-            this.componentService.$showLoadingStatus.next(false);
-            this.componentService.displayAPIError(res);
           }
         })
       }

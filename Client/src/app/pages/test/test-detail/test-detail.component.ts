@@ -48,30 +48,18 @@ export class TestDetailComponent implements OnInit {
       next: res => {
         this.componentService.$showLoadingStatus.next(false);
         this.data = res;
-      },
-
-      error: res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.componentService.displayAPIError(res);
-      },
-
-      complete: () => this.componentService.$showLoadingStatus.next(false)
+      }
     });
 
     if(this.userService.getLoggedInUser() != null) {
       //check if saved
       this.testService.isSaved(this.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: res => {
+      .subscribe(res => {
           debugger
           this.isSaved = res;
-        },
-
-        error: res => {
-          this.componentService.displayAPIError(res);
-        }}
-      );
+          this.componentService.$showLoadingStatus.next(false);
+        });
     }
   }
 

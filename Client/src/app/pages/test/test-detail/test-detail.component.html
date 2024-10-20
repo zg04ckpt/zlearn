@@ -1,29 +1,25 @@
 @if(data) {
-    <div class="row mt-3">
+    <div class="row mt-3 px-3">
+        <!-- Top action -->
+        <div class="d-flex mb-2 col-12">
+            <button class="btn btn-sm btn-outline-secondary px-3"
+            (click)="back()">
+                Quay lại
+            </button>
+        </div>
+
+        <!-- Content -->
         <div class="col-lg-9">
-
-            <div class="d-flex ms-3 mb-2">
-                <button class="btn btn-sm btn-outline-secondary"
-                (click)="back()"
-                >Quay lại</button>
-            </div>
-
-            <div class="card card-body ms-3">
-    
-                <h5 class="">
-                    <i class='bx bx-label fw-bold'></i>
-                    Chi tiết
-                </h5>
+            <div class="card card-body">
+                <div class="d-flex align-items-center">
+                    <i class='bx bx-label fw-bold fs-4'></i>
+                    <p class="fs-4 mb-0 ms-2 fw-bold">Chi tiết {{data!.name}}</p>
+                </div>
     
                 <div class="d-flex mt-3">
                     <img [src]="data!.imageUrl" alt="" width="150px" height="200px"
                     style="object-fit: cover;">
                     <div class="d-flex flex-column ms-3 w-100">
-    
-                        <div class="row">
-                            <div class="col-2 fw-light">Tên:</div>
-                            <div class="col-10"><b>{{data!.name}}</b></div>
-                        </div>
     
                         <div class="row mt-1">
                             <div class="col-2">Người đăng:</div>
@@ -83,8 +79,7 @@
                 @if(!isSaved) {
                     <button class="position-absolute top-0 end-0 btn btn-outline-secondary btn-sm rounded-0 m-3"
                     (click)="saveThisTest()">
-                        <i class='bx bx-bookmark fw-lighter'></i>
-                        Lưu
+                        <i class='bx bx-bookmark fw-lighter me-1 mt-1'></i>Lưu
                     </button>
                 } @else {
                     <label class="position-absolute top-0 end-0 m-3 align-content-center">
@@ -97,35 +92,23 @@
     
         <div class="col-lg-3">
             <div class="card me-3" style="height: 500px;">
-                <span class="position-absolute top-0 end-0 m-2" (click)="add_comment.hidden = false" id="add">
-                    <i class='bx bx-plus-medical' ></i>
-                </span>
                 <div class="card-header text-center">Bình luận</div>
-                <div class="card-body">
-    
-                    <!--Add comment-->
-                    <div #add_comment hidden="" class="mb-3">
-                        <textarea type="text" class="form-control border-2 border-secondary overflow-hidden" placeholder="Bình luận ..."
-                        style="font-size: 14px;"></textarea>
-                        <div class="d-flex flex-row-reverse mt-1">
-                            <button class="btn btn-sm btn-success rounded-0 py-0 shadow-sm" style="font-size: 12px;">Gửi</button>
-                            <button class="btn btn-sm btn-danger rounded-0 py-0 me-1 shadow-sm" style="font-size: 12px;"
-                            (click)="add_comment.hidden = true">Hủy</button>
-                        </div>
-                    </div>
+                <div class="card-body p-2 d-flex flex-column justify-content-between">
     
                     <!--Comment-->
-                    <div class="card card-body px-2 py-1 mb-2">
+                    <div class=" px-2 py-1 mb-2"
+                    style="height: fit-content;">
+
                         <div class="d-flex mb-1">
                             <img src="" alt="" class="avt mt-1">
                             <div class="d-flex flex-column ms-2">
                                 <small class="fw-bold align-text-top">Tên người dùng</small>
-                                <p class="mb-1" style="font-size: 14px;">Đề như con cặc, mẹ toàn bị sai làm cái éo gì ??!!</p>
+                                <p class="mb-1" style="font-size: 12px;">Đề quá tệ ??!!</p>
                             </div>
                         </div>
     
                         <div class="d-flex justify-content-between p-0">
-                            <small class="text-secondary" style="font-size: 12px;">12:56 - 19/08/24</small>
+                            <small class="text-secondary align-content-center" style="font-size: 10px;">12:56 - 19/08/24</small>
                             <div class="d-flex align-content-center">
                                 <i class='bx bx-heart fw-bold heart-btn'></i>
                                 <div class="me-1" style="font-size: 12px;">34</div>
@@ -135,7 +118,11 @@
                         </div>
                     </div>
     
-                    
+                    <!--Add comment-->
+                    <div class="position-relative">
+                        <input onfocus="sendCmt.hidden = false" onblur="sendCmt.hidden = true" id="typecomment" type="text" class="w-100 p-1 ps-2 pe-4 overflow-hidden m-0" placeholder="Bình luận ...">
+                        <i id="sendCmt" hidden class='bx text-info bx-send position-absolute end-0 top-50 translate-middle-y me-2 fw-bold btn p-0'></i>
+                    </div>
                 </div>
                 
             </div>

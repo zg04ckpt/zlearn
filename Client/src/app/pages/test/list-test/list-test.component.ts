@@ -47,23 +47,14 @@ export class ListTestComponent implements OnInit {
     this.componentService.$showLoadingStatus.next(true);
     this.testService.getAll(this.pageIndex, this.pageSize, this.key)
     .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe({
-      next: res => {
+    .subscribe(res => {
         this.componentService.$showLoadingStatus.next(false);
         debugger;
         this.total = res.total;
         this.totalPage = Math.ceil(this.total / this.pageSize);
         if(this.totalPage == 0) this.pageIndex = 0;
         this.list = res.data;
-      },
-
-      error: res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.componentService.displayAPIError(res);
-      },
-
-      complete: () => this.componentService.$showLoadingStatus.next(false)
-    });
+      });
   }
 
   navigate(url: string) {

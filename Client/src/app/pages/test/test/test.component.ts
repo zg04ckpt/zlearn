@@ -68,8 +68,7 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
     this.componentService.$showLoadingStatus.next(true);
     this.testService.getContent(this.testId)
     .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe({
-      next: res => {
+    .subscribe(res => {
         this.componentService.$showLoadingStatus.next(false);
         this.test = res;
         this.test.questions.forEach(x => x.selectedAnswer = 0);
@@ -98,14 +97,6 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
         }
 
         debugger;
-      },
-
-      error: res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.componentService.displayAPIError(res);
-      },
-
-      complete: () => this.componentService.$showLoadingStatus.next(false)
     });
   }
 
@@ -136,20 +127,12 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
       testName: this.test!.name,
     };
     
-    this.testService.markTest(this.answer).subscribe({
-      next: res=> {
-        debugger;
-        this.componentService.$showLoadingStatus.next(false);
-        this.result = res;
-        this.status = TestStatus.ShowAnswer;
-      },
-
-      error: res => {
-        debugger;
-        this.componentService.$showLoadingStatus.next(false);
-        this.componentService.displayAPIError(res);
-      }
-    })
+    this.testService.markTest(this.answer).subscribe(res=> {
+      debugger;
+      this.componentService.$showLoadingStatus.next(false);
+      this.result = res;
+      this.status = TestStatus.ShowAnswer;
+    });
   }
 
   navigate(url: string) {
