@@ -32,6 +32,28 @@ namespace Core.Common
         }
 
 
+        public static Expression<Func<T, bool>> GetOrLambdaExpression<T>(List<ExpressionFilter> filters)
+        {
+            if (filters.Count == 0)
+            {
+                return null;
+            }
+
+            //tạo tham số đại diện cho T
+            ParameterExpression t = Expression.Parameter(typeof(T), "t");
+            //Biểu thức lambda trả về
+            Expression exp = null;
+
+            exp = GetExpression<T>(t, filters[0]);
+            for (int i = 1; i < filters.Count; i++)
+            {
+                exp = Expression.Or(exp, GetExpression<T>(t, filters[i]));
+            }
+
+            return Expression.Lambda<Func<T, bool>>(exp, t);
+        }
+
+
         //Gen expression for lambda
         private static Expression GetExpression<T>(ParameterExpression param, ExpressionFilter filter)
         {

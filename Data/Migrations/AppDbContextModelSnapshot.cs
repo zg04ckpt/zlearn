@@ -140,6 +140,20 @@ namespace Data.Migrations
                     b.ToTable("AppUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.Image", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Images", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.Question", b =>
                 {
                     b.Property<Guid>("Id")

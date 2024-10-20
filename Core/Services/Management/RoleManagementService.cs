@@ -6,7 +6,7 @@ using Core.Interfaces.IServices.Management;
 using Core.Mappers;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
-using static Utilities.Consts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services.Management
 {
@@ -53,7 +53,7 @@ namespace Core.Services.Management
 
         public async Task<APIResult<IEnumerable<RoleDTO>>> GetAll()
         {
-            var roles = _roleManager.Roles.ToArray();
+            var roles = await _roleManager.Roles.ToArrayAsync();
             return new APISuccessResult<IEnumerable<RoleDTO>>(roles.Select(e => Map(e)));
         }
 

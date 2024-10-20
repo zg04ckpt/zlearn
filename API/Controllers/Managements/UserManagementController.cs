@@ -8,7 +8,7 @@ namespace BE.Controllers.Managements
 {
     [Route("api/managements/users")]
     [ApiController]
-    public class UserManagementController : BaseController
+    public class UserManagementController : ControllerBase
     {
         private readonly IUserManagementService _userManagementService;
 

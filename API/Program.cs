@@ -1,37 +1,34 @@
 ﻿
-using AspNetCoreRateLimit;
-using Data.Entities;
-using Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.Extensions.FileProviders;
-using Utilities;
-using Application.System.Users;
-using Application.System.Roles;
-using Application.System.Manage;
-using Application.Features.Learn;
-using Core.Interfaces.IServices.Management;
-using Core.Services.Management;
-using Core.Interfaces.IRepositories;
-using Core.Repositories;
 using API.Middlewares;
-using Core.Interfaces.IServices.System;
-using Core.Services.System;
+using AspNetCoreRateLimit;
+using Core.Common;
+using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.Common;
+using Core.Interfaces.IServices.Features;
+using Core.Interfaces.IServices.Management;
+using Core.Interfaces.IServices.System;
+using Core.Repositories;
 using Core.Services.Common;
+using Core.Services.Features;
+using Core.Services.Management;
+using Core.Services.System;
+using Data;
+using Data.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var Configuration = builder.Configuration;
+var configuration = builder.Configuration;
 
-// AddRole services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(
-        Configuration.GetConnectionString(Consts.CONNECTION_STRING),
+        configuration.GetConnectionString("DefaultConnection"),
         options => options.EnableRetryOnFailure());
     options.EnableDetailedErrors();
 });
@@ -41,20 +38,16 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddDefaultTokenProviders();
 
 
-builder.Services.AddTransient<ITestService, TestService>();
-builder.Services.AddSingleton<Application.Common.IFileService, Application.Common.FileService>();
-builder.Services.AddTransient<Application.System.Users.IUserService, UserService>();
-builder.Services.AddTransient<IAdminService, AdminService>();
-//builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddSingleton<Application.Common.IEmailSender, Application.Common.EmailSender>();
-builder.Services.AddTransient<IRoleService, RoleService>();
-
 builder.Services.AddTransient<IRoleManagementService, RoleManagementService>();
 builder.Services.AddTransient<IUserManagementService, UserManagementService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ITestRepository, TestRepository>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<IFileService, FileService>();
+builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.AddTransient<ITestService, TestService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 
 builder.Services.AddControllers();
@@ -98,9 +91,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = Configuration[Consts.AppSettingsKey.ISSUER],
-        ValidAudience = Configuration[Consts.AppSettingsKey.AUDIENCE],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY))),
+        ValidIssuer = configuration.GetSection(Consts.JWT_SECTION)["Issuer"],
+        ValidAudience = configuration.GetSection(Consts.JWT_SECTION)["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(Consts.SECRET_KEY))),
         ClockSkew = TimeSpan.Zero
     };
 
@@ -117,11 +110,6 @@ builder.Services.AddAuthentication(options =>
             return Task.CompletedTask;
         }
     };
-});
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole(Consts.DEFAULT_ADMIN_ROLE));
 });
 
 //cấu hình cors
@@ -145,8 +133,8 @@ builder.Services.AddCors(options =>
 
 //cấu hình giới hạn truy cập
 builder.Services.AddMemoryCache();
-builder.Services.Configure<ClientRateLimitOptions>(Configuration.GetSection("ClientRateLimiting"));
-builder.Services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
+builder.Services.Configure<ClientRateLimitOptions>(configuration.GetSection("ClientRateLimiting"));
+builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
 
 
 var app = builder.Build();
@@ -160,16 +148,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<HandleExceptionMiddleware>();
 
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowAll");
 //app.UseClientRateLimiting();
 //app.UseIpRateLimiting();
 
-string path = Path.Combine(Directory.GetCurrentDirectory(), FileService.FOLDER_NAME);
+string path = Path.Combine(Directory.GetCurrentDirectory(), FileService.IMAGE_FOLDER_NAME);
 
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(path),
-    RequestPath = FileService.REQUEST_PATH
+    RequestPath = FileService.IMAGE_PATH
 });
 
 app.UseAuthentication();

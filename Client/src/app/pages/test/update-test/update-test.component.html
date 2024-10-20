@@ -256,7 +256,7 @@ id="scrollToTopButton" (click)="scrollToTop()">
             <!--Answer-->
             <div class="input-group mt-2">
                 <div class="input-group-text">
-                    <input class="form-check-input mt-0" type="radio" name="ans"
+                    <input class="form-check-input mt-0" type="radio" name="A"
                     [(ngModel)]="editQuestion.correctAnswer" value="1">
                     <span class="ms-2">A</span>
                 </div>
@@ -265,7 +265,7 @@ id="scrollToTopButton" (click)="scrollToTop()">
     
             <div class="input-group mt-2">
                 <div class="input-group-text">
-                    <input class="form-check-input mt-0" type="radio" name="ans"
+                    <input class="form-check-input mt-0" type="radio" name="B"
                     [(ngModel)]="editQuestion.correctAnswer" value="2">
                     <span class="ms-2">B</span>
                 </div>
@@ -275,7 +275,7 @@ id="scrollToTopButton" (click)="scrollToTop()">
             @if(editQuestion.answerC != null) {
                 <div class="input-group mt-2 position-relative">
                     <div class="input-group-text">
-                        <input class="form-check-input mt-0" type="radio" name="ans"
+                        <input class="form-check-input mt-0" type="radio" name="C"
                         [(ngModel)]="editQuestion.correctAnswer" value="3">
                         <span class="ms-2">C</span>
                     </div>
@@ -290,7 +290,7 @@ id="scrollToTopButton" (click)="scrollToTop()">
             @if(editQuestion.answerD != null) {
                 <div class="input-group mt-2 position-relative">
                     <div class="input-group-text">
-                        <input class="form-check-input mt-0" type="radio" name="ans"
+                        <input class="form-check-input mt-0" type="radio" name="D"
                         [(ngModel)]="editQuestion.correctAnswer" value="4">
                         <span class="ms-2">D</span>
                     </div>

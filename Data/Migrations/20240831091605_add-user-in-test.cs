@@ -22,7 +22,7 @@ namespace Data.Migrations
                 table: "TestResults");
 
             migrationBuilder.CreateTable(
-                name: "SavedTest",
+                name: "SavedTests",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -47,14 +47,14 @@ namespace Data.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserInTests_TestId",
-                table: "SavedTest",
+                table: "SavedTests",
                 column: "TestId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "SavedTest");
+                name: "SavedTests");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "AppUserId",

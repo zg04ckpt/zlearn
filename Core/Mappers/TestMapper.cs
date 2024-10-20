@@ -49,7 +49,7 @@ namespace Core.Mappers
             return new UpdateTestDTO
             {
                 Name = test.Name,
-                ImageUrl = FileService.GetAsUrl(test.ImageUrl),
+                ImageUrl = test.ImageUrl,
                 Description = test.Description,
                 Source = test.Source,
                 Duration = test.Duration,
@@ -58,7 +58,7 @@ namespace Core.Mappers
                 {
                     Id = x.Id.ToString().ToLower(),
                     Content = x.Content,
-                    ImageUrl = FileService.GetAsUrl(x.ImageUrl),
+                    ImageUrl = x.ImageUrl,
                     AnswerA = x.AnswerA,
                     AnswerB = x.AnswerB,
                     AnswerC = x.AnswerC,
@@ -74,7 +74,7 @@ namespace Core.Mappers
             {
                 Id = test.Id.ToString().ToLower(),
                 Name = test.Name,
-                ImageUrl = FileService.GetAsUrl(test.ImageUrl),
+                ImageUrl = test.ImageUrl,
                 NumberOfAttempts = test.NumberOfAttempts,
                 NumberOfQuestions = test.NumberOfQuestions,
                 IsPrivate = test.IsPrivate,
@@ -87,7 +87,7 @@ namespace Core.Mappers
             {
                 Id = test.Id.ToString(),
                 Name = test.Name,
-                ImageUrl = FileService.GetAsUrl(test.ImageUrl),
+                ImageUrl = test.ImageUrl,
                 UpdatedDate = test.UpdatedDate,
                 CreatedDate = test.CreatedDate,
                 Description = test.Description,
@@ -111,7 +111,7 @@ namespace Core.Mappers
                 {
                     Id = x.Id.ToString(),
                     Content = x.Content,
-                    ImageUrl = FileService.GetAsUrl(x.ImageUrl),
+                    ImageUrl = x.ImageUrl,
                     AnswerA = x.AnswerA,
                     AnswerB = x.AnswerB,
                     AnswerC = x.AnswerC,

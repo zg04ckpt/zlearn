@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { finalize, map, Observable, tap } from "rxjs";
+import { finalize, lastValueFrom, map, Observable, pipe, tap } from "rxjs";
 import { PagingResultDTO } from "../dtos/common/paging-result.dto";
 import { TestItem } from "../entities/test/test-item.entity";
 import { TestDetail } from "../entities/test/test-detail.entity";
@@ -13,6 +13,8 @@ import { TestUpdateContent } from "../dtos/test/update-test-content.dto";
 import { UpdateTestDTO } from "../dtos/test/update-test.dts";
 import { ComponentService } from "./component.service";
 import { TestResult } from "../entities/test/test-result.entity";
+import { APIResult } from "../dtos/common/api-result.dto";
+import { FileService } from "./file.service";
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +23,8 @@ export class TestService {
     baseUrl: string = environment.baseUrl;
     constructor(
         private http: HttpClient,
-        private componentService: ComponentService
+        private componentService: ComponentService,
+        private fileService: FileService
     ) {}
 
     getAll(
@@ -29,140 +32,189 @@ export class TestService {
         pageSize: number, 
         key: String
     ): Observable<PagingResultDTO<TestItem>> {
-        return this.http.get<PagingResultDTO<TestItem>>(
-            `tests?pageIndex=${pageIndex}&pageSize=${pageSize}&key=${key}`,
-        ).pipe(map(res => {
-            res.data.forEach(x => x.imageUrl = this.baseUrl + x.imageUrl);
-            return res;
-        }));
+        return this.http.get<APIResult<PagingResultDTO<TestItem>>>(
+            `tests?pageIndex=${pageIndex}&pageSize=${pageSize}&name=${key}`,
+        ).pipe(
+            map(res => {
+                return res.data!;
+            }),
+            map(res => {
+                res.data.forEach(x => x.imageUrl = this.baseUrl + x.imageUrl);
+                return res;
+            })
+        );
     }
 
     getAllMyTests(): Observable<TestDetail[]> {
-        return this.http.get<TestDetail[]>(
+        return this.http.get<APIResult<TestDetail[]>>(
             `tests/my-tests`,
-        ).pipe(map(res => {
-            res.forEach(x => x.imageUrl = this.baseUrl + x.imageUrl);
-            return res;
-        }));
+        ).pipe(
+            map(res => {
+                return res.data!;
+            }),
+            map(res => {
+                res.forEach(x => x.imageUrl = this.baseUrl + x.imageUrl);
+                return res;
+            })
+        );
     }
 
     getDetail(id: string): Observable<TestDetail> {
-        return this.http.get<TestDetail>(
+        return this.http.get<APIResult<TestDetail>>(
             `tests/${id}/detail`
-        ).pipe(map(res => {
-            res.imageUrl = this.baseUrl + res.imageUrl;
-            return res;
-        }));
+        ).pipe(
+            map(res => {
+                return res.data!;
+            }),
+            map(res => {
+                res.imageUrl = this.baseUrl + res.imageUrl;
+                return res;
+            })
+        );
     }
 
     getContent(id: string): Observable<Test> {
-        return this.http.get<Test>(
+        return this.http.get<APIResult<Test>>(
             `tests/${id}/content`
-        ).pipe(map(res => {
-            res.questions.forEach(x => x.imageUrl = this.baseUrl + x.imageUrl);
-            return res;
-        }));
+        ).pipe(
+            map(res => {
+                return res.data!;
+            }),
+            map(res => {
+                res.questions.forEach(x => x.imageUrl = this.baseUrl + x.imageUrl);
+                return res;
+            })
+        );
     }
 
     markTest(data: MarkTestDTO): Observable<MarkTestResultDTO> {
-        return this.http.post<MarkTestResultDTO>(
+        return this.http.post<APIResult<MarkTestResultDTO>>(
             `tests/mark-test`,
             data
-        );
+        ).pipe(map(res => {
+            return res.data!;
+        }));
     }
     
-    create(data: CreateTestDTO): Observable<void> {
-        this.componentService.$showLoadingStatus.next(true);
-        const formData = new FormData();
-        formData.append('name', data.name);
-        if (data.image !== null) {
-            formData.append('image', data.image);
+    async create(data: CreateTestDTO): Promise<void> {
+        debugger
+        const imageData = new FormData();
+        let hasImage = false;
+        if(data.image) {
+            imageData.append('test', data.image);
+            hasImage = true;
+            data.image = null;
         }
-        formData.append('description', data.description);
-        formData.append('source', data.source);
-        formData.append('duration', data.duration.toString());
-        data.questions.forEach((value, index) => {
-            formData.append(`questions[${index}].content`, value.content);
-            if(value.image !== null) {
-                formData.append(`questions[${index}].image`, value.image);
+        
+        data.questions.forEach((e, index) => {
+            if(e.image) {
+                hasImage = true;
+                imageData.append(`${index}`, e.image);
+                e.image = null;
             }
-            formData.append(`questions[${index}].answerA`, value.answerA);
-            formData.append(`questions[${index}].answerB`, value.answerB);
-            if(value.answerC !== null) {
-                formData.append(`questions[${index}].answerC`, value.answerC);
-            }
-            if(value.answerD !== null) {
-                formData.append(`questions[${index}].answerD`, value.answerD);
-            }
-            formData.append(`questions[${index}].correctAnswer`, value.correctAnswer.toString());
         });
 
-        return this.http.post<void>(`tests`, formData)
-        .pipe(finalize(() => this.componentService.$showLoadingStatus.next(false)));
+        if(hasImage) {
+            const saveImageResult = await this.fileService.saveFile(imageData);
+            debugger
+            if(saveImageResult.success) {
+                const imageUrls = saveImageResult.data!;
+                imageUrls.forEach(e => {
+                    if(e.key == 'test') data.imageUrl = e.url;
+                    else data.questions[Number(e.key)].imageUrl = e.url;
+                });
+            }
+        }
+
+        return lastValueFrom(this.http
+            .post<APIResult<void>>(`tests`, data)
+            .pipe(map(res => res.data!)));
     }
 
-    update(id: string, data: UpdateTestDTO): Observable<void> {
-        const formData = new FormData();
-        formData.append('name', data.name);
-        if (data.image !== null) {
-            formData.append('image', data.image);
+    async update(id: string, data: UpdateTestDTO): Promise<void> {
+        debugger
+        const imageData = new FormData();
+        let hasImage = false;
+        if(data.image)  {
+            imageData.append(data.imageUrl, data.image);
+            hasImage = true;
+            data.image = null;
         }
-        formData.append('description', data.description);
-        formData.append('source', data.source);
-        formData.append('duration', data.duration.toString());
-        data.questions.forEach((value, index) => {
-            if(value.id !== null) {
-                formData.append(`questions[${index}].id`, value.id);
+        const indexOf:{[key: string]: number} = {}; // đánh dấu question theo imageUrl
+        data.questions.forEach((e, index) => {
+            if(e.image) {
+                hasImage = true;
+                imageData.append(e.imageUrl, e.image);
+                e.image = null;
+                indexOf[e.imageUrl] = index;
             }
-            formData.append(`questions[${index}].content`, value.content);
-            if(value.image !== null) {
-                formData.append(`questions[${index}].image`, value.image);
-            }
-            formData.append(`questions[${index}].answerA`, value.answerA);
-            formData.append(`questions[${index}].answerB`, value.answerB);
-            if(value.answerC !== null) {
-                formData.append(`questions[${index}].answerC`, value.answerC);
-            }
-            if(value.answerD !== null) {
-                formData.append(`questions[${index}].answerD`, value.answerD);
-            }
-            formData.append(`questions[${index}].correctAnswer`, value.correctAnswer.toString());
         });
-        formData.append('isPrivate', data.isPrivate.toString());
 
-        return this.http.put<void>(`tests/${id}`, formData);
+        if(hasImage) {
+            const saveImageResult = await this.fileService.updateImage(imageData);
+            debugger
+            if(saveImageResult.success) {
+                const imageUrls = saveImageResult.data!;
+                imageUrls.forEach(e => {
+                    if(e.key == data.imageUrl) data.imageUrl = e.url;
+                    else data.questions[indexOf[e.key]].imageUrl = e.url;
+                });
+            }
+        }
+
+        return lastValueFrom(this.http
+            .put<APIResult<void>>(`tests/${id}`, data)
+            .pipe(map(res => res.data!)));
     }
 
     delete(id: string): Observable<void> {
-        return this.http.delete<void>(`tests/${id}`);
+        return this.http
+            .delete<APIResult<void>>(`tests/${id}`)
+            .pipe(map(res => {
+                return res.data!;
+            }));
     }
 
     saveTest(testId: string): Observable<void> {
-        return this.http.post<void>(
+        return this.http.post<APIResult<void>>(
             `tests/save?testId=${testId}`, 
             null
-        );
+        ).pipe(map(res => {
+            return res.data!;
+        }));
     }
 
     isSaved(testId: string): Observable<boolean> {
-        return this.http.get<boolean>(
+        return this.http.get<APIResult<boolean>>(
             `tests/save/isSaved?testId=${testId}`
-        );
+        ).pipe(map(res => {
+            return res.data!;
+        }));
     }
 
     removeSavedTest(id: string): Observable<void> {
         const params = new HttpParams().set("testId", id);
-        return this.http.delete<void>('tests/save', { params });
+        return this.http
+            .delete<APIResult<void>>('tests/save', { params })
+            .pipe(map(res => {
+                return res.data!;
+            }));       
     }
 
     getAllSavedTests(): Observable<TestItem[]> {
-        return this.http.get<TestItem[]>('tests/save');
+        return this.http
+        .get<APIResult<TestItem[]>>('tests/save')
+        .pipe(map(res => {
+            return res.data!;
+        }));
     }
 
-    getUpdateContent(testId: string): Observable<TestUpdateContent> {
-        return this.http.get<TestUpdateContent>(
+    getUpdateContent(testId: string): Observable<UpdateTestDTO> {
+        return this.http.get<APIResult<UpdateTestDTO>>(
             `tests/${testId}/update-content`
-        ).pipe(map(res => {
+        ).pipe(
+            map(res => res.data!),
+            map(res => {
             if(res.imageUrl) {
                 res.imageUrl = this.baseUrl + res.imageUrl;
             }
@@ -185,8 +237,11 @@ export class TestService {
     }
 
     getResultsByUserId(): Observable<TestResult[]> {
-        this.componentService.$showLoadingStatus.next(true);
-        return this.http.get<TestResult[]>('tests/my-results')
-        .pipe(finalize(() => this.componentService.$showLoadingStatus.next(false)));
+        return this.http
+        .get<APIResult<TestResult[]>>('tests/my-results')
+        .pipe(map(res => {
+            debugger
+            return res.data!;
+        }));
     }
 }

@@ -4,12 +4,12 @@ using Core.DTOs;
 using Core.Interfaces.IServices.System;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BE.Controllers
+namespace API.Controllers
 {
     [Route("api/auth")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthController : BaseController
+    public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
 

@@ -9,7 +9,7 @@ namespace Core.Interfaces.IServices.Features
     {
         // ---------- Test -----------
         Task<APIResult<PaginatedResult<TestItemDTO>>> GetTestsAsListItems(int pageSize, int pageIndex, List<ExpressionFilter> filters);
-        Task<APIResult<IEnumerable<TestInfoDTO>>> GetTestInfosOfUser(ClaimsPrincipal claimsPrincipal);
+        Task<APIResult<List<TestInfoDTO>>> GetTestInfosOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult<TestInfoDTO>> GetTestInfo(string testId);
         Task<APIResult<TestDTO>> GetTestContent(ClaimsPrincipal claimsPrincipal, string testId);
         Task<APIResult<UpdateTestDTO>> GetTestUpdateContent(ClaimsPrincipal claimsPrincipal, string testId);
@@ -20,13 +20,13 @@ namespace Core.Interfaces.IServices.Features
 
         // ---------- Test result ------------
         Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(int pageSize, int pageIndex, List<ExpressionFilter> filters);
-        Task<APIResult<IEnumerable<TestResult>>> GetTestResultsOfUser(ClaimsPrincipal claimsPrincipal);
+        Task<APIResult<List<TestResult>>> GetTestResultsOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult<TestResultDTO>> MarkTest(ClaimsPrincipal claimsPrincipal, MarkTestDTO dto, string ip);
 
 
         // ---------- Save test --------------
         Task<APIResult> SaveTest(ClaimsPrincipal claimsPrincipal, string testId);
-        Task<APIResult<IEnumerable<TestItemDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal);
+        Task<APIResult<List<TestItemDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult> DeleteFromSaved(ClaimsPrincipal claimsPrincipal, string testId);
         Task<APIResult<bool>> IsSaved(ClaimsPrincipal claimsPrincipal, string testId);
     }

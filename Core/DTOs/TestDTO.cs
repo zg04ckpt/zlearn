@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Data.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +63,12 @@ namespace Core.DTOs
         public bool IsPrivate { get; set; }
         public List<UpdateQuestionDTO> Questions { get; set; }
     }
+    
+    public class TestSearchDTO
+    {
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+    }
     #endregion
 
 
@@ -84,8 +91,8 @@ namespace Core.DTOs
         public string ImageUrl { get; set; }
         public string AnswerA { get; set; }
         public string AnswerB { get; set; }
-        public string AnswerC { get; set; }
-        public string AnswerD { get; set; }
+        public string? AnswerC { get; set; }
+        public string? AnswerD { get; set; }
         public int CorrectAnswer { get; set; }
     }
 
@@ -96,8 +103,8 @@ namespace Core.DTOs
         public string ImageUrl { get; set; }
         public string AnswerA { get; set; }
         public string AnswerB { get; set; }
-        public string AnswerC { get; set; }
-        public string AnswerD { get; set; }
+        public string? AnswerC { get; set; }
+        public string? AnswerD { get; set; }
         public int CorrectAnswer { get; set; }
     }
     #endregion
@@ -136,5 +143,12 @@ namespace Core.DTOs
         public List<int> Detail { get; set; }
     }
 
+    public class TestResultSearchDTO
+    {
+        public string? StartTime { get; set; }
+        public string? EndTime { get; set; }
+        public string? TestName { get; set; }
+        public string? UserName { get; set; }
+    }
     #endregion
 }

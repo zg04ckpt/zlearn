@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserDetailMapper } from '../mappers/user/user-detail.mapper';
 import { UserDetail } from '../entities/user/user-detail.entity';
-import { map, Observable, Subject } from 'rxjs';
+import { map, Observable, pipe, Subject } from 'rxjs';
 import { UserDetailDTO } from '../dtos/user/user-detail.dto';
 import { StorageKey, StorageService } from './storage.service';
 import { User } from '../entities/user/user.entity';
+import { APIResult } from '../dtos/common/api-result.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -28,11 +29,14 @@ export class UserService {
   getProfile(userId: string): Observable<UserDetail> {
     const userDetailMapper = new UserDetailMapper;
     return this.http
-      .get<UserDetailDTO>(`users/${userId}/profile`)
+      .get<APIResult<UserDetailDTO>>(`users/${userId}/profile`)
+      .pipe(map(res => res.data!))
       .pipe(map(userDetailMapper.map));
   }
 
   updateProfile(userId: string, data: UserDetailDTO): Observable<void> {
-    return this.http.put<void>(`users/${userId}/profile`, data);
+    return this.http
+      .put<APIResult<void>>(`users/${userId}/profile`, data)
+      .pipe(map(res => res.data!));
   }
 }

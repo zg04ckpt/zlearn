@@ -34,28 +34,15 @@ export class UserProfileComponent implements OnInit {
     debugger;
     this.componentService.$showLoadingStatus.next(true);
     this.user = this.userService.getLoggedInUser();
-    if(this.user != null)
-    {
-      this.userService.getProfile(this.user.id).subscribe({
-
-        next: res => {
-          debugger;
-          this.loading = false;
-          this.userDetail = res;
-          this.reset();
-          this.componentService.$showLoadingStatus.next(false);
-        },
-
-
-        error: res => {
-          debugger;
-          this.componentService.displayMessage(res.error?.message || res.statusText);
-          this.componentService.$showLoadingStatus.next(false);
-        }
+    if(this.user != null) {
+      this.userService.getProfile(this.user.id).subscribe(res => {
+        debugger;
+        this.loading = false;
+        this.userDetail = res;
+        this.reset();
+        this.componentService.$showLoadingStatus.next(false);
       });
-    }
-    else
-    {
+    } else {
       this.componentService.$showLoadingStatus.next(false);
       this.authService.showLoginRequirement();
     }

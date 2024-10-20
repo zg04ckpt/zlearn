@@ -31,6 +31,7 @@ export class UpdateTestComponent implements OnInit {
   data: UpdateTestDTO = {
     name: "",
     image: null,
+    imageUrl: '',
     description: "",
     source: "",
     duration: 0,
@@ -47,6 +48,7 @@ export class UpdateTestComponent implements OnInit {
     id: string|null,
     content: string,
     image: File|null,
+    imageUrl: string,
     answerA: string,
     answerB: string,
     answerC: string|null,
@@ -75,44 +77,35 @@ export class UpdateTestComponent implements OnInit {
     this.componentService.$showLoadingStatus.next(true);
     this.testService.getUpdateContent(this.id)
     .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe({
-      next: async res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.testImagePreviewUrl = res.imageUrl;
-        this.data.name = res.name;
-
-        this.data.image = await this.convertImageUrlToFile(res.imageUrl);
-
-        this.data.description = res.description;
-        this.data.duration = res.duration;
-        this.data.source = res.source;
-        this.data.isPrivate = res.isPrivate;
-        res.questions.forEach( async x => {
-          this.data.questions.push({
-            id: x.id,
-            content: x.content,
-            image: await this.convertImageUrlToFile(x.imageUrl),
-            answerA: x.answerA,
-            answerB: x.answerB,
-            answerC: x.answerC,
-            answerD: x.answerD,
-            correctAnswer: x.correctAnswer
-          });
- 
-          this.questionManager.push({
-            previewImageUrl: x.imageUrl,
-            selected: false
-          });
+    .subscribe(async res => {
+      this.componentService.$showLoadingStatus.next(false);
+      this.testImagePreviewUrl = res.imageUrl;
+      this.data.name = res.name;
+      this.data.image = await this.convertImageUrlToFile(res.imageUrl);
+      this.data.imageUrl = res.imageUrl;
+      this.data.description = res.description;
+      this.data.duration = res.duration;
+      this.data.source = res.source;
+      this.data.isPrivate = res.isPrivate;
+      res.questions.forEach( async x => {
+        this.data.questions.push({
+          id: x.id,
+          content: x.content,
+          image: await this.convertImageUrlToFile(x.imageUrl),
+          imageUrl: x.imageUrl,
+          answerA: x.answerA,
+          answerB: x.answerB,
+          answerC: x.answerC,
+          answerD: x.answerD,
+          correctAnswer: x.correctAnswer
         });
-      },
 
-      error: res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.componentService.displayAPIError(res);
-      },
-
-      complete: () => this.componentService.$showLoadingStatus.next(false)
-    })
+        this.questionManager.push({
+          previewImageUrl: x.imageUrl,
+          selected: false
+        });
+      });
+    });
   }
 
   async convertImageUrlToFile(imageUrl: string): Promise<File|null> {
@@ -140,19 +133,19 @@ export class UpdateTestComponent implements OnInit {
   saveTest() {
     //check valid before send
     if(this.data.name.trim() == "") {
-      this.componentService.displayMessage("Tên bài test trống!");
+      this.componentService.displayMessage("Tên đề trống!");
       return;
     }
     if(this.data.description.trim() == "") {
-      this.componentService.displayMessage("Mô tả test trống!");
+      this.componentService.displayMessage("Mô tả đề trống!");
       return;
     }
     if(this.data.source.trim() == "") {
-      this.componentService.displayMessage("Nguồn test trống!");
+      this.componentService.displayMessage("Nguồn đề trống!");
       return;
     }
     if(this.data.duration <= 0) {
-      this.componentService.displayMessage("Thời gian làm test không hợp lệ!");
+      this.componentService.displayMessage("Thời gian làm đề không hợp lệ!");
       return;
     }
     if(this.data.questions.length == 0) {
@@ -166,25 +159,11 @@ export class UpdateTestComponent implements OnInit {
     if(currentUser == null) {
       this.authService.showLoginRequirement();
     } else {
-      this.componentService.displayConfirmMessage("Xác nhận lưu chỉnh sửa?", () => {
-        this.componentService.$showLoadingStatus.next(true);
-        this.testService.update(this.id!, this.data)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: res => {
-            this.componentService.$showLoadingStatus.next(false);
-            this.componentService.displayMessage("Cập nhật test thành công");
-            this.isSuccess = true;
-          },
-  
-          error: res => {
-            this.componentService.$showLoadingStatus.next(false);
-            this.isSuccess = false;
-            this.componentService.displayAPIError(res);
-          },
-
-          complete: () => this.componentService.$showLoadingStatus.next(false)
-        });
+      this.componentService.displayConfirmMessage("Xác nhận lưu chỉnh sửa?", async () => {
+        await this.testService.update(this.id!, this.data);
+          this.componentService.$showLoadingStatus.next(false);
+          this.componentService.$showToast.next("Cập nhật đề thành công");
+          this.isSuccess = true;
       });
     }
   }
@@ -310,6 +289,7 @@ export class UpdateTestComponent implements OnInit {
       id: null,
       content: "",
       image: null,
+      imageUrl: '',
       answerA: "",
       answerB: "",
       answerC: null,
@@ -324,6 +304,7 @@ export class UpdateTestComponent implements OnInit {
     this.editIndex = i;
     this.isAdding = false;
     this.editQuestion = {... this.data.questions[i]};
+    console.log(this.editQuestion);
     this.questionImagePreviewUrl = this.questionManager[i].previewImageUrl;
   }
 
@@ -371,7 +352,8 @@ export class UpdateTestComponent implements OnInit {
             answerC: ws[XLSX.utils.encode_cell({c: 3, r: i})]?.v,
             answerD: ws[XLSX.utils.encode_cell({c: 4, r: i})]?.v,
             correctAnswer: ws[XLSX.utils.encode_cell({c: 5, r: i})]?.v,
-            image: imageFile
+            image: imageFile,
+            imageUrl: ''
           });
 
           this.questionManager.push({ previewImageUrl: null, selected: false});

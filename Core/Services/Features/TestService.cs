@@ -6,11 +6,6 @@ using Core.Interfaces.IServices.Common;
 using Core.Interfaces.IServices.Features;
 using Core.Mappers;
 using Data.Entities;
-using Microsoft.AspNet.Identity;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 
 namespace Core.Services.Features
@@ -90,7 +85,7 @@ namespace Core.Services.Features
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var test = await _testRepository.GetById(Guid.Parse(testId))
                 ?? throw new ErrorException("Đề trắc nghiệm không tồn tại");
-            if (!test.AuthorId.Equals(userId)) 
+            if (!test.AuthorId.ToString().Equals(userId)) 
                 throw new ForbiddenException();
 
             _testRepository.Delete(test);
@@ -110,11 +105,11 @@ namespace Core.Services.Features
             return new APISuccessResult<PaginatedResult<TestResult>>(data);
         }
 
-        public async Task<APIResult<IEnumerable<TestItemDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal)
+        public async Task<APIResult<List<TestItemDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal)
         {
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var rawData = await _testRepository.GetSavedTestsOfUser(userId);
-            return new APISuccessResult<IEnumerable<TestItemDTO>> (rawData.Select(e => TestMapper.Map(e)));
+            return new APISuccessResult<List<TestItemDTO>> (rawData.Select(e => TestMapper.MapToItem(e)).ToList());
         }
 
         public async Task<APIResult<TestDTO>> GetTestContent(ClaimsPrincipal claimsPrincipal, string testId)
@@ -125,7 +120,7 @@ namespace Core.Services.Features
             if (test.IsPrivate)
             {
                 var userId = claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if(userId == null || !userId.Equals(test.AuthorId))
+                if(userId == null || !userId.Equals(test.AuthorId.ToString()))
                 {
                     throw new ForbiddenException();
                 }
@@ -148,18 +143,18 @@ namespace Core.Services.Features
             return new APISuccessResult<TestInfoDTO>(TestMapper.MapToInfo(test));
         }
 
-        public async Task<APIResult<IEnumerable<TestInfoDTO>>> GetTestInfosOfUser(ClaimsPrincipal claimsPrincipal)
+        public async Task<APIResult<List<TestInfoDTO>>> GetTestInfosOfUser(ClaimsPrincipal claimsPrincipal)
         {
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            var tests = await _testRepository.GetAll(x => x.AuthorId.Equals(userId));
-            return new APISuccessResult<IEnumerable<TestInfoDTO>>(tests.Select(x => TestMapper.MapToInfo(x)));
+            var tests = await _testRepository.GetAll(x => x.AuthorId.ToString().Equals(userId));
+            return new APISuccessResult<List<TestInfoDTO>>(tests.Select(x => TestMapper.MapToInfo(x)).ToList());
         }
 
-        public async Task<APIResult<IEnumerable<TestResult>>> GetTestResultsOfUser(ClaimsPrincipal claimsPrincipal)
+        public async Task<APIResult<List<TestResult>>> GetTestResultsOfUser(ClaimsPrincipal claimsPrincipal)
         {
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var results = await _testRepository.GetResultsByUserId(userId);
-            return new APISuccessResult<IEnumerable<TestResult>>(results);
+            return new APISuccessResult<List<TestResult>>(results);
         }
 
         public async Task<APIResult<PaginatedResult<TestItemDTO>>> GetTestsAsListItems(int pageSize, int pageIndex, List<ExpressionFilter> filters)
@@ -222,8 +217,8 @@ namespace Core.Services.Features
             }
 
             //calculate used time
-            var start = DateTime.Parse(dto.StartTime);
-            var end = DateTime.Parse(dto.EndTime);
+            var start = DateTime.Parse(dto.StartTime).AddHours(-7);
+            var end = DateTime.Parse(dto.EndTime).AddHours(-7); ;
             var duration = end - start;
 
             //calculate score and save result
@@ -289,7 +284,7 @@ namespace Core.Services.Features
             var test = await _testRepository.GetById(Guid.Parse(testId))
                 ?? throw new ErrorException("Đề không tồn tại");
 
-            if (!test.AuthorId.Equals(userId))
+            if (!test.AuthorId.ToString().Equals(userId))
                 throw new ForbiddenException();
 
             //update test

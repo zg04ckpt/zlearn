@@ -1,11 +1,12 @@
 ﻿using Core.DTOs;
 using Data.Entities;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Core.Mappers
 {
     public class UserMapper
     {
-        protected UserManagementDTO Map(AppUser user)
+        public static UserManagementDTO MapToManage(AppUser user)
         {
             return new UserManagementDTO
             {
@@ -30,7 +31,7 @@ namespace Core.Mappers
             };
         }
 
-        protected AppUser Map(AppUser oldUser, UserManagementDTO user)
+        public static AppUser MapFromManage(AppUser oldUser, UserManagementDTO user)
         {
             oldUser.FirstName = user.FirstName;
             oldUser.LastName = user.LastName;
@@ -49,6 +50,37 @@ namespace Core.Mappers
             oldUser.LockoutEnd = user.LockoutEnd;
             oldUser.LockoutEnabled = user.LockoutEnabled;
             oldUser.AccessFailedCount = user.AccessFailedCount;
+
+            return oldUser;
+        }
+
+        public static UserProfileDTO MapToProfile(AppUser user)
+        {
+            return new UserProfileDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNum = user.PhoneNumber,
+                Gender = user.Gender,
+                DayOfBirth = user.DateOfBirth,
+                Address = user.Address,
+                Intro = user.Description,
+                SocialLinks = user.UserLinks
+            };
+        }
+
+        public static AppUser MapFromProfile(AppUser oldUser, UserProfileDTO user)
+        {
+            oldUser.FirstName = user.FirstName;
+            oldUser.LastName = user.LastName;
+            oldUser.Address = user.Address;
+            oldUser.Gender = user.Gender;
+            oldUser.DateOfBirth = user.DayOfBirth;
+            oldUser.Email = user.Email;
+            oldUser.PhoneNumber = user.PhoneNum;
+            oldUser.Description = user.Intro;
+            oldUser.UserLinks = user.SocialLinks;
 
             return oldUser;
         }

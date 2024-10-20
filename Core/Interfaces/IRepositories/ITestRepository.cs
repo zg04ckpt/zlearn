@@ -21,11 +21,11 @@ namespace Core.Interfaces.IRepositories
 
         // ------------------ test result ---------------------
         Task<PaginatedResult<TestResult>> GetAllResults(int pageIndex, int pageSize, List<ExpressionFilter> filters);
-        Task<IEnumerable<TestResult>> GetResultsByUserId(string userId);
+        Task<List<TestResult>> GetResultsByUserId(string userId);
         void SaveResult(TestResult testResult);
 
         // ------------------ save test ---------------------
-        Task<IEnumerable<Test>> GetSavedTestsOfUser(string userId);
+        Task<List<Test>> GetSavedTestsOfUser(string userId);
         void SaveTest(SavedTest savedTest);
         Task UnSave(string userId, string testId);
         Task<bool> IsSaved(string userId, string testId);

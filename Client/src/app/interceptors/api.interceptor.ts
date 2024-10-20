@@ -9,11 +9,14 @@ import { StorageKey, StorageService } from '../services/storage.service';
 import { APIError } from '../dtos/common/api-result.dto';
 
 export const apiInterceptor: HttpInterceptorFn = (req, next) => {
-  if(!req.url.includes('images')) {
-    req = req.clone({
-      url: `${environment.baseUrl}/api/${req.url}`
-    });
-  }
+  // if(!req.url.includes('images')) {
+  //   req = req.clone({
+  //     url: `${environment.baseUrl}/api/${req.url}`
+  //   });
+  // }
+  req = req.clone({
+    url: `${environment.baseUrl}/api/${req.url}`
+  });
   const router = inject(Router);
   const commonService = inject(ComponentService);
   const authService = inject(AuthService);

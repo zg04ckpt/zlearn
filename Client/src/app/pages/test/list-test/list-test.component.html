@@ -2,42 +2,40 @@
 
     <h3 class="text-center mt-4">Danh sách các bài trắc nghiệm</h3>
 
-    <div class="d-flex mt-5 justify-content-center">
-        <div class="input-group me-1 w-50">
-            <label class="input-group-text">Danh mục</label>
-            <select class="form-select">
-                <option selected>Tất cả</option>
-            </select>
-        </div>
-
-        <div class="input-group ms-1 w-25">
-            <input type="text" class="form-control" placeholder="Từ khóa..." [(ngModel)]="key">
-            <button class="btn btn-outline-dark" (click)="pageIndex = 1; search()">
-                <i class='bx bx-search fs-6 py-1'></i>
-            </button>
-        </div>
-    </div>
-
-    <div class="row mt-3">
-        <div class="col-10 offset-1">
-            <div class="d-flex mx-lg-5">
-                @if(isLoggedIn()) {
-                    <button class="btn btn-sm btn-success"
-                    [routerLink]="['/tests', 'my-tests']">
-                        <i class='bx bx-food-menu'></i>
-                        Quản lí test
-                    </button>
-                }
-            </div>
-        </div>
-    </div>
     
 
     <div class="row mt-3">
         <div class="col-10 offset-1">
-            <div class="card card-body mx-lg-5">
 
-                <!--top-->
+            <!-- Category and search -->
+            <div class="d-flex mt-5 justify-content-center">
+                <div class="input-group w-75 px-0">
+                    <label class="input-group-text">Danh mục</label>
+                    <select class="form-select">
+                        <option selected>Tất cả</option>
+                    </select>
+                </div>
+        
+                <div class="input-group ms-2 w-25">
+                    <input type="text" class="form-control" placeholder="Từ khóa..." [(ngModel)]="key">
+                    <button class="btn btn-outline-dark" (click)="pageIndex = 1; search()">
+                        <i class='bx bx-search fs-6 py-1'></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Top action -->
+            <div class="d-flex mt-3">
+                @if(isLoggedIn()) {
+                    <button class="btn btn-sm btn-outline-dark"
+                    [routerLink]="['/tests', 'my-tests']">
+                        <i class='bx bx-food-menu me-1 mt-1'></i>Chức năng
+                    </button>
+                }
+            </div>
+
+            <!-- Content -->
+            <div class="card card-body mt-2">
                 <div class="d-flex align-items-center">
                     <span class="flex-fill">Tìm thấy: <b class="text-info">{{total}}</b> kết quả</span>
 
@@ -104,6 +102,13 @@
                 </div>
 
             </div>
+        </div>
+    </div>
+    
+
+    <div class="row mt-3">
+        <div class="col-10 offset-1">
+            
         </div>
     </div>
 

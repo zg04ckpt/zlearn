@@ -96,7 +96,7 @@ namespace Core.Services.Management
             var dtos = new List<UserManagementDTO>();
             foreach(AppUser e in users.Data)
             {
-                var dto = Map(e);
+                var dto = MapToManage(e);
                 dto.Roles = await _userManager.GetRolesAsync(e);
                 dtos.Add(dto);
             }
@@ -113,7 +113,7 @@ namespace Core.Services.Management
             var user = await _userManager.FindByIdAsync(userId)
                 ?? throw new ErrorException("Không tìm thấy user");
 
-            var dto = Map(user);
+            var dto = MapToManage(user);
             dto.Roles = await _userManager.GetRolesAsync(user);
             return new APISuccessResult<UserManagementDTO>(dto);
         }
@@ -123,7 +123,7 @@ namespace Core.Services.Management
             var user = await _userManager.FindByIdAsync(dto.Id)
                 ?? throw new ErrorException("Không tìm thấy user");
 
-            user = Map(user, dto);
+            user = MapFromManage(user, dto);
             var result = await _userManager.UpdateAsync(user);
 
             if(result.Succeeded)

@@ -13,9 +13,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
-using Utilities;
-using Utilities.Exceptions;
 
 namespace Core.Services.System
 {
@@ -72,7 +69,7 @@ namespace Core.Services.System
             //get tokens
             var token = await GenerateToken(user);
             user.RefreshToken = token.RefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(double.Parse(_config[Consts.AppSettingsKey.REFRESH_LIFE_TIME]));
+            user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(double.Parse(_config.GetSection(Consts.JWT_SECTION)["AccessLifeTime"]));
             await _userManager.UpdateAsync(user);
 
             return new APISuccessResult<LoginResponseDTO>(new LoginResponseDTO
@@ -139,7 +136,7 @@ namespace Core.Services.System
             var createProcess = await _userManager.CreateAsync(newUser, request.Password);
             if (createProcess.Succeeded)
             {
-                var roleAssignResult = await _userManager.AddToRoleAsync(newUser, Consts.DEFAULT_USER_ROLE);
+                var roleAssignResult = await _userManager.AddToRoleAsync(newUser, Consts.USER_ROLE);
                 if (roleAssignResult.Succeeded)
                 {
                     //email confirm
@@ -398,15 +395,15 @@ namespace Core.Services.System
             {
                 publicClaims.Add(new(ClaimTypes.Role, role));
             }
-            var secretKey = Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY);
+            var secretKey = Environment.GetEnvironmentVariable(Consts.SECRET_KEY);
             var tokenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var token = new JwtSecurityToken
             (
-                issuer: _config[Consts.AppSettingsKey.ISSUER],
-                audience: _config[Consts.AppSettingsKey.AUDIENCE],
+                issuer: _config.GetSection(Consts.JWT_SECTION)["Issuer"],
+                audience: _config.GetSection(Consts.JWT_SECTION)["Audience"],
                 claims: publicClaims,
                 signingCredentials: new SigningCredentials(tokenKey, SecurityAlgorithms.HmacSha256),
-                expires: DateTime.Now.AddMinutes(double.Parse(_config[Consts.AppSettingsKey.ACCESS_LIFE_TIME]))
+                expires: DateTime.Now.AddMinutes(double.Parse(_config.GetSection(Consts.JWT_SECTION)["RefreshLifeTime"]))
             );
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var accessToken = jwtTokenHandler.WriteToken(token);
@@ -435,10 +432,10 @@ namespace Core.Services.System
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = false,
 
-                ValidIssuer = _config[Consts.AppSettingsKey.ISSUER],
-                ValidAudience = _config[Consts.AppSettingsKey.AUDIENCE],
+                ValidIssuer = _config.GetSection(Consts.JWT_SECTION)["Issuer"],
+                ValidAudience = _config.GetSection(Consts.JWT_SECTION)["Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(Consts.EnvKey.SECRET_KEY)))
+                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(Consts.SECRET_KEY)))
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -298,7 +298,7 @@ namespace Data.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("SavedTest", (string)null);
+                    b.ToTable("SavedTests", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -423,13 +423,13 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.UserInTest", b =>
                 {
                     b.HasOne("Data.Entities.Test", "Test")
-                        .WithMany("SavedTest")
+                        .WithMany("SavedTests")
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.AppUser", "User")
-                        .WithMany("SavedTest")
+                        .WithMany("SavedTests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -443,14 +443,14 @@ namespace Data.Migrations
                 {
                     b.Navigation("Tests");
 
-                    b.Navigation("SavedTest");
+                    b.Navigation("SavedTests");
                 });
 
             modelBuilder.Entity("Data.Entities.Test", b =>
                 {
                     b.Navigation("Questions");
 
-                    b.Navigation("SavedTest");
+                    b.Navigation("SavedTests");
                 });
 #pragma warning restore 612, 618
         }

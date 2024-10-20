@@ -1,15 +1,17 @@
 @if (!loading) {
     <div class="mx-2 mx-lg-5">
-        <div class="d-flex pt-4">
-            @if (!updating) {
-                <button (click)="updating = true" class="btn btn-outline-dark me-2">Cập nhật</button>
-            }
-            @else {
-                <button (click)="reset()" class="btn btn-outline-danger me-2">Hủy</button>
-                <button (click)="save()" class="btn btn-outline-success me-2">Lưu</button>
-            }
-        </div>
+        
         <div class="row mt-4 mx-0 mx-sm-5">
+            <div class="d-flex col-12 pt-4 mb-3 flex-row-reverse">
+                @if (!updating) {
+                    <button (click)="updating = true" class="btn btn-sm btn-outline-dark me-2" style="width: 100px;">Cập nhật</button>
+                }
+                @else {
+                    <button (click)="reset()" class="btn btn-sm btn-outline-danger me-2" style="width: 100px;">Hủy</button>
+                    <button (click)="save()" class="btn btn-sm btn-outline-success me-2" style="width: 100px;">Lưu</button>
+                }
+            </div>
+            
             <div class="col-12">
                 <div class="card mt-4 mt-lg-0 shadow-sm">
                     <div class="card-header fw-bold text-center">

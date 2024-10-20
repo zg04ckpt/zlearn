@@ -3,12 +3,6 @@ using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Utilities;
 
 namespace Data
 {
@@ -20,7 +14,7 @@ namespace Data
         public static async Task Initialize(IServiceProvider serviceProvider, UserManager<AppUser> userManager)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRole>>();
-            string[] roleNames = { Consts.DEFAULT_ADMIN_ROLE, Consts.DEFAULT_USER_ROLE };
+            string[] roleNames = { "Admin", "User" };
             foreach (var roleName in roleNames)
             {
                 var roleExist = await roleManager.RoleExistsAsync(roleName);

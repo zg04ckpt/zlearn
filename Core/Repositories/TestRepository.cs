@@ -2,11 +2,10 @@
 using Core.DTOs;
 using Core.Exceptions;
 using Core.Interfaces.IRepositories;
+using Core.Services.Common;
 using Data;
 using Data.Entities;
-using System.Data.Entity;
-using System.Security.Claims;
-using Utilities.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Repositories
 {
@@ -45,29 +44,32 @@ namespace Core.Repositories
 
         public async Task<List<Question>> GetQuestions(string testId)
         {
-            return await _context.Questions.
-                Where(x => x.TestId.Equals(testId))
+            return await _context.Questions
+                .Where(x => x.TestId.ToString().Equals(testId))
+                .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<TestResult>> GetResultsByUserId(string userId)
+        public async Task<List<TestResult>> GetResultsByUserId(string userId)
         {
             return await _context.TestResults
-                .Where(x => x.UserId.Equals(userId)).AsNoTracking()
+                .Where(x => x.UserId.Equals(userId))
+                .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Test>> GetSavedTestsOfUser(string userId)
+        public async Task<List<Test>> GetSavedTestsOfUser(string userId)
         {
-            var rawData = from test in _context.Tests
-                          join st in _context.SavedTest on test.Id equals st.TestId
-                          select test;
-            return await rawData.ToListAsync();
+            return await(from test in _context.Tests
+                        join st in _context.SavedTests on test.Id equals st.TestId
+                        where st.UserId.ToString().Equals(userId)
+                        select test).ToListAsync();
         }
 
         public Task<bool> IsSaved(string userId, string testId)
         {
-            return _context.SavedTest.AnyAsync(x => x.UserId.Equals(userId) && x.UserId.Equals(testId));
+            return _context.SavedTests
+                .AnyAsync(x => x.UserId.ToString().Equals(userId) && x.TestId.ToString().Equals(testId));
         }
 
         public void RemoveQuestion(Question question)
@@ -82,15 +84,15 @@ namespace Core.Repositories
 
         public void SaveTest(SavedTest savedTest)
         {
-            _context.SavedTest.Add(savedTest);
+            _context.SavedTests.Add(savedTest);
         }
 
         public async Task UnSave(string userId, string testId)
         {
-            var uit = await _context.SavedTest
-                .Where(x => x.UserId.ToString() == userId && x.TestId.ToString() == testId)
+            var uit = await _context.SavedTests
+                .Where(x => x.UserId.ToString().Equals(userId) && x.TestId.ToString().Equals(testId))
                 .FirstOrDefaultAsync() ?? throw new ErrorException("Không tìm thấy test cần bỏ lưu");
-            _context.SavedTest.Remove(uit);
+            _context.SavedTests.Remove(uit);
         }
 
         public void UpdateQuestion(Question question)

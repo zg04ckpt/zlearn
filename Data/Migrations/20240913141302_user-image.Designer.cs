@@ -188,7 +188,7 @@ namespace Data.Migrations
                     b.ToTable("Questions", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Entities.SavedTest", b =>
+            modelBuilder.Entity("Data.Entities.SavedTests", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -416,7 +416,7 @@ namespace Data.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("Data.Entities.SavedTest", b =>
+            modelBuilder.Entity("Data.Entities.SavedTests", b =>
                 {
                     b.HasOne("Data.Entities.Test", "Test")
                         .WithMany("UserInTests")

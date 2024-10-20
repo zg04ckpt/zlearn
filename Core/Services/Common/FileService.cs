@@ -1,36 +1,29 @@
 ﻿using Core.Exceptions;
 using Core.Interfaces.IServices.Common;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Utilities.Consts;
 
 namespace Core.Services.Common
 {
     public class FileService : IFileService
     {
         private readonly string _folderPath;
-        public const string FOLDER_NAME = "Images";
-        public const string REQUEST_PATH = "/images";
+        public const string IMAGE_FOLDER_NAME = "Images";
+        public const string IMAGE_PATH = "/api/images";
 
         public FileService()
         {
-            _folderPath = Path.Combine(Directory.GetCurrentDirectory(), FOLDER_NAME);
+            _folderPath = Path.Combine(Directory.GetCurrentDirectory(), IMAGE_FOLDER_NAME);
         }
 
-        public async Task<bool> DeleteFile(string fileName)
+        public async Task DeleteFile(string fileName)
         {
-            if (fileName == null) return false;
+            if (fileName == null)
+                throw new ErrorException("Nội dung file trống");
             var filePath = Path.Combine(_folderPath, fileName);
             if (File.Exists(filePath))
             {
                 await Task.Run(() => File.Delete(filePath));
-                return true;
             }
-            return false;
         }
 
         public async Task<string> SaveFile(IFormFile file)
@@ -49,13 +42,13 @@ namespace Core.Services.Common
         public string GetFileUrl(string fileName)
         {
             if (fileName == null) return null;
-            return REQUEST_PATH + "/" + fileName;
+            return IMAGE_PATH + "/" + fileName;
         }
 
         public static string GetAsUrl(string fileName)
         {
             if (fileName == null) return null;
-            return REQUEST_PATH + "/" + fileName;
+            return IMAGE_PATH + "/" + fileName;
         }
     }
 }
