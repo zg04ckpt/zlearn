@@ -4,16 +4,20 @@ import { ComponentService } from '../../../services/component.service';
 import { TestService } from '../../../services/test.service';
 import { TestDetail } from '../../../entities/test/test-detail.entity';
 import { FormsModule } from '@angular/forms';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserService } from '../../../services/user.service';
+import { User } from '../../../entities/user/user.entity';
+import { CommentDTO } from '../../../dtos/comment/comment.dto';
+import { CommentService } from '../../../services/comment.service';
 
 @Component({
   selector: 'app-test',
   standalone: true,
   imports: [
     RouterLink,
-    FormsModule
+    FormsModule,
+    DatePipe
   ],
   templateUrl: './test-detail.component.html',
   styleUrl: './test-detail.component.css'
@@ -24,6 +28,9 @@ export class TestDetailComponent implements OnInit {
   mode: string = "practice";
   destroyRef = inject(DestroyRef);
   isSaved: boolean = false;
+  user: User|null = null;
+  comments: CommentDTO[] = [];
+  //comments
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -31,13 +38,16 @@ export class TestDetailComponent implements OnInit {
     private testService: TestService,
     private router: Router,
     private location: Location,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    private commentService: CommentService
+  ) {  }
 
   ngOnInit(): void {
+    this.userService.$currentUser.subscribe(next => this.user = next);
+
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     if(this.id == null) {
-      this.componentService.displayMessage("Không tìm thấy bài test");
+      this.componentService.displayMessage("Không tìm thấy đề");
       return;
     }
 
@@ -59,8 +69,55 @@ export class TestDetailComponent implements OnInit {
           debugger
           this.isSaved = res;
           this.componentService.$showLoadingStatus.next(false);
-        });
+      });
     }
+
+    //comment
+    this.getComments();
+
+    // for(let i = 0; i < 10; i++) {
+    //   this.comments.push({
+    //     id: 'id',
+    //     content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur eius quibusdam saepe sunt velit esse deserunt excepturi eaque vitae, cupiditate sint consequuntur aspernatur soluta porro ipsam qui. Quibusdam, inventore iusto! Pariatur blanditiis nulla fuga rem debitis consequuntur expedita! Molestiae natus esse fugit, nulla sint, quasi sequi recusandae praesentium, tempore quia accusamus eaque.",
+    //     createdAt: new Date(),
+    //     likes: i + 32,
+    //     parentId: null,
+    //     userName: 'nguyencao142' + i,
+    //     userId: 'id',
+    //     userAvatar: '',
+    //     childsId: [
+    //       'id1',
+    //       'id1',
+    //       'id1',
+    //       'id1'
+    //     ]
+    //   })
+    // }
+  }
+
+  getComments() {
+    this.commentService.getAllCommentsOfTest(this.id!).subscribe(next => {
+      this.comments = next;
+      this.componentService.$showLoadingStatus.next(false);
+    });
+  }
+
+  comment(content: string) {
+    this.commentService.sendComment({
+      content: content,
+      parentId: null,
+      testId: this.id!
+    }).subscribe(next => {
+      this.getComments();
+      this.componentService.$showLoadingStatus.next(false);
+    });
+  }
+
+  like(comment: CommentDTO) {
+    this.commentService.like(comment.id).subscribe(next => {
+      comment.likes++;
+      this.componentService.$showLoadingStatus.next(false);
+    });
   }
 
   checkPrivacy(): boolean {

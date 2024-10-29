@@ -90,38 +90,44 @@
             </div>
         </div>
     
+        <!-- Comment -->
         <div class="col-lg-3">
-            <div class="card me-3" style="height: 500px;">
+            <div class="card me-3" >
                 <div class="card-header text-center">Bình luận</div>
-                <div class="card-body p-2 d-flex flex-column justify-content-between">
+                <div class="card-body p-1 d-flex flex-column justify-content-between" style="height: 75vh;">
+                    <div class="table-wrapper flex-fill">
+                        @for (item of comments; track $index) {
+                            <!--Comment-->
+                            <div class="px-2 py-1 d-flex flex-column">
+                                <div class="d-flex">
+                                    <img src="" alt="" class="avt mt-1">
+                                    <div class="d-flex flex-row flex-column ms-2">
+                                        <div class="d-flex">
+                                            <small class="fw-bold align-text-top">{{item.userName}}</small>
+                                            <small class="text-secondary align-content-center ms-2" style="font-size: 10px;">{{item.createdAt | date: 'HH:mm - dd/MM/yyyy'}}</small>
+                                        </div>
+                                        <p class="mb-1" style="font-size: 12px;">{{item.content}}</p>
+                                    </div>
+                                </div>
     
-                    <!--Comment-->
-                    <div class=" px-2 py-1 mb-2"
-                    style="height: fit-content;">
-
-                        <div class="d-flex mb-1">
-                            <img src="" alt="" class="avt mt-1">
-                            <div class="d-flex flex-column ms-2">
-                                <small class="fw-bold align-text-top">Tên người dùng</small>
-                                <p class="mb-1" style="font-size: 12px;">Đề quá tệ ??!!</p>
-                            </div>
-                        </div>
+                                <div class="d-flex flex-row align-content-center flex-row-reverse">
     
-                        <div class="d-flex justify-content-between p-0">
-                            <small class="text-secondary align-content-center" style="font-size: 10px;">12:56 - 19/08/24</small>
-                            <div class="d-flex align-content-center">
-                                <i class='bx bx-heart fw-bold heart-btn'></i>
-                                <div class="me-1" style="font-size: 12px;">34</div>
-                                <i class='bx bx-reply fw-bold reply-btn'></i>
-                                <div style="font-size: 12px;">34</div>
+                                    <div style="font-size: 10px;">{{item.childsId?.length || 0}}</div>
+                                    <i class='bx bx-reply fw-bold reply-btn'></i>
+    
+                                    <div class="me-1" style="font-size: 10px;">{{item.likes}}</div>
+                                    <i class='bx bx-heart fw-bold heart-btn me-1' (click)="like(item)"></i>
+                                    
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
+
     
                     <!--Add comment-->
-                    <div class="position-relative">
-                        <input onfocus="sendCmt.hidden = false" onblur="sendCmt.hidden = true" id="typecomment" type="text" class="w-100 p-1 ps-2 pe-4 overflow-hidden m-0" placeholder="Bình luận ...">
-                        <i id="sendCmt" hidden class='bx text-info bx-send position-absolute end-0 top-50 translate-middle-y me-2 fw-bold btn p-0'></i>
+                    <div class="d-flex mt-3 p-1">
+                        <input #commentInput type="text" class="w-100 p-1 ps-2 pe-4 overflow-hidden m-0" placeholder="Bình luận ...">
+                        <i (click)="comment(commentInput.value); commentInput.value = ''" class='bx bx-send btn btn-sm btn-outline-dark fs-4 p-0 px-2 ms-2'></i>
                     </div>
                 </div>
                 
