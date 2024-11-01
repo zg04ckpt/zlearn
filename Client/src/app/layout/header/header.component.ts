@@ -51,7 +51,7 @@ export class HeaderComponent {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
-    console.log('Screen width:', window.innerWidth);
+    // console.log('Screen width:', window.innerWidth);
     // Thực hiện các hành động khác khi kích thước màn hình thay đổi
   }
 }

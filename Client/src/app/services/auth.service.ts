@@ -14,6 +14,7 @@ import { ComponentService } from "./component.service";
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
 import { APIResult } from "../dtos/common/api-result.dto";
+import { environment } from "../../environments/environment";
 
 @Injectable({
     providedIn: 'root'
@@ -35,6 +36,7 @@ export class AuthService {
             .post<APIResult<UserDTO>>(`auth/login`, data)
             .pipe(
                 tap(res => {
+                    res.data!.profileImage = environment.baseUrl + res.data!.profileImage;
                     debugger
                     this.storageService.save(StorageKey.accessToken, res.data!.accessToken);
                     this.storageService.save(StorageKey.refreshToken, res.data!.refreshToken);

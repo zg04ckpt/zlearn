@@ -8,7 +8,8 @@ export class UserMapper extends Mapper<UserDTO, User> {
             id: param.id,
             userName: param.username,
             fullName: param.fullName,
-            roles: param.roles
+            roles: param.roles,
+            profileImage: param.profileImage
         }
     }
 }

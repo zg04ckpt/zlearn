@@ -10,6 +10,7 @@ import { CreateTestDTO } from '../../../dtos/test/create-test.dto';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UpdateTestDTO } from '../../../dtos/test/update-test.dts';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-update-test',
@@ -64,7 +65,8 @@ export class UpdateTestComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private titleService: Title
   ) {}
   
   ngOnInit(): void {
@@ -106,6 +108,8 @@ export class UpdateTestComponent implements OnInit {
         });
       });
     });
+
+    this.titleService.setTitle("Cập nhật đề - ZLEARN");
   }
 
   async convertImageUrlToFile(imageUrl: string): Promise<File|null> {
@@ -161,9 +165,9 @@ export class UpdateTestComponent implements OnInit {
     } else {
       this.componentService.displayConfirmMessage("Xác nhận lưu chỉnh sửa?", async () => {
         await this.testService.update(this.id!, this.data);
-          this.componentService.$showLoadingStatus.next(false);
-          this.componentService.$showToast.next("Cập nhật đề thành công");
-          this.isSuccess = true;
+        this.componentService.$showLoadingStatus.next(false);
+        this.componentService.$showToast.next("Cập nhật đề thành công");
+        this.isSuccess = true;
       });
     }
   }

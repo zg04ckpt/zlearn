@@ -24,6 +24,8 @@ export class UserProfileComponent implements OnInit {
   userDetail: UserDetail|null = null;
   editingData: UserDetail|null = null;
   updating: boolean = false;
+  avtPreviewLink: string|null = null;
+
   constructor(
     private userService: UserService,
     private componentService: ComponentService,
@@ -39,6 +41,7 @@ export class UserProfileComponent implements OnInit {
         debugger;
         this.loading = false;
         this.userDetail = res;
+        this.avtPreviewLink = res.imageUrl;
         this.reset();
         this.componentService.$showLoadingStatus.next(false);
       });
@@ -58,10 +61,10 @@ export class UserProfileComponent implements OnInit {
       "Xác nhận lưu thay đổi?",
       [
         { name: "Hủy", action: () => {} },
-        { name: "Xác nhận", action: () => {
+        { name: "Xác nhận", action: async () => {
 
           this.componentService.$showLoadingStatus.next(true);
-          this.userService.updateProfile(this.user!.id, {
+          await this.userService.updateProfile(this.user!.id, {
             firstName: this.editingData!.firstName,
             lastName: this.editingData!.lastName,
             email: this.editingData!.email,
@@ -70,28 +73,29 @@ export class UserProfileComponent implements OnInit {
             dayOfBirth: this.editingData!.dayOfBirth,
             address: this.editingData!.address,
             intro: this.editingData!.intro,
-            socialLinks: this.convertLinksToString()
-          }).subscribe({
-            next: res => { 
-              this.updating = false;
-              this.componentService.$showLoadingStatus.next(false);
-              this.userDetail = this.editingData;
-              this.componentService.displayMessage("Lưu thay đổi thành công!");
-            },
-
-            error: res => {
-              this.componentService.$showLoadingStatus.next(false);
-              this.componentService.displayMessage(`Lỗi: ${res.error?.message || res.statusText}`);
-            }
+            socialLinks: this.convertLinksToString(),
+            image: this.editingData!.image,
+            imageUrl: this.editingData!.imageUrl
           });
+          this.updating = false;
+          this.componentService.$showLoadingStatus.next(false);
+          this.userDetail = this.editingData;
+          this.componentService.displayMessage("Lưu thay đổi thành công!");
         }}
       ]
     );
     
   }
 
-  changeAvatar() {
-
+  changeAvatar(event: any) {
+    const image:File = event.target.files[0];
+    if(image != null) {
+      this.editingData!.image = image;
+      const reader = new FileReader();
+      reader.onload = e => this.avtPreviewLink = reader.result as string
+      debugger
+      reader.readAsDataURL(image);
+    }
   }
 
   convertLinksToString(): string {

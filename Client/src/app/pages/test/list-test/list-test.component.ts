@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-list-test',
@@ -32,10 +33,12 @@ export class ListTestComponent implements OnInit {
     private router: Router,
     private testService: TestService,
     private componentService: ComponentService,
-    private userService: UserService
+    private userService: UserService,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    this.titleService.setTitle("Trắc nghiệm - ZLEARN")
     this.search();
   }
 

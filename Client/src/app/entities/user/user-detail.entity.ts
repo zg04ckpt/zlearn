@@ -4,6 +4,8 @@ export interface UserDetail {
     firstName: string;
     lastName: string;
     email: string;
+    image: File|null;
+    imageUrl: string|null;
     phoneNum: string;
     gender: Gender;
     dayOfBirth: string;

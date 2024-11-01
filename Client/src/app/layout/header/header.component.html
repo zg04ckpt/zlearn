@@ -26,7 +26,7 @@ style="position: fixed; top: 0; height: 50px; z-index: 3;">
                         {{user.fullName || user.userName}}
                     </small>
                     <div class="dropdown position-relative">
-                        <img class="dropdown-toggle" data-bs-toggle="dropdown" src="assets\images\avt.png" alt="" id="avt">
+                        <img class="dropdown-toggle" data-bs-toggle="dropdown" [src]="user.profileImage || 'assets\images\avt.png'" alt="" id="avt">
                         <ul class="dropdown-menu position-absolute mt-2 p-2 border-2 border-black shadow-sm" 
                             style="left: 100%; transform: translateX(-100%);">
                             <li><a class="dropdown-item my-1" [routerLink]="['user/profile']">Tài khoản</a></li>

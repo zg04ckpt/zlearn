@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
 import { Observable } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-create-test',
@@ -23,7 +24,7 @@ import { Observable } from 'rxjs';
   templateUrl: './create-test.component.html',
   styleUrl: './create-test.component.css'
 })
-export class CreateTestComponent implements CanComponentDeactivate{
+export class CreateTestComponent implements CanComponentDeactivate, OnInit{
   selectedCount: number = 0;
   questionManager: {
     previewImageUrl: string|null;
@@ -63,8 +64,13 @@ export class CreateTestComponent implements CanComponentDeactivate{
     private testService: TestService,
     private userService: UserService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private titleService: Title
   ) {}
+
+  ngOnInit(): void {
+    this.titleService.setTitle("Tạo đề trắc nghiệm - ZLEARN")
+  }
 
   canDeactivate = () => {
     if(this.isCreatedTest) return true;

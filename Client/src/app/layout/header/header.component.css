@@ -23,5 +23,6 @@
 
 #avt:hover {
     cursor: pointer;
-    border: 2px solid rgb(16, 197, 229);
+    border: 1px solid rgb(16, 197, 229);
+    
 }

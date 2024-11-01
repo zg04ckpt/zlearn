@@ -1,3 +1,4 @@
+import { environment } from "../../../environments/environment";
 import { UserDetailDTO } from "../../dtos/user/user-detail.dto";
 import { UserDetail } from "../../entities/user/user-detail.entity";
 import { Gender } from "../../enums/gender.enum";
@@ -25,7 +26,9 @@ export class UserDetailMapper extends Mapper<UserDetailDTO, UserDetail> {
             dayOfBirth: param.dayOfBirth,
             address: param.address,
             intro: param.intro,
-            socialLinks: list
+            socialLinks: list,
+            image: null,
+            imageUrl: param.imageUrl? environment.baseUrl + param.imageUrl : null
         }
     }
 }

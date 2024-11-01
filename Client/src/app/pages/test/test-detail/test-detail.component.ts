@@ -10,6 +10,7 @@ import { UserService } from '../../../services/user.service';
 import { User } from '../../../entities/user/user.entity';
 import { CommentDTO } from '../../../dtos/comment/comment.dto';
 import { CommentService } from '../../../services/comment.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-test',
@@ -39,7 +40,8 @@ export class TestDetailComponent implements OnInit {
     private router: Router,
     private location: Location,
     private userService: UserService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private titleService: Title
   ) {  }
 
   ngOnInit(): void {
@@ -58,6 +60,7 @@ export class TestDetailComponent implements OnInit {
       next: res => {
         this.componentService.$showLoadingStatus.next(false);
         this.data = res;
+        this.titleService.setTitle(`${this.data!.name} - ZLEARN`);
       }
     });
 
@@ -93,6 +96,8 @@ export class TestDetailComponent implements OnInit {
     //     ]
     //   })
     // }
+
+    
   }
 
   getComments() {

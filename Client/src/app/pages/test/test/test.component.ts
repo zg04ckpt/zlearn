@@ -12,6 +12,7 @@ import { CommonService } from '../../../services/common.service';
 import { UserService } from '../../../services/user.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -47,7 +48,8 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
     private testService: TestService,
     private commonService: CommonService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private titleService: Title
   ) {}
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -98,6 +100,8 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
 
         debugger;
     });
+
+    this.titleService.setTitle("Làm đề - ZLEARN")
   }
 
   endTest() {

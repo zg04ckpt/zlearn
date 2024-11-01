@@ -9,6 +9,7 @@ import moment from 'moment';
 import { concatMap } from 'rxjs';
 import { TestResult } from '../../../entities/test/test-result.entity';
 import { DatePipe } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-my-tests',
@@ -29,7 +30,8 @@ export class MyTestsComponent implements OnInit {
   constructor(
     private testService: TestService,
     private componentService: ComponentService,
-    private router: Router
+    private router: Router,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +48,7 @@ export class MyTestsComponent implements OnInit {
   }
 
   showCreatedTests() {
+    this.titleService.setTitle("Đề đã tạo - ZLEARN")
     this.list2 = [];
     this.list3 = [];
     this.componentService.$showLoadingStatus.next(true);
@@ -68,6 +71,7 @@ export class MyTestsComponent implements OnInit {
   }
 
   showSavedTests() {
+    this.titleService.setTitle("Đề đã lưu - ZLEARN")
     this.list1 = [];
     this.list3 = [];
     this.componentService.$showLoadingStatus.next(true);
@@ -89,6 +93,7 @@ export class MyTestsComponent implements OnInit {
   }
 
   showTestResults() {
+    this.titleService.setTitle("Lịch sử làm đề - ZLEARN")
     this.list1 = [];
     this.list2 = [];
     this.testService.getResultsByUserId()
