@@ -40,14 +40,17 @@ builder.Services.AddIdentity<AppUser, AppRole>()
 
 builder.Services.AddTransient<IRoleManagementService, RoleManagementService>();
 builder.Services.AddTransient<IUserManagementService, UserManagementService>();
+builder.Services.AddTransient<ITestManagementService, TestManagementService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITestRepository, TestRepository>();
+builder.Services.AddTransient<ICommentRepository, CommentRepository>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<IFileService, FileService>();
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ICommentService, CommentService>();
 
 
 builder.Services.AddControllers();

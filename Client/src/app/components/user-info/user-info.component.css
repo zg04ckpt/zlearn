@@ -1,0 +1,10 @@
+.nav-tabs li a {
+    padding: 5px;
+    font-size: 12px;
+}
+
+.text-ellipsis {
+    white-space: nowrap; /* Không cho phép xuống dòng */
+    overflow: hidden; /* Ẩn phần văn bản vượt quá */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm */
+}

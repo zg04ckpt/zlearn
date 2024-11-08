@@ -7,10 +7,7 @@ D:\Code\Web\zg04web\Data\bin\Debug\net6.0\Data.deps.json
 D:\Code\Web\zg04web\Data\bin\Debug\net6.0\Data.runtimeconfig.json
 D:\Code\Web\zg04web\Data\bin\Debug\net6.0\Data.dll
 D:\Code\Web\zg04web\Data\bin\Debug\net6.0\Data.pdb
-D:\Code\Web\zg04web\Data\bin\Debug\net6.0\Utilities.dll
-D:\Code\Web\zg04web\Data\bin\Debug\net6.0\Utilities.pdb
 D:\Code\Web\zg04web\Data\obj\Debug\net6.0\Data.csproj.AssemblyReference.cache
-D:\Code\Web\zg04web\Data\obj\Debug\net6.0\Data.csproj.Up2Date
 D:\Code\Web\zg04web\Data\obj\Debug\net6.0\Data.dll
 D:\Code\Web\zg04web\Data\obj\Debug\net6.0\refint\Data.dll
 D:\Code\Web\zg04web\Data\obj\Debug\net6.0\Data.pdb

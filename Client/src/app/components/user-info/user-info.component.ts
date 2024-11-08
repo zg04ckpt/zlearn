@@ -1,0 +1,35 @@
+import { Component, OnInit } from '@angular/core';
+import { UserDetail } from '../../entities/user/user-detail.entity';
+import { UserService } from '../../services/user.service';
+import { ComponentService } from '../../services/component.service';
+import { UserInfoDTO } from '../../dtos/user/user-info.dto';
+import { DatePipe } from '@angular/common';
+import { UserInfo } from '../../entities/user/user-info.entity';
+
+@Component({
+  selector: 'app-user-info',
+  standalone: true,
+  imports: [
+    DatePipe
+  ],
+  templateUrl: './user-info.component.html',
+  styleUrl: './user-info.component.css'
+})
+export class UserInfoComponent {
+  show: boolean = false;
+  userInfo: UserInfo|null = null;
+  constructor(
+    private userService: UserService,
+    private componentService: ComponentService
+  ) {
+    userService.$showInfo.subscribe(next => this.showInfo(next));
+  }
+  
+  showInfo(userId: string) {
+    this.userService.getUserProfile(userId).subscribe(next => {
+      this.componentService.$showLoadingStatus.next(false);
+      this.userInfo = next;
+      this.show = true;
+    });
+  }
+}

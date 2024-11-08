@@ -85,8 +85,14 @@ namespace Core.Services.Features
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var test = await _testRepository.GetById(Guid.Parse(testId))
                 ?? throw new ErrorException("Đề trắc nghiệm không tồn tại");
-            if (!test.AuthorId.ToString().Equals(userId)) 
-                throw new ForbiddenException();
+
+            if (!test.AuthorId.ToString().Equals(userId))
+            {
+                if(!claimsPrincipal.IsInRole(Consts.ADMIN_ROLE))
+                {
+                    throw new ForbiddenException();
+                }
+            }  
 
             _testRepository.Delete(test);
             if (await _testRepository.SaveChanges())

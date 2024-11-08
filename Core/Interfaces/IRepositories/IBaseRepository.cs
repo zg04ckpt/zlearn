@@ -15,7 +15,6 @@ namespace Core.Interfaces.IRepositories
         Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter);
         Task<PaginatedResult<T>> GetPaginatedData(int pageIndex, int pageSize, List<ExpressionFilter> filters);
         IQueryable<T> GetQuery();
-        Task<bool> IsExist(Tid id);
         Task<bool> IsExist(Expression<Func<T, bool>> filter);
         Task<T> GetById(Tid id);
         void Create(T entity);

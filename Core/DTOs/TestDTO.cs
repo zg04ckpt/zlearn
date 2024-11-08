@@ -63,7 +63,7 @@ namespace Core.DTOs
         public bool IsPrivate { get; set; }
         public List<UpdateQuestionDTO> Questions { get; set; }
     }
-    
+
     public class TestSearchDTO
     {
         public string? Name { get; set; }
@@ -98,7 +98,7 @@ namespace Core.DTOs
 
     public class UpdateQuestionDTO
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string Content { get; set; }
         public string ImageUrl { get; set; }
         public string AnswerA { get; set; }

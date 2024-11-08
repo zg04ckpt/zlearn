@@ -100,7 +100,7 @@
                             <!--Comment-->
                             <div class="px-2 py-1 d-flex flex-column">
                                 <div class="d-flex">
-                                    <img [src]="item.userAvatar" alt="" class="avt mt-1">
+                                    <img [src]="item.userAvatar" alt="" class="avt mt-1" (click)="showInfo(item.userId)">
                                     <div class="d-flex flex-row flex-column ms-2">
                                         <div class="d-flex">
                                             <small class="fw-bold align-text-top">{{item.userName}}</small>

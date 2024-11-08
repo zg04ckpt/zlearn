@@ -77,26 +77,6 @@ export class TestDetailComponent implements OnInit {
 
     //comment
     this.getComments();
-
-    // for(let i = 0; i < 10; i++) {
-    //   this.comments.push({
-    //     id: 'id',
-    //     content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur eius quibusdam saepe sunt velit esse deserunt excepturi eaque vitae, cupiditate sint consequuntur aspernatur soluta porro ipsam qui. Quibusdam, inventore iusto! Pariatur blanditiis nulla fuga rem debitis consequuntur expedita! Molestiae natus esse fugit, nulla sint, quasi sequi recusandae praesentium, tempore quia accusamus eaque.",
-    //     createdAt: new Date(),
-    //     likes: i + 32,
-    //     parentId: null,
-    //     userName: 'nguyencao142' + i,
-    //     userId: 'id',
-    //     userAvatar: '',
-    //     childsId: [
-    //       'id1',
-    //       'id1',
-    //       'id1',
-    //       'id1'
-    //     ]
-    //   })
-    // }
-
     
   }
 
@@ -152,6 +132,10 @@ export class TestDetailComponent implements OnInit {
 
       complete: () => this.componentService.$showLoadingStatus.next(false)
     });
+  }
+
+  showInfo(userId: string) {
+    this.userService.$showInfo.next(userId);
   }
 
   goToHome() {

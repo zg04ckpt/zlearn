@@ -37,7 +37,7 @@ export class UserProfileComponent implements OnInit {
     this.componentService.$showLoadingStatus.next(true);
     this.user = this.userService.getLoggedInUser();
     if(this.user != null) {
-      this.userService.getProfile(this.user.id).subscribe(res => {
+      this.userService.getProfile().subscribe(res => {
         debugger;
         this.loading = false;
         this.userDetail = res;
@@ -64,7 +64,7 @@ export class UserProfileComponent implements OnInit {
         { name: "Xác nhận", action: async () => {
 
           this.componentService.$showLoadingStatus.next(true);
-          await this.userService.updateProfile(this.user!.id, {
+          await this.userService.updateProfile({
             firstName: this.editingData!.firstName,
             lastName: this.editingData!.lastName,
             email: this.editingData!.email,

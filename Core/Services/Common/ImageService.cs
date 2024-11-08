@@ -1,10 +1,12 @@
 ﻿using Core.Common;
 using Core.DTOs;
 using Core.Exceptions;
+using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.Common;
 using Data;
 using Data.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,79 +21,53 @@ namespace Core.Services.Common
     {
         private readonly IFileService _fileService;
         private readonly AppDbContext _context;
-        public ImageService(IFileService fileService, AppDbContext context)
+        private readonly UserManager<AppUser> _userManager;
+
+        public ImageService(IFileService fileService, AppDbContext context, UserManager<AppUser> userManager)
         {
             _fileService = fileService;
             _context = context;
+            _userManager = userManager;
         }
 
-        public async Task<APIResult<IEnumerable<FileDTO>>> SaveImages(IFormCollection images, ClaimsPrincipal claimsPrincipal)
+        public async Task<APIResult<string>> SaveImage(ClaimsPrincipal claims, IFormFile image)
         {
-            string userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            var data = new Dictionary<string, IFormFile>();
-            foreach (var file in images.Files)
-            {
-                data[file.Name] = file;
-            }
+            string userId = claims.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
-            var savedImageNames = new List<string>();
-            var result = new List<FileDTO>();
-            foreach (var e in data)
+            string imageFileName = await _fileService.SaveFile(image);
+            _context.Images.Add(new Image
             {
-                string imageName = await _fileService.SaveFile(e.Value);
-                savedImageNames.Add(imageName);
-                result.Add(new FileDTO
-                {
-                    Key = e.Key,
-                    Url = _fileService.GetFileUrl(imageName)
-                });
-                
-            }
-            _context.Images.AddRange(savedImageNames.Select(e => new Image
-            {
-                Name = e,
+                Name = imageFileName,
                 Owner = userId
-            }));
+            });
             await _context.SaveChangesAsync();
-            return new APISuccessResult<IEnumerable<FileDTO>>("Lưu danh sách ảnh thành công", result);
+
+            return new APISuccessResult<string>(FileService.GetAsUrl(imageFileName));
         }
 
-        public async Task<APIResult<IEnumerable<FileDTO>>> UpdateImages(IFormCollection images, ClaimsPrincipal claimsPrincipal)
+        public async Task<APIResult<string>> UpdateImage(ClaimsPrincipal claims, IFormCollection data)
         {
-            string userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            var data = new Dictionary<string, IFormFile>();
-            foreach (var file in images.Files)
-            {
-                data[file.Name] = file;
-            }
+            string userId = claims.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            string imageFileName = Path.GetFileName(data["url"]);
+            IFormFile image = data.Files["image"];
 
-            var savedImageNames = new List<string>();
-            var result = new List<FileDTO>();
-            foreach (var e in data)
+            var old = await _context.Images.FindAsync(imageFileName)
+                ?? throw new ErrorException("Không tìm thấy ảnh cần cập nhật");
+            if (!old.Owner.Equals(userId))
             {
-                //xóa ảnh cũ
-                string oldFileName = Path.GetFileName(e.Key);
-                await _fileService.DeleteFile(oldFileName);
-                var oldImage = await _context.Images.FirstAsync(x => x.Name.Equals(oldFileName) && x.Owner.Equals(userId))
-                    ?? throw new ErrorException("Không tìm thấy ảnh hoặc bạn không có quyền sửa đổi");
-                _context.Images.Remove(oldImage);
-                //Tạo ảnh mới
-                string imageName = await _fileService.SaveFile(e.Value);
-                savedImageNames.Add(imageName);
-                result.Add(new FileDTO
-                {
-                    Key = e.Key,
-                    Url = _fileService.GetFileUrl(imageName)
-                });
-
+                throw new ErrorException("Không có quyền cập nhật ảnh này");
             }
-            _context.Images.AddRange(savedImageNames.Select(e => new Image
+            _context.Images.Remove(old);
+            await _fileService.DeleteFile(imageFileName);
+            imageFileName = await _fileService.SaveFile(image);
+            _context.Images.Add(new Image
             {
-                Name = e,
+                Name = imageFileName,
                 Owner = userId
-            }));
+            });
             await _context.SaveChangesAsync();
-            return new APISuccessResult<IEnumerable<FileDTO>>("Cập nhật danh sách ảnh thành công", result);
+
+            return new APISuccessResult<string>(FileService.GetAsUrl(imageFileName));
         }
     }
 }

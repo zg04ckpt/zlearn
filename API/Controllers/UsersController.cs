@@ -8,7 +8,7 @@ namespace BE.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    public class UsersController : BaseController
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly ILogger<UsersController> _logger;
@@ -18,18 +18,25 @@ namespace BE.Controllers
             _userService = userService;
         }
 
-        [HttpPut("{id}/profile")]
-        [Authorize(Consts.USER_ROLE)]
-        public async Task<IActionResult> UpdateUserDetail(string id, [FromBody] UserProfileDTO dto)
+        [HttpGet("{userId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserProfile(string userId)
         {
-            return Ok(await _userService.UpdateProfile(id, dto));
+            return Ok(await _userService.GetOtherUserProfile(userId));
         }
 
-        [HttpGet("{id}/profile")]
+        [HttpPut("my-profile")]
         [Authorize(Consts.USER_ROLE)]
-        public async Task<IActionResult> GetUserDetail(string id)
+        public async Task<IActionResult> UpdateUserDetail([FromBody] UserProfileDTO dto)
         {
-            return Ok(await _userService.GetProfile(id));
+            return Ok(await _userService.UpdateMyProfile(User, dto));
+        }
+
+        [HttpGet("my-profile")]
+        [Authorize(Consts.USER_ROLE)]
+        public async Task<IActionResult> GetUserDetail()
+        {
+            return Ok(await _userService.GetMyProfile(User));
         }
     }
 }

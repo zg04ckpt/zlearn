@@ -12,7 +12,7 @@ namespace Core.Interfaces.IServices.Common
 {
     public interface IImageService
     {
-        Task<APIResult<IEnumerable<FileDTO>>> SaveImages(IFormCollection images, ClaimsPrincipal claimsPrincipal);
-        Task<APIResult<IEnumerable<FileDTO>>> UpdateImages(IFormCollection images, ClaimsPrincipal claimsPrincipal);
+        Task<APIResult<string>> SaveImage(ClaimsPrincipal claims, IFormFile image);
+        Task<APIResult<string>> UpdateImage(ClaimsPrincipal claims, IFormCollection data);
     }
 }

@@ -28,5 +28,6 @@ namespace Data.Entities
 
         public List<Test> Tests { get; set; }
         public List<SavedTest> UserInTests { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

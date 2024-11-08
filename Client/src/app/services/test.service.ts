@@ -96,33 +96,16 @@ export class TestService {
         }));
     }
     
-    async create(data: CreateTestDTO): Promise<void> {
-        debugger
-        const imageData = new FormData();
-        let hasImage = false;
+    public async create(data: CreateTestDTO): Promise<void> {
+        // Update test image
         if(data.image) {
-            imageData.append('test', data.image);
-            hasImage = true;
-            data.image = null;
+            data.imageUrl = await this.fileService.saveImage(data.image);
         }
-        
-        data.questions.forEach((e, index) => {
-            if(e.image) {
-                hasImage = true;
-                imageData.append(`${index}`, e.image);
-                e.image = null;
-            }
-        });
 
-        if(hasImage) {
-            const saveImageResult = await this.fileService.saveFile(imageData);
-            debugger
-            if(saveImageResult.success) {
-                const imageUrls = saveImageResult.data!;
-                imageUrls.forEach(e => {
-                    if(e.key == 'test') data.imageUrl = e.url;
-                    else data.questions[Number(e.key)].imageUrl = e.url;
-                });
+        // update question image
+        for(var question of data.questions) {
+            if(question.image) {
+                question.imageUrl = await this.fileService.saveImage(question.image);
             }
         }
 
@@ -131,34 +114,26 @@ export class TestService {
             .pipe(map(res => res.data!)));
     }
 
-    async update(id: string, data: UpdateTestDTO): Promise<void> {
+    public async update(id: string, data: UpdateTestDTO): Promise<void> {
         debugger
-        const imageData = new FormData();
-        let hasImage = false;
-        if(data.image)  {
-            imageData.append(data.imageUrl, data.image);
-            hasImage = true;
-            data.image = null;
-        }
-        const indexOf:{[key: string]: number} = {}; // đánh dấu question theo imageUrl
-        data.questions.forEach((e, index) => {
-            if(e.image) {
-                hasImage = true;
-                imageData.append(e.imageUrl, e.image);
-                e.image = null;
-                indexOf[e.imageUrl] = index;
+        
+        // Update test image
+        if(data.image) {
+            if(data.imageUrl) {
+                data.imageUrl = await this.fileService.updateImage(data.imageUrl, data.image);
+            } else {
+                data.imageUrl = await this.fileService.saveImage(data.image);
             }
-        });
+        }
 
-        if(hasImage) {
-            const saveImageResult = await this.fileService.updateImage(imageData);
-            debugger
-            if(saveImageResult.success) {
-                const imageUrls = saveImageResult.data!;
-                imageUrls.forEach(e => {
-                    if(e.key == data.imageUrl) data.imageUrl = e.url;
-                    else data.questions[indexOf[e.key]].imageUrl = e.url;
-                });
+        // update question image
+        for(var question of data.questions) {
+            if(question.image) {
+                if(question.imageUrl) {
+                    question.imageUrl = await this.fileService.updateImage(question.imageUrl, question.image);
+                } else {
+                    question.imageUrl = await this.fileService.saveImage(question.image);
+                }
             }
         }
 

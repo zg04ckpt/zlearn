@@ -66,7 +66,26 @@ namespace Core.Mappers
                 DayOfBirth = user.DateOfBirth,
                 Address = user.Address,
                 Intro = user.Description,
-                SocialLinks = user.UserLinks
+                SocialLinks = user.UserLinks,
+                ImageUrl = user.ImageUrl
+            };
+        }
+
+        public static UserInfoDTO MapToInfo(AppUser user)
+        {
+            return new UserInfoDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.UserName,
+                Email = user.Email,
+                PhoneNum = user.PhoneNumber,
+                Gender = user.Gender,
+                DayOfBirth = user.DateOfBirth,
+                Address = user.Address,
+                Intro = user.Description,
+                SocialLinks = user.UserLinks,
+                ImageUrl = user.ImageUrl
             };
         }
 
@@ -81,6 +100,7 @@ namespace Core.Mappers
             oldUser.PhoneNumber = user.PhoneNum;
             oldUser.Description = user.Intro;
             oldUser.UserLinks = user.SocialLinks;
+            oldUser.ImageUrl = user.ImageUrl;
 
             return oldUser;
         }

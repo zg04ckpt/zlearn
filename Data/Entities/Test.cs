@@ -17,9 +17,10 @@ namespace Data.Entities
         public int NumberOfAttempts { get; set; }
         public int NumberOfQuestions { get; set; }
         public bool IsPrivate { get; set; }
-        public List<Question> Questions { get; set; }
-        public List<SavedTest> UserInTests { get; set; }
         public Guid AuthorId { get; set; }
         public AppUser Author { get; set; }
+        public List<Question> Questions { get; set; }
+        public List<SavedTest> UserInTests { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

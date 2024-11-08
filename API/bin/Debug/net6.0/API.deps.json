@@ -1841,26 +1841,6 @@
           "System.Xml.XPath": "4.3.0"
         }
       },
-      "Application/1.0.0": {
-        "dependencies": {
-          "Data": "1.0.0",
-          "MailKit": "4.6.0",
-          "Microsoft.AspNet.WebApi.Core": "5.3.0",
-          "Microsoft.AspNetCore.Authorization": "6.0.30",
-          "Microsoft.AspNetCore.Identity": "2.2.0",
-          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.30",
-          "Microsoft.Extensions.Hosting.Abstractions": "6.0.0",
-          "MimeKit": "4.6.0",
-          "Utilities": "1.0.0",
-          "ViewModels": "1.0.0"
-        },
-        "runtime": {
-          "Application.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
       "Core/1.0.0": {
         "dependencies": {
           "AutoMapper": "13.0.1",
@@ -1884,34 +1864,10 @@
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.30",
           "Microsoft.AspNetCore.WebUtilities": "2.2.0",
           "Microsoft.EntityFrameworkCore": "6.0.30",
-          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.30",
-          "Utilities": "1.0.0"
+          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.30"
         },
         "runtime": {
           "Data.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "Utilities/1.0.0": {
-        "runtime": {
-          "Utilities.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "ViewModels/1.0.0": {
-        "dependencies": {
-          "Data": "1.0.0",
-          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
-          "Microsoft.AspNetCore.Http.Features": "5.0.17",
-          "Newtonsoft.Json": "13.0.3",
-          "Utilities": "1.0.0"
-        },
-        "runtime": {
-          "ViewModels.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -3360,27 +3316,12 @@
       "path": "system.xml.xpath.xdocument/4.3.0",
       "hashPath": "system.xml.xpath.xdocument.4.3.0.nupkg.sha512"
     },
-    "Application/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "Core/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
     "Data/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Utilities/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "ViewModels/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

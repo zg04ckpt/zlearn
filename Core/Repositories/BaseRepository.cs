@@ -34,12 +34,6 @@ namespace Core.Repositories
             return data;
         }
 
-        public async Task<bool> IsExist(Tid id)
-        {
-            PropertyInfo idProperty = typeof(T).GetProperty("Id");
-            return await _context.Set<T>().AnyAsync(t => idProperty.GetValue(t).Equals(id));
-        }
-
         public async Task<bool> IsExist(Expression<Func<T, bool>> filter)
         {
             return await _context.Set<T>().AnyAsync(filter);

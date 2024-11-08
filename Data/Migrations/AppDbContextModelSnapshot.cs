@@ -140,6 +140,40 @@ namespace Data.Migrations
                     b.ToTable("AppUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Likes")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.Image", b =>
                 {
                     b.Property<string>("Name")
@@ -416,6 +450,25 @@ namespace Data.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.Comment", b =>
+                {
+                    b.HasOne("Data.Entities.Test", "Test")
+                        .WithMany("Comments")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.AppUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Data.Entities.Question", b =>
                 {
                     b.HasOne("Data.Entities.Test", "Test")
@@ -459,6 +512,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.AppUser", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Tests");
 
                     b.Navigation("UserInTests");
@@ -466,6 +521,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Test", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Questions");
 
                     b.Navigation("UserInTests");

@@ -17,18 +17,18 @@ namespace API.Controllers
         }
 
         [Authorize("User")]
-        [HttpPost("images")]
-        public async Task<IActionResult> CreateImage([FromForm] IFormCollection data)
+        [HttpPost("images/save")]
+        public async Task<IActionResult> CreateImage([FromForm] IFormFile image)
         {
-            return Ok(await _imageService.SaveImages(data, User));
+            return Ok(await _imageService.SaveImage(User, image));
         }
 
 
         [Authorize("User")]
-        [HttpPut("images")]
+        [HttpPost("images/update")]
         public async Task<IActionResult> UpdateImage([FromForm] IFormCollection data)
         {
-            return Ok(await _imageService.UpdateImages(data, User));
+            return Ok(await _imageService.UpdateImage(User, data));
         }
     
     }

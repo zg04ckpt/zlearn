@@ -6,11 +6,14 @@ import { PagingResultDTO } from '../dtos/common/paging-result.dto';
 import { Role } from '../entities/management/role.entity';
 import { AssignRoleDTO } from '../dtos/management/assign-role.dto';
 import { APIResult } from '../dtos/common/api-result.dto';
+import { TestDetail } from '../entities/test/test-detail.entity';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ManagementService {
+  baseUrl = environment.baseUrl;
   constructor(
     private http: HttpClient
   ) { }
@@ -80,5 +83,19 @@ export class ManagementService {
 
   deleteRole(id: string): Observable<void> {
     return this.http.delete<void>(`managements/roles/${id}`);
+  }
+
+
+  // TEST -------------------------------------------------
+  getAllTests(pageIndex: number, pageSize: number, key: String): Observable<PagingResultDTO<TestDetail>> {
+    return this.http.get<APIResult<PagingResultDTO<TestDetail>>>(
+      `managements/tests?pageIndex=${pageIndex}&pageSize=${pageSize}&name=${key}`
+    ).pipe(
+      map(res => res.data!),
+      map(res => {
+          res.data.forEach(x => x.imageUrl = this.baseUrl + x.imageUrl);
+          return res;
+      })
+    );
   }
 }

@@ -326,11 +326,7 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {
-              "D:\\Code\\Web\\zg04web\\Utilities\\Utilities.csproj": {
-                "projectPath": "D:\\Code\\Web\\zg04web\\Utilities\\Utilities.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {

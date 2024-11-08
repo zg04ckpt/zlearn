@@ -164,9 +164,10 @@ export class UpdateTestComponent implements OnInit {
       this.authService.showLoginRequirement();
     } else {
       this.componentService.displayConfirmMessage("Xác nhận lưu chỉnh sửa?", async () => {
-        await this.testService.update(this.id!, this.data);
+        await this.testService.update(this.id!, {...this.data});
         this.componentService.$showLoadingStatus.next(false);
         this.componentService.$showToast.next("Cập nhật đề thành công");
+        window.history.back();
         this.isSuccess = true;
       });
     }

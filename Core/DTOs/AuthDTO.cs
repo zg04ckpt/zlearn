@@ -24,6 +24,7 @@ namespace Core.DTOs
         public string Email { get; set; }
         public string FullName { get; set; }
         public string Username { get; set; }
+        public string ProfileImage { get; set; }
         public IEnumerable<string> Roles { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }

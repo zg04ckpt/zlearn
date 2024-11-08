@@ -11,7 +11,7 @@ style="width: 220px; z-index: 2; margin-top: 50px; padding-bottom: 50px;">
         <i class='bx fw-bolder fs-2' [ngClass]="{'bx-chevron-left': show, 'bx-chevron-right': !show}"></i>
     </button>
     
-    <ul class="nav nav-fill mb-auto flex-column mt-2" id="sidebar-menu">
+    <ul class="nav nav-fill mb-auto flex-column mt-0" id="sidebar-menu">
         @if(user?.roles?.includes('Admin'))
         {
             <li class="nav-item">
@@ -45,6 +45,12 @@ style="width: 220px; z-index: 2; margin-top: 50px; padding-bottom: 50px;">
                     <a routerLink="management/roles" class="nav-link active text-start">
                         <i class='bx bxs-right-arrow me-2' ></i>
                         Quản lí quyền
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="management/tests" class="nav-link active text-start">
+                        <i class='bx bxs-right-arrow me-2' ></i>
+                        Quản lí đề
                     </a>
                 </li>
             </div>

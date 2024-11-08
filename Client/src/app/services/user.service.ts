@@ -11,12 +11,18 @@ import { FileService } from './file.service';
 import { FileResponseDTO } from '../dtos/common/file.dto';
 import { ComponentService } from './component.service';
 import { environment } from '../../environments/environment';
+import { UserMapper } from '../mappers/user/user.mapper';
+import { UserInfoDTO } from '../dtos/user/user-info.dto';
+import { UserInfoMapper } from '../mappers/user/user-info.mapper';
+import { UserInfo } from '../entities/user/user-info.entity';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   public $currentUser = new Subject<User|null>();
+  public $showInfo = new Subject<string>();
+
   baseUrl: string = environment.baseUrl;
   constructor(
     private http: HttpClient,
@@ -33,36 +39,34 @@ export class UserService {
       return null;
   }
 
-  getProfile(userId: string): Observable<UserDetail> {
+  getProfile(): Observable<UserDetail> {
     const userDetailMapper = new UserDetailMapper;
     return this.http
-      .get<APIResult<UserDetailDTO>>(`users/${userId}/profile`)
+      .get<APIResult<UserDetailDTO>>(`users/my-profile`)
       .pipe(map(res => res.data!))
       .pipe(map(userDetailMapper.map));
   }
 
-  async updateProfile(userId: string, data: UserDetailDTO): Promise<void> {
+  async updateProfile(data: UserDetailDTO): Promise<void> {
     debugger
     if(data.image) {
-      const formData = new FormData();
-      let result: APIResult<FileResponseDTO[]>|null = null;
       if(data.imageUrl) {
-        formData.append(data.imageUrl, data.image);
-        result = await this.fileService.updateImage(formData);
+        data.imageUrl = await this.fileService.updateImage(data.imageUrl, data.image);
       } else {
-        formData.append('image', data.image);
-        result = await this.fileService.saveFile(formData);
-      }
-      data.image = null;
-      if(result.success) {
-        data.imageUrl = result.data![0].url;
-      } else {
-        this.componentService.displayMessage("Thay đổi ảnh thất bại!");
+        data.imageUrl = await this.fileService.saveImage(data.image);
       }
     }
 
     return lastValueFrom(this.http
-      .put<APIResult<void>>(`users/${userId}/profile`, data)
+      .put<APIResult<void>>(`users/my-profile`, data)
       .pipe(map(res => res.data!)));
+  }
+
+  getUserProfile(userId: string): Observable<UserInfo> {
+    const mapper = new UserInfoMapper;
+    return this.http
+      .get<APIResult<UserInfoDTO>>(`users/${userId}`)
+      .pipe(map(res => res!.data))
+      .pipe(map(res => mapper.map(res!)));
   }
 }

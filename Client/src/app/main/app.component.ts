@@ -18,6 +18,7 @@ import { CommaExpr } from '@angular/compiler';
 import { Forbidden403Component } from '../pages/others/forbidden403/forbidden403.component';
 import { Notfound404Component } from '../pages/others/notfound404/notfound404.component';
 import { ServiceUnavailable503Component } from '../pages/others/service-unavailable503/service-unavailable503.component';
+import { UserInfoComponent } from '../components/user-info/user-info.component';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,7 @@ import { ServiceUnavailable503Component } from '../pages/others/service-unavaila
     LoadingComponent,
     MessageComponent,
     ToastComponent,
+    UserInfoComponent,
     CommonModule,
     Forbidden403Component,
     Notfound404Component,

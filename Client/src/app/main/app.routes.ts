@@ -15,6 +15,7 @@ import { Forbidden403Component } from '../pages/others/forbidden403/forbidden403
 import { ServiceUnavailable503Component } from '../pages/others/service-unavailable503/service-unavailable503.component';
 import { canDeactivateGuard } from '../guards/can-deactivate.guard';
 import { UpdateTestComponent } from '../pages/test/update-test/update-test.component';
+import { TestManagementComponent } from '../pages/management/test-management/test-management.component';
 export const routes: Routes = [
     { path: "", component: HomeComponent },
     { path: "user/profile", component: UserProfileComponent },
@@ -22,6 +23,7 @@ export const routes: Routes = [
     { path: "management" , component: OverviewComponent},
     { path: "management/users", component: UsersListComponent },
     { path: "management/roles", component: RoleComponent },
+    { path: "management/tests", component: TestManagementComponent },
     { path: "tests", component: ListTestComponent },
     { path: "tests/create", component: CreateTestComponent, canDeactivate: [canDeactivateGuard] },
     { path: "tests/update/:id", component: UpdateTestComponent, canDeactivate: [canDeactivateGuard] },

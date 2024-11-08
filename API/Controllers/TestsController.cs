@@ -9,7 +9,7 @@ namespace API.Controllers
 {
     [Route("api/tests")]
     [ApiController]
-    public class TestsController : BaseController
+    public class TestsController : ControllerBase
     {
         private readonly ITestService _testService;
 

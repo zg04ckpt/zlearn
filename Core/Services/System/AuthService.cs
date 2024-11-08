@@ -78,6 +78,7 @@ namespace Core.Services.System
                 Email = user.Email,
                 FullName = user.FirstName != null && user.LastName != null ? user.LastName + " " + user.FirstName : "",
                 Username = user.UserName,
+                ProfileImage = user.ImageUrl,
                 AccessToken = token.AccessToken,
                 RefreshToken = token.RefreshToken,
                 Roles = (await _userManager.GetRolesAsync(user)).ToList(),

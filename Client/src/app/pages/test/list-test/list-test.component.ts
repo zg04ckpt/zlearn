@@ -51,13 +51,13 @@ export class ListTestComponent implements OnInit {
     this.testService.getAll(this.pageIndex, this.pageSize, this.key)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(res => {
-        this.componentService.$showLoadingStatus.next(false);
-        debugger;
-        this.total = res.total;
-        this.totalPage = Math.ceil(this.total / this.pageSize);
-        if(this.totalPage == 0) this.pageIndex = 0;
-        this.list = res.data;
-      });
+      this.componentService.$showLoadingStatus.next(false);
+      debugger;
+      this.total = res.total;
+      this.totalPage = Math.ceil(this.total / this.pageSize);
+      if(this.totalPage == 0) this.pageIndex = 0;
+      this.list = res.data;
+    });
   }
 
   navigate(url: string) {
