@@ -4,6 +4,9 @@ import { NgClass } from '@angular/common';
 import { ManagementService } from '../../../services/management.service';
 import { ComponentService } from '../../../services/component.service';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
 
 @Component({
   selector: 'app-role',
@@ -18,13 +21,19 @@ import { FormsModule } from '@angular/forms';
 export class RoleComponent implements OnInit {
   roles: Role[] = [];
   selectedRole: Role|null = null;
+  title: string = "Quản lý quyền";
   constructor(
     private managementService: ManagementService,
-    private componentService: ComponentService
+    private componentService: ComponentService,
+    private router: Router,
+    private titleService: Title,
+    private breadcrumbService: BreadcrumbService
   ) {}
 
   ngOnInit(): void {
     this.load();
+    this.titleService.setTitle(this.title);
+    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
   }
 
   load() {

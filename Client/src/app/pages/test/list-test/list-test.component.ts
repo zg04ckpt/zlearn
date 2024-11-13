@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TestItem } from '../../../entities/test/test-item.entity';
 import { TestService } from '../../../services/test.service';
@@ -9,6 +9,8 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
 import { Title } from '@angular/platform-browser';
+import { LayoutService } from '../../../services/layout.service';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
 
 @Component({
   selector: 'app-list-test',
@@ -28,17 +30,20 @@ export class ListTestComponent implements OnInit {
   total: number = 0;
   key: string = "";
   destroyRef = inject(DestroyRef);
+  title: string = "Trắc nghiệm";
 
   constructor(
     private router: Router,
     private testService: TestService,
     private componentService: ComponentService,
     private userService: UserService,
-    private titleService: Title
+    private titleService: Title,
+    private breadcrumbService: BreadcrumbService,
   ) {}
 
   ngOnInit(): void {
-    this.titleService.setTitle("Trắc nghiệm - ZLEARN")
+    this.titleService.setTitle(this.title);
+    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
     this.search();
   }
 

@@ -11,6 +11,7 @@ import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UpdateTestDTO } from '../../../dtos/test/update-test.dts';
 import { Title } from '@angular/platform-browser';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
 
 @Component({
   selector: 'app-update-test',
@@ -58,6 +59,7 @@ export class UpdateTestComponent implements OnInit {
   }|null = null;
   isSuccess: boolean = false;
   destroyRef = inject(DestroyRef);
+  title: string = "";
 
   constructor(
     private componentService: ComponentService,
@@ -66,7 +68,8 @@ export class UpdateTestComponent implements OnInit {
     private authService: AuthService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private titleService: Title
+    private titleService: Title,
+    private breadcrumbService: BreadcrumbService
   ) {}
   
   ngOnInit(): void {
@@ -80,6 +83,10 @@ export class UpdateTestComponent implements OnInit {
     this.testService.getUpdateContent(this.id)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(async res => {
+      this.title =`Cập nhật - ${res.name}`;
+      this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+      this.titleService.setTitle(this.title);
+
       this.componentService.$showLoadingStatus.next(false);
       this.testImagePreviewUrl = res.imageUrl;
       this.data.name = res.name;
@@ -108,8 +115,6 @@ export class UpdateTestComponent implements OnInit {
         });
       });
     });
-
-    this.titleService.setTitle("Cập nhật đề - ZLEARN");
   }
 
   async convertImageUrlToFile(imageUrl: string): Promise<File|null> {

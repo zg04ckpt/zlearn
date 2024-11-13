@@ -13,6 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
 import { Observable } from 'rxjs';
 import { Title } from '@angular/platform-browser';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
 
 @Component({
   selector: 'app-create-test',
@@ -58,6 +59,7 @@ export class CreateTestComponent implements CanComponentDeactivate, OnInit{
   }|null = null;
   destroyRef = inject(DestroyRef);
   isCreatedTest:boolean = false;
+  title: string = "Tạo đề mới";
 
   constructor(
     private componentService: ComponentService,
@@ -65,11 +67,13 @@ export class CreateTestComponent implements CanComponentDeactivate, OnInit{
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
-    private titleService: Title
+    private titleService: Title,
+    private breadcrumbService: BreadcrumbService
   ) {}
 
   ngOnInit(): void {
-    this.titleService.setTitle("Tạo đề trắc nghiệm - ZLEARN")
+    this.titleService.setTitle(this.title);
+    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
   }
 
   canDeactivate = () => {

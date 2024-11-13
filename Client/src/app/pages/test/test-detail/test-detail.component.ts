@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ComponentService } from '../../../services/component.service';
 import { TestService } from '../../../services/test.service';
@@ -11,6 +11,7 @@ import { User } from '../../../entities/user/user.entity';
 import { CommentDTO } from '../../../dtos/comment/comment.dto';
 import { CommentService } from '../../../services/comment.service';
 import { Title } from '@angular/platform-browser';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
 
 @Component({
   selector: 'app-test',
@@ -23,7 +24,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './test-detail.component.html',
   styleUrl: './test-detail.component.css'
 })
-export class TestDetailComponent implements OnInit {
+export class TestDetailComponent implements OnInit{
   id: string|null = null;
   data: TestDetail|null = null;
   mode: string = "practice";
@@ -31,7 +32,7 @@ export class TestDetailComponent implements OnInit {
   isSaved: boolean = false;
   user: User|null = null;
   comments: CommentDTO[] = [];
-  //comments
+  title: string = "";
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -41,7 +42,8 @@ export class TestDetailComponent implements OnInit {
     private location: Location,
     private userService: UserService,
     private commentService: CommentService,
-    private titleService: Title
+    private titleService: Title,
+    private breadcrumbService: BreadcrumbService
   ) {  }
 
   ngOnInit(): void {
@@ -60,7 +62,9 @@ export class TestDetailComponent implements OnInit {
       next: res => {
         this.componentService.$showLoadingStatus.next(false);
         this.data = res;
-        this.titleService.setTitle(`${this.data!.name} - ZLEARN`);
+        this.title = `${this.data!.name}`;
+        this.titleService.setTitle(this.title);
+        this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
       }
     });
 

@@ -7,6 +7,9 @@ import { UserDetail } from '../../../entities/user/user-detail.entity';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-detail',
@@ -25,16 +28,19 @@ export class UserProfileComponent implements OnInit {
   editingData: UserDetail|null = null;
   updating: boolean = false;
   avtPreviewLink: string|null = null;
+  title: string = "";
 
   constructor(
     private userService: UserService,
     private componentService: ComponentService,
-    private authService: AuthService
+    private authService: AuthService,
+    private breadcrumbService: BreadcrumbService,
+    private router: Router,
+    private titleService: Title
   ) { }
 
   ngOnInit(): void {
-    debugger;
-    this.componentService.$showLoadingStatus.next(true);
+    this.title = "Thông tin cá nhân";
     this.user = this.userService.getLoggedInUser();
     if(this.user != null) {
       this.userService.getProfile().subscribe(res => {
@@ -49,6 +55,8 @@ export class UserProfileComponent implements OnInit {
       this.componentService.$showLoadingStatus.next(false);
       this.authService.showLoginRequirement();
     }
+    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+    this.titleService.setTitle(this.title);
   }
 
   reset() {

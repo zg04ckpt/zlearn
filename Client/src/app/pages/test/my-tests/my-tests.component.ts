@@ -10,6 +10,7 @@ import { concatMap } from 'rxjs';
 import { TestResult } from '../../../entities/test/test-result.entity';
 import { DatePipe } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
 
 @Component({
   selector: 'app-my-tests',
@@ -25,17 +26,21 @@ export class MyTestsComponent implements OnInit {
   list1: TestDetail[] = [];
   list2: TestItem[] = [];
   list3: TestResult[] = [];
-  destroyRef = inject(DestroyRef)
+  destroyRef = inject(DestroyRef);
+  title: string = "Quản lý đề";
 
   constructor(
     private testService: TestService,
     private componentService: ComponentService,
     private router: Router,
-    private titleService: Title
+    private titleService: Title,
+    private breadcrumbService: BreadcrumbService,
   ) {}
 
   ngOnInit(): void {
     this.showCreatedTests();
+    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+    this.titleService.setTitle(this.title);
   }
 
   timeFormat(duration: number): string {

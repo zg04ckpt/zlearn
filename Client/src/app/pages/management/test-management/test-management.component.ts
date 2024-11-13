@@ -6,8 +6,10 @@ import { ComponentService } from '../../../services/component.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 import { TestService } from '../../../services/test.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../services/user.service';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-test-management',
@@ -28,16 +30,22 @@ export class TestManagementComponent implements OnInit {
   testDetails: TestDetail[] = []
   key: string = "";
   destroyRef = inject(DestroyRef);
+  title: string = "Quản lý đề";
 
   constructor(
     private managementService: ManagementService,
     private componentService: ComponentService,
     private testService: TestService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
+    private titleService: Title,
+    private breadcrumbService: BreadcrumbService
   ) {}
 
   ngOnInit(): void {
     this.search();
+    this.titleService.setTitle(this.title);
+    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
   }
 
   showUserDetail(userId: string) {
