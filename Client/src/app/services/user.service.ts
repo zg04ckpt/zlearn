@@ -69,4 +69,10 @@ export class UserService {
       .pipe(map(res => res!.data))
       .pipe(map(res => mapper.map(res!)));
   }
+
+  like(userId: string): Observable<void> {
+    return this.http
+      .get<APIResult<void>>(`users/like?userId=${userId}`)
+      .pipe(map(res => res!.data));
+  }
 }
