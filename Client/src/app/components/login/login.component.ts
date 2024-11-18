@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { ComponentService } from '../../services/component.service';
 import { FormControl, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validator, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+import { RouterEvent, RouterLink } from '@angular/router';
 
 interface LoginForm {
   email: FormControl;
@@ -17,7 +18,8 @@ interface LoginForm {
   imports: [
     NgClass,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -99,6 +101,10 @@ export class LoginComponent {
 
   redirectToRegister() {
     this.componentService.$showRegisterDialog.next(true);
+    this.componentService.$showLoginDialog.next(false);
+  }
+
+  closeLoginDialog() {
     this.componentService.$showLoginDialog.next(false);
   }
 }

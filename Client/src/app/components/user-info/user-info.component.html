@@ -36,7 +36,7 @@
     
                         <div class="text-start ms-2">
                             <i class='bx bxs-like'></i>
-                            32
+                            {{userInfo!.likes}}
                         </div>
                     </div>
 
@@ -52,17 +52,19 @@
                 <i class='bx bxs-user-check text-secondary fs-5'></i>
                 <small class="text-secondary ms-1">Bạn bè</small>
             </div> -->
-
-            <div class="d-flex mt-2 justify-content-center" style="height: 25px;">
-                <button class="btn btn-outline-dark p-1 d-flex justify-content-center" style="width: 100px;">
-                    <i class='bx bxs-user-plus fs-5 me-1'></i>
-                    <div style="font-size: 12px;">Kết bạn</div>
-                </button>
-                <button class="btn btn-outline-dark p-1 ms-2 d-flex justify-content-center" style="width: 100px;">
-                    <i class='bx bxl-messenger fs-5 me-1'></i>
-                    <div style="font-size: 12px;">Nhắn tin</div>
-                </button>
-            </div>
+            
+            @if (!isYourself) {
+                <div class="d-flex mt-2 justify-content-center" style="height: 25px;">
+                    <button class="btn btn-outline-dark p-1 d-flex justify-content-center" style="width: 100px;">
+                        <i class='bx bxs-user-plus fs-5 me-1'></i>
+                        <div style="font-size: 12px;">Kết bạn</div>
+                    </button>
+                    <button class="btn btn-outline-dark p-1 ms-2 d-flex justify-content-center" style="width: 100px;">
+                        <i class='bx bxl-messenger fs-5 me-1'></i>
+                        <div style="font-size: 12px;">Nhắn tin</div>
+                    </button>
+                </div>
+            }
 
 
             <ul class="nav nav-tabs nav-fill mt-2" role="tablist">
@@ -83,7 +85,7 @@
             <!-- Tab content -->
             <div class="tab-content">
                 <div class="tab-pane fade active show pt-2" id="introduction" role="tabpanel">
-                    <p class="mb-0">{{userInfo!.intro}}</p> 
+                    <p class="mb-0">{{userInfo!.intro || '--'}}</p> 
                 </div>
 
                 <div class="tab-pane fade pt-2" id="social" role="tabpanel">
@@ -95,10 +97,13 @@
                 </div>
             </div>
 
-            <button class="btn btn-sm col-12 btn-outline-dark d-flex justify-content-center mt-2">
-                <div>Thích</div>
-                <i class='bx bx-like ms-2 mt-1'></i>
-            </button>
+            @if(!isYourself && !userInfo!.isLiked) {
+                <button class="btn btn-sm col-12 btn-outline-dark d-flex justify-content-center mt-2"
+                (click)="likeUser(userInfo!.id)">
+                    <div>Thích</div>
+                    <i class='bx bx-like ms-2 mt-1'></i>
+                </button>
+            }
         </div>
         
         

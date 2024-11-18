@@ -4,7 +4,7 @@
             <span class="btn btn-close position-absolute top-0 end-0 m-1" id="close-btn" (click)="show = false"></span>
             <h3 class="fw-bold">Đăng nhập</h3>
             <p>Chào mừng bạn quay trở lại ZLEARN!</p>
-            <a class="mt-3 text-end text-decoration-none link-info" style="cursor: pointer;">Quên mật khẩu?</a>
+            <a [routerLink]="['/auth/reset-password']" (click)="closeLoginDialog()" class="mt-3 text-end text-decoration-none link-info" style="cursor: pointer;">Quên mật khẩu?</a>
             
             <form [formGroup]="form" class="mt-1" (ngSubmit)="login()">
 

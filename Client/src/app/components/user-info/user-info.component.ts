@@ -18,6 +18,8 @@ import { UserInfo } from '../../entities/user/user-info.entity';
 export class UserInfoComponent {
   show: boolean = false;
   userInfo: UserInfo|null = null;
+  isYourself: boolean = false;
+
   constructor(
     private userService: UserService,
     private componentService: ComponentService
@@ -29,7 +31,18 @@ export class UserInfoComponent {
     this.userService.getUserProfile(userId).subscribe(next => {
       this.componentService.$showLoadingStatus.next(false);
       this.userInfo = next;
+
+      this.isYourself = this.userService.getLoggedInUser()?.id == next.id;
+
       this.show = true;
+    });
+  }
+
+  likeUser(userId: string) {
+    this.userService.like(userId).subscribe(next => {
+      this.componentService.$showLoadingStatus.next(false);
+      this.userInfo!.isLiked = true;
+      this.userInfo!.likes += 1;
     });
   }
 }
