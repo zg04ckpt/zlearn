@@ -7,13 +7,16 @@
             <div class="d-flex mt-5 justify-content-center">
                 <div class="input-group w-75 px-0">
                     <label class="input-group-text">Danh mục</label>
-                    <select class="form-select">
-                        <option selected>Tất cả</option>
+                    <select class="form-select" [(ngModel)]="cateSlug" (change)="search()">
+                        <option value="">Tất cả</option>
+                        @for (item of categories; track $index) {
+                            <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
+                        }
                     </select>
                 </div>
         
                 <div class="input-group ms-2 w-25">
-                    <input type="text" class="form-control" placeholder="Từ khóa..." [(ngModel)]="key">
+                    <input type="text" class="form-control" placeholder="Tên đề ..." [(ngModel)]="key">
                     <button class="btn btn-outline-dark" (click)="pageIndex = 1; search()">
                         <i class='bx bx-search fs-6 py-1'></i>
                     </button>

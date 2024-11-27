@@ -12,6 +12,9 @@ import { CommentDTO } from '../../../dtos/comment/comment.dto';
 import { CommentService } from '../../../services/comment.service';
 import { Title } from '@angular/platform-browser';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
+import { TestItem } from '../../../entities/test/test-item.entity';
+import { HomeService } from '../../../services/home.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-test',
@@ -30,9 +33,11 @@ export class TestDetailComponent implements OnInit{
   mode: string = "practice";
   destroyRef = inject(DestroyRef);
   isSaved: boolean = false;
-  user: User|null = null;
+  // user: User|null = null;
   comments: CommentDTO[] = [];
   title: string = "";
+  currentUserId: string|null = null;
+  randomTests: TestItem[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,20 +48,33 @@ export class TestDetailComponent implements OnInit{
     private userService: UserService,
     private commentService: CommentService,
     private titleService: Title,
-    private breadcrumbService: BreadcrumbService
-  ) {  }
+    private breadcrumbService: BreadcrumbService,
+    private homeService: HomeService
+  ) { 
+    
+  }
 
   ngOnInit(): void {
-    this.userService.$currentUser.subscribe(next => this.user = next);
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.id = params.get('id');
+      if(this.id) {
+        this.getData();
+      }
+    })
+  }
 
+  getData() {
+    //Get current logged in user id
+    this.currentUserId = this.userService.getLoggedInUser()?.id || null;
+    
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     if(this.id == null) {
       this.componentService.displayMessage("Không tìm thấy đề");
       return;
     }
 
-    this.componentService.$showLoadingStatus.next(true);
-    this.testService.getDetail(this.id)
+    // Get detail
+    this.testService.getDetail(this.id!)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe({
       next: res => {
@@ -68,9 +86,9 @@ export class TestDetailComponent implements OnInit{
       }
     });
 
+    //check if this test saved
     if(this.userService.getLoggedInUser() != null) {
-      //check if saved
-      this.testService.isSaved(this.id)
+      this.testService.isSaved(this.id!)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
           debugger
@@ -81,7 +99,12 @@ export class TestDetailComponent implements OnInit{
 
     //comment
     this.getComments();
-    
+    // Random 10 tests
+    this.homeService.getRandomTest(10).subscribe(res => {
+      debugger
+      this.randomTests = res;
+      this.componentService.$showLoadingStatus.next(false);
+    });
   }
 
   getComments() {
@@ -102,7 +125,20 @@ export class TestDetailComponent implements OnInit{
     });
   }
 
+  removeComment(commentId: string) {
+    this.componentService.displayConfirmMessage("Xác nhận xóa bình luận này?", () => {
+      this.commentService.removeComment(commentId).subscribe(next => {
+        this.componentService.$showLoadingStatus.next(false);
+        this.componentService.displayMessage("Xóa thành công!");
+        this.getComments();
+      });
+    });
+  }
+
   like(comment: CommentDTO) {
+    if(comment.userId == this.currentUserId) {
+      return;
+    }
     this.commentService.like(comment.id).subscribe(next => {
       comment.likes++;
       this.componentService.$showLoadingStatus.next(false);

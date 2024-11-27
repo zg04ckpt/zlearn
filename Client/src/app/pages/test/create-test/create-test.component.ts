@@ -14,6 +14,8 @@ import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
 import { Observable } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
+import { environment } from '../../../../environments/environment';
+import { CategoryItem } from '../../../entities/management/category-item.entity';
 
 @Component({
   selector: 'app-create-test',
@@ -38,6 +40,7 @@ export class CreateTestComponent implements CanComponentDeactivate, OnInit{
     description: "",
     source: "",
     duration: 0,
+    categorySlug: "",
     isPrivate: false,
     questions: []
   };
@@ -60,6 +63,21 @@ export class CreateTestComponent implements CanComponentDeactivate, OnInit{
   destroyRef = inject(DestroyRef);
   isCreatedTest:boolean = false;
   title: string = "Tạo đề mới";
+  baseUrl: string = environment.baseUrl;
+
+  showUploadConfig = false;
+  uploadConfig = {
+    quesIndex: 0,
+    aIndex: 0,
+    bIndex: 0,
+    cIndex: 0,
+    dIndex: 0,
+    ansIndex: 0,
+    startRow: 0,
+    rowsCount: 0 
+  }
+
+  categories: CategoryItem[] = [];
 
   constructor(
     private componentService: ComponentService,
@@ -74,6 +92,10 @@ export class CreateTestComponent implements CanComponentDeactivate, OnInit{
   ngOnInit(): void {
     this.titleService.setTitle(this.title);
     this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+    this.testService.getCategories().subscribe(next => {
+      this.componentService.$showLoadingStatus.next(false);
+      this.categories = next;
+    });
   }
 
   canDeactivate = () => {
@@ -85,30 +107,72 @@ export class CreateTestComponent implements CanComponentDeactivate, OnInit{
     this.router.navigateByUrl("/tests/my-tests");
   }
 
+  checkQuestionValid(): string|null {
+    if(this.data.questions.length == 0) {
+      return `Danh sách câu hỏi trống`;
+    }
+
+    for(let i = 0; i < this.data.questions.length; i++) {
+      let q = this.data.questions[i];
+      debugger
+      if(!q.content || q.content.trim() === "") {
+        return `Câu hỏi thứ ${i+1} có nội dung trống`;
+      }
+
+      if(q.correctAnswer == 0 || q.correctAnswer > 4 || (!q.answerC && q.correctAnswer == 3) || (!q.answerD && q.correctAnswer == 4)) {
+        return `Câu hỏi thứ ${i+1} chưa chọn đáp án đúng`;
+      }
+
+      if(q.answerA.trim() === "" || q.answerB.trim() === "" || q.answerC?.trim() === "" || q.answerD?.trim() === "") {
+        return `Câu hỏi thứ ${i+1} chứa đáp án trống`;
+      }
+
+      // check duplication
+      let ans = [q.answerA.trim(), q.answerB.trim()]
+      if(q.answerC) {
+        ans.push(q.answerC.trim());
+      }
+      if(q.answerD) {
+        ans.push(q.answerD.trim());
+      }
+      if(new Set(ans).size != ans.length) {
+        return `Câu hỏi thứ ${i+1} chứa đáp án trùng`;
+      }
+
+    }
+    return null;
+  }
+
   saveTest() {
+    
     //check valid before send
     if(this.data.name.trim() == "") {
-      this.componentService.displayMessage("Tên bài đề trống!");
+      this.componentService.displayError("Tên bài đề trống!", []);
       return;
     }
     if(this.data.description.trim() == "") {
-      this.componentService.displayMessage("Mô tả đề trống!");
+      this.componentService.displayError("Mô tả đề trống!", []);
+      return;
+    }
+    if(this.data.categorySlug.trim() == "") {
+      this.componentService.displayError("Danh mục trống!", []);
       return;
     }
     if(this.data.source.trim() == "") {
-      this.componentService.displayMessage("Nguồn đề trống!");
+      this.componentService.displayError("Nguồn đề trống!", []);
       return;
     }
     if(this.data.duration <= 0) {
-      this.componentService.displayMessage("Thời gian làm đề không hợp lệ!");
-      return;
-    }
-    if(this.data.questions.length == 0) {
-      this.componentService.displayMessage("Danh sách câu hỏi trống!");
+      this.componentService.displayError("Thời gian làm đề không hợp lệ!", []);
       return;
     }
 
-    debugger
+    //check question
+    let qError = this.checkQuestionValid();
+    if(qError) {
+      this.componentService.displayError(qError, []);
+      return;
+    }
 
     const currentUser = this.userService.getLoggedInUser();
     if(currentUser == null) {
@@ -186,16 +250,28 @@ export class CreateTestComponent implements CanComponentDeactivate, OnInit{
       return false;
     }
 
-    if(this.editQuestion!.answerA.trim() == "" 
-    || this.editQuestion!.answerB.trim() == "" 
-    || this.editQuestion!.answerC?.trim() == "" 
-    || this.editQuestion!.answerD?.trim() == "" ) {
+    if( this.editQuestion!.answerA.trim() == "" 
+      || this.editQuestion!.answerB.trim() == "" 
+      || this.editQuestion!.answerC?.trim() == "" 
+      || this.editQuestion!.answerD?.trim() == "" 
+    ) {
       this.componentService.displayMessage("Nội dung câu trả lời trống!");
       return false;
     }
 
-    if(this.editQuestion!.correctAnswer == 0) {
+    const correctAns = this.editQuestion!.correctAnswer
+    if(correctAns == 0 || correctAns > 4) {
       this.componentService.displayMessage("Chưa chọn đáp án đúng!");
+      return false;
+    }
+
+    if(!this.editQuestion!.answerC && correctAns === 3) {
+      this.componentService.displayMessage("Đáp án không hợp lệ!");
+      return false;
+    }
+
+    if(!this.editQuestion!.answerD && correctAns === 4) {
+      this.componentService.displayMessage("Đáp án không hợp lệ!");
       return false;
     }
 
@@ -268,7 +344,22 @@ export class CreateTestComponent implements CanComponentDeactivate, OnInit{
     }
   }
 
+  checkUploadConfig(event: Event) {
+    if(
+      this.uploadConfig.quesIndex == 0 ||
+      this.uploadConfig.aIndex == 0 || 
+      this.uploadConfig.bIndex == 0 ||
+      this.uploadConfig.ansIndex == 0 ||
+      this.uploadConfig.startRow == 0 ||
+      this.uploadConfig.rowsCount == 0
+    ) {
+      this.componentService.displayError("Vui lòng điền đủ cấu hình (trừ đáp án C, và D có thể bỏ)", []);
+      event.preventDefault();
+    }
+  }
+
   convertExcelFileToData(event: Event) {
+
     const target = event.target as HTMLInputElement;
     if(target.files?.length !== 1) {
       this.componentService.displayMessage("Không thể tải lên nhiều file");
@@ -279,38 +370,25 @@ export class CreateTestComponent implements CanComponentDeactivate, OnInit{
       const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary' });
       const ws: XLSX.WorkSheet = wb.Sheets[wb.SheetNames[0]];
       if(ws != null) {
-        const range: XLSX.Range = XLSX.utils.decode_range(ws['!ref']!);
-        for(let i = 1; i <= range.e.r; i++) {
+        debugger
+        let i = this.uploadConfig.startRow-1;
+        for(let k = 0; k < this.uploadConfig.rowsCount; k++) {
 
-          //get image from cell
-          const imageCell = ws[XLSX.utils.encode_cell({ c: 6, r: i })];
-          let imageFile: File | null = null;
-          if (imageCell && imageCell.v) {
-              const imageData = imageCell.v; // Assuming image data is stored in the cell
-              const byteCharacters = atob(imageData);
-              const byteNumbers = new Array(byteCharacters.length);
-              for (let j = 0; j < byteCharacters.length; j++) {
-                  byteNumbers[j] = byteCharacters.charCodeAt(j);
-              }
-              const byteArray = new Uint8Array(byteNumbers);
-              imageFile = new File([byteArray], `image_${i}.png`, { type: 'image/png' });
-          }
-          
           this.data.questions.push({
-            content: ws[XLSX.utils.encode_cell({c: 0, r: i})]?.v,
-            answerA: ws[XLSX.utils.encode_cell({c: 1, r: i})]?.v,
-            answerB: ws[XLSX.utils.encode_cell({c: 2, r: i})]?.v,
-            answerC: ws[XLSX.utils.encode_cell({c: 3, r: i})]?.v,
-            answerD: ws[XLSX.utils.encode_cell({c: 4, r: i})]?.v,
-            correctAnswer: ws[XLSX.utils.encode_cell({c: 5, r: i})]?.v,
-            image: imageFile,
+            content: ws[XLSX.utils.encode_cell({c: this.uploadConfig.quesIndex-1, r: i+k})]?.v || "",
+            answerA: ws[XLSX.utils.encode_cell({c: this.uploadConfig.aIndex-1, r: i+k})]?.v || "",
+            answerB: ws[XLSX.utils.encode_cell({c: this.uploadConfig.bIndex-1, r: i+k})]?.v || "",
+            answerC: ws[XLSX.utils.encode_cell({c: this.uploadConfig.cIndex-1, r: i+k})]?.v || null,
+            answerD: ws[XLSX.utils.encode_cell({c: this.uploadConfig.dIndex-1, r: i+k})]?.v || null,
+            correctAnswer: ws[XLSX.utils.encode_cell({c: this.uploadConfig.ansIndex-1, r: i+k})]?.v || 0,
+            image: null,
             imageUrl: ""
           });
 
           this.questionManager.push({ previewImageUrl: null, selected: false});
           this.getImageUrl(this.data.questions.length-1);
         }
-        debugger
+        this.showUploadConfig = false;
       }
     };
 

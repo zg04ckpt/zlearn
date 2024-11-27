@@ -46,6 +46,16 @@
                             <textarea class="form-control" [(ngModel)]="data.description" name="2"></textarea>
                         </div>
 
+                        <!--Category-->
+                        <div class="mb-3">
+                            <label class="form-label">Danh mục</label>
+                            <select class="form-select" [(ngModel)]="data.categorySlug" name="7">
+                                @for (item of categories; track $index) {
+                                    <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
+                                }
+                            </select>
+                        </div>
+
                         <!--Source-->
                         <div class="mb-3">
                             <label class="form-label">Nguồn</label>

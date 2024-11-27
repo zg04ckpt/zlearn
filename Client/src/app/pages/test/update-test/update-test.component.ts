@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { UpdateTestDTO } from '../../../dtos/test/update-test.dts';
 import { Title } from '@angular/platform-browser';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
+import { CategoryItem } from '../../../entities/management/category-item.entity';
 
 @Component({
   selector: 'app-update-test',
@@ -35,6 +36,7 @@ export class UpdateTestComponent implements OnInit {
     image: null,
     imageUrl: '',
     description: "",
+    categorySlug: "",
     source: "",
     duration: 0,
     isPrivate: false,
@@ -61,6 +63,8 @@ export class UpdateTestComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   title: string = "";
 
+  categories: CategoryItem[] = [];
+
   constructor(
     private componentService: ComponentService,
     private testService: TestService,
@@ -79,7 +83,6 @@ export class UpdateTestComponent implements OnInit {
       return;
     }
 
-    this.componentService.$showLoadingStatus.next(true);
     this.testService.getUpdateContent(this.id)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(async res => {
@@ -115,6 +118,12 @@ export class UpdateTestComponent implements OnInit {
         });
       });
     });
+
+    //get categories
+    this.testService.getCategories().subscribe(next => {
+      this.componentService.$showLoadingStatus.next(false);
+      this.categories = next;
+    });
   }
 
   async convertImageUrlToFile(imageUrl: string): Promise<File|null> {
@@ -147,6 +156,10 @@ export class UpdateTestComponent implements OnInit {
     }
     if(this.data.description.trim() == "") {
       this.componentService.displayMessage("Mô tả đề trống!");
+      return;
+    }
+    if(this.data.categorySlug.trim() == "") {
+      this.componentService.displayError("Danh mục trống!", []);
       return;
     }
     if(this.data.source.trim() == "") {

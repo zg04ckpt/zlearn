@@ -11,6 +11,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Title } from '@angular/platform-browser';
 import { LayoutService } from '../../../services/layout.service';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
+import { CategoryItem } from '../../../entities/management/category-item.entity';
 
 @Component({
   selector: 'app-list-test',
@@ -32,6 +33,9 @@ export class ListTestComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   title: string = "Trắc nghiệm";
 
+  categories: CategoryItem[] = [];
+  cateSlug = "";
+
   constructor(
     private router: Router,
     private testService: TestService,
@@ -45,6 +49,10 @@ export class ListTestComponent implements OnInit {
     this.titleService.setTitle(this.title);
     this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
     this.search();
+    this.testService.getCategories().subscribe(next => {
+      this.componentService.$showLoadingStatus.next(false);
+      this.categories = next;
+    });
   }
 
   isLoggedIn(): boolean {
@@ -52,8 +60,11 @@ export class ListTestComponent implements OnInit {
   }
 
   search() {
+    if(this.pageIndex == 0) {
+      this.pageIndex = 1;
+    }
     this.componentService.$showLoadingStatus.next(true);
-    this.testService.getAll(this.pageIndex, this.pageSize, this.key)
+    this.testService.getAll(this.pageIndex, this.pageSize, this.key, this.cateSlug)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(res => {
       this.componentService.$showLoadingStatus.next(false);

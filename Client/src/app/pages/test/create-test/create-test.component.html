@@ -1,7 +1,7 @@
 <div class="row mt-3" id="test-create-form">
     <div class="col-10 offset-1">
         <div class="card card-body shadow-sm mb-5">
-            <h4 class="text-center">Tạo test trắc nghiệm</h4>
+            <h4 class="text-center">Tạo đề trắc nghiệm</h4>
 
             <div class="d-flex justify-content-center mt-2">
 
@@ -26,9 +26,9 @@
 
                         <!--Ảnh-->
                         <div class="mb-3">
-                          <label class="form-label">Ảnh</label>
+                          <label class="form-label">Ảnh minh họa</label>
                           <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            <img [src]="testImagePreviewUrl" alt="" height="100" width="100"
+                            <img [src]="testImagePreviewUrl" height="100" width="100"
                             style="object-fit: cover;">
                             <div class="button-wrapper">
                                 <label class="btn btn-secondary btn-sm me-2 mb-2">
@@ -38,6 +38,16 @@
                                 <p class="text-muted mb-0">Vui lòng chỉ chọn JPG hoặc PNG</p>
                             </div>
                           </div>
+                        </div>
+
+                        <!--Category-->
+                        <div class="mb-3">
+                            <label class="form-label">Danh mục</label>
+                            <select class="form-select" [(ngModel)]="data.categorySlug" name="7">
+                                @for (item of categories; track $index) {
+                                    <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
+                                }
+                            </select>
                         </div>
 
                         <!--Description-->
@@ -66,7 +76,7 @@
                                 <option [ngValue]="false">Công khai</option>
                             </select>
                         </div>
-                      </form>
+                    </form>
                 </div>
 
                 <div class="col-lg-8">
@@ -106,9 +116,8 @@
                             }
 
                             <!--Upload question button-->
-                            <label class="btn rounded-btn position-relative me-2" title="Tải câu hỏi từ file excel">
+                            <label (click)="showUploadConfig = true" class="btn rounded-btn position-relative me-2" title="Tải câu hỏi từ file excel">
                                 <i class='bx bx-arrow-from-bottom position-absolute top-50 start-50 translate-middle'></i>
-                                <input type="file" hidden="" accept=".xlsx" (change)="convertExcelFileToData($event)">
                             </label>
                             
                             <span (click)="showAddQuestionModal()" class="rounded-btn position-relative">
@@ -302,5 +311,89 @@ id="scrollToTopButton" (click)="scrollToTop()">
                 </div>
             }
         </div>
+    </div>
+}
+
+@if (showUploadConfig) {
+    <div class="card card-body position-fixed start-50 top-0 translate-middle-x shadow-lg pt-2"
+    style="margin-top: 80px; width: 300px;">
+
+        <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="showUploadConfig = false"></button>
+        <h6 class="text-center fw-bolder">Tải câu hỏi từ file excel</h6>
+        <small class="text-center fst-italic">(*) Đặt giá trị 0 nếu không muốn thiết lập</small>
+        <div class="row mt-2">
+
+            <div class="col-8">
+                <h6 class="mt-1">Vị trí cột câu hỏi:</h6>
+            </div>
+            <div class="col-4">
+                <input [(ngModel)]="uploadConfig.quesIndex" type="number" min="0" class="form-control" style="height: 24px;">
+            </div>
+
+            <div class="col-8">
+                <h6 class="mt-1">Vị trí cột đáp án A:</h6>
+            </div>
+            <div class="col-4">
+                <input [(ngModel)]="uploadConfig.aIndex" type="number" min="0" class="form-control" style="height: 24px;">
+            </div>
+
+            <div class="col-8">
+                <h6 class="mt-1">Vị trí cột đáp án B:</h6>
+            </div>
+            <div class="col-4">
+                <input [(ngModel)]="uploadConfig.bIndex" type="number" min="0" class="form-control" style="height: 24px;">
+            </div>
+
+            <div class="col-8">
+                <h6 class="mt-1">Vị trí cột đáp án C:</h6>
+            </div>
+            <div class="col-4">
+                <input [(ngModel)]="uploadConfig.cIndex" type="number" min="0" class="form-control" style="height: 24px;">
+            </div>
+
+            <div class="col-8">
+                <h6 class="mt-1">Vị trí cột đáp án D:</h6>
+            </div>
+            <div class="col-4">
+                <input [(ngModel)]="uploadConfig.dIndex" type="number" min="0" class="form-control" style="height: 24px;">
+            </div>
+
+            <div class="col-8">
+                <h6 class="mt-1">Vị trí cột đáp án đúng:</h6>
+            </div>
+            <div class="col-4">
+                <input [(ngModel)]="uploadConfig.ansIndex" type="number" min="0" class="form-control" style="height: 24px;">
+            </div>
+
+            <div class="col-8">
+                <h6 class="mt-1">Dòng bắt đầu:</h6>
+            </div>
+            <div class="col-4">
+                <input [(ngModel)]="uploadConfig.startRow" type="number" min="0" class="form-control" style="height: 24px;">
+            </div>
+
+            <div class="col-8">
+                <h6 class="mt-1">Số lượng dòng:</h6>
+            </div>
+            <div class="col-4">
+                <input [(ngModel)]="uploadConfig.rowsCount" type="number" min="0" class="form-control" style="height: 24px;">
+            </div>
+
+            <div class="d-flex justify-content-center mt-3">
+                <button class="ms-1 border-1 bg-light" onclick="uploadInstructionImage.hidden = false">Hưỡng dẫn</button>
+                <label class="ms-1 border-1 bg-dark text-light px-2 align-content-center" (click)="checkUploadConfig($event)">
+                    Upload
+                    <input type="file" hidden="" accept=".xlsx" (change)="convertExcelFileToData($event)">
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Instruction image -->
+    <div hidden id="uploadInstructionImage" class="w-100 h-100 top-0 start-0 position-absolute" style="z-index: 10000; background-color: rgba(128, 128, 128, 0.466);">
+        <button class="btn btn-close fs-1 position-absolute end-0 top-0 m-2" onclick="uploadInstructionImage.hidden = true"></button>
+        <img [src]="baseUrl + '/api/images/system/hd1.jpg'" alt="" class="position-absolute top-0 mt-5 start-50 translate-middle-x border-2 bg-dark sh"
+        style="max-width: 1000px;">
     </div>
 }
