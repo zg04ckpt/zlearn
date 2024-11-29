@@ -8,6 +8,8 @@ import { AssignRoleDTO } from '../dtos/management/assign-role.dto';
 import { APIResult } from '../dtos/common/api-result.dto';
 import { TestDetail } from '../entities/test/test-detail.entity';
 import { environment } from '../../environments/environment';
+import { Summary } from '../entities/management/summary.entity';
+import { CategoryNode } from '../entities/management/category-node.entity';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,19 @@ export class ManagementService {
   constructor(
     private http: HttpClient
   ) { }
+
+  // Overview ----------------------------------------------
+  getOverviewToday(): Observable<Summary> {
+    return this.http
+      .get<APIResult<Summary>>(`summaries/today`)
+      .pipe(map(res => res.data!));
+  }
+
+  getOverviewByRange(start: string, end: string): Observable<Summary> {
+    return this.http
+      .get<APIResult<Summary>>(`summaries/range?start=${start}&end=${end}`)
+      .pipe(map(res => res.data!));
+  }
 
   //USER --------------------------------------------------
   getAllUsers(pageIndex: number,pageSize: number, searchKeys: any): Observable<PagingResultDTO<UserManagement>> {
@@ -97,5 +112,32 @@ export class ManagementService {
           return res;
       })
     );
+  }
+
+  // CATEGORY -----------------------------------------------------
+  getCategoryTree(): Observable<CategoryNode> {
+    return this.http.get<APIResult<CategoryNode>>(
+      `managements/categories`
+    ).pipe(map(res => res.data!));
+  }
+
+  createNewCate(parentId: string, name: string, slug: string, desc: string): Observable<string> {
+    return this.http.post<APIResult<string>>(
+      `managements/categories`, 
+      {name: name, description: desc, parentId: parentId, slug: slug}
+    ).pipe(map(res => res.data!));
+  }
+
+  updateCate(id: string, parentId: string, name: string, slug: string, desc: string): Observable<void> {
+    return this.http.put<APIResult<void>>(
+      `managements/categories/${id}`, 
+      {name: name, description: desc, parentId: parentId, slug: slug}
+    ).pipe(map(res => res.data!));
+  }
+
+  deleteCate(id: string): Observable<void> {
+    return this.http.delete<APIResult<void>>(
+      `managements/categories/${id}`,
+    ).pipe(map(res => res.data!));
   }
 }

@@ -19,6 +19,7 @@ import { Forbidden403Component } from '../pages/others/forbidden403/forbidden403
 import { Notfound404Component } from '../pages/others/notfound404/notfound404.component';
 import { ServiceUnavailable503Component } from '../pages/others/service-unavailable503/service-unavailable503.component';
 import { UserInfoComponent } from '../components/user-info/user-info.component';
+import { ForgotPasswordComponent } from '../pages/others/forgot-password/forgot-password.component';
 
 @Component({
   selector: 'app-root',

@@ -8,6 +8,7 @@ import { ComponentService } from '../../services/component.service';
 import { NgClass } from '@angular/common';
 import { LayoutService } from '../../services/layout.service';
 import { Breadcrumb, BreadcrumbService } from '../../services/breadcrumb.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -22,7 +23,7 @@ import { Breadcrumb, BreadcrumbService } from '../../services/breadcrumb.service
 export class HeaderComponent {
   user: User|null = null;
   breadcrumbs: Breadcrumb[] = []
-
+  defaultAvtUrl = environment.defaultAvtUrl
   constructor(
     private userService: UserService,
     private authService: AuthService,
@@ -32,6 +33,11 @@ export class HeaderComponent {
   ) {
     userService.$currentUser.subscribe(next => this.user = next);
     breadcrumbService.$breadcrumb.subscribe(next => {
+      if(next == null) {
+        this.breadcrumbs.pop();
+        return;
+      }
+
       if(next.url == '/') {
         this.breadcrumbs = [];
         return;

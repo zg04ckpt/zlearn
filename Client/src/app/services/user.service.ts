@@ -47,19 +47,23 @@ export class UserService {
       .pipe(map(userDetailMapper.map));
   }
 
-  async updateProfile(data: UserDetailDTO): Promise<void> {
-    debugger
+  public updateProfile2(data: UserDetailDTO): Observable<void> {
+    const formData = new FormData();
+    formData.append(`firstName`, data.firstName);
+    formData.append(`lastName`, data.lastName);
+    formData.append(`email`, data.email);
     if(data.image) {
-      if(data.imageUrl) {
-        data.imageUrl = await this.fileService.updateImage(data.imageUrl, data.image);
-      } else {
-        data.imageUrl = await this.fileService.saveImage(data.image);
-      }
+      formData.append(`image`, data.image);
     }
-
-    return lastValueFrom(this.http
-      .put<APIResult<void>>(`users/my-profile`, data)
-      .pipe(map(res => res.data!)));
+    formData.append(`phoneNum`, data.phoneNum);
+    formData.append(`gender`, data.gender.toString());
+    formData.append(`dayOfBirth`, data.dayOfBirth);
+    formData.append(`address`, data.address);
+    formData.append(`intro`, data.intro);
+    formData.append(`socialLinks`, data.socialLinks);
+    return this.http
+      .put<APIResult<void>>(`users/my-profile`, formData)
+      .pipe(map(res => res.data!));
   }
 
   getUserProfile(userId: string): Observable<UserInfo> {

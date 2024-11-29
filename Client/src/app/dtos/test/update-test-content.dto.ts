@@ -5,6 +5,7 @@ export interface TestUpdateContent
     description : string;
     source : string;
     duration : number;
+    categorySlug: string,
     isPrivate : boolean;
     questions : {
         id: string|null;

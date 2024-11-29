@@ -1,31 +1,30 @@
 import { Component, OnInit } from '@angular/core';
+import { CreateTestDTO } from '../../../dtos/test/create-test.dto';
+import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
+import { CategoryItem } from '../../../entities/management/category-item.entity';
 import { ComponentService } from '../../../services/component.service';
 import { TestService } from '../../../services/test.service';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
-import { CreateTestDTO } from '../../../dtos/test/create-test.dto';
-import { FormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
-import { environment } from '../../../../environments/environment';
 import * as XLSX from 'xlsx';
-import { UpdateTestDTO } from '../../../dtos/test/update-test.dts';
+import { NgClass } from '@angular/common';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-update-test-2',
+  selector: 'app-create-test-2',
   standalone: true,
   imports: [
     FormsModule,
     NgClass
   ],
-  templateUrl: './update-test-2.component.html',
-  styleUrl: './update-test-2.component.css'
+  templateUrl: './create-test-2.component.html',
+  styleUrl: './create-test-2.component.css'
 })
-export class UpdateTest2Component implements OnInit {
+export class CreateTest2Component implements OnInit {
   constructor(
     private componentService: ComponentService,
     private testService: TestService,
@@ -33,17 +32,13 @@ export class UpdateTest2Component implements OnInit {
     private authService: AuthService,
     private router: Router,
     private titleService: Title,
-    private breadcrumbService: BreadcrumbService,
-    private activatedRoute: ActivatedRoute
+    private breadcrumbService: BreadcrumbService
   ) {}
 
   // Test
-  id: string|null = null;
-  testImageUrl = "";
-  data: UpdateTestDTO = {
+  data: CreateTestDTO = {
     name: "",
     image: null,
-    imageUrl: "",
     description: "",
     source: "",
     duration: 0,
@@ -51,8 +46,9 @@ export class UpdateTest2Component implements OnInit {
     isPrivate: false,
     questions: []
   };
+  testImageUrl = environment.defaultImageUrl;
   categories: CategoryItem[] = [];
-  success = false;  // true if this test updated successfully
+  success = false; // true if this test created successfully
 
   // Questions
   selectedCount = 0;
@@ -126,25 +122,6 @@ export class UpdateTest2Component implements OnInit {
       this.componentService.$showLoadingStatus.next(false);
       this.categories = next;
     });
-
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    if(this.id == null) {
-      this.componentService.displayMessage("Không tìm thấy bài test");
-      return;
-    } else {
-      this.testService.getUpdateContent(this.id).subscribe(next => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.data = next;
-        this.testImageUrl = next.imageUrl;
-        this.data.questions.forEach(q => {
-          this.questionManager.push({
-            imageUrl: q.imageUrl,
-            selected: false
-          });
-        });
-        console.log(this.data);
-      });
-    }
   }
 
   // TEST ------------------------------------------------------------------
@@ -216,8 +193,8 @@ export class UpdateTest2Component implements OnInit {
       }
     }
 
-    this.componentService.displayConfirmMessage("Xác nhận lưu thay đổi?", () => {
-      this.testService.update2(this.id!, this.data).subscribe(next => {
+    this.componentService.displayConfirmMessage("Xác nhận tạo đề này?", () => {
+      this.testService.create2(this.data).subscribe(next => {
         this.componentService.$showLoadingStatus.next(false);
         this.componentService.$showToast.next("Tạo thành công");
         this.success = true;
@@ -262,6 +239,7 @@ export class UpdateTest2Component implements OnInit {
   }
 
   public convertExcelFileToData(event: Event) {
+
     const target = event.target as HTMLInputElement;
     if(target.files?.length !== 1) {
       this.componentService.displayMessage("Không thể tải lên nhiều file");
@@ -277,16 +255,15 @@ export class UpdateTest2Component implements OnInit {
         for(let k = 0; k < this.uploadQuestionModule.rowsCount; k++) {
 
           this.data.questions.push({
-            id: null,
             content: ws[XLSX.utils.encode_cell({c: this.uploadQuestionModule.quesIndex-1, r: i+k})]?.v || "",
             answerA: ws[XLSX.utils.encode_cell({c: this.uploadQuestionModule.aIndex-1, r: i+k})]?.v || "",
             answerB: ws[XLSX.utils.encode_cell({c: this.uploadQuestionModule.bIndex-1, r: i+k})]?.v || "",
             answerC: ws[XLSX.utils.encode_cell({c: this.uploadQuestionModule.cIndex-1, r: i+k})]?.v || null,
             answerD: ws[XLSX.utils.encode_cell({c: this.uploadQuestionModule.dIndex-1, r: i+k})]?.v || null,
             correctAnswer: ws[XLSX.utils.encode_cell({c: this.uploadQuestionModule.ansIndex-1, r: i+k})]?.v || 0,
-            image: null,
-            imageUrl: null
+            image: null
           });
+
           this.questionManager.push({ imageUrl: null, selected: false});
         }
         this.uploadQuestionModule.isShow = false;
@@ -339,10 +316,8 @@ export class UpdateTest2Component implements OnInit {
     // Display confirm
     this.componentService.displayConfirmMessage("Xác nhận thêm câu hỏi này?", () => {
       this.data.questions.push({
-        id: null,
         content: this.addQuestionModule.content,
         image: this.addQuestionModule.image,
-        imageUrl: null,
         answerA: this.addQuestionModule.answerA,
         answerB: this.addQuestionModule.answerB,
         answerC: this.addQuestionModule.answerC,
@@ -386,17 +361,15 @@ export class UpdateTest2Component implements OnInit {
     }
 
     this.componentService.displayConfirmMessage("Xác nhận cập nhật câu này?", () => {
-      const q = this.data.questions[this.updateQuestionModule.index];
-      q.content = this.updateQuestionModule.content;
-      q.image = this.updateQuestionModule.image;
-      q.answerA = this.updateQuestionModule.answerA;
-      q.answerB = this.updateQuestionModule.answerB;
-      q.answerC = this.updateQuestionModule.answerC;
-      q.answerD = this.updateQuestionModule.answerD;
-      if(!this.updateQuestionModule.imageUrl) {
-        q.imageUrl = null;
-      }
-      q.correctAnswer = this.updateQuestionModule.correctAnswer
+      this.data.questions[this.updateQuestionModule.index] = {
+        content: this.updateQuestionModule.content,
+        image: this.updateQuestionModule.image,
+        answerA: this.updateQuestionModule.answerA,
+        answerB: this.updateQuestionModule.answerB,
+        answerC: this.updateQuestionModule.answerC,
+        answerD: this.updateQuestionModule.answerD,
+        correctAnswer: this.updateQuestionModule.correctAnswer
+      };
       this.questionManager[this.updateQuestionModule.index].imageUrl = this.updateQuestionModule.imageUrl;
       this.updateQuestionModule.isShow = false;
     });
@@ -411,7 +384,7 @@ export class UpdateTest2Component implements OnInit {
     this.updateQuestionModule.answerC = this.data.questions[index].answerC; 
     this.updateQuestionModule.answerD = this.data.questions[index].answerD; 
     this.updateQuestionModule.correctAnswer = this.data.questions[index].correctAnswer; 
-    this.updateQuestionModule.image = null; 
+    this.updateQuestionModule.image = this.data.questions[index].image; 
     this.updateQuestionModule.imageUrl = this.questionManager[index].imageUrl;
     this.updateQuestionModule.isShow = true;
     console.log(this.updateQuestionModule);
@@ -473,7 +446,7 @@ export class UpdateTest2Component implements OnInit {
 
   public canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     if(!this.success) {
-      return confirm("Bạn chưa cập nhật đề thành công, rời khỏi sẽ mất bản nháp?");
+      return confirm("Bạn chưa tạo đề thành công, rời khỏi sẽ mất bản nháp?");
     }
     return true;
   }

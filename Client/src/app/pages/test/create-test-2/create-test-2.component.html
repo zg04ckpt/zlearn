@@ -1,35 +1,26 @@
-<div class="row mt-3" id="test-create-form">
-    <div class="col-10 offset-1">
-        <div class="card card-body shadow-sm mb-5">
+<div class="row" id="test-create-form">
+    <div class="col-12">
+        <div class="card card-body shadow-lg m-3 mb-5">
             <h4 class="text-center">Tạo đề trắc nghiệm</h4>
-
             <div class="d-flex justify-content-center mt-2">
-
-                <button class="btn btn-outline-dark btn-sm px-4 mx-1"
-                (click)="backToList()"
-                >Quay lại danh sách</button>
-
-                <button class="btn btn-outline-success btn-sm px-4 mx-1"
-                (click)="saveTest()"
-                >Lưu</button>
-
+                <button class="btn btn-outline-dark btn-sm px-4 mx-1"(click)="back()">Quay lại danh sách</button>
+                <button class="btn btn-outline-success btn-sm px-4 mx-1"(click)="save()">Tạo mới</button>
             </div>
 
             <div class="row mt-3">
                 <div class="col-lg-4">
-                    <form>
+                    <div>
                         <!--Name-->
                         <div class="mb-3">
                           <label class="form-label">Tên bài test</label>
-                          <input type="text" class="form-control" [(ngModel)]="data.name" name="1">
+                          <input type="text" class="form-control" [(ngModel)]="data.name">
                         </div>
 
                         <!--Ảnh-->
                         <div class="mb-3">
                           <label class="form-label">Ảnh minh họa</label>
                           <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            <img [src]="testImagePreviewUrl" height="100" width="100"
-                            style="object-fit: cover;">
+                            <img [src]="testImageUrl" height="100" width="100" style="object-fit: cover;">
                             <div class="button-wrapper">
                                 <label class="btn btn-secondary btn-sm me-2 mb-2">
                                     <span>Chọn ảnh từ thiết bị</span>
@@ -43,7 +34,7 @@
                         <!--Category-->
                         <div class="mb-3">
                             <label class="form-label">Danh mục</label>
-                            <select class="form-select" [(ngModel)]="data.categorySlug" name="7">
+                            <select class="form-select" [(ngModel)]="data.categorySlug">
                                 @for (item of categories; track $index) {
                                     <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
                                 }
@@ -53,30 +44,30 @@
                         <!--Description-->
                         <div class="mb-3">
                             <label class="form-label">Mô tả</label>
-                            <textarea class="form-control" [(ngModel)]="data.description" name="2"></textarea>
+                            <textarea class="form-control" [(ngModel)]="data.description"></textarea>
                         </div>
 
                         <!--Source-->
                         <div class="mb-3">
                             <label class="form-label">Nguồn</label>
-                            <input type="text" class="form-control" [(ngModel)]="data.source"  name="3">
+                            <input type="text" class="form-control" [(ngModel)]="data.source">
                         </div>
 
                         <!--Time-->
                         <div class="mb-3">
                             <label class="form-label">Thời gian (phút)</label>
-                            <input type="number" min="1" class="form-control" [(ngModel)]="data.duration"  name="4">
+                            <input type="number" min="1" class="form-control" [(ngModel)]="data.duration">
                         </div>
 
                         <!--Privacy mode-->
                         <div class="mb-3">
                             <label class="form-label">Chế độ riêng tư</label>
-                            <select [(ngModel)]="data.isPrivate" class="form-select" name="5">
+                            <select [(ngModel)]="data.isPrivate" class="form-select">
                                 <option [ngValue]="true">Riêng tư(Chỉ mình tôi)</option>
                                 <option [ngValue]="false">Công khai</option>
                             </select>
                         </div>
-                    </form>
+                    </div>
                 </div>
 
                 <div class="col-lg-8">
@@ -86,41 +77,40 @@
                         <div class="d-flex align-items-center">
                             <small class="fw-bold me-2 flex-fill">Số lượng: {{data.questions.length}}</small>
 
-                            @if(selectedCount) {
+                            @if(selectedCount > 0) {
                                 <div class="d-flex me-2 ps-2" id="selected">
                                     <span style="font-size: 12px;">Đã chọn {{selectedCount}} câu</span>
-                                    <i class='bx bx-x-circle text-danger m-1' (click)="cancelSelectAll()"></i>
+                                    <i class='bx bx-x-circle text-danger m-1' (click)="unselectAll()"></i>
                                 </div>
                             }
 
                             <!--Remove button-->
-                            @if(selectedCount) {
-                                <span class="rounded-btn position-relative me-2"  (click)="removeSelected()">
+                            @if(selectedCount > 0) {
+                                <span class="rounded-btn position-relative me-2"  (click)="removeSelectedQuestions()">
                                     <i class='bx bx-trash position-absolute top-50 start-50 translate-middle'></i>
                                 </span>
                             }
-                            
 
                             <!--Select all question button-->
-                            @if(!isSelectedAll) {
+                            @if(data.questions.length > 0 && selectedCount != data.questions.length) {
                                 <span class="rounded-btn position-relative me-2"
-                                (click)="selectOrUnselectAll(true);" title="Chọn tất cả">
+                                (click)="selectAll();" title="Chọn tất cả">
                                     <span class='position-absolute top-50 start-50 translate-middle'>All</span>
                                 </span>
                             }
-                            @else {
+                            @else if(selectedCount > 0) {
                                 <span class="rounded-btn position-relative me-2"
-                                (click)="selectOrUnselectAll(false)" title="Hủy chọn tất cả">
+                                (click)="unselectAll()" title="Hủy chọn tất cả">
                                     <i class='bx bx-x position-absolute top-50 start-50 translate-middle'></i>
                                 </span>
                             }
 
                             <!--Upload question button-->
-                            <label (click)="showUploadConfig = true" class="btn rounded-btn position-relative me-2" title="Tải câu hỏi từ file excel">
+                            <label (click)="uploadQuestionModule.isShow= true" class="btn rounded-btn position-relative me-2" title="Tải câu hỏi từ file excel">
                                 <i class='bx bx-arrow-from-bottom position-absolute top-50 start-50 translate-middle'></i>
                             </label>
                             
-                            <span (click)="showAddQuestionModal()" class="rounded-btn position-relative">
+                            <span (click)="addQuestionModule.isShow = true" class="rounded-btn position-relative">
                                 <i class='bx bx-plus-medical position-absolute top-50 start-50 translate-middle'></i>
                             </span>
                         </div>
@@ -131,13 +121,13 @@
 
                                 <i class='bx bxs-pencil text-secondary 
                                 position-absolute edit-btn end-0 top-0 mt-3 me-1'
-                                (click)="showEditQuestionModal($index)"></i>
+                                (click)="updateQuestion($index)"></i>
 
                                 <!--Question-->
                                 <div class="d-flex align-items-start position-relative pe-3 my-2">
                                     <!--STT-->
                                     <div class="rounded-btn position-relative"
-                                    (click)="select($index)"
+                                    (click)="questionManager[$index].selected = true; selectedCount = selectedCount + 1"
                                     [ngClass]="{'bg-secondary text-white': questionManager[$index].selected}">
                                         <span class='fw-bold position-absolute top-50 start-50 translate-middle'>{{$index+1}}</span>
                                     </div>
@@ -148,7 +138,7 @@
 
                                 <!--Image-->
                                 @if(item.image) {
-                                    <img class="question-image mb-2" [src]="questionManager[$index].previewImageUrl" alt="Lỗi hiển thị ảnh">
+                                    <img class="question-image mb-2" [src]="questionManager[$index].imageUrl" alt="Lỗi hiển thị ảnh">
                                 }
                                 
                                 <!--Answers-->
@@ -204,108 +194,85 @@
     </div>
 </div>
 
-<!--Scroll top top-->
-<span class="btn p-0 position-fixed end-0 bottom-0 shadow-lg text-center"
-id="scrollToTopButton" (click)="scrollToTop()">
-    <i class='bx bx-up-arrow-alt fs-2 fw-bold mt-1'></i>
-</span>
-
-<!--Edit modal-->
-@if(editQuestion != null) {
+<!--Add dialog-->
+@if(addQuestionModule.isShow) {
     <div class="position-fixed overflow-auto col-10 col-lg-6 shadow-lg start-50 top-0 translate-middle-x card card-body pt-2"
     style="margin-top: 80px; height: 80vh; z-index: 3;">
         <div class="d-flex flex-column">
-            @if(isAdding) {
-                <label class="text-center fw-bold">Thêm câu hỏi</label>
-            }
-            @else {
-                <label class="text-center fw-bold">Chỉnh sửa câu hỏi</label>
-            }
+            <label class="text-center fw-bold">Thêm câu hỏi</label>
+            <button class="btn btn-close position-absolute top-0 end-0 m-1" (click)="addQuestionModule.isShow = false"></button>
             <div class="d-flex flex-row mt-2">
-                @if(isAdding) {
-                    <button class="btn btn-outline-success btn-sm me-2"
-                    (click)="addQuestionToData()"
-                    >Thêm</button>
+                <button class="btn btn-outline-success btn-sm me-2" (click)="addNewQuestionToData()">Lưu</button>
+                
+                @if(addQuestionModule.answerC == null) {
+                    <button class="btn btn-outline-info btn-sm me-2" (click)="addQuestionModule.answerC = ''">Thêm đáp án</button>
+                } 
+                @else if(addQuestionModule.answerD == null) {
+                    <button class="btn btn-outline-info btn-sm me-2" (click)="addQuestionModule.answerD = ''">Thêm đáp án</button>
                 }
-                @else {
-                    <button class="btn btn-outline-success btn-sm me-2"
-                    (click)="updateQuestionToData()"
-                    >Cập nhật</button>
-                }
-                <button class="btn btn-close position-absolute top-0 end-0 m-1" 
-                (click)="editQuestion = null"></button>
-
-                @if(editQuestion.answerC == null || editQuestion.answerD == null) {
-                    <button class="btn btn-outline-info btn-sm me-2" 
-                    (click)="addAnswerInEditQuestion()">Thêm câu trả lời</button>
-                }
-                @if(imagePreview.hidden == true) {
-                    <button class="btn btn-outline-dark btn-sm" 
-                    (click)="imagePreview.hidden = false;">
-                        Thêm ảnh
-                    </button>
-                }
+                <label class="btn btn-outline-secondary me-2 btn-sm">
+                    Cập nhật ảnh cho câu hỏi
+                    <input type="file" hidden="" accept=".png, .jpg" (change)="uploadQuestionImage($event, true)">
+                </label>
             </div>
     
             <!--Content-->
-            <textarea class="form-control mt-2" placeholder="Nội dung câu hỏi..."
-            [(ngModel)]="editQuestion.content"></textarea>
+            <textarea class="form-control mt-2" placeholder="Nội dung câu hỏi..." [(ngModel)]="addQuestionModule.content"></textarea>
     
             <!--Image-->
-            <div #imagePreview [hidden]="questionImagePreviewUrl == null" class="card card-body mt-2 position-relative">
-                <img [src]="questionImagePreviewUrl" alt="" class="question-image">
-                <label class="btn-sm position-absolute top-50 start-50 translate-middle btn btn-outline-secondary">
-                    <span>Chọn ảnh từ thiết bị</span>
-                    <input type="file" hidden="" accept=".png, .jpg" (change)="uploadQuestionImage($event)">
-                </label>
-                <button class="btn btn-close position-absolute end-0 top-0 m-1" 
-                (click)="imagePreview.hidden = true; editQuestion.image = null"></button>
-            </div>
+            @if(addQuestionModule.image) {
+                <div class="card card-body mt-2 position-relative">
+                    <img [src]="addQuestionModule.imageUrl" alt="" class="question-image">
+                    
+                    <button class="btn btn-close position-absolute end-0 top-0 m-1" 
+                    (click)="addQuestionModule.image = null; addQuestionModule.imageUrl = null"></button>
+                </div>
+            }
             
             <!--Answer-->
             <div class="input-group mt-2">
                 <div class="input-group-text">
                     <input class="form-check-input mt-0" type="radio" name="ans"
-                    [(ngModel)]="editQuestion.correctAnswer" value="1">
+                    [(ngModel)]="addQuestionModule.correctAnswer" [value]="1">
                     <span class="ms-2">A</span>
                 </div>
-                <input type="text" class="form-control" [(ngModel)]="editQuestion.answerA">
+                <input type="text" class="form-control" [(ngModel)]="addQuestionModule.answerA">
             </div>
     
             <div class="input-group mt-2">
                 <div class="input-group-text">
                     <input class="form-check-input mt-0" type="radio" name="ans"
-                    [(ngModel)]="editQuestion.correctAnswer" value="2">
+                    [(ngModel)]="addQuestionModule.correctAnswer" [value]="2">
                     <span class="ms-2">B</span>
                 </div>
-                <input type="text" class="form-control" [(ngModel)]="editQuestion.answerB">
+                <input type="text" class="form-control" [(ngModel)]="addQuestionModule.answerB">
             </div>
     
-            @if(editQuestion.answerC != null) {
+            @if(addQuestionModule.answerC != null) {
                 <div class="input-group mt-2 position-relative">
                     <div class="input-group-text">
                         <input class="form-check-input mt-0" type="radio" name="ans"
-                        [(ngModel)]="editQuestion.correctAnswer" value="3">
+                        [(ngModel)]="addQuestionModule.correctAnswer" [value]="3">
                         <span class="ms-2">C</span>
                     </div>
-                    <input type="text" class="form-control" [(ngModel)]="editQuestion.answerC">
+                    <input type="text" class="form-control" [(ngModel)]="addQuestionModule.answerC">
                     <span class="position-absolute end-0 top-50 translate-middle-y"
-                    (click)="editQuestion.answerC = null; editQuestion.correctAnswer = 0">
+                    (click)="addQuestionModule.answerC = null; addQuestionModule.correctAnswer = 0">
                         <i class='bx bx-x fw-bold fs-3 m-1'></i>
                     </span>
                 </div>
             }
     
-            @if(editQuestion.answerD != null) {
+            @if(addQuestionModule.answerD != null) {
                 <div class="input-group mt-2 position-relative">
                     <div class="input-group-text">
                         <input class="form-check-input mt-0" type="radio" name="ans"
-                        [(ngModel)]="editQuestion.correctAnswer" value="4">
+                        [(ngModel)]="addQuestionModule.correctAnswer" [value]="4">
                         <span class="ms-2">D</span>
                     </div>
-                    <input type="text" class="form-control" [(ngModel)]="editQuestion.answerD">
+                    <input type="text" class="form-control" [(ngModel)]="addQuestionModule.answerD">
                     <span class="position-absolute end-0 top-50 translate-middle-y"
-                    (click)="editQuestion.answerD = null; editQuestion.correctAnswer = 0">
+                    (click)="addQuestionModule.answerD = null; addQuestionModule.correctAnswer = 0">
                         <i class='bx bx-x fw-bold fs-3 m-1'></i>
                     </span>
                 </div>
@@ -314,11 +281,99 @@ id="scrollToTopButton" (click)="scrollToTop()">
     </div>
 }
 
-@if (showUploadConfig) {
+<!--Edit dialog-->
+@if(updateQuestionModule.isShow) {
+    <div class="position-fixed overflow-auto col-10 col-lg-6 shadow-lg start-50 top-0 translate-middle-x card card-body pt-2"
+    style="margin-top: 80px; height: 80vh; z-index: 3;">
+        <div class="d-flex flex-column">
+            <label class="text-center fw-bold">Cập nhật câu hỏi</label>
+            <div class="d-flex flex-row mt-2">
+                <button class="btn btn-outline-success btn-sm me-2" (click)="updateQuestionToData()">Lưu</button>
+                <button class="btn btn-close position-absolute top-0 end-0 m-1" (click)="updateQuestionModule.isShow = false"></button>
+
+                @if(addQuestionModule.answerC == null) {
+                    <button class="btn btn-outline-info btn-sm me-2" (click)="updateQuestionModule.answerC = ''">Thêm câu trả lời</button>
+                } 
+                @else if(addQuestionModule.answerD == null) {
+                    <button class="btn btn-outline-info btn-sm me-2" (click)="updateQuestionModule.answerD = ''">Thêm câu trả lời</button>
+                }
+
+                <label class="btn btn-outline-secondary me-2 btn-sm">
+                    Cập nhật ảnh cho câu hỏi
+                    <input type="file" hidden="" accept=".png, .jpg" (change)="uploadQuestionImage($event, false)">
+                </label>
+            </div>
+    
+            <!--Content-->
+            <textarea class="form-control mt-2" placeholder="Nội dung câu hỏi..." [(ngModel)]="updateQuestionModule.content"></textarea>
+    
+            <!--Image-->
+            @if(updateQuestionModule.image) {
+                <div class="card card-body mt-2 position-relative">
+                    <img [src]="updateQuestionModule.imageUrl" alt="" class="question-image">
+                    
+                    <button class="btn btn-close position-absolute end-0 top-0 m-1" 
+                    (click)="updateQuestionModule.image = null; updateQuestionModule.imageUrl = null"></button>
+                </div>
+            }
+            
+            <!--Answer-->
+            <div class="input-group mt-2">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="radio" name="ans"
+                    [(ngModel)]="updateQuestionModule.correctAnswer" [value]="1">
+                    <span class="ms-2">A</span>
+                </div>
+                <input type="text" class="form-control" [(ngModel)]="updateQuestionModule.answerA">
+            </div>
+    
+            <div class="input-group mt-2">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="radio" name="ans"
+                    [(ngModel)]="updateQuestionModule.correctAnswer" [value]="2">
+                    <span class="ms-2">B</span>
+                </div>
+                <input type="text" class="form-control" [(ngModel)]="updateQuestionModule.answerB">
+            </div>
+    
+            @if(updateQuestionModule.answerC != null) {
+                <div class="input-group mt-2 position-relative">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="radio" name="ans"
+                        [(ngModel)]="updateQuestionModule.correctAnswer" [value]="3">
+                        <span class="ms-2">C</span>
+                    </div>
+                    <input type="text" class="form-control" [(ngModel)]="updateQuestionModule.answerC">
+                    <span class="position-absolute end-0 top-50 translate-middle-y"
+                    (click)="updateQuestionModule.answerC = null; updateQuestionModule.correctAnswer = 0">
+                        <i class='bx bx-x fw-bold fs-3 m-1'></i>
+                    </span>
+                </div>
+            }
+    
+            @if(updateQuestionModule.answerD != null) {
+                <div class="input-group mt-2 position-relative">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="radio" name="ans"
+                        [(ngModel)]="updateQuestionModule.correctAnswer" [value]="4">
+                        <span class="ms-2">D</span>
+                    </div>
+                    <input type="text" class="form-control" [(ngModel)]="updateQuestionModule.answerD">
+                    <span class="position-absolute end-0 top-50 translate-middle-y"
+                    (click)="updateQuestionModule.answerD = null; updateQuestionModule.correctAnswer = 0">
+                        <i class='bx bx-x fw-bold fs-3 m-1'></i>
+                    </span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<!-- Upload config dialog -->
+@if(uploadQuestionModule.isShow) {
     <div class="card card-body position-fixed start-50 top-0 translate-middle-x shadow-lg pt-2"
     style="margin-top: 80px; width: 300px;">
-
-        <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="showUploadConfig = false"></button>
+        <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="uploadQuestionModule.isShow= false"></button>
         <h6 class="text-center fw-bolder">Tải câu hỏi từ file excel</h6>
         <small class="text-center fst-italic">(*) Đặt giá trị 0 nếu không muốn thiết lập</small>
         <div class="row mt-2">
@@ -327,56 +382,56 @@ id="scrollToTopButton" (click)="scrollToTop()">
                 <h6 class="mt-1">Vị trí cột câu hỏi:</h6>
             </div>
             <div class="col-4">
-                <input [(ngModel)]="uploadConfig.quesIndex" type="number" min="0" class="form-control" style="height: 24px;">
+                <input [(ngModel)]="uploadQuestionModule.quesIndex" type="number" min="0" class="form-control" style="height: 24px;">
             </div>
 
             <div class="col-8">
                 <h6 class="mt-1">Vị trí cột đáp án A:</h6>
             </div>
             <div class="col-4">
-                <input [(ngModel)]="uploadConfig.aIndex" type="number" min="0" class="form-control" style="height: 24px;">
+                <input [(ngModel)]="uploadQuestionModule.aIndex" type="number" min="0" class="form-control" style="height: 24px;">
             </div>
 
             <div class="col-8">
                 <h6 class="mt-1">Vị trí cột đáp án B:</h6>
             </div>
             <div class="col-4">
-                <input [(ngModel)]="uploadConfig.bIndex" type="number" min="0" class="form-control" style="height: 24px;">
+                <input [(ngModel)]="uploadQuestionModule.bIndex" type="number" min="0" class="form-control" style="height: 24px;">
             </div>
 
             <div class="col-8">
                 <h6 class="mt-1">Vị trí cột đáp án C:</h6>
             </div>
             <div class="col-4">
-                <input [(ngModel)]="uploadConfig.cIndex" type="number" min="0" class="form-control" style="height: 24px;">
+                <input [(ngModel)]="uploadQuestionModule.cIndex" type="number" min="0" class="form-control" style="height: 24px;">
             </div>
 
             <div class="col-8">
                 <h6 class="mt-1">Vị trí cột đáp án D:</h6>
             </div>
             <div class="col-4">
-                <input [(ngModel)]="uploadConfig.dIndex" type="number" min="0" class="form-control" style="height: 24px;">
+                <input [(ngModel)]="uploadQuestionModule.dIndex" type="number" min="0" class="form-control" style="height: 24px;">
             </div>
 
             <div class="col-8">
                 <h6 class="mt-1">Vị trí cột đáp án đúng:</h6>
             </div>
             <div class="col-4">
-                <input [(ngModel)]="uploadConfig.ansIndex" type="number" min="0" class="form-control" style="height: 24px;">
+                <input [(ngModel)]="uploadQuestionModule.ansIndex" type="number" min="0" class="form-control" style="height: 24px;">
             </div>
 
             <div class="col-8">
                 <h6 class="mt-1">Dòng bắt đầu:</h6>
             </div>
             <div class="col-4">
-                <input [(ngModel)]="uploadConfig.startRow" type="number" min="0" class="form-control" style="height: 24px;">
+                <input [(ngModel)]="uploadQuestionModule.startRow" type="number" min="0" class="form-control" style="height: 24px;">
             </div>
 
             <div class="col-8">
                 <h6 class="mt-1">Số lượng dòng:</h6>
             </div>
             <div class="col-4">
-                <input [(ngModel)]="uploadConfig.rowsCount" type="number" min="0" class="form-control" style="height: 24px;">
+                <input [(ngModel)]="uploadQuestionModule.rowsCount" type="number" min="0" class="form-control" style="height: 24px;">
             </div>
 
             <div class="d-flex justify-content-center mt-3">
@@ -393,7 +448,7 @@ id="scrollToTopButton" (click)="scrollToTop()">
     <!-- Instruction image -->
     <div hidden id="uploadInstructionImage" class="w-100 h-100 top-0 start-0 position-absolute" style="z-index: 10000; background-color: rgba(128, 128, 128, 0.466);">
         <button class="btn btn-close fs-1 position-absolute end-0 top-0 m-2" onclick="uploadInstructionImage.hidden = true"></button>
-        <img [src]="baseUrl + '/api/images/system/hd1.jpg'" alt="" class="position-absolute top-0 mt-5 start-50 translate-middle-x border-2 bg-dark sh"
+        <img [src]="uploadQuestionModule.instructionImageUrl" alt="" class="position-absolute top-0 mt-5 start-50 translate-middle-x border-2 bg-dark sh"
         style="max-width: 1000px;">
     </div>
 }

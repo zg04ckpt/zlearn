@@ -10,6 +10,8 @@ import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
 import { Title } from '@angular/platform-browser';
+import { CommentService } from '../../../services/comment.service';
+import { CommentDTO } from '../../../dtos/comment/comment.dto';
 
 @Component({
   selector: 'app-test-management',
@@ -31,6 +33,9 @@ export class TestManagementComponent implements OnInit {
   key: string = "";
   destroyRef = inject(DestroyRef);
   title: string = "Quản lý đề";
+  
+  isShowCommentsOfTest = false;
+  comments: CommentDTO[] = [];
 
   constructor(
     private managementService: ManagementService,
@@ -39,7 +44,8 @@ export class TestManagementComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private titleService: Title,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private commentService: CommentService
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +77,24 @@ export class TestManagementComponent implements OnInit {
         this.componentService.$showLoadingStatus.next(false);
         this.componentService.displayMessage("Xóa test thành công!");
         this.search();
+      });
+    });
+  }
+
+  showCommentsOfTest(testId: string) {
+    this.commentService.getAllCommentsOfTest(testId).subscribe(next => {
+      this.comments = next;
+      this.componentService.$showLoadingStatus.next(false);
+      this.isShowCommentsOfTest = true;
+    });
+  }
+
+  removeComment(commentId: string) {
+    this.componentService.displayConfirmMessage("Xác nhận xóa bình luận này?", () => {
+      this.commentService.removeComment(commentId).subscribe(next => {
+        this.componentService.$showLoadingStatus.next(false);
+        this.componentService.displayMessage("Xóa thành công!");
+        this.comments = this.comments.filter(e => e.id != commentId);
       });
     });
   }

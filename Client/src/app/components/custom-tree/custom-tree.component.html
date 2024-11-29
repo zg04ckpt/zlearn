@@ -1,0 +1,13 @@
+<div class="d-flex flex-column cate-list">
+    @for (item of items; track $index) {
+        <div class="cate-item d-flex align-items-center">
+            <i class='bx toggle' (click)="item.isExpand = !item.isExpand" [ngClass]="{'bx-chevron-right': !item.isExpand, 'bx-chevron-down': item.isExpand}"></i>
+            <div [title]="item.description" [ngStyle]="{'font-weight': item.isExpand? 'bold':'normal'}">{{item.name}}</div>
+            <i class='bx bx-plus-circle add ms-3' (click)="add(item.id);"></i>
+            <i class='bx bx-pencil edit' (click)="edit(item.id)"></i>
+            <i class='bx bx-trash remove' (click)="delete(item.id)"></i>
+        </div>
+        <!-- Children -->
+        <app-custom-tree (onAdd)="add($event.id)" (onEdit)="edit($event.id)" (onDelete)="delete($event.id)" [hidden]="!item.isExpand" [items]="item.children" style="margin-left: 30px;"></app-custom-tree>
+    }
+</div>

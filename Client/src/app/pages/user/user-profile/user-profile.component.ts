@@ -10,6 +10,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
 import { Title } from '@angular/platform-browser';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-user-detail',
@@ -29,6 +30,7 @@ export class UserProfileComponent implements OnInit {
   updating: boolean = false;
   avtPreviewLink: string|null = null;
   title: string = "";
+  defaultAvtUrl = environment.defaultAvtUrl;
 
   constructor(
     private userService: UserService,
@@ -69,10 +71,8 @@ export class UserProfileComponent implements OnInit {
       "Xác nhận lưu thay đổi?",
       [
         { name: "Hủy", action: () => {} },
-        { name: "Xác nhận", action: async () => {
-
-          this.componentService.$showLoadingStatus.next(true);
-          await this.userService.updateProfile({
+        { name: "Xác nhận", action: () => {
+          this.userService.updateProfile2({
             firstName: this.editingData!.firstName,
             lastName: this.editingData!.lastName,
             email: this.editingData!.email,
@@ -84,11 +84,12 @@ export class UserProfileComponent implements OnInit {
             socialLinks: this.convertLinksToString(),
             image: this.editingData!.image,
             imageUrl: this.editingData!.imageUrl
+          }).subscribe(next => {
+            this.updating = false;
+            this.componentService.$showLoadingStatus.next(false);
+            this.userDetail = this.editingData;
+            this.componentService.displayMessage("Lưu thay đổi thành công!");
           });
-          this.updating = false;
-          this.componentService.$showLoadingStatus.next(false);
-          this.userDetail = this.editingData;
-          this.componentService.displayMessage("Lưu thay đổi thành công!");
         }}
       ]
     );
@@ -101,7 +102,6 @@ export class UserProfileComponent implements OnInit {
       this.editingData!.image = image;
       const reader = new FileReader();
       reader.onload = e => this.avtPreviewLink = reader.result as string
-      debugger
       reader.readAsDataURL(image);
     }
   }

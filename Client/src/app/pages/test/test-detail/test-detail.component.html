@@ -18,7 +18,7 @@
                 </div>
     
                 <div class="d-flex mt-2">
-                    <img [src]="data!.imageUrl" alt="" width="150px" height="200px"
+                    <img [src]="data!.imageUrl || defaultImageUrl" alt="" width="150px" height="200px"
                     style="object-fit: cover;">
                     <div class="d-flex flex-column ms-3 w-100">
     
@@ -97,7 +97,7 @@
                     @for (item of randomTests; track $index) {
                         <div class="mx-2 other-tests p-2 my-2 d-flex flex-column d-block" style="width: 200px; height: auto;"
                         [routerLink]="['/tests/', item.id]">
-                            <img [src]="item.imageUrl" alt="" class="test-img">
+                            <img [src]="item.imageUrl || defaultImageUrl" alt="" class="test-img">
                             <small class="fw-bold fs-6">{{item.name}}</small>
                             <div class="d-flex flex-row text-secondary">
                                 <small>{{item.numberOfQuestions}} câu hỏi</small>

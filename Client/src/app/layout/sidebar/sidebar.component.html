@@ -10,7 +10,12 @@ style="width: 220px; z-index: 2; margin-top: 50px; padding-bottom: 50px;">
     (click)="toggleStatus()">
         <i class='bx fw-bolder fs-2' [ngClass]="{'bx-chevron-left': show, 'bx-chevron-right': !show}"></i>
     </button>
-    
+    <div class="d-md-none w-100 text-center">
+        <a routerLink="" class=" fw-bold text-white fs-5  text-decoration-none">
+            ZLEARN
+        </a>
+        <hr class="text-white my-2">
+    </div>
     <ul class="nav nav-fill mb-auto flex-column mt-0" id="sidebar-menu">
         @if(user?.roles?.includes('Admin'))
         {
@@ -28,7 +33,7 @@ style="width: 220px; z-index: 2; margin-top: 50px; padding-bottom: 50px;">
                 </a>
             </li>
 
-            <div #manageFeatures class="ms-3" style="font-size: 15px;">
+            <div #manageFeatures class="ms-3" style="font-size: 15px;" hidden>
                 <li class="nav-item">
                     <a routerLink="management" class="nav-link active text-start">
                         <i class='bx bxs-right-arrow me-2' ></i>
@@ -51,6 +56,12 @@ style="width: 220px; z-index: 2; margin-top: 50px; padding-bottom: 50px;">
                     <a routerLink="management/tests" class="nav-link active text-start">
                         <i class='bx bxs-right-arrow me-2' ></i>
                         Quản lí đề
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="management/categories" class="nav-link active text-start">
+                        <i class='bx bxs-right-arrow me-2' ></i>
+                        Quản lí danh mục
                     </a>
                 </li>
             </div>

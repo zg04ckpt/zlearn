@@ -27,9 +27,9 @@ export class CommentService {
             .pipe(map(res => res.data!));
     }
 
-    removeComment(testId: string): Observable<void> {
+    removeComment(commentId: string): Observable<void> {
         return this.http
-            .delete<APIResult<void>>(`comments/${testId}`)
+            .delete<APIResult<void>>(`comments/${commentId}`)
             .pipe(map(res => res.data!));
     }
 

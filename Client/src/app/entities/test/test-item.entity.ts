@@ -4,5 +4,6 @@ export interface TestItem {
     imageUrl: string|null;
     numberOfQuestions: number;
     numberOfAttempts: number;
-    isPrivate: boolean
+    isPrivate: boolean,
+    description: string
 }

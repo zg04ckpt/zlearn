@@ -32,6 +32,7 @@ export class ListTestComponent implements OnInit {
   key: string = "";
   destroyRef = inject(DestroyRef);
   title: string = "Trắc nghiệm";
+  defaultImageUrl = environment.defaultImageUrl;
 
   categories: CategoryItem[] = [];
   cateSlug = "";

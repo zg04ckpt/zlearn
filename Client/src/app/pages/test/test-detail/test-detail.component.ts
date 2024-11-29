@@ -15,6 +15,7 @@ import { BreadcrumbService } from '../../../services/breadcrumb.service';
 import { TestItem } from '../../../entities/test/test-item.entity';
 import { HomeService } from '../../../services/home.service';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-test',
@@ -33,6 +34,7 @@ export class TestDetailComponent implements OnInit{
   mode: string = "practice";
   destroyRef = inject(DestroyRef);
   isSaved: boolean = false;
+  defaultImageUrl = environment.defaultImageUrl;
   // user: User|null = null;
   comments: CommentDTO[] = [];
   title: string = "";

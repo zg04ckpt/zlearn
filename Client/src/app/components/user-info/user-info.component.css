@@ -8,3 +8,7 @@
     overflow: hidden; /* Ẩn phần văn bản vượt quá */
     text-overflow: ellipsis; /* Hiển thị dấu ba chấm */
 }
+
+* {
+    font-size: 12px;
+}

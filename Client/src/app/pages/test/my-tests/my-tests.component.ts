@@ -11,6 +11,7 @@ import { TestResult } from '../../../entities/test/test-result.entity';
 import { DatePipe } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-my-tests',
@@ -28,6 +29,7 @@ export class MyTestsComponent implements OnInit {
   list3: TestResult[] = [];
   destroyRef = inject(DestroyRef);
   title: string = "Quản lý đề";
+  defaultImageUrl = environment.defaultImageUrl;
 
   constructor(
     private testService: TestService,

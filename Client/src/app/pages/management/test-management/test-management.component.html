@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <table class="table table-sm">
+        <table class="table table-sm  table-hover">
             <thead>
                 <tr>
                     <td style="width: 10px;">STT</td>
@@ -74,6 +74,7 @@
                                 <i class="btn bx bx-dots-vertical p-0 m-0" data-bs-toggle="dropdown"></i>
                                 <div class="dropdown-menu">
                                     <a class="btn dropdown-item" (click)="delete(item.id)">Xóa</a>
+                                    <a class="btn dropdown-item" (click)="showCommentsOfTest(item.id)">Quản lý bình luận</a>
                                 </div>
                             </div>
                         </td>
@@ -83,3 +84,47 @@
         </table>
     </div>
 </div>
+
+
+@if(isShowCommentsOfTest) {
+    <div class="position-fixed w-100 h-100 top-0 start-0" style="background-color: rgba(128, 128, 128, 0.442);">
+        <div class="card card-body position-absolute start-50 translate-middle-x pt-2" style="margin-top: 100px; height: 500px;">
+            <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="isShowCommentsOfTest = false;"></button>
+            <h5 class="text-center fw-bold">Bình luận</h5>
+            <div class="table-wrapper">
+                <table class="comment-table table table-sm table-auto table-hover table-bordered" style="width: 800px;">
+                    <thead>
+                        <tr>
+                            <th class="w-auto text-center align-content-start">STT</th>
+                            <th class="col-3 text-center align-content-start">Thời gian</th>
+                            <th class="col-5 text-center align-content-start">Nội dung</th>
+                            <th class="col-2 text-center align-content-start">User</th>
+                            <th class="col-1 text-center align-content-start">Thích</th>
+                            <th class="w-auto">Chọn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of comments; track $index) {
+                            <tr>
+                                <td>{{$index + 1}}</td>
+                                <td>{{item.createdAt | date: 'HH:mm - dd/MM/yyyy'}}</td>
+                                <td>{{item.content}}</td>
+                                <td><a (click)="showUserDetail(item.userId)" class="link-dark underline-when-hover" >{{item.userName}}</a></td>
+                                <td>{{item.likes}}</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <i class="btn bx bx-dots-vertical p-0 m-0" data-bs-toggle="dropdown"></i>
+                                        <div class="dropdown-menu">
+                                            <a class="btn dropdown-item" (click)="removeComment(item.id)">Xóa</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+}

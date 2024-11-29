@@ -1,4 +1,5 @@
 export interface UserInfoDTO {
+    id: string;
     firstName: string;
     lastName: string;
     username: string;
@@ -10,4 +11,6 @@ export interface UserInfoDTO {
     address: string;
     intro: string;
     socialLinks: string;
+    likes: number;
+    isLiked: boolean;
 }

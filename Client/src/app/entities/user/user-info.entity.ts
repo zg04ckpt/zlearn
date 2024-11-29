@@ -1,6 +1,7 @@
 import { Gender } from "../../enums/gender.enum";
 
 export interface UserInfo {
+    id: string;
     firstName: string;
     lastName: string;
     username: string;
@@ -12,4 +13,6 @@ export interface UserInfo {
     address: string;
     intro: string;
     socialLinks: {name: string, url: string}[];
+    likes: number;
+    isLiked: boolean;
 }

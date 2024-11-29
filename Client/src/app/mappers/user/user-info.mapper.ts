@@ -20,6 +20,7 @@ export class UserInfoMapper extends Mapper<UserInfoDTO, UserInfo> {
         }
         
         return {
+            id: param.id,
             firstName: param.firstName,
             lastName: param.lastName,
             username: param.username,
@@ -30,7 +31,9 @@ export class UserInfoMapper extends Mapper<UserInfoDTO, UserInfo> {
             address: param.address,
             intro: param.intro,
             socialLinks: list,
-            imageUrl: param.imageUrl? environment.baseUrl + param.imageUrl : null
+            imageUrl: param.imageUrl? environment.baseUrl + param.imageUrl : null,
+            likes: param.likes,
+            isLiked: param.isLiked
         }
     }
 }

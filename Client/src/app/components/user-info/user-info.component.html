@@ -1,7 +1,8 @@
 @if (show) {
-    <div class="card card-body text-center position-fixed top-0 p-2 shadow-sm start-50 translate-middle-x" style="width: 250px; margin-top: 100px;">
+    <div class="card card-body text-center position-fixed top-0 p-2 shadow-sm start-50 translate-middle-x" style="width: 250px; margin-top: 80px;">
         <span class="btn btn-close position-absolute top-0 end-0 m-1" id="close-btn" (click)="show = false"></span>
         <div class="d-flex flex-column px-1">
+            <!-- Name -->
              @if (userInfo!.lastName && userInfo!.firstName) {
                  <h6 class="fw-bold text-center">{{(userInfo!.lastName + ' ' + userInfo!.firstName) || '---'}}</h6>
              } @else {
@@ -12,16 +13,19 @@
                 <img [src]="userInfo!.imageUrl" alt="" width="100px" height="100px" style="border-radius: 50%; border: 1px solid black; object-fit: cover;">
 
                 <div class="d-flex flex-column ms-2 text-ellipsis">
+                    <!-- Username -->
                     <div class="text-start ">
                         <i class='bx bxs-user mt-1 '></i>
                         {{userInfo!.username}}
                     </div>
 
+                    <!-- DOB -->
                     <div class="text-start mt-1">
                         <i class='bx bxs-cake'></i>
                         {{(userInfo!.dayOfBirth | date: 'dd/MM/yyyy') || '---'}}
                     </div>
 
+                    <!-- Gender and likes -->
                     <div class="d-flex mt-1">
                         <div class="text-start">
                             <i class='bx bx-male-female'></i>
@@ -41,7 +45,7 @@
                     </div>
 
 
-                    <div class="text-start mt-1">
+                    <div class="text-start mt-1 text-wrap">
                         <i class='bx bxs-map mt-1'></i>
                         {{userInfo!.address || "---"}}
                     </div>
