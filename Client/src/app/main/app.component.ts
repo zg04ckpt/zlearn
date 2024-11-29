@@ -20,6 +20,8 @@ import { Notfound404Component } from '../pages/others/notfound404/notfound404.co
 import { ServiceUnavailable503Component } from '../pages/others/service-unavailable503/service-unavailable503.component';
 import { UserInfoComponent } from '../components/user-info/user-info.component';
 import { ForgotPasswordComponent } from '../pages/others/forgot-password/forgot-password.component';
+import { Register2Component } from "../components/register-2/register-2.component";
+import { Login2Component } from "../components/login-2/login-2.component";
 
 @Component({
   selector: 'app-root',
@@ -38,8 +40,10 @@ import { ForgotPasswordComponent } from '../pages/others/forgot-password/forgot-
     CommonModule,
     Forbidden403Component,
     Notfound404Component,
-    ServiceUnavailable503Component
-  ],
+    ServiceUnavailable503Component,
+    Register2Component,
+    Login2Component
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

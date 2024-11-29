@@ -133,18 +133,18 @@ export class RegisterComponent {
   }
 
   register() {
-    this.authService.register({
-      userName: this.form.controls.userName.value,
-      email: this.form.controls.email.value,
-      password: this.form.controls.password.value,
-      confirmPassword: this.form.controls.confirmPassword.value
-    }).subscribe({
-      next: res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.componentService.$showRegisterDialog.next(false);
-        this.componentService.displayMessage("Đăng kí thành công! Để đăng nhập, vui lòng kiểm tra email để nhận link xác thực");
-      }
-    });
+    // this.authService.register({
+    //   userName: this.form.controls.userName.value,
+    //   email: this.form.controls.email.value,
+    //   password: this.form.controls.password.value,
+    //   confirmPassword: this.form.controls.confirmPassword.value
+    // }).subscribe({
+    //   next: res => {
+    //     this.componentService.$showLoadingStatus.next(false);
+    //     this.componentService.$showRegisterDialog.next(false);
+    //     this.componentService.displayMessage("Đăng kí thành công! Để đăng nhập, vui lòng kiểm tra email để nhận link xác thực");
+    //   }
+    // });
   }
 
   redirectToLogin() {

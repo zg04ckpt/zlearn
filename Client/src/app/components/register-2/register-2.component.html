@@ -1,0 +1,106 @@
+@if (show) {
+    <div class="position-fixed vw-100 vh-100 top-0 shadow-sm" 
+    style="background-color: #7f7f7f7f; z-index: 3;" >
+        <div class="card card-body text-center start-50 translate-middle-x" 
+        style="width: 350px; margin-top: 100px;">
+            <span class="btn btn-close position-absolute top-0 end-0 m-1" id="close-btn" (click)="show = false"></span>
+            <h3 class="fw-bold">Đăng kí</h3>
+            <p>Vui lòng điền đầy đủ thông tin!</p>
+            
+            <form class="mt-1" (ngSubmit)="submit()">
+    
+                <!-- Email -->
+                <div class="position-relative">
+                    <input type="email" class="form-control" placeholder="Email đăng kí" name="1" autocomplete="off" 
+                        [(ngModel)]="emailInput.value" 
+                        [ngClass]="{'invalid-border': !emailInput.valid}"
+                        (focus)="emailInput.focus = true" (blur)="emailInput.focus = false"
+                        (input)="emailInput.listener.next(emailInput.value); emailInput.valid = true;">
+                    @if (!emailInput.valid && emailInput.focus) {
+                        <small id="invalidEmailMessage" class="shadow-sm position-absolute py-1 w-100 start-0 bottom-100 bg-white invalid-mess">
+                            Định đạng email không hợp lệ
+                        </small>
+                    }
+                </div>
+
+                <!-- Last name -->
+                <div class="position-relative mt-2">
+                    <input type="text" class="form-control" placeholder="Họ đệm (VD: Hoàng Văn)" name="2" autocomplete="off" 
+                        [(ngModel)]="lastNameInput.value" 
+                        [ngClass]="{'invalid-border': !lastNameInput.valid}"
+                        (focus)="lastNameInput.focus = true" (blur)="lastNameInput.focus = false"
+                        (input)="lastNameInput.listener.next(lastNameInput.value); lastNameInput.valid = true;">
+                    @if (!lastNameInput.valid && lastNameInput.focus) {
+                        <small id="invalidEmailMessage" class="shadow-sm position-absolute py-1 w-100 start-0 bottom-100 bg-white invalid-mess">
+                            Định đạng tên không hợp lệ (1-100 kí tự, chỉ chứa chữ cái và khoảng trắng)
+                        </small>
+                    }
+                </div>
+
+                <!-- First name -->
+                <div class="position-relative mt-2">
+                    <input type="text" class="form-control" placeholder="Tên (VD: Nam)" name="3" autocomplete="off" 
+                        [(ngModel)]="firstNameInput.value" 
+                        [ngClass]="{'invalid-border': !firstNameInput.valid}"
+                        (focus)="firstNameInput.focus = true" (blur)="firstNameInput.focus = false"
+                        (input)="firstNameInput.listener.next(firstNameInput.value); firstNameInput.valid = true;">
+                    @if (!firstNameInput.valid && firstNameInput.focus) {
+                        <small id="invalidEmailMessage" class="shadow-sm position-absolute py-1 w-100 start-0 bottom-100 bg-white invalid-mess">
+                            Định đạng tên không hợp lệ (1-100 kí tự, chỉ chứa chữ cái và khoảng trắng)
+                        </small>
+                    }
+                </div>
+
+                <!-- user name -->
+                <div class="position-relative mt-2">
+                    <input type="text" class="form-control" placeholder="Tên tài khoản" name="4" autocomplete="off" 
+                        [(ngModel)]="userNameInput.value" 
+                        [ngClass]="{'invalid-border': !userNameInput.valid}"
+                        (focus)="userNameInput.focus = true" (blur)="userNameInput.focus = false"
+                        (input)="userNameInput.listener.next(userNameInput.value); userNameInput.valid = true;">
+                    @if (!userNameInput.valid && userNameInput.focus) {
+                        <small id="invalidEmailMessage" class="shadow-sm position-absolute py-1 w-100 start-0 bottom-100 bg-white invalid-mess">
+                            Tên tài khoản không hợp lệ (2-16 kí tự, chỉ chứa chữ cái, chữ số, không chứa loại kí tự khác kể cả có dấu)
+                        </small>
+                    }
+                </div>
+
+                <!-- Password -->
+                <div class="position-relative mt-2">
+                    <input type="password" class="form-control" placeholder="Mật khẩu" name="pass" autocomplete="off" 
+                        [(ngModel)]="passInput.value" 
+                        [ngClass]="{'invalid-border': !passInput.valid}"
+                        (focus)="passInput.focus = true" (blur)="passInput.focus = false"
+                        (input)="passInput.listener.next(passInput.value); passInput.valid = true;">
+                    @if (!passInput.valid && passInput.focus) {
+                        <small class="shadow-sm position-absolute py-1 w-100 start-0 bottom-100 bg-white invalid-mess">
+                            Mật khẩu (8-16 kí tự) phải chứa kí tự in thường, in hoa, chữ số và kí tự đặc biệt (.&#64;!#*)
+                        </small>
+                    }
+                </div>
+
+                <!-- Confirm password -->
+                <div class="position-relative mt-2">
+                    <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" name="confirmPass" autocomplete="off" 
+                        [(ngModel)]="confirmPassInput.value" 
+                        [ngClass]="{'invalid-border': !confirmPassInput.valid}"
+                        (focus)="confirmPassInput.focus = true" (blur)="confirmPassInput.focus = false"
+                        (input)="confirmPassInput.listener.next(confirmPassInput.value); confirmPassInput.valid = true;">
+                    @if (!confirmPassInput.valid && confirmPassInput.focus) {
+                        <small class="shadow-sm position-absolute py-1 w-100 start-0 bottom-100 bg-white invalid-mess">
+                            Mật khẩu xác nhận không khớp
+                        </small>
+                    }
+                </div>
+
+                <button type="submit" [disabled]="!emailInput.valid || !lastNameInput.valid || !firstNameInput.valid|| !userNameInput.valid || !passInput.valid || !confirmPassInput.valid" 
+                    class="btn btn-outline-success mt-4 form-control">Tạo tài khoản</button>
+            </form>
+
+            <p class="text-center mt-2">
+                <span>Đã có tài khoản? </span>
+                <a class="text-decoration-none link-info" style="cursor: pointer;" (click)="redirectToLogin()">Đăng nhập</a>
+            </p>
+        </div>
+    </div>
+}
