@@ -2,15 +2,14 @@ export interface CreateTestDTO
 {
     name: string,
     image: File|null,
-    imageUrl: string,
     description: string,
     source: string,
     duration: number,
+    categorySlug: string,
     isPrivate: boolean,
     questions: {
         content: string,
         image: File|null,
-        imageUrl: string,
         answerA: string,
         answerB: string,
         answerC: string|null,

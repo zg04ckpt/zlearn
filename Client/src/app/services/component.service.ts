@@ -67,7 +67,7 @@ export class ComponentService {
     public displayAPIError(error: any) {
         debugger
         this.$showMessage.next({
-            message: error.Message || Object.values(error.errors).flat().join(', ') || "Lỗi không xác định", 
+            message: error?.Message || (error?.errors && Object.values(error.errors).flat().join('\n')) || "Lỗi không xác định", 
             isInfo: false, 
             buttons: [
                 { name: "Đóng", action: () => {} }

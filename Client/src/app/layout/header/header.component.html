@@ -1,19 +1,32 @@
-<nav class="navbar navbar-dark bg-dark w-100" 
+<nav class="navbar navbar-dark bg-dark w-100 d-flex justify-content-between" 
 style="position: fixed; top: 0; height: 50px; z-index: 3;">
-<!-- [ngStyle]="{'padding-left': sidebarIsShowing? '220px':'0px'}" -->
 
-    <a routerLink="" class="fw-bold text-white fs-5 text-center text-decoration-none"
-    style="width: 220px;">
-        ZLEARN
-    </a>
+    <div class="d-flex align-items-center">
+        <a routerLink="" class="d-none d-md-block fw-bold text-white fs-5 text-center text-decoration-none"
+        style="width: 220px;">
+            ZLEARN
+        </a>
+    
+        <div class="breadcrumb m-0 ms-3 ms-md-0">
+            <li class="breadcrumb-item" [ngClass]="{'active': breadcrumbs.length == 0}">
+                <a [routerLink]="['/']"><i class='bx bxs-home'></i></a>
+            </li>
+            @for (item of breadcrumbs; track $index) {
+                <li class="breadcrumb-item" [ngClass]="{'active': $index == breadcrumbs.length-1}">
+                    <a [routerLink]="[item.url]">{{item.name}}</a>
+                </li>
+            }
+        </div>
+    </div>
 
     <div class="justify-content-end me-2">
         <div class="d-flex end-0">
             @if (!user) {
-                <a (click)="showLogin()" class="btn btn-sm btn-light me-1">
+                <a (click)="showLogin()" class="link-info me-1 px-1" style="cursor: pointer;">
                     Đăng nhập
                 </a>
-                <a (click)="showRegister()" class="btn btn-sm btn-outline-light">
+                |
+                <a (click)="showRegister()" class="link-secondary px-1 me-2" style="cursor: pointer;">
                     Đăng kí
                 </a>
             }
@@ -22,11 +35,11 @@ style="position: fixed; top: 0; height: 50px; z-index: 3;">
                     <span class="me-2" id="notification" title="Thông báo">
                         <i class='bx bxs-bell'></i>
                     </span>
-                    <small class="d-none d-sm-block text-light me-2 align-content-center my-auto fw-bold fst-italic">
+                    <small class="d-none d-md-block text-light me-2 align-content-center my-auto fw-bold fst-italic">
                         {{user.fullName || user.userName}}
                     </small>
                     <div class="dropdown position-relative">
-                        <img class="dropdown-toggle" data-bs-toggle="dropdown" src="assets\images\avt.png" alt="" id="avt">
+                        <img class="dropdown-toggle me-2" data-bs-toggle="dropdown" [src]="user.profileImage || defaultAvtUrl" alt="" id="avt">
                         <ul class="dropdown-menu position-absolute mt-2 p-2 border-2 border-black shadow-sm" 
                             style="left: 100%; transform: translateX(-100%);">
                             <li><a class="dropdown-item my-1" [routerLink]="['user/profile']">Tài khoản</a></li>
@@ -43,7 +56,5 @@ style="position: fixed; top: 0; height: 50px; z-index: 3;">
                 </div>
             }
         </div>
-
-        
     </div>
 </nav>

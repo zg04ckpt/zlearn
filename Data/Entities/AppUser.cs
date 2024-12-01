@@ -19,6 +19,8 @@ namespace Data.Entities
         public string CreatedDate { get; set; }
         public string RefreshToken { get; set; }
         public string ImageUrl { get; set; }
+        public bool Active { get; set; }
+        public int Likes { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
 
         #region full information
@@ -28,5 +30,6 @@ namespace Data.Entities
 
         public List<Test> Tests { get; set; }
         public List<SavedTest> UserInTests { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

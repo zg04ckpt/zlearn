@@ -66,6 +66,15 @@ namespace Core.Repositories
                         select test).ToListAsync();
         }
 
+        public async Task<List<Test>> GetTopByAttempt(int amount)
+        {
+            return await _context.Tests.AsNoTracking()
+                .OrderByDescending(x => x.NumberOfAttempts)
+                .Take(amount)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public Task<bool> IsSaved(string userId, string testId)
         {
             return _context.SavedTests

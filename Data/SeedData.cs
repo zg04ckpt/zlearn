@@ -11,9 +11,9 @@ namespace Data
         private const string ADMIN_EMAIL = "ADMIN_EMAIL";
         private const string ADMIN_PASSWORD = "ADMIN_PASSWORD";
 
-        public static async Task Initialize(IServiceProvider serviceProvider, UserManager<AppUser> userManager)
+        public static async Task Initialize(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, AppDbContext dbContext)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRole>>();
+            // Init default role
             string[] roleNames = { "Admin", "User" };
             foreach (var roleName in roleNames)
             {
@@ -29,20 +29,19 @@ namespace Data
                 }
             }
 
+            // Init default admin
             var adminEmail = Environment.GetEnvironmentVariable(ADMIN_EMAIL);
             var adminPassword = Environment.GetEnvironmentVariable(ADMIN_PASSWORD);
-
             if (adminEmail == null || adminPassword == null)
             {
                 throw new Exception("Admin email and password must be configured in environment variables.");
             }
-
             var user = await userManager.FindByEmailAsync(adminEmail);
             if (user == null)
             {
                 var admin = new AppUser
                 {
-                    UserName = adminEmail,
+                    UserName = "admin",
                     Email = adminEmail,
                     FirstName = "Nguyên",
                     LastName = "Hoàng",
@@ -64,6 +63,20 @@ namespace Data
                     var errors = string.Join(",", createdAdmin.Errors.Select(e => e.Description));
                     throw new Exception(errors);
                 }
+            }
+
+            // Init root category
+            if(!dbContext.Categories.Any(e => e.ParentId == null && e.Name.Equals("Danh mục"))) {
+                var rootCategory = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Danh mục",
+                    Description = "Được tạo mặc định, danh mục gốc",
+                    ParentId = null,
+                    Slug = "root"
+                };
+                dbContext.Categories.Add(rootCategory);
+                await dbContext.SaveChangesAsync();
             }
         }
     }

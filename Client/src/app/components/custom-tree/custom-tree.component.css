@@ -1,0 +1,38 @@
+.cate-item {
+    height: 30px;
+    font-weight: bolder;
+}
+
+.cate-list {
+    
+}
+
+.cate-list * {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cate-list i {
+    font-size: 20px;
+}
+
+.cate-list i.add:hover {
+    color: rgb(0, 191, 191);
+}
+
+.cate-list i.remove:hover {
+    color: rgb(191, 0, 60);
+}
+
+.cate-list i.toggle:hover {
+    color: rgb(0, 191, 191);
+}
+
+.cate-list i.edit:hover {
+    color: rgb(0, 191, 191);
+}
+
+.cate-item:hover {
+    cursor: pointer;
+    background-color: rgba(218, 218, 218, 0.691);
+}

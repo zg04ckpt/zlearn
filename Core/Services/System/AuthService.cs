@@ -8,6 +8,7 @@ using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -22,13 +23,19 @@ namespace Core.Services.System
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _config;
         private readonly IEmailService _emailSender;
+        private readonly ISummaryService _summaryService;
+        private readonly ILogger<AuthService> _logger;
+        private readonly ILogService _logService;
 
-        public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config, IEmailService emailSender)
+        public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config, IEmailService emailSender, ISummaryService summaryService, ILogger<AuthService> logger, ILogService logService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
             _emailSender = emailSender;
+            _summaryService = summaryService;
+            _logger = logger;
+            _logService = logService;
         }
 
         public async Task<APIResult> ValidateEmail(string userId, string token)
@@ -78,6 +85,7 @@ namespace Core.Services.System
                 Email = user.Email,
                 FullName = user.FirstName != null && user.LastName != null ? user.LastName + " " + user.FirstName : "",
                 Username = user.UserName,
+                ProfileImage = user.ImageUrl,
                 AccessToken = token.AccessToken,
                 RefreshToken = token.RefreshToken,
                 Roles = (await _userManager.GetRolesAsync(user)).ToList(),
@@ -129,256 +137,69 @@ namespace Core.Services.System
             {
                 UserName = request.UserName,
                 Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
                 CreatedDate = DateOnly.FromDateTime(DateTime.Today).ToString()
             };
 
             //save user to db
             var createProcess = await _userManager.CreateAsync(newUser, request.Password);
-            if (createProcess.Succeeded)
-            {
-                var roleAssignResult = await _userManager.AddToRoleAsync(newUser, Consts.USER_ROLE);
-                if (roleAssignResult.Succeeded)
-                {
-                    //email confirm
-                    var validateCode = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
-                    validateCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(validateCode));
-                    var url = $"{origin}/auth/email-confirm?id={newUser.Id}&token={validateCode}";
-                    var sendMailResult = await _emailSender.SendTo(
-                        newUser.Email,
-                        "Xác thực email của bạn",
-                        GetValidationEmailHtml(url)
-                    );
-
-                    if (!sendMailResult)
-                    {
-                        await _userManager.DeleteAsync(newUser);
-                        throw new ErrorException("Lỗi gửi mail xác thực");
-                    }
-
-                    return new APISuccessResult("Đăng kí tài khoản thành công");
-                }
-                else
-                {
-                    await _userManager.DeleteAsync(newUser);
-                    throw new ErrorException("Lỗi gán quyền user");
-                }
-            }
-            else
+            if (!createProcess.Succeeded)
             {
                 await _userManager.DeleteAsync(newUser);
-                throw new ErrorException("Đăng kí không thành công!");
+                throw new ErrorException("Tạo tài khoản thất bại!");
             }
+
+            //assign default role
+            var roleAssignResult = await _userManager.AddToRoleAsync(newUser, Consts.USER_ROLE);
+            if(!roleAssignResult.Succeeded)
+            {
+                await _userManager.DeleteAsync(newUser);
+                throw new ErrorException("Lỗi gán quyền người dùng");
+            }
+
+            //get url contains a code to validate
+            var validateCode = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+            validateCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(validateCode));
+            var url = $"{origin}/auth/email-confirm?id={newUser.Id}&token={validateCode}";
+
+            //get the template of confirm account email
+            string? emailContent = null;
+            try
+            {
+                var path = Path.Combine(AppContext.BaseDirectory, "Resources", "Templates", "RegisterEmail.html");
+                emailContent = await File.ReadAllTextAsync(path);
+                emailContent = emailContent.Replace("[confirm-url]", url);
+            }
+            catch(Exception ex)
+            {
+                await _userManager.DeleteAsync(newUser);
+                throw new ErrorException("Lỗi đọc file templates");
+            }
+
+            //send mail
+            var sendMailResult = await _emailSender.SendTo(
+                newUser.Email,
+                "Xác thực email của bạn",
+                emailContent!
+            );
+            if (!sendMailResult)
+            {
+                await _userManager.DeleteAsync(newUser);
+                throw new ErrorException("Lỗi gửi mail xác thực");
+            }
+
+            //summary
+            await _summaryService.IncreaseUserCount();
+            
+
+            //log
+            _logger.LogInformation($"Người dùng đăng kí mới: {newUser.LastName} {newUser.FirstName}");
+            await _logService.SendInfoLog($"Người dùng đăng kí mới: {newUser.LastName} {newUser.FirstName}");
+
+            return new APISuccessResult("Đăng kí tài khoản thành công");
         }
 
-        private string GetValidationEmailHtml(string confirmUrl)
-        {
-            return $@"<!DOCTYPE html>
-<html>
-<head>
-
-  <meta charset=""utf-8"">
-  <meta http-equiv=""x-ua-compatible"" content=""ie=edge"">
-  <title>Email Confirmation</title>
-  <meta name=""viewport"" content=""width=device-width, initial-scale=1"">
-  <style type=""text/css"">
-  /**
-   * Google webfonts. Recommended to include the .woff version for cross-client compatibility.
-   */
-  @media screen {{
-    @font-face {{
-      font-family: 'Source Sans Pro';
-      font-style: normal;
-      font-weight: 400;
-      src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format('woff');
-    }}
-    @font-face {{
-      font-family: 'Source Sans Pro';
-      font-style: normal;
-      font-weight: 700;
-      src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
-    }}
-  }}
-  /**
-   * Avoid browser level font resizing.
-   * 1. Windows Mobile
-   * 2. iOS / OSX
-   */
-  body,
-  table,
-  td,
-  a {{
-    -ms-text-size-adjust: 100%; /* 1 */
-    -webkit-text-size-adjust: 100%; /* 2 */
-  }}
-  /**
-   * Remove extra space added to tables and cells in Outlook.
-   */
-  table,
-  td {{
-    mso-table-rspace: 0pt;
-    mso-table-lspace: 0pt;
-  }}
-  /**
-   * Better fluid images in Internet Explorer.
-   */
-  img {{
-    -ms-interpolation-mode: bicubic;
-  }}
-  /**
-   * Remove blue links for iOS devices.
-   */
-  a[x-apple-data-detectors] {{
-    font-family: inherit !important;
-    font-size: inherit !important;
-    font-weight: inherit !important;
-    line-height: inherit !important;
-    color: inherit !important;
-    text-decoration: none !important;
-  }}
-  /**
-   * Fix centering issues in Android 4.4.
-   */
-  div[style*=""margin: 16px 0;""] {{
-    margin: 0 !important;
-  }}
-  body {{
-    width: 100% !important;
-    height: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }}
-  /**
-   * Collapse table borders to avoid space between cells.
-   */
-  table {{
-    border-collapse: collapse !important;
-  }}
-  a {{
-    color: #1a82e2;
-  }}
-  img {{
-    height: auto;
-    line-height: 100%;
-    text-decoration: none;
-    border: 0;
-    outline: none;
-  }}
-  </style>
-
-</head>
-<body style=""background-color: #e9ecef;"">
-
-  <div class=""preheader"" style=""display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;"">
-    A preheader is the short summary text that follows the subject line when an email is viewed in the inbox.
-  </div>
-  <table border=""0"" cellpadding=""0"" cellspacing=""0"" width=""100%"">
-    <tr>
-      <td align=""center"" bgcolor=""#e9ecef"">
-        <table border=""0"" cellpadding=""0"" cellspacing=""0"" width=""100%"" style=""max-width: 600px;"">
-          <tr>
-            <td align=""center"" valign=""top"" style=""padding: 36px 24px;"">
-              <a href=""https://www.blogdesire.com"" target=""_blank"" style=""display: inline-block;"">
-                <img src=""https://www.blogdesire.com/wp-content/uploads/2019/07/blogdesire-1.png"" alt=""Logo"" border=""0"" width=""48"" style=""display: block; width: 48px; max-width: 48px; min-width: 48px;"">
-              </a>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td align=""center"" bgcolor=""#e9ecef"">
-        <table border=""0"" cellpadding=""0"" cellspacing=""0"" width=""100%"" style=""max-width: 600px;"">
-          <tr>
-            <td align=""left"" bgcolor=""#ffffff"" style=""padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;"">
-              <h1 style=""text-align: center; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;"">
-                Xác thực email của bạn</h1>
-            </td>
-      </td>
-    </tr>
-    <tr>
-      <td align=""center"" bgcolor=""#e9ecef"">
-        <table border=""0"" cellpadding=""0"" cellspacing=""0"" width=""100%"" style=""max-width: 600px;"">
-          <tr>
-            <td align=""left"" bgcolor=""#ffffff"" style=""padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"">
-              <p style=""margin: 0; text-align: center;"">Bạn còn bước cuối cùng để hoàn tất đăng kí tài khoản tại ZLEARN. <br> Vui lòng ấn vào nút dưới đây để xác nhận email</p>
-            </td>
-          </tr>
-          <!-- end copy -->
-
-          <!-- start button -->
-          <tr>
-            <td align=""left"" bgcolor=""#ffffff"">
-              <table border=""0"" cellpadding=""0"" cellspacing=""0"" width=""100%"">
-                <tr>
-                  <td align=""center"" bgcolor=""#ffffff"" style=""padding: 12px;"">
-                    <table border=""0"" cellpadding=""0"" cellspacing=""0"">
-                      <tr>
-                        <td align=""center"" bgcolor=""#1a82e2"" style=""border-radius: 6px;"">
-                          <a href=""{confirmUrl}"" target=""_blank"" style=""display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;"">
-                            Xác thực
-                            </a>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <!-- end button -->
-
-          <!-- start copy -->
-          <tr>
-            <td align=""left"" bgcolor=""#ffffff"" style=""padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf"">
-              <p style=""margin: 0; text-align: center; font-weight: 500; font-style: oblique;"">ZLEARN - BOT</p>
-            </td>
-          </tr>
-          <!-- end copy -->
-
-        </table>
-        <!--[if (gte mso 9)|(IE)]>
-        </td>
-        </tr>
-        </table>
-        <![endif]-->
-      </td>
-    </tr>
-    <!-- end copy block -->
-
-    <!-- start footer -->
-    <tr>
-      <td align=""center"" bgcolor=""#e9ecef"" style=""padding: 24px;"">
-        <!--[if (gte mso 9)|(IE)]>
-        <table align=""center"" border=""0"" cellpadding=""0"" cellspacing=""0"" width=""600"">
-        <tr>
-        <td align=""center"" valign=""top"" width=""600"">
-        <![endif]-->
-        <table border=""0"" cellpadding=""0"" cellspacing=""0"" width=""100%"" style=""max-width: 600px;"">
-
-          <!-- start permission -->
-          <tr>
-            <td align=""center"" bgcolor=""#e9ecef"" style=""padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;"">
-              <p style=""margin: 0;"">Email được gửi tự động bởi hệ thống. Vui lòng không phản hồi.</p>
-            </td>
-          </tr>
-          <!-- end permission -->
-
-        </table>
-        <!--[if (gte mso 9)|(IE)]>
-        </td>
-        </tr>
-        </table>
-        <![endif]-->
-      </td>
-    </tr>
-    <!-- end footer -->
-
-  </table>
-  <!-- end body -->
-
-</body>
-</html>";
-        }
         private async Task<TokenDTO> GenerateToken(AppUser user)
         {
             //generate access token
@@ -449,6 +270,51 @@ namespace Core.Services.System
             }
 
             return principal;
+        }
+
+        public async Task<APIResult> ForgotPassword(ForgotPasswordDTO data)
+        {
+            var user = await _userManager.FindByEmailAsync(data.Email)
+                ?? throw new ErrorException("Tài khoản không tồn tại");
+
+            //generate url contains token for reset password
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var url = $"{_config[Consts.SettingKeys.JWT_AUDIENCE]}/auth/reset-password?id={user.Id}&token={token}";
+
+            //get email template
+            var path = Path.Combine(AppContext.BaseDirectory, "Resources", "Templates", "ResetPasswordEmail.html");
+            var template = await File.ReadAllTextAsync(path);
+            template = template.Replace("[username]", user.UserName);
+            template = template.Replace("[reset-pass-url]", url);
+
+            //send mail
+            var sendMailResult = await _emailSender.SendTo(
+                    user.Email,
+                    "Tạo lại mật khẩu mới - ZLEARN",
+                    template
+                );
+            if(!sendMailResult)
+            {
+                return new APIErrorResult("Gửi mail thất bại, yêu cầu tạo mật khẩu mới không thành công!");
+            }
+            return new APISuccessResult("Gửi yêu cầu thành công, vui lòng kiểm tra email của bạn!");
+        }
+
+        public async Task<APIResult> ResetPassword(ResetPasswordDTO data)
+        {
+            var user = await _userManager.FindByIdAsync(data.UserId)
+               ?? throw new ErrorException("Tài khoản không tồn tại");
+
+            // tạo lại mật khẩu
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(data.Token));
+            var resetPassResult = await _userManager.ResetPasswordAsync(user, decodedToken, data.Password);
+            if(!resetPassResult.Succeeded)
+            {
+                return new APIErrorResult("Cập nhật mật khẩu mới thất bại!");
+            }
+
+            return new APISuccessResult("Cập nhật mật khẩu mới thành công!");
         }
     }
 }

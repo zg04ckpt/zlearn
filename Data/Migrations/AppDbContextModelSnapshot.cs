@@ -56,6 +56,9 @@ namespace Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Address")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -94,6 +97,9 @@ namespace Data.Migrations
                     b.Property<string>("LastName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Likes")
+                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -138,6 +144,74 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("Categories", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Likes")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Image", b =>
@@ -189,6 +263,9 @@ namespace Data.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("TestId")
                         .HasColumnType("uniqueidentifier");
 
@@ -218,6 +295,28 @@ namespace Data.Migrations
                     b.ToTable("SavedTests", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.Summary", b =>
+                {
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<int>("AccessCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommentCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TestCompletionCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Date");
+
+                    b.ToTable("Summaries", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.Test", b =>
                 {
                     b.Property<Guid>("Id")
@@ -228,6 +327,10 @@ namespace Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CategorySlug")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -317,6 +420,19 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TestResults", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.UserLike", b =>
+                {
+                    b.Property<Guid>("LikedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LikedUserId", "UserId");
+
+                    b.ToTable("UserLikes", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -416,6 +532,36 @@ namespace Data.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.Category", b =>
+                {
+                    b.HasOne("Data.Entities.Category", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("Data.Entities.Comment", b =>
+                {
+                    b.HasOne("Data.Entities.Test", "Test")
+                        .WithMany("Comments")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.AppUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Data.Entities.Question", b =>
                 {
                     b.HasOne("Data.Entities.Test", "Test")
@@ -459,13 +605,22 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.AppUser", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Tests");
 
                     b.Navigation("UserInTests");
                 });
 
+            modelBuilder.Entity("Data.Entities.Category", b =>
+                {
+                    b.Navigation("Children");
+                });
+
             modelBuilder.Entity("Data.Entities.Test", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Questions");
 
                     b.Navigation("UserInTests");

@@ -20,20 +20,22 @@ namespace Core.DTOs
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         public int NumberOfQuestions { get; set; }
         public int NumberOfAttempts { get; set; }
         public bool IsPrivate { get; set; }
+        public string Description { get; set; }
     }
 
     public class TestInfoDTO
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         public string UpdatedDate { get; set; }
         public string CreatedDate { get; set; }
         public string Description { get; set; }
+        public string CategoryName { get; set; }
         public string Source { get; set; }
         public string AuthorName { get; set; }
         public string AuthorId { get; set; }
@@ -45,10 +47,12 @@ namespace Core.DTOs
     public class CreateTestDTO
     {
         public string Name { get; set; }
-        public string ImageUrl { get; set; }
+        public IFormFile? Image { get; set; }
+        public string? ImageUrl { get; set; }
         public string Description { get; set; }
         public string Source { get; set; }
         public int Duration { get; set; }
+        public string CategorySlug { get; set; }
         public bool IsPrivate { get; set; }
         public List<CreateQuestionDTO> Questions { get; set; }
     }
@@ -56,18 +60,21 @@ namespace Core.DTOs
     public class UpdateTestDTO
     {
         public string Name { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
+        public IFormFile? Image { get; set; }
         public string Description { get; set; }
         public string Source { get; set; }
         public int Duration { get; set; }
+        public string CategorySlug { get; set; }
         public bool IsPrivate { get; set; }
         public List<UpdateQuestionDTO> Questions { get; set; }
     }
-    
+
     public class TestSearchDTO
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public string? CategorySlug { get; set; }
     }
     #endregion
 
@@ -88,7 +95,8 @@ namespace Core.DTOs
     public class CreateQuestionDTO
     {
         public string Content { get; set; }
-        public string ImageUrl { get; set; }
+        public IFormFile? Image { get; set; }
+        public string? ImageUrl { get; set; }
         public string AnswerA { get; set; }
         public string AnswerB { get; set; }
         public string? AnswerC { get; set; }
@@ -98,9 +106,10 @@ namespace Core.DTOs
 
     public class UpdateQuestionDTO
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string Content { get; set; }
-        public string ImageUrl { get; set; }
+        public IFormFile? Image { get; set; }
+        public string? ImageUrl { get; set; }
         public string AnswerA { get; set; }
         public string AnswerB { get; set; }
         public string? AnswerC { get; set; }

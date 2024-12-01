@@ -5,26 +5,51 @@ import { StorageService } from '../../services/storage.service';
 import { User } from '../../entities/user/user.entity';
 import { AuthService } from '../../services/auth.service';
 import { ComponentService } from '../../services/component.service';
+import { NgClass } from '@angular/common';
+import { LayoutService } from '../../services/layout.service';
+import { Breadcrumb, BreadcrumbService } from '../../services/breadcrumb.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    NgClass
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
   user: User|null = null;
-
+  breadcrumbs: Breadcrumb[] = []
+  defaultAvtUrl = environment.defaultAvtUrl
   constructor(
-      private userService: UserService,
-      private authService: AuthService,
-      private componentService: ComponentService,
-      private router: Router
+    private userService: UserService,
+    private authService: AuthService,
+    private componentService: ComponentService,
+    private router: Router,
+    private breadcrumbService: BreadcrumbService
   ) {
-      userService.$currentUser.subscribe(next => this.user = next);
+    userService.$currentUser.subscribe(next => this.user = next);
+    breadcrumbService.$breadcrumb.subscribe(next => {
+      if(next == null) {
+        this.breadcrumbs.pop();
+        return;
+      }
+
+      if(next.url == '/') {
+        this.breadcrumbs = [];
+        return;
+      }
+
+      const i = this.breadcrumbs.findIndex(e => e.url == next.url);
+      if(i == -1) {
+        this.breadcrumbs.push(next);
+      } else {
+        this.breadcrumbs = this.breadcrumbs.slice(0, i+1);
+      }
+    });
   }
 
   showLogin() {
@@ -51,7 +76,7 @@ export class HeaderComponent {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
-    console.log('Screen width:', window.innerWidth);
+    // console.log('Screen width:', window.innerWidth);
     // Thực hiện các hành động khác khi kích thước màn hình thay đổi
   }
 }

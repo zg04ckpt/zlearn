@@ -7,6 +7,10 @@ import { UserDetail } from '../../../entities/user/user-detail.entity';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
+import { Title } from '@angular/platform-browser';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-user-detail',
@@ -24,21 +28,28 @@ export class UserProfileComponent implements OnInit {
   userDetail: UserDetail|null = null;
   editingData: UserDetail|null = null;
   updating: boolean = false;
+  avtPreviewLink: string|null = null;
+  title: string = "";
+  defaultAvtUrl = environment.defaultAvtUrl;
+
   constructor(
     private userService: UserService,
     private componentService: ComponentService,
-    private authService: AuthService
+    private authService: AuthService,
+    private breadcrumbService: BreadcrumbService,
+    private router: Router,
+    private titleService: Title
   ) { }
 
   ngOnInit(): void {
-    debugger;
-    this.componentService.$showLoadingStatus.next(true);
+    this.title = "Thông tin cá nhân";
     this.user = this.userService.getLoggedInUser();
     if(this.user != null) {
-      this.userService.getProfile(this.user.id).subscribe(res => {
+      this.userService.getProfile().subscribe(res => {
         debugger;
         this.loading = false;
         this.userDetail = res;
+        this.avtPreviewLink = res.imageUrl;
         this.reset();
         this.componentService.$showLoadingStatus.next(false);
       });
@@ -46,6 +57,8 @@ export class UserProfileComponent implements OnInit {
       this.componentService.$showLoadingStatus.next(false);
       this.authService.showLoginRequirement();
     }
+    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+    this.titleService.setTitle(this.title);
   }
 
   reset() {
@@ -59,9 +72,7 @@ export class UserProfileComponent implements OnInit {
       [
         { name: "Hủy", action: () => {} },
         { name: "Xác nhận", action: () => {
-
-          this.componentService.$showLoadingStatus.next(true);
-          this.userService.updateProfile(this.user!.id, {
+          this.userService.updateProfile2({
             firstName: this.editingData!.firstName,
             lastName: this.editingData!.lastName,
             email: this.editingData!.email,
@@ -70,19 +81,14 @@ export class UserProfileComponent implements OnInit {
             dayOfBirth: this.editingData!.dayOfBirth,
             address: this.editingData!.address,
             intro: this.editingData!.intro,
-            socialLinks: this.convertLinksToString()
-          }).subscribe({
-            next: res => { 
-              this.updating = false;
-              this.componentService.$showLoadingStatus.next(false);
-              this.userDetail = this.editingData;
-              this.componentService.displayMessage("Lưu thay đổi thành công!");
-            },
-
-            error: res => {
-              this.componentService.$showLoadingStatus.next(false);
-              this.componentService.displayMessage(`Lỗi: ${res.error?.message || res.statusText}`);
-            }
+            socialLinks: this.convertLinksToString(),
+            image: this.editingData!.image,
+            imageUrl: this.editingData!.imageUrl
+          }).subscribe(next => {
+            this.updating = false;
+            this.componentService.$showLoadingStatus.next(false);
+            this.userDetail = this.editingData;
+            this.componentService.displayMessage("Lưu thay đổi thành công!");
           });
         }}
       ]
@@ -90,8 +96,14 @@ export class UserProfileComponent implements OnInit {
     
   }
 
-  changeAvatar() {
-
+  changeAvatar(event: any) {
+    const image:File = event.target.files[0];
+    if(image != null) {
+      this.editingData!.image = image;
+      const reader = new FileReader();
+      reader.onload = e => this.avtPreviewLink = reader.result as string
+      reader.readAsDataURL(image);
+    }
   }
 
   convertLinksToString(): string {

@@ -20,10 +20,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-3 position-relative text-center align-content-center mb-3 mb-sm-0">
-                                <img src="assets\images\avt.png" alt="" id="avt">
+                                <img [src]="avtPreviewLink || defaultAvtUrl" id="avt">
                                 @if(updating) {
                                     <label class="btn position-absolute" id="changeAvtBtn">
-                                        <input type="file" accept="image/jpeg, image/png" (click)="changeAvatar()" hidden>
+                                        <input type="file" accept="image/jpeg, image/png" (change)="changeAvatar($event)" hidden>
                                         <i class='bx bx-upload'></i>
                                     </label>
                                 }

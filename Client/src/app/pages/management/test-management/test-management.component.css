@@ -1,0 +1,28 @@
+.underline-when-hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.underline-when-hover:hover {
+    color: aqua;
+    text-decoration: underline;
+}
+
+.table-wrapper {
+    overflow: auto;
+    height: auto;
+}
+
+.table-wrapper::-webkit-scrollbar {
+    width: 8px;  
+    height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 10px;  
+}
+
+.comment-table * {
+    font-size: 12px;
+}

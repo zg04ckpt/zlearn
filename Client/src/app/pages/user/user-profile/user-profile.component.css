@@ -1,6 +1,9 @@
 #avt {
-    width: 75%;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
+    border: 1px solid gray;
+    object-fit: cover;
 }
 
 label {

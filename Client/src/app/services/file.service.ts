@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { lastValueFrom, map, Observable } from "rxjs";
 import { APIResult } from "../dtos/common/api-result.dto";
-import { FileRequestDTO, FileResponseDTO } from "../dtos/common/file.dto";
 
 @Injectable({
     providedIn: 'root'
@@ -10,13 +9,22 @@ import { FileRequestDTO, FileResponseDTO } from "../dtos/common/file.dto";
 export class FileService {
     constructor(private http: HttpClient) {}
 
-    saveFile(data: FormData): Promise<APIResult<FileResponseDTO[]>> {
+    saveImage(image: File): Promise<string> {
+        const form = new FormData();
+        form.append('image', image);
         return lastValueFrom(this.http
-            .post<APIResult<FileResponseDTO[]>>(`files/images`, data));
+            .post<APIResult<string>>(`files/images/save`, form)
+            .pipe(map(res => res.data!))
+        );
     }
 
-    updateImage(data: FormData): Promise<APIResult<FileResponseDTO[]>> {
+    updateImage(url: string, image: File): Promise<string> {
+        const form = new FormData();
+        form.append('image', image);
+        form.append('url', url);
         return lastValueFrom(this.http
-            .put<APIResult<FileResponseDTO[]>>('files/images', data));
+            .post<APIResult<string>>('files/images/update', form)
+            .pipe(map(res => res.data!))
+        );
     }
 }

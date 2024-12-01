@@ -14,6 +14,7 @@ import { ComponentService } from "./component.service";
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
 import { APIResult } from "../dtos/common/api-result.dto";
+import { environment } from "../../environments/environment";
 
 @Injectable({
     providedIn: 'root'
@@ -28,13 +29,14 @@ export class AuthService {
         private location: Location
     ) { }
 
-    login(data: LoginDTO): Observable<User> {
+    public login(data: LoginDTO): Observable<User> {
         this.purgeAuth();
         const userMapper = new UserMapper;
         return this.http
             .post<APIResult<UserDTO>>(`auth/login`, data)
             .pipe(
                 tap(res => {
+                    res.data!.profileImage = res.data!.profileImage? environment.baseUrl + res.data!.profileImage : null;
                     debugger
                     this.storageService.save(StorageKey.accessToken, res.data!.accessToken);
                     this.storageService.save(StorageKey.refreshToken, res.data!.refreshToken);
@@ -48,21 +50,21 @@ export class AuthService {
             );
     }
 
-    register(data: RegisterDTO): Observable<void> {
+    public register(data: RegisterDTO): Observable<void> {
         this.purgeAuth();
         return this.http
             .post<APIResult<void>>(`auth/register`, data)
             .pipe(map(res => res.data!));
     }
 
-    logout(): Observable<void> {
+    public logout(): Observable<void> {
         this.purgeAuth();
         return this.http
             .post<APIResult<void>>(`auth/logout`, null)
             .pipe(map(res => res.data!));;
     }
 
-    refreshToken(): Observable<TokenDTO> {
+    public refreshToken(): Observable<TokenDTO> {
         const accToken = this.storageService.get(StorageKey.accessToken);
         const refToken = this.storageService.get(StorageKey.refreshToken);
 
@@ -81,14 +83,31 @@ export class AuthService {
         }));
     }
 
-    confirmEmail(data: ConfirmEmailDTO): Observable<void> {
+    public confirmEmail(data: ConfirmEmailDTO): Observable<void> {
         this.purgeAuth();
         return this.http.get<void>(
             `auth/email-confirm?id=${data.userId}&token=${data.token}`
         );
     }
+    
+    public forgotPassword(email: string): Observable<APIResult<void>> {
+        this.purgeAuth();
+        return this.http
+            .post<APIResult<void>>(`auth/forgot-password`, { email: email });
+    }
 
-    purgeAuth() {
+    public resetPassword(password: string, confirmPassword: string, userId: string, token: string): Observable<APIResult<void>> {
+        this.purgeAuth();
+        return this.http
+            .post<APIResult<void>>(`auth/reset-password`, { 
+                userId: userId,
+                password: password,
+                confirmPassword: confirmPassword, 
+                token: token
+            });
+    }
+
+    public purgeAuth() {
         this.storageService.remove(StorageKey.accessToken);
         this.storageService.remove(StorageKey.refreshToken);
         this.storageService.remove(StorageKey.expirationTime);
@@ -96,7 +115,7 @@ export class AuthService {
         this.userService.$currentUser.next(null);
     }
 
-    setLoginSessionTimer() {
+    public setLoginSessionTimer() {
         const timeString = this.storageService.get(StorageKey.expirationTime);
         if(timeString) {
             const expirationTime = new Date(timeString);
@@ -113,7 +132,7 @@ export class AuthService {
         }
     }
 
-    showEndLoginSessionMessage() {
+    public showEndLoginSessionMessage() {
         this.purgeAuth();
         this.componentService.displayMessageWithActions(
             "Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!",
@@ -124,7 +143,7 @@ export class AuthService {
         );
     }
 
-    showLoginRequirement() {
+    public showLoginRequirement() {
         this.componentService.displayMessageWithActions(
             "Vui lòng đăng nhập để tiếp tục!",
             [

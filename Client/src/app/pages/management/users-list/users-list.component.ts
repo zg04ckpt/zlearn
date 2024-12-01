@@ -8,6 +8,9 @@ import { AssignRoleDTO } from '../../../dtos/management/assign-role.dto';
 import { Role } from '../../../entities/management/role.entity';
 import { User } from '../../../entities/user/user.entity';
 import { use } from 'marked';
+import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
 
 @Component({
   selector: 'app-users-list',
@@ -35,7 +38,7 @@ export class UsersListComponent implements OnInit {
     name: string;
     selected: boolean;
   }[] = [];
-  
+  title: string = "Quản lý người dùng";
 
   searchKeys = {
     lastName: "",
@@ -49,9 +52,14 @@ export class UsersListComponent implements OnInit {
   constructor(
     private managementService: ManagementService,
     private componentService: ComponentService,
+    private router: Router,
+    private titleService: Title,
+    private breadcrumbService: BreadcrumbService
   ) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle(this.title);
+    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
     this.get(this.pageIndex);
 
     //load default role

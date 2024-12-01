@@ -7,6 +7,7 @@ using Core.Interfaces.IServices.Common;
 using Core.Interfaces.IServices.Features;
 using Core.Interfaces.IServices.Management;
 using Core.Interfaces.IServices.System;
+using Core.RealTime;
 using Core.Repositories;
 using Core.Services.Common;
 using Core.Services.Features;
@@ -20,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,14 +42,26 @@ builder.Services.AddIdentity<AppUser, AppRole>()
 
 builder.Services.AddTransient<IRoleManagementService, RoleManagementService>();
 builder.Services.AddTransient<IUserManagementService, UserManagementService>();
+builder.Services.AddTransient<ITestManagementService, TestManagementService>();
+
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITestRepository, TestRepository>();
-builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<ICommentRepository, CommentRepository>();
+builder.Services.AddTransient<ISummaryRepository, SummaryRepository>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<IFileService, FileService>();
-builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.AddSingleton<ILogService, LogService>();
+
+builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ICommentService, CommentService>();
+builder.Services.AddTransient<IHomeService, HomeService>();
+builder.Services.AddSingleton<ISummaryService, SummaryService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<TrackingMiddleware, TrackingMiddleware>();
 
 
 builder.Services.AddControllers();
@@ -112,32 +126,36 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-//cấu hình cors
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", builder =>
-    {
-        builder.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
-    options.AddPolicy("AllowSpecificOrigin", builder =>
-    {
-        builder.WithOrigins("http://localhost:4200")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-    });
-});
-
 
 //cấu hình giới hạn truy cập
 builder.Services.AddMemoryCache();
 builder.Services.Configure<ClientRateLimitOptions>(configuration.GetSection("ClientRateLimiting"));
 builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
 
+//cấu hình cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClient",
+        builder => builder
+            .WithOrigins("http://localhost:4200")
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
+//logging
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .CreateLogger();
+builder.Host.UseSerilog();
+
+//singalR
+builder.Services.AddSignalR();
 
 var app = builder.Build();
+
+//cors
+app.UseCors("AllowClient");
 
 if (app.Environment.IsDevelopment())
 {
@@ -146,23 +164,39 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BE v1"));
 }
 
-app.UseMiddleware<HandleExceptionMiddleware>();
 
-app.UseCors("AllowAll");
+
+app.UseMiddleware<HandleExceptionMiddleware>();
+app.UseMiddleware<TrackingMiddleware>();
+
+
 //app.UseClientRateLimiting();
 //app.UseIpRateLimiting();
 
-string path = Path.Combine(Directory.GetCurrentDirectory(), FileService.IMAGE_FOLDER_NAME);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "System")),
+    RequestPath = "/api/images/system"
+});
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(path),
-    RequestPath = FileService.IMAGE_PATH
+    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test")),
+    RequestPath = "/api/images/test"
+});
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "User")),
+    RequestPath = "/api/images/user"
 });
 
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
+
+//singalR
+app.MapHub<LogHub>("/logHub");
 
 app.UseEndpoints(endpoints =>
 {
@@ -172,8 +206,9 @@ app.UseEndpoints(endpoints =>
 using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-    var services = scope.ServiceProvider;
-    SeedData.Initialize(services, userManager).Wait();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    SeedData.Initialize(roleManager, userManager, dbContext).Wait();
 }
 
 app.Run();

@@ -12,7 +12,6 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-
         public AuthController(IAuthService authService)
         {
             _authService = authService;
@@ -46,6 +45,18 @@ namespace API.Controllers
         public async Task<IActionResult> RefreshToken([FromBody] TokenDTO token)
         {
             return Ok(await _authService.RefreshToken(token));
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO data)
+        {
+            return Ok(await _authService.ForgotPassword(data));
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO data)
+        {
+            return Ok(await _authService.ResetPassword(data));
         }
     }
 }

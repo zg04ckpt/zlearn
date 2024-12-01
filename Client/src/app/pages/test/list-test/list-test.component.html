@@ -1,9 +1,5 @@
 <div class="container-lg px-3">
 
-    <h3 class="text-center mt-4">Danh sách các bài trắc nghiệm</h3>
-
-    
-
     <div class="row mt-3">
         <div class="col-10 offset-1">
 
@@ -11,13 +7,16 @@
             <div class="d-flex mt-5 justify-content-center">
                 <div class="input-group w-75 px-0">
                     <label class="input-group-text">Danh mục</label>
-                    <select class="form-select">
-                        <option selected>Tất cả</option>
+                    <select class="form-select" [(ngModel)]="cateSlug" (change)="search()">
+                        <option value="">Tất cả</option>
+                        @for (item of categories; track $index) {
+                            <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
+                        }
                     </select>
                 </div>
         
                 <div class="input-group ms-2 w-25">
-                    <input type="text" class="form-control" placeholder="Từ khóa..." [(ngModel)]="key">
+                    <input type="text" class="form-control" placeholder="Tên đề ..." [(ngModel)]="key">
                     <button class="btn btn-outline-dark" (click)="pageIndex = 1; search()">
                         <i class='bx bx-search fs-6 py-1'></i>
                     </button>
@@ -82,7 +81,7 @@
                         @for (item of list; track $index) {
                             <div class="col-lg-6">
                                 <div class="card card-body d-flex flex-row p-2 test mb-3" (click)="navigate(item.id)">
-                                    <img [src]="item.imageUrl" alt="" width="50px" height="50px" style="object-fit: cover;">
+                                    <img [src]="item.imageUrl || defaultImageUrl" alt="" width="50px" height="50px" style="object-fit: cover;">
                                     <div class="d-flex flex-column ms-2 flex-fill">
                                         <h6 class="fs-6 fw-bold mt-1">{{item.name}}</h6>
                                         <div class="d-flex flex-row justify-content-between">

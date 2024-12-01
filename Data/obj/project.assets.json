@@ -920,16 +920,6 @@
             "rid": "win"
           }
         }
-      },
-      "Utilities/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "compile": {
-          "bin/placeholder/Utilities.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Utilities.dll": {}
-        }
       }
     }
   },
@@ -2316,11 +2306,6 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
-    },
-    "Utilities/1.0.0": {
-      "type": "project",
-      "path": "../Utilities/Utilities.csproj",
-      "msbuildProject": "../Utilities/Utilities.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -2330,8 +2315,7 @@
       "Microsoft.EntityFrameworkCore >= 6.0.30",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.30",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.30",
-      "Microsoft.EntityFrameworkCore.Tools >= 6.0.30",
-      "Utilities >= 1.0.0"
+      "Microsoft.EntityFrameworkCore.Tools >= 6.0.30"
     ]
   },
   "packageFolders": {
@@ -2361,11 +2345,7 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {
-            "D:\\Code\\Web\\zg04web\\Utilities\\Utilities.csproj": {
-              "projectPath": "D:\\Code\\Web\\zg04web\\Utilities\\Utilities.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
@@ -2423,6 +2403,20 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.35, 6.0.35]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.35, 6.0.35]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.35, 6.0.35]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"

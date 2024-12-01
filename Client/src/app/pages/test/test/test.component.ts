@@ -12,6 +12,8 @@ import { CommonService } from '../../../services/common.service';
 import { UserService } from '../../../services/user.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
+import { Title } from '@angular/platform-browser';
+import { BreadcrumbService } from '../../../services/breadcrumb.service';
 
 
 @Component({
@@ -34,6 +36,7 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
   result: MarkTestResultDTO|null = null;
   start: Date|null = null;
   end: Date|null = null;
+  title: string = "";
 
   //define
   TestStatus: any = TestStatus;
@@ -47,7 +50,9 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
     private testService: TestService,
     private commonService: CommonService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private titleService: Title,
+    private breadcrumbService: BreadcrumbService
   ) {}
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -65,7 +70,6 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
       return;
     }
 
-    this.componentService.$showLoadingStatus.next(true);
     this.testService.getContent(this.testId)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(res => {
@@ -79,6 +83,8 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
 
         //countDown
         if(option == "testing") {
+          this.title = `${this.test.name} - Thi thử`;
+
           this.remainder = new Subject<number>();
           this.remainderTime = this.test!.duration * 60;
           this.remainder.next(this.remainderTime);
@@ -94,14 +100,19 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
               this.endTest();
             }
           });
+        } else {
+          this.title = `${this.test.name} - Thi thử`;
         }
-
+        this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+        this.titleService.setTitle(this.title);
         debugger;
     });
+
+    this.titleService.setTitle("Làm đề - ZLEARN")
   }
 
   endTest() {
-    if(this.remainderTime != 0) {
+    if(this.status == TestStatus.Testing) {
       this.componentService.displayConfirmMessage("Xác nhận kết thúc?", () => {
         this.end = new Date;
         this.status = TestStatus.Completed;

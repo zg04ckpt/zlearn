@@ -34,12 +34,6 @@ namespace Core.Repositories
             return data;
         }
 
-        public async Task<bool> IsExist(Tid id)
-        {
-            PropertyInfo idProperty = typeof(T).GetProperty("Id");
-            return await _context.Set<T>().AnyAsync(t => idProperty.GetValue(t).Equals(id));
-        }
-
         public async Task<bool> IsExist(Expression<Func<T, bool>> filter)
         {
             return await _context.Set<T>().AnyAsync(filter);
@@ -97,6 +91,27 @@ namespace Core.Repositories
                 query = query.Where(lambda);
             }
 
+            var data = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedResult<T>
+            {
+                Total = await query.CountAsync(),
+                Data = data
+            };
+        }
+
+        public async Task<T?> Get(Expression<Func<T, bool>> lamda)
+        {
+            return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(lamda);
+        }
+
+        public async Task<PaginatedResult<T>> GetPaginatedData(int pageIndex, int pageSize, Expression<Func<T, bool>> filters)
+        {
+            var query = GetQuery().AsNoTracking();
+            query = query.Where(filters);
             var data = await query
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
