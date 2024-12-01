@@ -5,6 +5,7 @@ import { ComponentService } from '../../services/component.service';
 import { UserInfoDTO } from '../../dtos/user/user-info.dto';
 import { DatePipe } from '@angular/common';
 import { UserInfo } from '../../entities/user/user-info.entity';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-user-info',
@@ -19,6 +20,7 @@ export class UserInfoComponent {
   show: boolean = false;
   userInfo: UserInfo|null = null;
   isYourself: boolean = false;
+  defaultImageUrl = environment.defaultAvtUrl
 
   constructor(
     private userService: UserService,

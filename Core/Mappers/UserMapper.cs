@@ -75,6 +75,7 @@ namespace Core.Mappers
         {
             return new UserInfoDTO
             {
+                Id = user.Id.ToString(),
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Username = user.UserName,
@@ -85,7 +86,8 @@ namespace Core.Mappers
                 Address = user.Address,
                 Intro = user.Description,
                 SocialLinks = user.UserLinks,
-                ImageUrl = user.ImageUrl
+                ImageUrl = user.ImageUrl,
+                Likes = user.Likes
             };
         }
 
@@ -100,7 +102,6 @@ namespace Core.Mappers
             oldUser.PhoneNumber = user.PhoneNum;
             oldUser.Description = user.Intro;
             oldUser.UserLinks = user.SocialLinks;
-            oldUser.ImageUrl = user.ImageUrl;
 
             return oldUser;
         }

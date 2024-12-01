@@ -6,6 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { ManagementService } from '../../../services/management.service';
 import { ComponentService } from '../../../services/component.service';
 import { Summary } from '../../../entities/management/summary.entity';
+import { LogDTO } from '../../../dtos/management/log.dto';
+import * as signalR from '@microsoft/signalr';
+import { environment } from '../../../../environments/environment';
+
 
 @Component({
   selector: 'app-overview',
@@ -30,6 +34,11 @@ export class OverviewComponent implements OnInit {
     userCount: 0
   };
 
+  logs: LogDTO[] = [];
+  logHubConnection = new signalR.HubConnectionBuilder()
+    .withUrl(environment.baseUrl + '/logHub').build();
+  maxLogLines = 10;
+
   constructor(
     private router: Router,
     private titleService: Title,
@@ -42,6 +51,19 @@ export class OverviewComponent implements OnInit {
     this.titleService.setTitle(this.title);
     this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
     this.getToday();
+
+    //log
+    this.logHubConnection.start().then(() => {
+      this.managementService.listenSystemLog(this.logHubConnection.connectionId!).subscribe(res => {
+        this.componentService.$showLoadingStatus.next(false);
+        this.logHubConnection.on('onHasLog', data => {
+          this.logs.splice(0, 0, {time: data.time, type: data.type, desc: data.desc, detail: null});
+          if(this.logs.length > this.maxLogLines) {
+            this.logs.pop();
+          }
+        });
+      });
+    });
   }
 
   public getToday() {

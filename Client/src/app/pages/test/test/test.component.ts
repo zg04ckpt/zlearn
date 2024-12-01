@@ -112,7 +112,7 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
   }
 
   endTest() {
-    if(this.remainderTime != 0) {
+    if(this.status == TestStatus.Testing) {
       this.componentService.displayConfirmMessage("Xác nhận kết thúc?", () => {
         this.end = new Date;
         this.status = TestStatus.Completed;

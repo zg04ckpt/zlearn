@@ -6,6 +6,7 @@ namespace Core.Interfaces.IServices.Common
     {
         Task<string> SaveFile(IFormFile file);
         Task DeleteFile(string fileName);
-        string GetFileUrl(string fileName);
+        Task<string?> Save(IFormFile file, string folderPath);
+        Task Delete(string filePath);
     }
 }

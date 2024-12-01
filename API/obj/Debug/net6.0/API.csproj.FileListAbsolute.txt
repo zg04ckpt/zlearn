@@ -87,7 +87,6 @@ D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.AspNetCore.Razor.Language.dll
 D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.CodeAnalysis.dll
 D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.CodeAnalysis.CSharp.dll
 D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.CodeAnalysis.Razor.dll
-D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
 D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
 D:\Code\Web\zg04web\API\obj\Debug\net6.0\API.RazorAssemblyInfo.cache
 D:\Code\Web\zg04web\API\obj\Debug\net6.0\API.RazorAssemblyInfo.cs
@@ -99,3 +98,18 @@ D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.AspNet.Identity.Core.dll
 D:\Code\Web\zg04web\API\bin\Debug\net6.0\Microsoft.AspNet.Identity.EntityFramework.dll
 D:\Code\Web\zg04web\API\bin\Debug\net6.0\Core.dll
 D:\Code\Web\zg04web\API\bin\Debug\net6.0\Core.pdb
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Resources\Templates\RegisterEmail.html
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Resources\Templates\ResetPasswordEmail.html
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Resources\Images\System\hd1.jpg
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Resources\Images\Test\default.jpg
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Resources\Images\User\default.jpg
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Serilog.AspNetCore.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Serilog.Extensions.Hosting.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Serilog.Extensions.Logging.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Serilog.Formatting.Compact.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Serilog.Settings.Configuration.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Serilog.Sinks.Console.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Serilog.Sinks.Debug.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Serilog.Sinks.File.dll
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Logs\app-20241130.log
+D:\Code\Web\zg04web\API\bin\Debug\net6.0\Logs\app-20241201.log

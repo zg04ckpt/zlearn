@@ -106,14 +106,14 @@ export class CreateTest2Component implements OnInit {
 
   uploadQuestionModule = {
     isShow: false,
-    quesIndex: 0,
-    aIndex: 0,
-    bIndex: 0,
-    cIndex: 0,
-    dIndex: 0,
-    ansIndex: 0,
-    startRow: 0,
-    rowsCount: 0,
+    quesIndex: 1,
+    aIndex: 2,
+    bIndex: 3,
+    cIndex: 4,
+    dIndex: 5,
+    ansIndex: 6,
+    startRow: 2,
+    rowsCount: 50,
     instructionImageUrl: environment.baseUrl + '/api/images/system/hd1.jpg'
   }
 

@@ -3,32 +3,40 @@
   "WorkspaceRootPath": "D:\\Code\\Web\\zg04web\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\services\\common\\imageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\services\\common\\imageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\services\\common\\logservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\services\\common\\logservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\interfaces\\iservices\\common\\iimageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\interfaces\\iservices\\common\\iimageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\middlewares\\handleexceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\middlewares\\handleexceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\services\\system\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\services\\system\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\interfaces\\iservices\\common\\ilogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\interfaces\\iservices\\common\\ilogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\controllers\\testscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\controllers\\testscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\controllers\\managements\\logscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\controllers\\managements\\logscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\services\\features\\testservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\services\\features\\testservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\dtos\\testdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\dtos\\testdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\core.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\core.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\controllers\\filescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\controllers\\filescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|d:\\code\\web\\zg04web\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F3E7EC6-F0B3-4969-AB25-0A15B272D5AD}|API\\API.csproj|solutionrelative:api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\dtos\\commondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\dtos\\commondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|d:\\code\\web\\zg04web\\core\\services\\system\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BAE83A7-78CB-4632-B229-48093204629A}|Core\\Core.csproj|solutionrelative:core\\services\\system\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 224,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,93 +58,119 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IImageService.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Interfaces\\IServices\\Common\\IImageService.cs",
-              "RelativeDocumentMoniker": "Core\\Interfaces\\IServices\\Common\\IImageService.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Interfaces\\IServices\\Common\\IImageService.cs",
-              "RelativeToolTip": "Core\\Interfaces\\IServices\\Common\\IImageService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "LogsController.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Controllers\\Managements\\LogsController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\Managements\\LogsController.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Controllers\\Managements\\LogsController.cs",
+              "RelativeToolTip": "API\\Controllers\\Managements\\LogsController.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAwwBYAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T23:37:25.154Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ImageService.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Services\\Common\\ImageService.cs",
-              "RelativeDocumentMoniker": "Core\\Services\\Common\\ImageService.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Services\\Common\\ImageService.cs",
-              "RelativeToolTip": "Core\\Services\\Common\\ImageService.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAAwB4AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T23:37:21.721Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "TestService.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Services\\Features\\TestService.cs",
-              "RelativeDocumentMoniker": "Core\\Services\\Features\\TestService.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Services\\Features\\TestService.cs",
-              "RelativeToolTip": "Core\\Services\\Features\\TestService.cs",
-              "ViewState": "AgIAAEUBAAAAAAAAAAAAAB4BAAByAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T23:24:05.343Z",
+              "WhenOpened": "2024-11-30T23:42:15.661Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "TestDTO.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\DTOs\\TestDTO.cs",
-              "RelativeDocumentMoniker": "Core\\DTOs\\TestDTO.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\DTOs\\TestDTO.cs",
-              "RelativeToolTip": "Core\\DTOs\\TestDTO.cs",
-              "ViewState": "AgIAAEkAAAAAAAAAAAAUwGMAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T23:23:29.783Z",
+              "Title": "Core",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Core.csproj",
+              "RelativeDocumentMoniker": "Core\\Core.csproj",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Core.csproj",
+              "RelativeToolTip": "Core\\Core.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-11-30T23:33:34.204Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Services\\System\\UserService.cs",
-              "RelativeDocumentMoniker": "Core\\Services\\System\\UserService.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Services\\System\\UserService.cs",
-              "RelativeToolTip": "Core\\Services\\System\\UserService.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAnwCcAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T23:03:31.296Z",
+              "DocumentIndex": 4,
+              "Title": "API",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\API.csproj",
+              "RelativeDocumentMoniker": "API\\API.csproj",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\API.csproj",
+              "RelativeToolTip": "API\\API.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAwCoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-11-30T23:33:17.992Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "TestsController.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Controllers\\TestsController.cs",
-              "RelativeDocumentMoniker": "API\\Controllers\\TestsController.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Controllers\\TestsController.cs",
-              "RelativeToolTip": "API\\Controllers\\TestsController.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAewBgAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "LogService.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Services\\Common\\LogService.cs",
+              "RelativeDocumentMoniker": "Core\\Services\\Common\\LogService.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Services\\Common\\LogService.cs",
+              "RelativeToolTip": "Core\\Services\\Common\\LogService.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAuwEsAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T23:03:31.302Z",
+              "WhenOpened": "2024-11-30T23:30:40.571Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CommonDTO.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\DTOs\\CommonDTO.cs",
+              "RelativeDocumentMoniker": "Core\\DTOs\\CommonDTO.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\DTOs\\CommonDTO.cs",
+              "RelativeToolTip": "Core\\DTOs\\CommonDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-30T23:23:41.646Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HandleExceptionMiddleware.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Middlewares\\HandleExceptionMiddleware.cs",
+              "RelativeDocumentMoniker": "API\\Middlewares\\HandleExceptionMiddleware.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Middlewares\\HandleExceptionMiddleware.cs",
+              "RelativeToolTip": "API\\Middlewares\\HandleExceptionMiddleware.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwCEAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-30T23:19:20.49Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "FilesController.cs",
-              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Controllers\\FilesController.cs",
-              "RelativeDocumentMoniker": "API\\Controllers\\FilesController.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Controllers\\FilesController.cs",
-              "RelativeToolTip": "API\\Controllers\\FilesController.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAQwCIAAAABAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\Program.cs",
+              "RelativeDocumentMoniker": "API\\Program.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\API\\Program.cs",
+              "RelativeToolTip": "API\\Program.cs",
+              "ViewState": "AgIAAIcAAAAAAAAAAAArwJUAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T22:46:28.812Z",
+              "WhenOpened": "2024-11-30T23:17:03.171Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ILogService.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Interfaces\\IServices\\Common\\ILogService.cs",
+              "RelativeDocumentMoniker": "Core\\Interfaces\\IServices\\Common\\ILogService.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Interfaces\\IServices\\Common\\ILogService.cs",
+              "RelativeToolTip": "Core\\Interfaces\\IServices\\Common\\ILogService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-30T23:15:13.961Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Services\\System\\AuthService.cs",
+              "RelativeDocumentMoniker": "Core\\Services\\System\\AuthService.cs",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Services\\System\\AuthService.cs",
+              "RelativeToolTip": "Core\\Services\\System\\AuthService.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAAAMAAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-30T23:09:29.444Z",
               "EditorCaption": ""
             }
           ]

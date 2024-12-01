@@ -19,6 +19,8 @@ namespace Data.Entities
         public string CreatedDate { get; set; }
         public string RefreshToken { get; set; }
         public string ImageUrl { get; set; }
+        public bool Active { get; set; }
+        public int Likes { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
 
         #region full information

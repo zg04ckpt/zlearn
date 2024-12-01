@@ -103,6 +103,27 @@ namespace Core.Repositories
             };
         }
 
+        public async Task<T?> Get(Expression<Func<T, bool>> lamda)
+        {
+            return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(lamda);
+        }
+
+        public async Task<PaginatedResult<T>> GetPaginatedData(int pageIndex, int pageSize, Expression<Func<T, bool>> filters)
+        {
+            var query = GetQuery().AsNoTracking();
+            query = query.Where(filters);
+            var data = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedResult<T>
+            {
+                Total = await query.CountAsync(),
+                Data = data
+            };
+        }
+
         //public async Task<PaginatedResult<TEntity>> GetPaginatedData<TEntity>(int pageIndex, int pageSize, List<ExpressionFilter> filters, string? key) where TEntity : class
         //{
         //    var query = _context.Set<TEntity>().AsQueryable().AsNoTracking();

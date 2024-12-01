@@ -14,7 +14,7 @@
                     @for (item of randomTests; track $index) {
                         <div class="carousel-item" [ngClass]="{'active': $index == 0}"
                         [routerLink]="['/tests/', item.id]">
-                            <img class="d-block w-100" [src]="item.imageUrl || 'assets/images/bg.jpg'"  
+                            <img class="d-block w-100" [src]="item.imageUrl || defaultImageUrl"  
                             style="object-fit: cover; width: 80%; height: 300px;">
                             <div class="carousel-caption d-none d-md-block">
                                 <h3>{{item.name}}</h3>

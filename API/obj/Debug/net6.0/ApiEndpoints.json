@@ -22,6 +22,22 @@
   },
   {
     "ContainingType": "API.Controllers.AuthController",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/auth/forgot-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "data",
+        "Type": "Core.DTOs.ForgotPasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/auth/login",
     "HttpMethod": "POST",
@@ -73,6 +89,22 @@
       {
         "Name": "dto",
         "Type": "Core.DTOs.RegisterDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.AuthController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/auth/reset-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "data",
+        "Type": "Core.DTOs.ResetPasswordDTO",
         "IsRequired": true
       }
     ],
@@ -143,40 +175,126 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "API.Controllers.FilesController",
-    "Method": "CreateImage",
-    "RelativePath": "api/files/images/save",
+    "ContainingType": "API.Controllers.HomeController",
+    "Method": "GetRandomTests",
+    "RelativePath": "api/home/random-tests",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.HomeController",
+    "Method": "GetTopTests",
+    "RelativePath": "api/home/top-tests",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.HomeController",
+    "Method": "GetTopUsers",
+    "RelativePath": "api/home/top-users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Managements.CategoryManagementController",
+    "Method": "GetCategoriesTree",
+    "RelativePath": "api/managements/categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Managements.CategoryManagementController",
+    "Method": "Create",
+    "RelativePath": "api/managements/categories",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "ContentType",
+        "Name": "data",
+        "Type": "Core.DTOs.CategoryDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Managements.CategoryManagementController",
+    "Method": "Update",
+    "RelativePath": "api/managements/categories/{categoryId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
         "Type": "System.String",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
-        "Name": "ContentDisposition",
+        "Name": "data",
+        "Type": "Core.DTOs.CategoryDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Managements.CategoryManagementController",
+    "Method": "Delete",
+    "RelativePath": "api/managements/categories/{categoryId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
         "Type": "System.String",
-        "IsRequired": false
-      },
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Managements.LogsController",
+    "Method": "GetLogsOfDate",
+    "RelativePath": "api/managements/log",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
-        "Name": "Headers",
-        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
-        "IsRequired": false
-      },
-      {
-        "Name": "Length",
-        "Type": "System.Int64",
-        "IsRequired": false
-      },
-      {
-        "Name": "Name",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "FileName",
+        "Name": "date",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -184,19 +302,50 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "API.Controllers.FilesController",
-    "Method": "UpdateImage",
-    "RelativePath": "api/files/images/update",
+    "ContainingType": "API.Controllers.Managements.OverviewController",
+    "Method": "ConnectToLogHub",
+    "RelativePath": "api/managements/overview/connectToLogHub",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "data",
-        "Type": "Microsoft.AspNetCore.Http.IFormCollection",
+        "Type": "Core.DTOs.ConnectionDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Managements.OverviewController",
+    "Method": "GetRange",
+    "RelativePath": "api/managements/overview/range",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Managements.OverviewController",
+    "Method": "GetToday",
+    "RelativePath": "api/managements/overview/today",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -282,6 +431,11 @@
       },
       {
         "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategorySlug",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -428,9 +582,49 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "dto",
-        "Type": "Core.DTOs.CreateTestDTO",
-        "IsRequired": true
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Image",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "ImageUrl",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Source",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Duration",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategorySlug",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsPrivate",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "Questions",
+        "Type": "System.Collections.Generic.List\u00601[[Core.DTOs.CreateQuestionDTO, Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -460,6 +654,11 @@
       },
       {
         "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategorySlug",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -528,9 +727,49 @@
         "IsRequired": true
       },
       {
-        "Name": "dto",
-        "Type": "Core.DTOs.UpdateTestDTO",
-        "IsRequired": true
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ImageUrl",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Image",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Source",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Duration",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategorySlug",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsPrivate",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "Questions",
+        "Type": "System.Collections.Generic.List\u00601[[Core.DTOs.UpdateQuestionDTO, Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -549,6 +788,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.TestsController",
+    "Method": "GetCategories",
+    "RelativePath": "api/tests/categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -704,6 +953,22 @@
   },
   {
     "ContainingType": "BE.Controllers.UsersController",
+    "Method": "Like",
+    "RelativePath": "api/users/like",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE.Controllers.UsersController",
     "Method": "UpdateUserDetail",
     "RelativePath": "api/users/my-profile",
     "HttpMethod": "PUT",
@@ -711,9 +976,59 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "dto",
-        "Type": "Core.DTOs.UserProfileDTO",
-        "IsRequired": true
+        "Name": "FirstName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "LastName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Image",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "ImageUrl",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DayOfBirth",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Gender",
+        "Type": "Data.Entities.Enums.Gender",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PhoneNum",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Address",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Intro",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SocialLinks",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

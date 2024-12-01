@@ -1,0 +1,42 @@
+<div class="d-flex m-2">
+    <input #inp type="date" class="form-control-sm w-auto" >
+    <button class="btn btn-sm btn-dark ms-2" (click)="getLogs(inp.value)">Hiển thị</button>
+</div>
+
+<div class="log-table card card-body p-1 shadow ms-2 pb-2 me-2 h-75 mb-5">
+    <div class="table-wrapper">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-2">Thời gian</th>
+                    <th class="col-1">Loại</th>
+                    <th class="col-auto">Mô tả</th>
+                    <th class="col-1">Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of logs; track $index) {
+                    <tr>
+                        <td>{{item.time}}</td>
+                        <td>{{item.type}}</td>
+                        <td>{{item.desc}}</td>
+                        <td><button class="btn btn-sm btn-outline-secondary" (click)="showDetail(item.detail)">Xem</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if(isShowLogDetail) {
+    <div class="position-fixed vh-100 vw-100 top-0 start-0" style="background-color: rgba(128, 128, 128, 0.471);">
+        <div class="card card-body position-absolute start-50 translate-middle-x p-2" style="margin-top: 80px; width: 800px; max-height: 500px;">
+            <button class="btn-close position-absolute end-0 top-0 m-2" (click)="isShowLogDetail = false"></button>
+            <h6 class="mt-1">Chi tiết log</h6>
+            <hr class="my-1">
+            <div class="table-wrapper">
+                <p class="mb-2" style="font-size: 12px;" [innerHTML]="detail"></p>
+            </div>
+        </div>
+    </div>
+}

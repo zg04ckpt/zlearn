@@ -2,7 +2,10 @@
 using BE.Controllers;
 using Core.Common;
 using Core.DTOs;
+using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.Features;
+using Core.Interfaces.IServices.System;
+using Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -12,16 +15,18 @@ namespace API.Controllers
     public class TestsController : ControllerBase
     {
         private readonly ITestService _testService;
+        private readonly ICategoryService _categoryService;
 
-        public TestsController(ITestService testService, ILogger<TestsController> logger)
+        public TestsController(ITestService testService, ILogger<TestsController> logger, ICategoryService categoryService)
         {
             _testService = testService;
+            _categoryService = categoryService;
         }
 
 
         [HttpPost]
         [Authorize(Consts.USER_ROLE)]
-        public async Task<IActionResult> Create([FromBody] CreateTestDTO dto)
+        public async Task<IActionResult> Create([FromForm] CreateTestDTO dto)
         {
             return Ok(await _testService.CreateTest(User, dto));
         }
@@ -55,8 +60,17 @@ namespace API.Controllers
                 }
             }
 
-            return Ok(await _testService.GetTestsAsListItems(pageIndex, pageSize, filters));
+            return Ok(await _testService.SearchTest(pageIndex, pageSize, dto));
         }
+
+
+        [HttpGet("categories")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCategories()
+        {
+            return Ok(await _categoryService.GetChildrenCategoriesBySlug("trac-nghiem"));
+        }
+
 
         [HttpGet("my-tests")]
         [Authorize]
@@ -124,7 +138,7 @@ namespace API.Controllers
 
         [HttpPut("{testId}")]
         [Authorize(Consts.USER_ROLE)]
-        public async Task<IActionResult> Update(string testId, [FromBody] UpdateTestDTO dto)
+        public async Task<IActionResult> Update(string testId, [FromForm] UpdateTestDTO dto)
         {
             return Ok(await _testService.UpdateTest(User, testId, dto));
         }
@@ -168,6 +182,8 @@ namespace API.Controllers
         {
             return Ok(await _testService.DeleteFromSaved(User, testId));
         }
+
+
     }
 }
 

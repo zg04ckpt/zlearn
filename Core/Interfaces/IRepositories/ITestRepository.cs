@@ -29,5 +29,8 @@ namespace Core.Interfaces.IRepositories
         void SaveTest(SavedTest savedTest);
         Task UnSave(string userId, string testId);
         Task<bool> IsSaved(string userId, string testId);
+
+        // ------------------ Other ---------------------
+        Task<List<Test>> GetTopByAttempt(int amount);
     }
 }

@@ -16,6 +16,7 @@ import { ForgotPasswordComponent } from '../pages/others/forgot-password/forgot-
 import { CateManagementComponent } from '../pages/management/cate-management/cate-management.component';
 import { CreateTest2Component } from '../pages/test/create-test-2/create-test-2.component';
 import { UpdateTest2Component } from '../pages/test/update-test-2/update-test-2.component';
+import { LogComponent } from '../pages/management/log/log.component';
 
 export const routes: Routes = [
     { path: "", component: HomeComponent, data: { breadcrumb: 'Trang chủ'}},
@@ -26,6 +27,7 @@ export const routes: Routes = [
     { path: "management/roles", component: RoleComponent, data: { breadcrumb: 'Quản lý quyền' }},
     { path: "management/tests", component: TestManagementComponent, data: { breadcrumb: 'Quản lý đề' }},
     { path: "management/categories", component: CateManagementComponent, data: { breadcrumb: 'Quản lý danh mục' }},
+    { path: "management/logs", component: LogComponent, data: { breadcrumb: 'Quản lý log' }},
 
     { path: "tests", component: ListTestComponent, data: { breadcrumb: 'Trắc nghiệm' }},
     { path: "tests/my-tests", component: MyTestsComponent, data: { breadcrumb: 'Quản lý đề' }},

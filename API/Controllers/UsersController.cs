@@ -22,12 +22,12 @@ namespace BE.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetUserProfile(string userId)
         {
-            return Ok(await _userService.GetOtherUserProfile(userId));
+            return Ok(await _userService.GetOtherUserProfile(User, userId));
         }
 
         [HttpPut("my-profile")]
         [Authorize(Consts.USER_ROLE)]
-        public async Task<IActionResult> UpdateUserDetail([FromBody] UserProfileDTO dto)
+        public async Task<IActionResult> UpdateUserDetail([FromForm] UserProfileDTO dto)
         {
             return Ok(await _userService.UpdateMyProfile(User, dto));
         }
@@ -37,6 +37,13 @@ namespace BE.Controllers
         public async Task<IActionResult> GetUserDetail()
         {
             return Ok(await _userService.GetMyProfile(User));
+        }
+
+        [HttpGet("like")]
+        [Authorize(Consts.USER_ROLE)]
+        public async Task<IActionResult> Like(string userId)
+        {
+            return Ok(await _userService.Like(User, userId));
         }
     }
 }

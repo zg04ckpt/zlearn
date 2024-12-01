@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Core.DTOs;
+using Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -32,6 +34,53 @@ namespace Core.Common
         }
 
 
+        public static Expression<Func<Test, bool>> GetTestSearchingExpression(TestSearchDTO criteria)
+        {
+            // element in lamda
+            var e = Expression.Parameter(typeof(Test), "e");
+            // expression in lamda
+            var expressions = new List<Expression>();
+
+            // Contains condition
+            MethodInfo containsMethod = typeof(string).GetMethod("Contains", new Type[] { typeof(string) })!;
+
+            // Name and Description
+            if (!string.IsNullOrEmpty(criteria.Name))
+            {
+                var nameProp = Expression.Property(e, nameof(criteria.Name));
+                var valueProp = Expression.Constant(criteria.Name);
+                expressions.Add(Expression.Call(nameProp, containsMethod, valueProp));
+            }
+            if (!string.IsNullOrEmpty(criteria.Description))
+            {
+                var nameProp = Expression.Property(e, nameof(criteria.Description));
+                var valueProp = Expression.Constant(criteria.Description);
+                expressions.Add(Expression.Call(nameProp, containsMethod, valueProp));
+            }
+
+            // Category
+            if (!string.IsNullOrEmpty(criteria.CategorySlug))
+            {
+                var nameProp = Expression.Property(e, nameof(criteria.CategorySlug));
+                var valueProp = Expression.Constant(criteria.CategorySlug);
+                expressions.Add(Expression.Equal(nameProp, valueProp));
+            }
+
+            // Combine all expressions
+            Expression? combinedExpressions = null;
+            foreach (var expression in expressions)
+            {
+                combinedExpressions = combinedExpressions == null? 
+                    expression : Expression.AndAlso(combinedExpressions, expression);
+            }
+
+            if(combinedExpressions == null)
+            {
+                return e => true;
+            }
+            return Expression.Lambda<Func<Test, bool>>(combinedExpressions, e);
+        }
+
         public static Expression<Func<T, bool>> GetOrLambdaExpression<T>(List<ExpressionFilter> filters)
         {
             if (filters.Count == 0)
@@ -52,6 +101,8 @@ namespace Core.Common
 
             return Expression.Lambda<Func<T, bool>>(exp, t);
         }
+
+
 
 
         //Gen expression for lambda

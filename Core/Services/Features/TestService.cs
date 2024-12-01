@@ -4,21 +4,36 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.Common;
 using Core.Interfaces.IServices.Features;
+using Core.Interfaces.IServices.System;
 using Core.Mappers;
 using Data.Entities;
+using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace Core.Services.Features
 {
     public class TestService : ITestService
     {
-        private readonly ITestRepository _testRepository;
-        private readonly IFileService _fileService;
+        private const string IMAGE_REQUEST_PATH = "/api/images/test/";
+        private readonly string _imageFolderPath;
 
-        public TestService(ITestRepository testRepository, IFileService fileService)
+        private readonly ITestRepository _testRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IFileService _fileService;
+        private readonly ISummaryService _summaryService;
+        private readonly ILogger<TestService> _logger;
+        private readonly ILogService _logService;
+
+        public TestService(ITestRepository testRepository, IFileService fileService, ISummaryService summaryService, ICategoryRepository categoryRepository, ILogger<TestService> logger, ILogService logHubService)
         {
+            _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test");
             _testRepository = testRepository;
             _fileService = fileService;
+            _summaryService = summaryService;
+            _categoryRepository = categoryRepository;
+            _logger = logger;
+            _logService = logHubService;
         }
 
         public async Task<APIResult> CreateTest(ClaimsPrincipal claimsPrincipal, CreateTestDTO dto)
@@ -27,23 +42,33 @@ namespace Core.Services.Features
             if (await _testRepository.IsExist(x => x.Name.Equals(dto.Name)))
                 throw new ErrorException("Tên đề trắc nghiệm bị trùng");
 
+            //check if questions list is empty
+            if (dto.Questions == null)
+                throw new ErrorException("Danh sách câu hỏi trống");
+
             //create new question set
             var test = TestMapper.MapFromCreate(dto);
             test.AuthorName = claimsPrincipal.FindFirst(ClaimTypes.GivenName)!.Value;
             test.AuthorId = Guid.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            if(dto.Image != null)
+            {
+                test.ImageUrl = IMAGE_REQUEST_PATH + (await _fileService.Save(dto.Image, _imageFolderPath));
+            }
+            else
+            {
+                test.ImageUrl = null;
+            }
 
             //create questions
             var questions = new List<Question>();
-            if (dto.Questions == null)
-                throw new ErrorException("Danh sách câu hỏi trống");
-
+            int order = 1;
             foreach (var question in dto.Questions)
             {
                 var newQuestion = new Question
                 {
                     Id = Guid.NewGuid(),
                     Content = question.Content,
-                    ImageUrl = question.ImageUrl,
+                    Order = order++,
                     AnswerA = question.AnswerA,
                     AnswerB = question.AnswerB,
                     AnswerC = question.AnswerC,
@@ -51,6 +76,15 @@ namespace Core.Services.Features
                     CorrectAnswer = question.CorrectAnswer,
                     TestId = test.Id,
                 };
+                if (question.Image != null)
+                {
+                    newQuestion.ImageUrl = IMAGE_REQUEST_PATH + (await _fileService.Save(question.Image, _imageFolderPath));
+                }
+                else
+                {
+                    newQuestion.ImageUrl = null;
+                } 
+                    
                 questions.Add(newQuestion);
             }
             test.Questions = questions;
@@ -58,6 +92,8 @@ namespace Core.Services.Features
             _testRepository.Create(test);
             if(await _testRepository.SaveChanges())
             {
+                _logger.LogInformation($"Đề trắc nghiệm mới được tạo bởi {test.AuthorName}");
+                await _logService.SendInfoLog($"Đề trắc nghiệm mới được tạo bởi {test.AuthorName}");
                 return new APISuccessResult("Tạo đề thành công");
             } 
             else 
@@ -93,6 +129,19 @@ namespace Core.Services.Features
                     throw new ForbiddenException();
                 }
             }  
+
+            // remove all image
+            if(test.ImageUrl != null)
+            {
+                await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(test.ImageUrl)));
+            }
+            foreach (var q in await _testRepository.GetQuestions(testId))
+            {
+                if(q.ImageUrl != null)
+                {
+                    await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(q.ImageUrl)));
+                }
+            }
 
             _testRepository.Delete(test);
             if (await _testRepository.SaveChanges())
@@ -132,21 +181,23 @@ namespace Core.Services.Features
                 }
             }
 
-            var question = await _testRepository.GetQuestions(testId);
-            if(question.Count == 0)
+            var questions = await _testRepository.GetQuestions(testId);
+            questions.Sort((a, b) => a.Order.CompareTo(b.Order));
+            if(questions.Count == 0)
             {
                 throw new ErrorException("Đề trống (không có câu hỏi)");
             }
 
-            return new APISuccessResult<TestDTO>(TestMapper.MapToContent(test, question));
+            return new APISuccessResult<TestDTO>(TestMapper.MapToContent(test, questions));
         }
 
         public async Task<APIResult<TestInfoDTO>> GetTestInfo(string testId)
         {
             var test = await _testRepository.GetById(Guid.Parse(testId))
                 ?? throw new ErrorException("Đề không tồn tại");
-
-            return new APISuccessResult<TestInfoDTO>(TestMapper.MapToInfo(test));
+            var info = TestMapper.MapToInfo(test);
+            info.CategoryName = (await _categoryRepository.Get(e => e.Slug.Equals(test.CategorySlug)))!.Name;
+            return new APISuccessResult<TestInfoDTO>(info);
         }
 
         public async Task<APIResult<List<TestInfoDTO>>> GetTestInfosOfUser(ClaimsPrincipal claimsPrincipal)
@@ -177,8 +228,9 @@ namespace Core.Services.Features
         {
             var test = await _testRepository.GetById(Guid.Parse(testId))
                 ?? throw new ErrorException("Đề không tồn tại");
-            var question = await _testRepository.GetQuestions(testId);
-            return new APISuccessResult<UpdateTestDTO>(TestMapper.MapToUpdate(test, question));
+            var questions = await _testRepository.GetQuestions(testId);
+            questions.Sort((a, b) => a.Order.CompareTo(b.Order));
+            return new APISuccessResult<UpdateTestDTO>(TestMapper.MapToUpdate(test, questions));
         }
 
         public async Task<APIResult<bool>> IsSaved(ClaimsPrincipal claimsPrincipal, string testId)
@@ -245,6 +297,9 @@ namespace Core.Services.Features
             };
             _testRepository.SaveResult(result);
 
+            //summary
+            await _summaryService.IncreaseTestCompletionCount();
+
             if (await _testRepository.SaveChanges())
             {
                 return new APISuccessResult<TestResultDTO>("Lưu kết quả thành công", new TestResultDTO
@@ -284,6 +339,16 @@ namespace Core.Services.Features
             }
         }
 
+        public async Task<APIResult<PaginatedResult<TestItemDTO>>> SearchTest(int pageSize, int pageIndex, TestSearchDTO data)
+        {
+            var tests = await _testRepository.GetPaginatedData(pageSize, pageIndex, LambdaBuilder.GetTestSearchingExpression(data));
+            return new APISuccessResult<PaginatedResult<TestItemDTO>>(new PaginatedResult<TestItemDTO>
+            {
+                Total = tests.Total,
+                Data = tests.Data.Select(x => TestMapper.MapToItem(x))
+            });
+        }
+
         public async Task<APIResult> UpdateTest(ClaimsPrincipal claimsPrincipal, string testId, UpdateTestDTO dto)
         {
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
@@ -294,19 +359,26 @@ namespace Core.Services.Features
                 throw new ForbiddenException();
 
             //update test
-            await _fileService.DeleteFile(test.ImageUrl);
             test = TestMapper.MapFromUpdate(test, dto);
+            if(dto.Image != null)
+            {
+                if (test.ImageUrl != null)
+                {
+                    await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(test.ImageUrl)));
+                }
+                test.ImageUrl = IMAGE_REQUEST_PATH + await _fileService.Save(dto.Image, _imageFolderPath);
+            }
 
             //update question
             Dictionary<string, UpdateQuestionDTO> map = new();
             foreach (var e in dto.Questions)
             {
+                // if id is null, it is new question
                 if (e.Id == null)
                 {
                     var newQ = new Question
                     {
                         Id = Guid.NewGuid(),
-                        ImageUrl = e.ImageUrl,
                         Content = e.Content,
                         AnswerA = e.AnswerA,
                         AnswerB = e.AnswerB,
@@ -315,6 +387,14 @@ namespace Core.Services.Features
                         CorrectAnswer = e.CorrectAnswer,
                         TestId = test.Id,
                     };
+                    if (e.Image != null)
+                    {
+                        newQ.ImageUrl = IMAGE_REQUEST_PATH + (await _fileService.Save(e.Image, _imageFolderPath));
+                    }
+                    else
+                    {
+                        newQ.ImageUrl = null;
+                    }
                     _testRepository.AddQuestion(newQ);
                 }
                 else
@@ -325,10 +405,21 @@ namespace Core.Services.Features
             var oldQuestions = await _testRepository.GetQuestions(testId);
             foreach (var e in oldQuestions)
             {
+                // update old question or delete if not exists
                 if (map.TryGetValue(e.Id.ToString(), out var updated))
                 {
-                    await _fileService.DeleteFile(e.ImageUrl);
-                    e.ImageUrl = updated.ImageUrl;
+                    if(updated.Image != null)
+                    {
+                        if (e.ImageUrl != null)
+                        {
+                            await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(e.ImageUrl)));
+                        }
+                        e.ImageUrl = IMAGE_REQUEST_PATH + await _fileService.SaveFile(updated.Image);
+                    } else if(updated.ImageUrl == null && e.ImageUrl != null)
+                    {
+                        await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(e.ImageUrl)));
+                        e.ImageUrl = null;
+                    }
                     e.Content = updated.Content;
                     e.AnswerA = updated.AnswerA;
                     e.AnswerB = updated.AnswerB;
@@ -339,6 +430,10 @@ namespace Core.Services.Features
                 }
                 else
                 {
+                    if (e.ImageUrl != null)
+                    {
+                        await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(e.ImageUrl)));
+                    }
                     _testRepository.RemoveQuestion(e);
                 }
             }

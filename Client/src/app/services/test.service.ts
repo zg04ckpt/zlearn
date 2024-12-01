@@ -177,34 +177,6 @@ export class TestService {
             .pipe(map(res => res.data!));
     }
 
-    public async update(id: string, data: UpdateTestDTO): Promise<void> {
-        debugger
-        
-        // Update test image
-        if(data.image) {
-            if(data.imageUrl) {
-                data.imageUrl = await this.fileService.updateImage(data.imageUrl, data.image);
-            } else {
-                data.imageUrl = await this.fileService.saveImage(data.image);
-            }
-        }
-
-        // update question image
-        for(var question of data.questions) {
-            if(question.image) {
-                if(question.imageUrl) {
-                    question.imageUrl = await this.fileService.updateImage(question.imageUrl, question.image);
-                } else {
-                    question.imageUrl = await this.fileService.saveImage(question.image);
-                }
-            }
-        }
-
-        return lastValueFrom(this.http
-            .put<APIResult<void>>(`tests/${id}`, data)
-            .pipe(map(res => res.data!)));
-    }
-
     public delete(id: string): Observable<void> {
         return this.http
             .delete<APIResult<void>>(`tests/${id}`)
@@ -242,8 +214,10 @@ export class TestService {
     public getAllSavedTests(): Observable<TestItem[]> {
         return this.http
         .get<APIResult<TestItem[]>>('tests/save')
+        .pipe(map(res => res.data!))
         .pipe(map(res => {
-            return res.data!;
+            res.forEach(x => x.imageUrl = x.imageUrl? this.baseUrl + x.imageUrl : null);
+            return res;
         }));
     }
 

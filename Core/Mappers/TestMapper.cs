@@ -1,14 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Services.Common;
 using Data.Entities;
-using Microsoft.AspNet.Identity;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Mappers
 {
@@ -29,18 +21,19 @@ namespace Core.Mappers
                 NumberOfAttempts = 0,
                 NumberOfQuestions = dto.Questions.Count,
                 IsPrivate = dto.IsPrivate,
+                CategorySlug = dto.CategorySlug
             };
         }
 
         public static Test MapFromUpdate(Test test, UpdateTestDTO dto)
         {
             test.Name = dto.Name;
-            test.ImageUrl = dto.ImageUrl;
             test.Description = dto.Description;
             test.Source = dto.Source;
             test.Duration = dto.Duration;
             test.UpdatedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
             test.IsPrivate = dto.IsPrivate;
+            test.CategorySlug = dto.CategorySlug;
             return test;
         }
 
@@ -50,6 +43,7 @@ namespace Core.Mappers
             {
                 Name = test.Name,
                 ImageUrl = test.ImageUrl,
+                Image = null,
                 Description = test.Description,
                 Source = test.Source,
                 Duration = test.Duration,
@@ -59,12 +53,14 @@ namespace Core.Mappers
                     Id = x.Id.ToString().ToLower(),
                     Content = x.Content,
                     ImageUrl = x.ImageUrl,
+                    Image = null,
                     AnswerA = x.AnswerA,
                     AnswerB = x.AnswerB,
                     AnswerC = x.AnswerC,
                     AnswerD = x.AnswerD,
                     CorrectAnswer = x.CorrectAnswer
                 }).ToList(),
+                CategorySlug = test.CategorySlug
             };
         }
 
@@ -78,6 +74,7 @@ namespace Core.Mappers
                 NumberOfAttempts = test.NumberOfAttempts,
                 NumberOfQuestions = test.NumberOfQuestions,
                 IsPrivate = test.IsPrivate,
+                Description = test.Description
             };
         }
 

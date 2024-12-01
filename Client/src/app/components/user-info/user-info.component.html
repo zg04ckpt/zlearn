@@ -10,7 +10,7 @@
              }
             <hr class="m-0 w-100">
             <div class="d-flex mt-2" style="font-size: 12px;">
-                <img [src]="userInfo!.imageUrl" alt="" width="100px" height="100px" style="border-radius: 50%; border: 1px solid black; object-fit: cover;">
+                <img [src]="userInfo!.imageUrl || defaultImageUrl" alt="" width="100px" height="100px" style="border-radius: 50%; border: 1px solid black; object-fit: cover;">
 
                 <div class="d-flex flex-column ms-2 text-ellipsis">
                     <!-- Username -->

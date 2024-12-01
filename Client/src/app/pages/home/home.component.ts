@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EnvironmentInjector, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import { Title } from '@angular/platform-browser';
@@ -9,6 +9,7 @@ import { ComponentService } from '../../services/component.service';
 import { UserDetail } from '../../entities/user/user-detail.entity';
 import { UserInfo } from '../../entities/user/user-info.entity';
 import { UserService } from '../../services/user.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +26,7 @@ export class HomeComponent implements OnInit {
   randomTests: TestItem[] = [];
   topUsers: UserInfo[] = [];
   topTests: TestItem[] = [];
+  defaultImageUrl = environment.defaultImageUrl;
 
   constructor(
     private router: Router,

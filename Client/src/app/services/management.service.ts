@@ -10,6 +10,7 @@ import { TestDetail } from '../entities/test/test-detail.entity';
 import { environment } from '../../environments/environment';
 import { Summary } from '../entities/management/summary.entity';
 import { CategoryNode } from '../entities/management/category-node.entity';
+import { LogDTO } from '../dtos/management/log.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,13 +24,24 @@ export class ManagementService {
   // Overview ----------------------------------------------
   getOverviewToday(): Observable<Summary> {
     return this.http
-      .get<APIResult<Summary>>(`summaries/today`)
+      .get<APIResult<Summary>>(`managements/overview/today`)
       .pipe(map(res => res.data!));
   }
 
   getOverviewByRange(start: string, end: string): Observable<Summary> {
     return this.http
-      .get<APIResult<Summary>>(`summaries/range?start=${start}&end=${end}`)
+      .get<APIResult<Summary>>(`managements/overview/range?start=${start}&end=${end}`)
+      .pipe(map(res => res.data!));
+  }
+
+  // Logs
+  listenSystemLog(connectionId: string): Observable<void> {
+    return this.http.post<void>(`managements/overview/connectToLogHub`, {connectionId: connectionId} );
+  }
+
+  getLogsOfDate(date: string): Observable<LogDTO[]> {
+    return this.http
+      .get<APIResult<LogDTO[]>>(`managements/log?date=${date}`)
       .pipe(map(res => res.data!));
   }
 

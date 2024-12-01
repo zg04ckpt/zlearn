@@ -39,6 +39,7 @@ export class UpdateTest2Component implements OnInit {
 
   // Test
   id: string|null = null;
+  defaultImageUrl = environment.defaultImageUrl
   testImageUrl = "";
   data: UpdateTestDTO = {
     name: "",

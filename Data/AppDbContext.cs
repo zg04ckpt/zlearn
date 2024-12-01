@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Data.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System;
 using Microsoft.AspNetCore.Identity;
 using Data.Configs;
 using Data.Entities;
@@ -25,6 +24,9 @@ namespace Data
             modelBuilder.ApplyConfiguration(new AppRoleConfig());
             modelBuilder.ApplyConfiguration(new ImageConfig());
             modelBuilder.ApplyConfiguration(new CommentConfig());
+            modelBuilder.ApplyConfiguration(new UserLikeConfig());
+            modelBuilder.ApplyConfiguration(new SummaryConfig());
+            modelBuilder.ApplyConfiguration(new CategoryConfig());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -35,6 +37,7 @@ namespace Data
 
         #region DbSet
         public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<UserLike> UserLikes { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<Question> Questions { get; set; }
@@ -42,6 +45,8 @@ namespace Data
         public DbSet<SavedTest> SavedTests { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Summary> Summaries { get; set; }
+        public DbSet<Category> Categories { get; set; }
         #endregion
     }
 }

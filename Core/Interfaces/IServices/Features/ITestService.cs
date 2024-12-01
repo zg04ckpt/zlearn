@@ -9,6 +9,7 @@ namespace Core.Interfaces.IServices.Features
     {
         // ---------- Test -----------
         Task<APIResult<PaginatedResult<TestItemDTO>>> GetTestsAsListItems(int pageSize, int pageIndex, List<ExpressionFilter> filters);
+        Task<APIResult<PaginatedResult<TestItemDTO>>> SearchTest(int pageSize, int pageIndex, TestSearchDTO data);
         Task<APIResult<List<TestInfoDTO>>> GetTestInfosOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult<TestInfoDTO>> GetTestInfo(string testId);
         Task<APIResult<TestDTO>> GetTestContent(ClaimsPrincipal claimsPrincipal, string testId);

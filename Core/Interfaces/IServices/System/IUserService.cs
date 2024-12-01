@@ -13,6 +13,8 @@ namespace Core.Interfaces.IServices.System
     {
         Task<APIResult<UserProfileDTO>> GetMyProfile(ClaimsPrincipal claimsPrincipal);
         Task<APIResult> UpdateMyProfile(ClaimsPrincipal claimsPrincipal, UserProfileDTO dto);
-        Task<APIResult<UserInfoDTO>> GetOtherUserProfile(string userId);
+        Task<APIResult<UserInfoDTO>> GetOtherUserProfile(ClaimsPrincipal claimsPrincipal, string userId);
+        Task<APIResult> Like(ClaimsPrincipal claimsPrincipal, string likedUserId);
+        Task<APIResult<bool>> IsLiked(ClaimsPrincipal claimsPrincipal, string likedUserId);
     }
 }

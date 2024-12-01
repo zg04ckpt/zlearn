@@ -8,17 +8,19 @@ namespace Core.Services.Common
     {
         private readonly string _folderPath;
         public const string IMAGE_FOLDER_NAME = "Images";
-        public const string IMAGE_PATH = "/api/images";
+        public const string IMAGE_PATH = "/api/images/test";
 
         public FileService()
         {
-            _folderPath = Path.Combine(Directory.GetCurrentDirectory(), IMAGE_FOLDER_NAME);
+            _folderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test");
         }
 
         public async Task DeleteFile(string fileName)
         {
-            if (fileName == null)
-                throw new ErrorException("Nội dung file trống");
+            if (fileName == null || fileName.Equals("default.jpg"))
+            {
+                return;
+            }
             var filePath = Path.Combine(_folderPath, fileName);
             if (File.Exists(filePath))
             {
@@ -30,7 +32,7 @@ namespace Core.Services.Common
         {
             if (file == null)
             {
-                throw new ErrorException("File trống");
+                return null;
             }
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             var filePath = Path.Combine(_folderPath, fileName);
@@ -39,16 +41,25 @@ namespace Core.Services.Common
             return fileName;
         }
 
-        public string GetFileUrl(string fileName)
+        public async Task<string?> Save(IFormFile file, string folderPath)
         {
-            if (fileName == null) return null;
-            return IMAGE_PATH + "/" + fileName;
+            if (file == null)
+            {
+                return null;
+            }
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var filePath = Path.Combine(folderPath, fileName);
+            using var output = new FileStream(filePath, FileMode.Create);
+            await file.OpenReadStream().CopyToAsync(output);
+            return fileName;
         }
 
-        public static string GetAsUrl(string fileName)
+        public async Task Delete(string filePath)
         {
-            if (fileName == null) return null;
-            return IMAGE_PATH + "/" + fileName;
+            if (File.Exists(filePath))
+            {
+                await Task.Run(() => File.Delete(filePath));
+            }
         }
     }
 }
