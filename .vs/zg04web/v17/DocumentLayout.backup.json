@@ -66,34 +66,31 @@
               "RelativeToolTip": "API\\Controllers\\Managements\\LogsController.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAwwBYAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-30T23:42:15.661Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T23:42:15.661Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "Core",
+              "Title": "Core.csproj",
               "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Core.csproj",
               "RelativeDocumentMoniker": "Core\\Core.csproj",
               "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Core.csproj",
               "RelativeToolTip": "Core\\Core.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-11-30T23:33:34.204Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T23:33:34.204Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "API",
+              "Title": "API.csproj",
               "DocumentMoniker": "D:\\Code\\Web\\zg04web\\API\\API.csproj",
               "RelativeDocumentMoniker": "API\\API.csproj",
               "ToolTip": "D:\\Code\\Web\\zg04web\\API\\API.csproj",
               "RelativeToolTip": "API\\API.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAwCoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-11-30T23:33:17.992Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T23:33:17.992Z"
             },
             {
               "$type": "Document",
@@ -101,9 +98,9 @@
               "Title": "LogService.cs",
               "DocumentMoniker": "D:\\Code\\Web\\zg04web\\Core\\Services\\Common\\LogService.cs",
               "RelativeDocumentMoniker": "Core\\Services\\Common\\LogService.cs",
-              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Services\\Common\\LogService.cs*",
-              "RelativeToolTip": "Core\\Services\\Common\\LogService.cs*",
-              "ViewState": "AgIAABYAAAAAAAAAAAAuwCEAAAAAAAAAAAAAAA==",
+              "ToolTip": "D:\\Code\\Web\\zg04web\\Core\\Services\\Common\\LogService.cs",
+              "RelativeToolTip": "Core\\Services\\Common\\LogService.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAuwEsAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-30T23:30:40.571Z",
               "EditorCaption": ""
@@ -118,8 +115,7 @@
               "RelativeToolTip": "Core\\DTOs\\CommonDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-30T23:23:41.646Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T23:23:41.646Z"
             },
             {
               "$type": "Document",
@@ -131,8 +127,7 @@
               "RelativeToolTip": "API\\Middlewares\\HandleExceptionMiddleware.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAAYwCEAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-30T23:19:20.49Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T23:19:20.49Z"
             },
             {
               "$type": "Document",
@@ -144,8 +139,7 @@
               "RelativeToolTip": "API\\Program.cs",
               "ViewState": "AgIAAIcAAAAAAAAAAAArwJUAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-30T23:17:03.171Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T23:17:03.171Z"
             },
             {
               "$type": "Document",
@@ -157,8 +151,7 @@
               "RelativeToolTip": "Core\\Interfaces\\IServices\\Common\\ILogService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-30T23:15:13.961Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T23:15:13.961Z"
             },
             {
               "$type": "Document",
@@ -170,8 +163,7 @@
               "RelativeToolTip": "Core\\Services\\System\\AuthService.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAAAMAAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-30T23:09:29.444Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T23:09:29.444Z"
             }
           ]
         },

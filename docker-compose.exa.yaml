@@ -1,0 +1,62 @@
+services:
+  web:
+    container_name: web
+    image: web:2.0
+    build: 
+      context: ./Client/Web
+      dockerfile: Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "4200:80"
+    volumes:
+      - nginx-config:/etc/nginx/conf.d
+      
+  api:
+    container_name: api
+    image: api:2.0
+    build: 
+      context: ./Server
+      dockerfile: Dockerfile.api
+    environment:
+      SYSTEM_EMAIL: "[email for auto send mail]"
+      SYSTEM_EMAIL_PASS: "[access pass for sender email]"
+      ADMIN_EMAIL: "[default email for admin account]"
+      ADMIN_PASSWORD: "[default password for admin account]"
+      ASPNETCORE_ENVIRONMENT: "Production"
+      SECRET_KEY: "[secret key for jwt token]"
+    volumes:
+      - resources:/Resources
+      - logs:/Logs
+    ports:
+      - 5000:80
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile.sqlserver
+    image: mssql:2019
+    container_name: db
+    environment:
+      SA_PASSWORD: "[mssql password for sa account]"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - sqlserver:/var/opt/mssql
+    ports:
+      - 1434:1433
+    networks:
+      - app-network
+
+volumes:
+  nginx-config:
+  logs:
+  resources:
+  sqlserver:
+
+networks:
+  app-network:
+    driver: bridge
