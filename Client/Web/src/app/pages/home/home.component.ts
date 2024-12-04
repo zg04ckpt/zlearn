@@ -22,7 +22,7 @@ import { environment } from '../../../environments/environment';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  title: string = 'Trang chủ 2s';
+  title: string = 'Trang chủ';
   randomTests: TestItem[] = [];
   topUsers: UserInfo[] = [];
   topTests: TestItem[] = [];
