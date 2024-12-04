@@ -1,0 +1,88 @@
+<div 
+[ngClass]="show? 'visible':'hidden'"
+class="d-flex flex-column flex-shrink-0 bg-dark px-1 vh-100 position-fixed top-0" 
+style="width: 220px; z-index: 2; margin-top: 50px; padding-bottom: 50px;">
+
+    <button 
+    class="btn rounded-0 border-1 border-secondary shadow-sm position-absolute top-50 start-100 p-0" 
+    id="toggle-btn"
+    [ngClass]="show? 'btn-visible':'btn-hidden'"
+    (click)="toggleStatus()">
+        <i class='bx fw-bolder fs-2' [ngClass]="{'bx-chevron-left': show, 'bx-chevron-right': !show}"></i>
+    </button>
+    <div class="d-md-none w-100 text-center">
+        <a routerLink="" class=" fw-bold text-white fs-5  text-decoration-none">
+            ZLEARN
+        </a>
+        <hr class="text-white my-2">
+    </div>
+    <ul class="nav nav-fill mb-auto flex-column mt-0" id="sidebar-menu">
+        @if(user?.roles?.includes('Admin'))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-start" 
+                (click)="manageFeatures.hidden = !manageFeatures.hidden">
+                    <i class='bx bxs-bar-chart-alt-2 me-2'></i>
+                    Quản lí
+                    @if(manageFeatures.hidden) {
+                        <i class='bx bx-chevron-right fs-4 fw-bold float-end'></i>
+                    }
+                    @else {
+                        <i class='bx bx-chevron-down fs-4 fw-bold float-end'></i>
+                    }
+                </a>
+            </li>
+
+            <div #manageFeatures class="ms-3" style="font-size: 15px;" hidden>
+                <li class="nav-item">
+                    <a routerLink="management" class="nav-link active text-start">
+                        <i class='bx bxs-right-arrow me-2' ></i>
+                        Tổng quan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="management/users" class="nav-link active text-start">
+                        <i class='bx bxs-right-arrow me-2' ></i>
+                        Quản lí user
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="management/roles" class="nav-link active text-start">
+                        <i class='bx bxs-right-arrow me-2' ></i>
+                        Quản lí quyền
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="management/tests" class="nav-link active text-start">
+                        <i class='bx bxs-right-arrow me-2' ></i>
+                        Quản lí đề
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="management/categories" class="nav-link active text-start">
+                        <i class='bx bxs-right-arrow me-2' ></i>
+                        Quản lí danh mục
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="management/logs" class="nav-link active text-start">
+                        <i class='bx bxs-right-arrow me-2' ></i>
+                        Quản lí log
+                    </a>
+                </li>
+            </div>
+        }
+        <li class="nav-item">
+            <a routerLink="" class="nav-link active text-start">
+                <i class='bx bxs-home me-2'></i>
+                Trang chủ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a routerLink="tests" class="nav-link text-start">
+                <i class='bx bxs-notepad me-2' ></i>
+                Trắc nghiệm
+            </a>
+        </li>
+    </ul>
+</div>

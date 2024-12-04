@@ -1,0 +1,86 @@
+<!-- Summaries -->
+<div class="ms-2 mt-2 mb-2">
+    <div class="d-flex flex-row align-content-center">
+        <select class="form-select w-auto" [(ngModel)]="isCustom">
+            <option [ngValue]="false">Hôm nay</option>
+            <option [ngValue]="true">Tùy chỉnh</option>
+        </select>
+
+        @if(isCustom) {
+            <div class="d-flex align-items-center">
+                <div class="fs-6 ms-3">Từ</div>
+                <input type="date" class="form-control w-auto ms-2" [(ngModel)]="filter.start">
+                <div class="fs-6 ms-2">Đến</div>
+                <input type="date" class="form-control w-auto ms-2" [(ngModel)]="filter.end">
+                <button class="btn btn-dark ms-2" (click)="getRange()">Kiểm tra</button>
+            </div>
+        }
+    </div>
+</div>
+<div class="d-flex" style="width: fit-content;">
+    <div class="card card-body shadow ms-2 mt-2 pb-2" >
+        <div class="d-flex flex-column">
+            <h5>Lượng truy cập</h5>
+            <hr class="m-0 mb-2">
+            <h4>{{summary.accessCount}}</h4>
+        </div>
+    </div>
+
+    <div class="card card-body shadow ms-2 mt-2 pb-2" >
+        <div class="d-flex flex-column">
+            <h5>Số lượt làm đề</h5>
+            <hr class="m-0 mb-2">
+            <h4>{{summary.testCompletionCount}}</h4>
+        </div>
+    </div>
+
+    <div class="card card-body shadow ms-2 mt-2 pb-2" >
+        <div class="d-flex flex-column">
+            <h5>Số bình luận mới</h5>
+            <hr class="m-0 mb-2">
+            <h4>{{summary.commentCount}}</h4>
+        </div>
+    </div>
+
+    <div class="card card-body shadow ms-2 mt-2 pb-2" >
+        <div class="d-flex flex-column">
+            <h5>Số người dùng mới</h5>
+            <hr class="m-0 mb-2">
+            <h4>{{summary.userCount}}</h4>
+        </div>
+    </div>
+</div>
+
+<!-- System log -->
+<div class="d-flex align-items-center mt-3 ms-2 p-1">
+    <h6>Log hệ thống</h6>
+    <h6 class="ms-4">Tối đa</h6>
+    <select class="form-select w-auto ms-2 mb-2" [(ngModel)]="maxLogLines">
+        <option [ngValue]="10">10 dòng</option>
+        <option [ngValue]="50">50 dòng</option>
+        <option [ngValue]="100">100 dòng</option>
+    </select>
+    <h6 class="ms-2 underline-when-hover"><i class='bx bxs-right-arrow'></i>Chi tiết</h6>
+</div>
+<div class="log-table card card-body shadow ms-2 pb-2 me-2 h-75 mb-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-2">Thời gian</th>
+                <th class="col-1">Loại</th>
+                <th class="col-auto">Mô tả</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of logs; track $index) {
+                <tr>
+                    <td>{{item.time}}</td>
+                    <td>{{item.type}}</td>
+                    <td>{{item.desc}}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

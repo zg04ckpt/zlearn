@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+*, body {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.underline-when-hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.underline-when-hover:hover {
+    color: aqua;
+    text-decoration: underline;
+}
+
+.table-wrapper {
+    position: relative; /* Đảm bảo phần tử cha có vị trí tương đối */
+    overflow: hidden; /* Ẩn thanh cuộn mặc định */
+    height: auto;
+    padding-right: 8px;
+}
+
+/* Ẩn thanh cuộn mặc định */
+.table-wrapper::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+/* Hiển thị thanh cuộn khi hover */
+.table-wrapper:hover {
+    overflow: auto; /* Hiển thị thanh cuộn khi hover */
+    
+}
+
+.table-wrapper:hover::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 10px;  
+}
+
+/* Đảm bảo thanh cuộn không ảnh hưởng đến bố cục */
+.table-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.text-ellipsis {
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    max-width: 60%;
+}

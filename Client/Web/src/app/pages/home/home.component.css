@@ -1,0 +1,22 @@
+.underline-when-hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.underline-when-hover:hover {
+    color: aqua;
+    text-decoration: underline;
+}
+
+
+.top1 {
+    color: #ffcd06;
+}
+
+.top2 {
+    color: #1ad392;
+}
+
+.top3 {
+    color: #d3301a;
+}

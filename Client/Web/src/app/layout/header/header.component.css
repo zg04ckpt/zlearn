@@ -1,0 +1,47 @@
+a {
+    text-decoration: none;
+}
+
+
+.breadcrumb-item a {
+    color: gray;
+}
+
+.breadcrumb-item a:hover {
+    text-decoration: underline;
+    color: yellow;
+}
+
+.breadcrumb-item,.active a {
+    color: white;
+    font-weight: bold;
+}
+
+#avt {
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    margin: auto;
+}
+
+#notification {
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin: auto;
+    align-content: center;
+    text-align: center;
+}
+
+#notification:hover {
+    color: yellow;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.13);
+}
+
+#avt:hover {
+    cursor: pointer;
+    border: 1px solid rgb(16, 197, 229);
+    
+}

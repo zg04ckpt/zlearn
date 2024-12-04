@@ -1,0 +1,18 @@
+<app-header/>
+<app-sidebar/>
+
+<div class="main-content" [ngClass]="showSidebar? 'with-sidebar':'without-sidebar'">
+    <router-outlet/>
+    <app-service-unavailable503/>
+    <app-forbidden403/>
+</div>
+
+<app-footer/>
+<app-login-2/>
+<app-register-2/>
+<app-loading/>
+<app-message/>
+<app-toast/>
+<app-user-info/>
+
+

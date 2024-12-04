@@ -1,0 +1,55 @@
+<div class="card card-body shadow-sm m-2">
+    <app-custom-tree [items]="data" (onAdd)="showAddDialog($event.id)" (onDelete)="deleteConfirmDialog($event.id)" (onEdit)="showUpdateDialog($event.id)"/>
+</div>
+
+@if(isShowAddDialog) {
+    <div class="h-100 w-100 position-absolute top-0 start-0" style="background-color: rgba(128, 128, 128, 0.51);">
+        <div class="card card-body pt-2 mt-3 position-absolute start-50 translate-middle-x" style="width: 400px;">
+            <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="isShowAddDialog = false"></button>
+            <h5 class="text-center fw-bolder">Tạo danh mục mới</h5>
+            <h6 class="mt-2 fst-italic">Danh mục cha: <b class="fst-italic">{{addModel.parentName}}</b></h6>
+            <input type="text" placeholder="Tên danh mục mới" class="form-control mt-2" [(ngModel)]="addModel.newName">
+            <input type="text" placeholder="Tên rút gọn(VD: trac-nghiem)" class="form-control mt-2" [(ngModel)]="addModel.newSlug">
+            <input type="text" placeholder="Mô tả danh mục mới" class="form-control mt-2" [(ngModel)]="addModel.newDesc">
+            <div class="w-100 mt-3 text-center">
+                <button class="btn btn-outline-dark" style="width: 100px;" (click)="addNewCategory()">Tạo mới</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if(isShowUpdateDialog) {
+    <div class="h-100 w-100 position-absolute top-0 start-0" style="background-color: rgba(128, 128, 128, 0.51);">
+        <div class="card card-body pt-2 mt-3 position-absolute start-50 translate-middle-x" style="width: 400px;">
+            <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="isShowUpdateDialog = false"></button>
+            <h5 class="text-center fw-bolder">Cập nhật danh mục</h5>
+            <p class="fst-italic text-center">{{updateModel.oldName}}</p>
+            
+            <!-- Name -->
+            <label for="" class="mt-2 fw-bold">Tên danh mục mới:</label>
+            <input type="text" placeholder="Tên danh mục mới" class="form-control mt-1" [(ngModel)]="updateModel.newName">
+
+            <!-- Name -->
+            <label for="" class="mt-2 fw-bold">Tên rút gọn:</label>
+            <input type="text" placeholder="(VD: trac-nghiem)" class="form-control mt-1" [(ngModel)]="updateModel.slug">
+            
+            <!-- Desc -->
+            <label for="" class="mt-2 fw-bold">Mô tả danh mục mới:</label>
+            <input type="text" placeholder="Mô tả danh mục mới" class="form-control mt-2" [(ngModel)]="updateModel.newDesc">
+            
+            <!-- Select parent -->
+            <label for="" class="mt-2 fw-bold">Danh mục cha:</label>
+            <select class="form-select mt-1" [(ngModel)]="updateModel.newParentId">
+                @for (item of treeMap.entries(); track $index) {
+                    @if(item[0] != updateModel.id) {
+                        <option [value]="item[0]">{{item[1].node.name}} @if(item[1].parentId == null) { <b>(gốc)</b> }</option>
+                    }
+                }
+            </select>
+
+            <div class="w-100 mt-3 text-center">
+                <button class="btn btn-outline-dark" style="width: 100px;" (click)="updateCategory()">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,7 @@
+.log-table * {
+    font-size: 14px;
+}
+
+.log-table th {
+    font-weight: bold;
+}

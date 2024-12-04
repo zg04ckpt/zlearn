@@ -1,0 +1,11 @@
+@if(show) {
+    <div class="toast align-items-center bg-white show top-0 shadow-sm position-fixed start-50 translate-middle-x"
+    style="margin-top: 75px; z-index: 4;">
+        <div class="d-flex">
+            <div class="toast-body">
+            {{message}}
+        </div>
+            <button type="button" class="btn-close me-2 m-auto" (click)="show = false"></button>
+        </div>
+    </div>
+}

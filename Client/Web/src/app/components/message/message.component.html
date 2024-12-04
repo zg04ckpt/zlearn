@@ -1,0 +1,29 @@
+@if(show) {
+    <div class="position-fixed vh-100 vw-100 top-0 start-0" style="z-index: 10; background-color: rgba(128, 128, 128, 0.485);">
+        <div class="position-absolute shadow-lg start-50 translate-middle-x card"
+        style="width: 360px; top: 80px; ">
+            @if(module.isInfo) {
+                <div class="card-header bg-info text-white">Thông báo</div>
+            } 
+            @else {
+                <div class="card-header bg-danger text-white">Lỗi</div>
+            }
+            <button class="btn btn-close btn-close-white position-absolute top-0 end-0 m-2" (click)="show = false"></button>
+            
+            <div class="card-body pb-0">
+                <p class="fs-6 mb-3">{{module.message}}</p>
+            </div>
+            
+            @if(module.buttons.length != 0) {
+                <div class="d-flex justify-content-end m-2">
+                    @for (btn of module.buttons; track $index) {
+                        <button class="btn btn-sm btn-outline-dark px-3 mx-1" 
+                        (click)="btn.action(); show = false;">
+                            {{btn.name}}
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,114 @@
+<div class="container-lg px-3">
+
+    <div class="row mt-3">
+        <div class="col-10 offset-1">
+
+            <!-- Category and search -->
+            <div class="d-flex mt-5 justify-content-center">
+                <div class="input-group w-75 px-0">
+                    <label class="input-group-text">Danh mục</label>
+                    <select class="form-select" [(ngModel)]="cateSlug" (change)="search()">
+                        <option value="">Tất cả</option>
+                        @for (item of categories; track $index) {
+                            <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
+                        }
+                    </select>
+                </div>
+        
+                <div class="input-group ms-2 w-25">
+                    <input type="text" class="form-control" placeholder="Tên đề ..." [(ngModel)]="key">
+                    <button class="btn btn-outline-dark" (click)="pageIndex = 1; search()">
+                        <i class='bx bx-search fs-6 py-1'></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Top action -->
+            <div class="d-flex mt-3">
+                @if(isLoggedIn()) {
+                    <button class="btn btn-sm btn-outline-dark"
+                    [routerLink]="['/tests', 'my-tests']">
+                        <i class='bx bx-food-menu me-1 mt-1'></i>Chức năng
+                    </button>
+                }
+            </div>
+
+            <!-- Content -->
+            <div class="card card-body mt-2">
+                <div class="d-flex align-items-center">
+                    <span class="flex-fill">Tìm thấy: <b class="text-info">{{total}}</b> kết quả</span>
+
+                    @if(key != "") {
+                        <div class="d-flex me-2 ps-2 shadow-sm" id="selected">
+                            <span style="font-size: 12px;">Tìm kiếm theo từ khóa</span>
+                            <i class='bx bx-x-circle text-danger m-1' (click)="key = ''; pageIndex = 1; search()"></i>
+                        </div>
+                    }
+
+                    <div class="me-3">
+                        <span>Số KQ/trang:</span>
+                        <select class="ms-1" [(ngModel)]="pageSize" (change)="pageIndex = 1; search();" name="pageSize">
+                            <option value="6">6</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+
+                    <!--paging-->
+                    <div class="btn-group" style="width: auto;">
+                        <button class="btn btn-sm btn-outline-secondary"
+                        [disabled]="pageIndex <= 1"
+                        (click)="pageIndex = pageIndex - 1; search()">
+                            <i class='bx bxs-chevrons-left py-1'></i>
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-secondary"
+                        title="Chưa code đâu đừng ấn nhé v:">
+                        Trang {{pageIndex}}/{{totalPage}}</button>
+
+                        <button class="btn btn-sm btn-outline-secondary"
+                        [disabled]="pageIndex == totalPage"
+                        (click)="pageIndex = pageIndex + 1; search()">
+                            <i class='bx bxs-chevrons-right py-1'></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!--content-->
+                <div class="mt-4 mx-2">
+                    <div class="row">
+
+                        @for (item of list; track $index) {
+                            <div class="col-lg-6">
+                                <div class="card card-body d-flex flex-row p-2 test mb-3" (click)="navigate(item.id)">
+                                    <img [src]="item.imageUrl || defaultImageUrl" alt="" width="50px" height="50px" style="object-fit: cover;">
+                                    <div class="d-flex flex-column ms-2 flex-fill">
+                                        <h6 class="fs-6 fw-bold mt-1">{{item.name}}</h6>
+                                        <div class="d-flex flex-row justify-content-between">
+                                            <small class="fw-medium text-secondary">SL câu hỏi: {{item.numberOfQuestions}}</small>
+                                            <small class="fw-medium text-secondary">Số lượt làm: {{item.numberOfAttempts}}</small>
+                                        </div>
+                                    </div>
+                                    @if(item.isPrivate) {
+                                        <span class="position-absolute top-0 end-0 m-1">
+                                            <i class='bx bxs-lock fs-4'></i>
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="row mt-3">
+        <div class="col-10 offset-1">
+            
+        </div>
+    </div>
+
+</div>

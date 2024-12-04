@@ -1,0 +1,130 @@
+<div class="card m-3">
+    <div class="card-header fw-bold">Quản lý đề</div>
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between">
+            <div class="d-flex">
+                <button class="btn btn-sm btn-dark">Hành động</button>
+            </div>
+
+            <div class="d-flex align-items-center">
+                <!-- searching -->
+                @if(key != '') {
+                    <button class="btn btn-sm d-flex px-1 btn-danger me-1 align-items-center" 
+                    style="height: 20px;"
+                    (click)="key = ''; search()">
+                        <div style="font-size: 10px;">Hủy tìm kiếm</div>
+                        <i class='bx bx-x fs-6'></i>
+                    </button>
+                }
+
+                <div class="d-flex me-3">
+                    <input type="text" class="border-1 ps-2" placeholder="Nhập tên đề ..." [(ngModel)]="key" style="font-size: 12px;">
+                    <button class="btn btn-sm btn-outline-dark ms-1" (click)="pageIndex = 1; search()">
+                        <i class='bx bx-search fs-6 py-1'></i>
+                    </button>
+                </div>
+
+                <!--paging-->
+                <div class="btn-group" style="width: auto;">
+                    <button class="btn btn-sm btn-outline-secondary"
+                    [disabled]="pageIndex <= 1"
+                    (click)="pageIndex = pageIndex - 1; search()">
+                        <i class='bx bxs-chevrons-left py-1'></i>
+                    </button>
+
+                    <button class="btn btn-sm btn-outline-secondary"
+                    title="Chưa code đâu đừng ấn nhé v:">
+                    Trang {{pageIndex}}/{{totalPage}}</button>
+
+                    <button class="btn btn-sm btn-outline-secondary"
+                    [disabled]="pageIndex == totalPage"
+                    (click)="pageIndex = pageIndex + 1; search()">
+                        <i class='bx bxs-chevrons-right py-1'></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-sm  table-hover">
+            <thead>
+                <tr>
+                    <td style="width: 10px;">STT</td>
+                    <td style="width: 15%;">Tên</td>
+                    <td style="width: 10%;">Ngày câp nhật</td>
+                    <td style="width: 15%;">Người tạo</td>
+                    <td >Mô tả</td>
+                    <td style="width: 10%;">Lượt làm</td>
+                    <td style="width: 10px;">Chọn</td>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of testDetails; track $index) {
+                    <tr>
+                        <td class="text-center">{{$index+1 + pageSize*(pageIndex-1)}}</td>
+                        <td>
+                            <a class="link-dark underline-when-hover" [routerLink]="['/tests/', item.id]">{{item.name}}</a>
+                        </td>
+                        <td>{{item.updatedDate}}</td>
+                        <td class="underline-when-hover" (click)="showUserDetail(item.authorId)">{{item.authorName}}</td>
+                        <td>{{item.description}}</td>
+                        <td>{{item.numberOfAttempts}}</td>
+                        <td>
+                            <div class="dropdown">
+                                <i class="btn bx bx-dots-vertical p-0 m-0" data-bs-toggle="dropdown"></i>
+                                <div class="dropdown-menu">
+                                    <a class="btn dropdown-item" (click)="delete(item.id)">Xóa</a>
+                                    <a class="btn dropdown-item" (click)="showCommentsOfTest(item.id)">Quản lý bình luận</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@if(isShowCommentsOfTest) {
+    <div class="position-fixed w-100 h-100 top-0 start-0" style="background-color: rgba(128, 128, 128, 0.442);">
+        <div class="card card-body position-absolute start-50 translate-middle-x pt-2" style="margin-top: 100px; height: 500px;">
+            <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="isShowCommentsOfTest = false;"></button>
+            <h5 class="text-center fw-bold">Bình luận</h5>
+            <div class="table-wrapper">
+                <table class="comment-table table table-sm table-auto table-hover table-bordered" style="width: 800px;">
+                    <thead>
+                        <tr>
+                            <th class="w-auto text-center align-content-start">STT</th>
+                            <th class="col-3 text-center align-content-start">Thời gian</th>
+                            <th class="col-5 text-center align-content-start">Nội dung</th>
+                            <th class="col-2 text-center align-content-start">User</th>
+                            <th class="col-1 text-center align-content-start">Thích</th>
+                            <th class="w-auto">Chọn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of comments; track $index) {
+                            <tr>
+                                <td>{{$index + 1}}</td>
+                                <td>{{item.createdAt | date: 'HH:mm - dd/MM/yyyy'}}</td>
+                                <td>{{item.content}}</td>
+                                <td><a (click)="showUserDetail(item.userId)" class="link-dark underline-when-hover" >{{item.userName}}</a></td>
+                                <td>{{item.likes}}</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <i class="btn bx bx-dots-vertical p-0 m-0" data-bs-toggle="dropdown"></i>
+                                        <div class="dropdown-menu">
+                                            <a class="btn dropdown-item" (click)="removeComment(item.id)">Xóa</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+}

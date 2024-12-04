@@ -1,0 +1,50 @@
+#avt {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 1px solid gray;
+    object-fit: cover;
+}
+
+label {
+    padding-top: 0;
+}
+
+#add-link-btn {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+#changeAvtBtn {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: rgba(255, 255, 255, 0.656);
+}
+
+#changeAvtBtn:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(7, 189, 244);
+}
+
+.disableLink {
+    pointer-events: none;
+}
+
+.link-btn {
+    border: 1px solid rgb(0, 204, 255);
+    border-radius: 2px;
+}
+
+.link-btn i {
+    cursor: pointer;
+}
+
+#addLinkPopupBg {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #b1b1b16e;
+}

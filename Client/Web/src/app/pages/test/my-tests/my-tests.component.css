@@ -1,0 +1,14 @@
+button {
+    width: 100px;
+}
+
+.nav-link.active {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.nav-link {
+    width: 150px;
+    color: gray;
+}
+

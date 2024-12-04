@@ -1,0 +1,110 @@
+<div class="row">
+    <!-- Content -->
+    <div class="col-md-9">
+        <div class="mt-2 ps-2">
+            <!-- Random 10 test -->
+            <div id="topTests" class="carousel slide pointer-event shadow-sm" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    @for (item of randomTests; track $index) {
+                        <button type="button" data-bs-target="#topTests" [attr.data-bs-slide-to]="$index" [ngClass]="{'active': $index == 0}"
+                        [ariaLabel]="item.name"></button>
+                    }
+                </div>
+                <div class="carousel-inner">
+                    @for (item of randomTests; track $index) {
+                        <div class="carousel-item" [ngClass]="{'active': $index == 0}"
+                        [routerLink]="['/tests/', item.id]">
+                            <img class="d-block w-100" [src]="item.imageUrl || defaultImageUrl"  
+                            style="object-fit: cover; width: 80%; height: 300px;">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h3>{{item.name}}</h3>
+                                <p>{{item.description}}</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <a class="carousel-control-prev" href="#topTests" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#topTests" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </a>
+            </div>
+
+            <!-- Top Article -->
+            <div class="card mt-3 shadow-sm">
+                <div class="card-header fw-bolder">Bài viết nổi bật</div>
+                <div class="card-body">
+                    <p class="m-0 p-0"> Chưa phát triển </p>
+                </div>
+            </div>
+
+            <!-- Newest Article -->
+            <div class="card mt-3 shadow-sm">
+                <div class="card-header fw-bolder">Bài viết mới nhất</div>
+                <div class="card-body">
+                    <p class="m-0 p-0"> Chưa phát triển </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ranking -->
+    <div class="col-md-3">
+        <div class="d-flex justify-content-center flex-md-column mt-3 mt-md-2 me-2">
+            <!-- User rank -->
+            <div class="user-rank card ms-2 ms-md-0 shadow-sm border-1 border-dark" style="width: 300px;">
+                <div class="card-header text-center fw-bolder">BXH người dùng</div>
+                <div class="card-body px-1">
+                    
+                    <div class="d-flex flex-column">
+                        @for (item of topUsers; track $index) {
+                            <div class="d-flex">
+                                @if($index != 0) {
+                                    <span class="order mx-3" [ngClass]="{'top2': $index==1, 'top3': $index==2}">
+                                        {{$index + 1}}
+                                    </span>
+                                }
+                                @else {
+                                    <span class="order mx-2 top1">
+                                        <i class='bx bxs-trophy fs-3'></i>
+                                    </span>
+                                }
+                                <span class="name underline-when-hover" (click)="showInfo(item.id)" [ngClass]="{'fw-bolder': $index == 0}">{{item.username}}</span>
+                                <span class="likes" class="d-flex me-3 flex-fill align-items-center justify-content-end">
+                                    <i class='bx bx-heart ms-1 fs-5'></i>
+                                    <div class="text-center" style="width: 20px;">{{item.likes}}</div>
+                                </span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Test rank -->
+            <div class="user-rank card mt-0 mt-md-3 ms-2 ms-md-0 shadow-sm border-1 border-dark" style="width: 300px;">
+                <div class="card-header text-center fw-bolder">BXH đề</div>
+                <div class="card-body px-1">
+                    
+                    <div class="d-flex flex-column">
+
+                        @for (item of topTests; track $index) {
+                            <div class="d-flex">
+                                <span class="order mx-3 justify-content-center" style="width: 10px;">
+                                    {{$index + 1}}
+                                </span>
+                                <a class="link-dark underline-when-hover" [routerLink]="['/tests/', item.id]">{{item.name}}</a>
+                                <span class="likes" class="d-flex me-3 flex-fill align-items-center justify-content-end">
+                                    <div class="me-1 text-secondary" style="font-size: 12px;">Lượt làm</div>
+                                    <div class="fw-bolder text-center ms-1" style="width: 30px;">{{item.numberOfAttempts}}</div>
+                                </span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
