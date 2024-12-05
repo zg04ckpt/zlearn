@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Renderer2, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router, RouterLink } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
@@ -46,6 +46,9 @@ export class HeaderComponent {
       const i = this.breadcrumbs.findIndex(e => e.url == next.url);
       if(i == -1) {
         this.breadcrumbs.push(next);
+        if(this.breadcrumbs.length >= 3) {
+          this.breadcrumbs.shift();
+        }
       } else {
         this.breadcrumbs = this.breadcrumbs.slice(0, i+1);
       }

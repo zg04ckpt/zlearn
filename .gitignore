@@ -14,5 +14,6 @@
 
 #other
 docker-compose.yaml
+docker-compose.prod.yaml
 .github
 .vs

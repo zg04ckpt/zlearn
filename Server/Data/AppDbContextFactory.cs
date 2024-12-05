@@ -8,7 +8,10 @@ namespace  Data
         public AppDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlServer("Server=ZG04-CKPT\\SQLEXPRESS,1433;Database=zlearn;User Id=sa;Password=hcn14022004;");
+            optionsBuilder.UseMySql(
+                "Server=localhost;Database=zlearn;User=root;Password=admin;",
+                new MySqlServerVersion(new Version(8, 0, 37)) 
+            );
             return new AppDbContext(optionsBuilder.Options);
         }
     }

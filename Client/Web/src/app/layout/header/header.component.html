@@ -1,25 +1,23 @@
 <nav class="navbar navbar-dark bg-dark w-100 d-flex justify-content-between" 
 style="position: fixed; top: 0; height: 50px; z-index: 3;">
 
-    <div class="d-flex align-items-center">
-        <a routerLink="" class="d-none d-md-block fw-bold text-white fs-5 text-center text-decoration-none"
-        style="width: 220px;">
-            ZLEARN
-        </a>
-    
-        <div class="breadcrumb m-0 ms-3 ms-md-0">
-            <li class="breadcrumb-item" [ngClass]="{'active': breadcrumbs.length == 0}">
-                <a [routerLink]="['/']"><i class='bx bxs-home'></i></a>
+    <a routerLink="" class="d-none d-md-block fw-bold text-white fs-5 text-center text-decoration-none"
+    style="width: 220px;">
+        ZLEARN
+    </a>
+
+    <div #breadcrumb class="breadcrumb m-0 ms-3 ms-md-0 flex-fill">
+        <li class="breadcrumb-item" [ngClass]="{'active': breadcrumbs.length == 0}">
+            <a [routerLink]="['/']"><i class='bx bxs-home'></i></a>
+        </li>
+        @for (item of breadcrumbs; track $index) {
+            <li class="breadcrumb-item" [ngClass]="{'active': $index == breadcrumbs.length-1}">
+                <a [routerLink]="[item.url]">{{item.name}}</a>
             </li>
-            @for (item of breadcrumbs; track $index) {
-                <li class="breadcrumb-item" [ngClass]="{'active': $index == breadcrumbs.length-1}">
-                    <a [routerLink]="[item.url]">{{item.name}}</a>
-                </li>
-            }
-        </div>
+        }
     </div>
 
-    <div class="justify-content-end me-2">
+    <div class="position-absolute end-0 top-50 translate-middle-y justify-content-end me-2">
         <div class="d-flex end-0">
             @if (!user) {
                 <a (click)="showLogin()" class="link-info me-1 px-1" style="cursor: pointer;">

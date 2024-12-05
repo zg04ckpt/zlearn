@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentService } from '../../../services/component.service';
 import { TestStatus } from '../../../enums/test.enum';
@@ -52,7 +52,8 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
     private userService: UserService,
     private router: Router,
     private titleService: Title,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private renderer: Renderer2
   ) {}
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -143,7 +144,16 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
       this.componentService.$showLoadingStatus.next(false);
       this.result = res;
       this.status = TestStatus.ShowAnswer;
+      this.scrollToItem();
     });
+  }
+
+  scrollToItem() {
+    const element = document.getElementById('top');
+    element?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
   }
 
   navigate(url: string) {

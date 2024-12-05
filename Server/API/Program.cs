@@ -29,9 +29,11 @@ var configuration = builder.Configuration;
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(
+    options.UseMySql(
         configuration.GetConnectionString("DefaultConnection"),
-        options => options.EnableRetryOnFailure());
+        new MySqlServerVersion(new Version(8, 0, 37)),
+        options => options.EnableRetryOnFailure()
+    );
     options.EnableDetailedErrors();
 });
 
@@ -170,8 +172,8 @@ app.UseMiddleware<HandleExceptionMiddleware>();
 app.UseMiddleware<TrackingMiddleware>();
 
 
-//app.UseClientRateLimiting();
-//app.UseIpRateLimiting();
+app.UseClientRateLimiting();
+app.UseIpRateLimiting();
 
 app.UseStaticFiles(new StaticFileOptions
 {
