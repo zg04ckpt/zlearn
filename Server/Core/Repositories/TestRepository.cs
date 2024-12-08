@@ -4,7 +4,7 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Services.Common;
 using Data;
-using Data.Entities;
+using Data.Entities.TestEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Repositories

@@ -12,7 +12,7 @@ namespace Core.Services.Common
 
         public FileService()
         {
-            _folderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test");
+            _folderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "TestConfig");
         }
 
         public async Task DeleteFile(string fileName)

@@ -1,6 +1,6 @@
 ﻿using Core.Interfaces.IRepositories;
 using Data;
-using Data.Entities;
+using Data.Entities.CommonEntities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

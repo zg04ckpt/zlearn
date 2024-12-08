@@ -4,7 +4,7 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.Common;
 using Core.Interfaces.IServices.System;
 using Core.Mappers;
-using Data.Entities;
+using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace Core.Services.System
         {
             _userManager = userManager;
             _userRepository = userRepository;
-            _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "User");
+            _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "UserConfig");
             _fileService = fileService;
         }
 

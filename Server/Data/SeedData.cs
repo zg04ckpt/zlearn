@@ -1,5 +1,7 @@
 ﻿
 using Data.Entities;
+using Data.Entities.CommonEntities;
+using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,7 +16,7 @@ namespace Data
         public static async Task Initialize(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, AppDbContext dbContext)
         {
             // Init default role
-            string[] roleNames = { "Admin", "User" };
+            string[] roleNames = { "Admin", "UserConfig" };
             foreach (var roleName in roleNames)
             {
                 var roleExist = await roleManager.RoleExistsAsync(roleName);

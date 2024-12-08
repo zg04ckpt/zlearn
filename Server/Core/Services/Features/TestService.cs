@@ -6,7 +6,7 @@ using Core.Interfaces.IServices.Common;
 using Core.Interfaces.IServices.Features;
 using Core.Interfaces.IServices.System;
 using Core.Mappers;
-using Data.Entities;
+using Data.Entities.TestEntities;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 using System.Security.Claims;
@@ -27,7 +27,7 @@ namespace Core.Services.Features
 
         public TestService(ITestRepository testRepository, IFileService fileService, ISummaryService summaryService, ICategoryRepository categoryRepository, ILogger<TestService> logger, ILogService logHubService)
         {
-            _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test");
+            _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "TestConfig");
             _testRepository = testRepository;
             _fileService = fileService;
             _summaryService = summaryService;

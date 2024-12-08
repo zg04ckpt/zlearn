@@ -1,5 +1,4 @@
-﻿
-using Data.Entities;
+﻿using Data.Entities.UserEntities;
 
 namespace Core.Interfaces.IRepositories
 {

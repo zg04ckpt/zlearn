@@ -4,7 +4,7 @@ using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Core.Interfaces.IServices.Common;
 using Core.Interfaces.IServices.System;
-using Data.Entities;
+using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;

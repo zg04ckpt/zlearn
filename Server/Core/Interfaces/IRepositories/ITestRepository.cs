@@ -1,6 +1,6 @@
 ﻿using Core.Common;
 using Core.DTOs;
-using Data.Entities;
+using Data.Entities.TestEntities;
 using System.Security.Claims;
 
 namespace Core.Interfaces.IRepositories

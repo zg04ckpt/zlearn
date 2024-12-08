@@ -1,13 +1,13 @@
 ﻿using Core.Common;
 using Core.DTOs;
-using Data.Entities;
+using Data.Entities.TestEntities;
 using System.Security.Claims;
 
-namespace Core.Interfaces.IServices.Features 
-{ 
+namespace Core.Interfaces.IServices.Features
+{
     public interface ITestService
     {
-        // ---------- Test -----------
+        // ---------- TestConfig -----------
         Task<APIResult<PaginatedResult<TestItemDTO>>> GetTestsAsListItems(int pageSize, int pageIndex, List<ExpressionFilter> filters);
         Task<APIResult<PaginatedResult<TestItemDTO>>> SearchTest(int pageSize, int pageIndex, TestSearchDTO data);
         Task<APIResult<List<TestInfoDTO>>> GetTestInfosOfUser(ClaimsPrincipal claimsPrincipal);
@@ -19,7 +19,7 @@ namespace Core.Interfaces.IServices.Features
         Task<APIResult> DeleteTest(ClaimsPrincipal claimsPrincipal, string testId);
 
 
-        // ---------- Test result ------------
+        // ---------- TestConfig result ------------
         Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(int pageSize, int pageIndex, List<ExpressionFilter> filters);
         Task<APIResult<List<TestResult>>> GetTestResultsOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult<TestResultDTO>> MarkTest(ClaimsPrincipal claimsPrincipal, MarkTestDTO dto, string ip);

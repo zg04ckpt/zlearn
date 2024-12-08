@@ -1,5 +1,5 @@
 ﻿using Core.DTOs;
-using Data.Entities;
+using Data.Entities.TestEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

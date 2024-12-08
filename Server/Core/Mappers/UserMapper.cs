@@ -1,5 +1,5 @@
 ﻿using Core.DTOs;
-using Data.Entities;
+using Data.Entities.UserEntities;
 using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Core.Mappers

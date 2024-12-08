@@ -4,7 +4,7 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.System;
 using Core.Mappers;
-using Data.Entities;
+using Data.Entities.CommonEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

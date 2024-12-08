@@ -1,6 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Services.Common;
-using Data.Entities;
+using Data.Entities.TestEntities;
 
 namespace Core.Mappers
 {

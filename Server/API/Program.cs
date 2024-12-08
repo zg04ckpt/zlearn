@@ -14,7 +14,7 @@ using Core.Services.Features;
 using Core.Services.Management;
 using Core.Services.System;
 using Data;
-using Data.Entities;
+using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -183,13 +183,13 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test")),
+    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "TestConfig")),
     RequestPath = "/api/images/test"
 });
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "User")),
+    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "UserConfig")),
     RequestPath = "/api/images/user"
 });
 

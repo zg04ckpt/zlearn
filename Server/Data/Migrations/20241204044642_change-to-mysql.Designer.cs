@@ -316,7 +316,7 @@ namespace Data.Migrations
                     b.ToTable("Summaries", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Entities.Test", b =>
+            modelBuilder.Entity("Data.Entities.TestConfig", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -540,54 +540,54 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Comment", b =>
                 {
-                    b.HasOne("Data.Entities.Test", "Test")
+                    b.HasOne("Data.Entities.TestConfig", "TestConfig")
                         .WithMany("Comments")
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Entities.AppUser", "User")
+                    b.HasOne("Data.Entities.AppUser", "UserConfig")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Test");
+                    b.Navigation("TestConfig");
 
-                    b.Navigation("User");
+                    b.Navigation("UserConfig");
                 });
 
             modelBuilder.Entity("Data.Entities.Question", b =>
                 {
-                    b.HasOne("Data.Entities.Test", "Test")
+                    b.HasOne("Data.Entities.TestConfig", "TestConfig")
                         .WithMany("Questions")
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Test");
+                    b.Navigation("TestConfig");
                 });
 
             modelBuilder.Entity("Data.Entities.SavedTest", b =>
                 {
-                    b.HasOne("Data.Entities.Test", "Test")
+                    b.HasOne("Data.Entities.TestConfig", "TestConfig")
                         .WithMany("UserInTests")
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Entities.AppUser", "User")
+                    b.HasOne("Data.Entities.AppUser", "UserConfig")
                         .WithMany("UserInTests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Test");
+                    b.Navigation("TestConfig");
 
-                    b.Navigation("User");
+                    b.Navigation("UserConfig");
                 });
 
-            modelBuilder.Entity("Data.Entities.Test", b =>
+            modelBuilder.Entity("Data.Entities.TestConfig", b =>
                 {
                     b.HasOne("Data.Entities.AppUser", "Author")
                         .WithMany("Tests")
@@ -612,7 +612,7 @@ namespace Data.Migrations
                     b.Navigation("Children");
                 });
 
-            modelBuilder.Entity("Data.Entities.Test", b =>
+            modelBuilder.Entity("Data.Entities.TestConfig", b =>
                 {
                     b.Navigation("Comments");
 
