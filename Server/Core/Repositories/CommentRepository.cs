@@ -20,7 +20,7 @@ namespace Core.Repositories
         {
             return await _context.Comments
                 .Include(x => x.User)
-                .Where(x => x.TestId.ToString().Equals(testId))
+                .Where(x => x.TargetId.Equals(testId))
                 .OrderBy(x => x.CreatedAt)
                 .ToListAsync();
         }

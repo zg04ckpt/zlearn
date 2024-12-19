@@ -34,14 +34,36 @@ export class TestService {
         key: string,
         cate: string
     ): Observable<PagingResultDTO<TestItem>> {
-        return this.http.get<APIResult<PagingResultDTO<TestItem>>>(
-            `tests?pageIndex=${pageIndex}&pageSize=${pageSize}&name=${key}&categorySlug=${cate}`,
+        return this.http
+            .get<APIResult<PagingResultDTO<TestItem>>>(
+                `tests?pageIndex=${pageIndex}&pageSize=${pageSize}&name=${key}&categorySlug=${cate}`,
+            ).pipe(
+                map(res => res.data!),
+                map(res => {
+                    res.data.forEach(x => {
+                        x.imageUrl = x.imageUrl? this.baseUrl + x.imageUrl : null;
+                    });
+                    return res;
+                })
+            );
+    }
+
+    public getAllInfos(
+        pageIndex: number, 
+        pageSize: number, 
+        key: string,
+        cate: string
+    ): Observable<PagingResultDTO<TestDetail>> {
+        return this.http.get<APIResult<PagingResultDTO<TestDetail>>>(
+            `tests/all-info?pageIndex=${pageIndex}&pageSize=${pageSize}&name=${key}&categorySlug=${cate}`,
         ).pipe(
+            map(res => res.data!),
             map(res => {
-                return res.data!;
-            }),
-            map(res => {
-                res.data.forEach(x => x.imageUrl = x.imageUrl? this.baseUrl + x.imageUrl : null);
+                res.data.forEach(x => {
+                    x.imageUrl = x.imageUrl? this.baseUrl + x.imageUrl : null;
+                    x.createdDate = new Date(x.createdDate);
+                    x.updatedDate = new Date(x.updatedDate);
+                });
                 return res;
             })
         );
@@ -55,7 +77,12 @@ export class TestService {
                 return res.data!;
             }),
             map(res => {
-                res.forEach(x => x.imageUrl = x.imageUrl? this.baseUrl + x.imageUrl : null);
+                res.forEach(x => {
+                    x.imageUrl = x.imageUrl? this.baseUrl + x.imageUrl : null;
+                    x.updatedDate = new Date(x.updatedDate);
+                    x.createdDate = new Date(x.createdDate);
+                });
+                
                 return res;
             })
         );
@@ -72,6 +99,8 @@ export class TestService {
                 if(res.imageUrl) {
                     res.imageUrl = this.baseUrl + res.imageUrl;
                 }
+                res.updatedDate = new Date(res.updatedDate);
+                res.createdDate = new Date(res.createdDate);
                 return res;
             })
         );
@@ -95,7 +124,6 @@ export class TestService {
         return this.http
             .get<APIResult<CategoryItem[]>>(`tests/categories`)
             .pipe(map(res => res.data!));
-        
     }
 
     public markTest(data: MarkTestDTO): Observable<MarkTestResultDTO> {

@@ -50,9 +50,6 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.HasIndex("ParentId");
 
                     b.HasIndex("Slug")
@@ -134,6 +131,36 @@ namespace Data.Migrations
                     b.ToTable("Summaries", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.CommonEntities.UploadedFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("OwnedBy")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("UploadedBy")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UploadedFiles", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.DocumentEntities.Document", b =>
                 {
                     b.Property<Guid>("Id")
@@ -163,11 +190,12 @@ namespace Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
-                    b.Property<string>("ImagePath")
+                    b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -186,6 +214,9 @@ namespace Data.Migrations
                     b.Property<int>("PurchaseCount")
                         .HasColumnType("int");
 
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -197,6 +228,8 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("PaymentInfoId")
                         .IsUnique();
@@ -954,16 +987,16 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.DocumentEntities.Document", b =>
                 {
-                    b.HasOne("Data.Entities.CommonEntities.Category", "Category")
-                        .WithMany("Documents")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Data.Entities.UserEntities.AppUser", "Author")
                         .WithMany("Documents")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.CommonEntities.Category", "Category")
+                        .WithMany("Documents")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.DocumentEntities.PaymentInfo", "PaymentInfo")

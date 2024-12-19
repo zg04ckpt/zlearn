@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,8 +33,8 @@ namespace Core.DTOs
         public string Id { get; set; }
         public string Name { get; set; }
         public string? ImageUrl { get; set; }
-        public string UpdatedDate { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public string Description { get; set; }
         public string CategoryName { get; set; }
         public string Source { get; set; }
@@ -46,10 +47,14 @@ namespace Core.DTOs
 
     public class CreateTestDTO
     {
+        [MaxLength(60, ErrorMessage = "Tên tối đa {1} kí tự")]
         public string Name { get; set; }
         public IFormFile? Image { get; set; }
         public string? ImageUrl { get; set; }
+        [MaxLength(255, ErrorMessage = "Mô tả tối đa {1} kí tự")]
         public string Description { get; set; }
+
+        [MaxLength(100, ErrorMessage = "Nguồn tối đa {1} kí tự")]
         public string Source { get; set; }
         public int Duration { get; set; }
         public string CategorySlug { get; set; }
@@ -75,6 +80,8 @@ namespace Core.DTOs
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? CategorySlug { get; set; }
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
     }
     #endregion
 
@@ -158,6 +165,8 @@ namespace Core.DTOs
         public string? EndTime { get; set; }
         public string? TestName { get; set; }
         public string? UserName { get; set; }
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
     }
     #endregion
 }

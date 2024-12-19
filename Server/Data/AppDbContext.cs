@@ -46,6 +46,7 @@ namespace Data
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionOrderConfiguration());
             modelBuilder.ApplyConfiguration(new UserNotificationConfiguration());
+            modelBuilder.ApplyConfiguration(new UploadedFileConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -75,6 +76,7 @@ namespace Data
         public DbSet<PromotionOrder> PromotionOrders { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
+        public DbSet<UploadedFile> UploadedFiles { get; set; }
         #endregion
     }
 }

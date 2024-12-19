@@ -8,8 +8,8 @@ namespace Core.Interfaces.IServices.Features
     public interface ITestService
     {
         // ---------- TestConfig -----------
-        Task<APIResult<PaginatedResult<TestItemDTO>>> GetTestsAsListItems(int pageSize, int pageIndex, List<ExpressionFilter> filters);
-        Task<APIResult<PaginatedResult<TestItemDTO>>> SearchTest(int pageSize, int pageIndex, TestSearchDTO data);
+        Task<APIResult<PaginatedResult<TestItemDTO>>> GetAsItems(TestSearchDTO data);
+        Task<APIResult<PaginatedResult<TestInfoDTO>>> GetAsInfos(TestSearchDTO data);
         Task<APIResult<List<TestInfoDTO>>> GetTestInfosOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult<TestInfoDTO>> GetTestInfo(string testId);
         Task<APIResult<TestDTO>> GetTestContent(ClaimsPrincipal claimsPrincipal, string testId);
@@ -20,7 +20,7 @@ namespace Core.Interfaces.IServices.Features
 
 
         // ---------- TestConfig result ------------
-        Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(int pageSize, int pageIndex, List<ExpressionFilter> filters);
+        Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(TestResultSearchDTO data);
         Task<APIResult<List<TestResult>>> GetTestResultsOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult<TestResultDTO>> MarkTest(ClaimsPrincipal claimsPrincipal, MarkTestDTO dto, string ip);
 

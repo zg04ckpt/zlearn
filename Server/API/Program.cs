@@ -44,25 +44,29 @@ builder.Services.AddIdentity<AppUser, AppRole>()
 
 builder.Services.AddTransient<IRoleManagementService, RoleManagementService>();
 builder.Services.AddTransient<IUserManagementService, UserManagementService>();
-builder.Services.AddTransient<ITestManagementService, TestManagementService>();
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITestRepository, TestRepository>();
 builder.Services.AddTransient<ICommentRepository, CommentRepository>();
 builder.Services.AddTransient<ISummaryRepository, SummaryRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+builder.Services.AddTransient<IDocumentRepository, DocumentRepository>();
+builder.Services.AddTransient<IUploadedFileRepository, UploadedFileRepository>();
+builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
 
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<IFileService, FileService>();
 builder.Services.AddSingleton<ILogService, LogService>();
+builder.Services.AddSingleton<ISummaryService, SummaryService>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICommentService, CommentService>();
 builder.Services.AddTransient<IHomeService, HomeService>();
-builder.Services.AddSingleton<ISummaryService, SummaryService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IDocumentService, DocumentService>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddTransient<TrackingMiddleware, TrackingMiddleware>();
 
 
@@ -183,14 +187,20 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "TestConfig")),
+    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test")),
     RequestPath = "/api/images/test"
 });
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "UserConfig")),
+    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "User")),
     RequestPath = "/api/images/user"
+});
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Document")),
+    RequestPath = "/api/images/document"
 });
 
 app.UseAuthentication();

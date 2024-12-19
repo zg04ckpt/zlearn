@@ -74,7 +74,7 @@ namespace Core.Services.Features
             var userId = Guid.Parse(claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier));
             var comment = await _commentRepository.GetById(Guid.Parse(commentId))
                 ?? throw new ErrorException("Bình luận không tồn tại!");
-            var isOwner = await _testRepository.IsExist(e => e.AuthorId.Equals(userId) && e.Id.Equals(comment.TestId));
+            var isOwner = await _testRepository.IsExist(e => e.AuthorId.Equals(userId) && e.Id.ToString().Equals(comment.TargetId));
 
             // Only test owner and admin can delete this comment
             if (!isOwner && !claimsPrincipal.IsInRole("Admin"))

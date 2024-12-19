@@ -17,6 +17,11 @@ import { CateManagementComponent } from '../pages/management/cate-management/cat
 import { CreateTest2Component } from '../pages/test/create-test-2/create-test-2.component';
 import { UpdateTest2Component } from '../pages/test/update-test-2/update-test-2.component';
 import { LogComponent } from '../pages/management/log/log.component';
+import { ListDocumentsComponent } from '../pages/document/list-document/list-documents.component';
+import { CreateDocumentComponent } from '../pages/document/create-document/create-document.component';
+import { MyDocumentComponent } from '../pages/document/my-document/my-document.component';
+import { UpdateDocumentComponent } from '../pages/document/update-document/update-document.component';
+import { DocManagementComponent } from '../pages/management/doc-management/doc-management.component';
 
 export const routes: Routes = [
     { path: "", component: HomeComponent, data: { breadcrumb: 'Trang chủ'}},
@@ -28,6 +33,7 @@ export const routes: Routes = [
     { path: "management/tests", component: TestManagementComponent, data: { breadcrumb: 'Quản lý đề' }},
     { path: "management/categories", component: CateManagementComponent, data: { breadcrumb: 'Quản lý danh mục' }},
     { path: "management/logs", component: LogComponent, data: { breadcrumb: 'Quản lý log' }},
+    { path: "management/documents", component: DocManagementComponent, data: { breadcrumb: 'Quản lý tài liệu' }},
 
     { path: "tests", component: ListTestComponent, data: { breadcrumb: 'Trắc nghiệm' }},
     { path: "tests/my-tests", component: MyTestsComponent, data: { breadcrumb: 'Quản lý đề' }},
@@ -35,6 +41,11 @@ export const routes: Routes = [
     { path: "tests/update/:id", component: UpdateTest2Component, canDeactivate: [canDeactivateGuard], data: { breadcrumb: 'Cập nhật đề' }},
     { path: "tests/:id", component: TestDetailComponent, data: { breadcrumb: 'Chi tiết' }},
     { path: "tests/:id/:option", component: TestComponent, canDeactivate: [canDeactivateGuard], data: { breadcrumb: 'Làm đề' }},
+
+    { path: "documents", component: ListDocumentsComponent, data: { breadcrumb: 'Tài liệu' }},
+    { path: "documents/create", component: CreateDocumentComponent, data: { breadcrumb: 'Tạo tài liệu mới' }},
+    { path: "documents/my-documents", component: MyDocumentComponent, data: { breadcrumb: 'Tài liệu đã tải lên' }},
+    { path: "documents/:id/update", component: UpdateDocumentComponent, data: { breadcrumb: 'Cập nhật tài liệu' }},
 
     { path: "user/profile", component: UserProfileComponent, data: { breadcrumb: 'Thông tin cá nhân' }},
     { path: "auth/email-confirm", component: EmailValidationComponent, data: { breadcrumb: 'Xác thực email' }},

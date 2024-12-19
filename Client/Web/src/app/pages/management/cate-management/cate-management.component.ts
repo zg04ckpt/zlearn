@@ -129,14 +129,13 @@ export class CateManagementComponent implements OnInit {
         currentNode.description = this.updateModel.newDesc;
         currentNode.slug = this.updateModel.slug;
 
-        if(this.updateModel.oldParentId != this.updateModel.newParentId) {
-          // add current node in selected parent
-          const newParentNode = this.treeMap.get(this.updateModel.newParentId)!.node;
-          newParentNode.children.push(currentNode);
-          //remove node in old parent
-          const oldParentNode = this.treeMap.get(this.updateModel.oldParentId)!.node;
-          oldParentNode.children = oldParentNode.children.filter(e => e.id != currentNode.id);
-        }
+        //remove node in old parent
+        const oldParentNode = this.treeMap.get(this.updateModel.oldParentId)!.node;
+        oldParentNode.children = oldParentNode.children.filter(e => e.id != currentNode.id);
+        
+        // add current node in selected parent
+        const newParentNode = this.treeMap.get(this.updateModel.newParentId)!.node;
+        newParentNode.children.push(currentNode);
 
         //update node in treemap
         this.treeMap.set(currentNode.id, {node: currentNode, parentId: this.updateModel.newParentId});
@@ -152,6 +151,7 @@ export class CateManagementComponent implements OnInit {
       .subscribe(newCateId => {
         this.componentService.$showLoadingStatus.next(false);
         this.isShowAddDialog = true; 
+
         // add new child
         const parentNode = this.treeMap.get(this.addModel.parentId)!.node;
         const newNode: CategoryNode = {

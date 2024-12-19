@@ -25,9 +25,9 @@ namespace Core.Services.System
         public async Task<APIResult<string>> CreateNewCategory(CategoryDTO data)
         {
             // Check if name is duplicated
-            if (await _categoryRepository.IsExist(e => e.Name == data.Name))
+            if (await _categoryRepository.IsExist(e => e.Name == data.Name && e.ParentId.ToString().Equals(data.ParentId)))
             {
-                throw new ErrorException("Tên danh mục đã tồn tại!");
+                throw new ErrorException("Tên danh mục đã tồn tại cùng cấp!");
             }
 
             // Check if slug is duplicated
@@ -117,9 +117,9 @@ namespace Core.Services.System
             }
 
             // Check if name is duplicated
-            if (await _categoryRepository.IsExist(e => !e.Equals(category) && e.Name == data.Name))
+            if (await _categoryRepository.IsExist(e => e.Name == data.Name && e.ParentId.ToString().Equals(data.ParentId)))
             {
-                throw new ErrorException("Tên danh mục đã tồn tại!");
+                throw new ErrorException("Tên danh mục đã tồn tại cùng cấp!");
             }
 
             // Check if slug is duplicated

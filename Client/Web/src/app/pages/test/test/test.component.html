@@ -2,7 +2,7 @@
 <!--Content-->
 @if(status == TestStatus.Testing || status == TestStatus.Completed) {
     <div class="row">
-        <div class="col-lg-9">
+        <div [ngClass]="{'col-12': !isShowStatus, 'col-lg-9': isShowStatus}">
             <div class="card card-body m-4">
                 <h5 class="text-center fw-bold">{{test!.name}}</h5>
                 <div class="d-flex flex-column mt-4">
@@ -71,7 +71,7 @@
 }
 @else if(status == TestStatus.ShowAnswer) {
     <div class="row">
-        <div class="col-lg-9">
+        <div [ngClass]="{'col-12': !isShowStatus, 'col-lg-9': isShowStatus}">
             <div class="card card-body m-4">
     
                 <h5 class="text-center fw-bold">KẾT QUẢ</h5>
@@ -184,9 +184,8 @@
     </div>
 }
 
-
 <!--Status bar-->
-<div class="position-fixed card card-body me-3 d-flex flex-column p-3" id="status-box">
+<div class="position-fixed card card-body me-3 py-2 d-flex flex-column p-3" id="status-box">
     @if(status == TestStatus.Testing) {
         @if(remainder) {
             <span class="fw-bold fw-light text-center">
@@ -199,41 +198,43 @@
         <button class="btn btn-success btn-sm m-0" (click)="markTest()">Nộp bài và xem kết quả</button>
     }
     @else if(status == TestStatus.ShowAnswer) {
-        <button class="btn btn-secondary btn-sm m-0" (click)="navigate('tests')">Quay lại danh sách</button>
-    }
-
-    <hr>
-
-    @if(status == TestStatus.Testing || status == TestStatus.Completed) {
-        <div class="row mx-0 overflow-auto" style="max-height: 70vh;">
-            @for (item of test?.questions; track $index) {
-                <div class="col-3 text-center p-1">
-                    <div class="btn w-100 btn-sm status-btn fw-bolder"
-                    [ngClass]="{'bg-secondary text-white': item.selectedAnswer != 0}"
-                    (click)="scrollTo($index+1)">
-                        {{$index + 1}}
-                    </div>
-                </div>
-            }
-        </div>
-    }
-    @else if(status == TestStatus.ShowAnswer) {
-        <div class="row mx-0">
-            @for (item of test!.questions; track $index) {
-                <div class="col-3 text-center p-1">
-                    <div class="btn w-100 btn-sm status-btn fw-bolder"
-                    [ngClass]="{
-                        'bg-white text-dark': item.selectedAnswer == 0,
-                        'correct': item.selectedAnswer != 0 && item.selectedAnswer == result!.detail[$index],
-                        'wrong': item.selectedAnswer != 0 && item.selectedAnswer != result!.detail[$index],
-                    }"
-                    (click)="scrollTo($index+1)">
-                        {{$index + 1}}
-                    </div>
-                </div>
-            }
-        </div>
+        <button class="btn btn-secondary btn-sm m-0" onclick="window.history.back()">Quay lại</button>
     }
     
-    
+    @if (isShowStatus) {
+        <small class="btn btn-sm btn-outline-secondary mt-2 mb-2" (click)="isShowStatus = false">Ẩn trạng thái</small>
+        @if(status == TestStatus.Testing || status == TestStatus.Completed) {
+            <div class="row mx-0 overflow-auto" style="max-height: 70vh;">
+                @for (item of test?.questions; track $index) {
+                    <div class="col-3 text-center p-1">
+                        <div class="btn w-100 btn-sm status-btn fw-bolder"
+                        [ngClass]="{'bg-secondary text-white': item.selectedAnswer != 0}"
+                        (click)="scrollTo($index+1)">
+                            {{$index + 1}}
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @else if(status == TestStatus.ShowAnswer) {
+            <div class="row mx-0">
+                @for (item of test!.questions; track $index) {
+                    <div class="col-3 text-center p-1">
+                        <div class="btn w-100 btn-sm status-btn fw-bolder"
+                        [ngClass]="{
+                            'bg-white text-dark': item.selectedAnswer == 0,
+                            'correct': item.selectedAnswer != 0 && item.selectedAnswer == result!.detail[$index],
+                            'wrong': item.selectedAnswer != 0 && item.selectedAnswer != result!.detail[$index],
+                        }"
+                        (click)="scrollTo($index+1)">
+                            {{$index + 1}}
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+    @else {
+        <small class="btn btn-sm btn-outline-secondary mt-2 mb-2" (click)="isShowStatus = true">Hiện trạng thái</small>
+    }
 </div>

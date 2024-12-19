@@ -1,0 +1,119 @@
+<nav class="navbar navbar-dark bg-dark w-100 d-flex justify-content-between" 
+style="position: fixed; top: 0; height: 50px; z-index: 3;">
+
+    <a routerLink="" class="d-none d-md-block fw-bold text-white fs-5 text-center text-decoration-none"
+    style="width: 220px;">
+        ZLEARN
+    </a>
+
+    <div #breadcrumb class="breadcrumb m-0 ms-3 ms-md-0 flex-fill">
+        <li class="breadcrumb-item" [ngClass]="{'active': breadcrumbs.length == 0}">
+            <a [routerLink]="['/']"><i class='bx bxs-home'></i></a>
+        </li>
+        @for (item of breadcrumbs; track $index) {
+            <li class="breadcrumb-item" [ngClass]="{'active': $index == breadcrumbs.length-1}">
+                <a [routerLink]="[item.url]">{{item.name}}</a>
+            </li>
+        }
+    </div>
+
+    <div class="position-absolute end-0 top-50 translate-middle-y justify-content-end me-2">
+        <div class="d-flex end-0">
+            @if (!user) {
+                <a (click)="showLogin()" class="link-info me-1 px-1" style="cursor: pointer;">
+                    Đăng nhập
+                </a>
+                |
+                <a (click)="showRegister()" class="link-secondary px-1 me-2" style="cursor: pointer;">
+                    Đăng kí
+                </a>
+            }
+            @else {
+                <div class="d-flex end-0">
+                    <!-- Notification -->
+                    <span class="label position-relative" title="Thông báo" (click)="isShowNotification = !isShowNotification">
+                        <i class='bx bxs-bell'></i>
+                        <div class="label-badge position-absolute top-0 end-0 translate-middle m-2"></div>
+                    </span>
+                    
+                    <!-- Message -->
+                    <span class="me-2 label position-relative" title="Tin nhắn">
+                        <i class='bx bxs-chat'></i>
+                        <div class="label-badge position-absolute top-0 end-0 translate-middle m-2"></div>
+                    </span>
+                    <small class="d-none d-md-block text-light me-2 align-content-center my-auto fw-bold fst-italic">
+                        {{user.fullName || user.userName}}
+                    </small>
+                    <div class="dropdown position-relative">
+                        <img class="dropdown-toggle me-2" data-bs-toggle="dropdown" [src]="user.profileImage || defaultAvtUrl" alt="" id="avt">
+                        <ul class="dropdown-menu position-absolute mt-2 p-2 border-2 border-black shadow-sm" 
+                            style="left: 100%; transform: translateX(-100%);">
+                            <li><a class="dropdown-item my-1" [routerLink]="['user/profile']">Tài khoản</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <span class="dropdown-item align-content-center btn fw-bold text-center" (click)="logout()">
+                                    Đăng xuất
+                                    <i class='bx bx-log-out fw-bold'></i>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            }
+        </div>
+    </div>
+
+    @if(isShowNotification) {
+        <div id="noti" class=" position-absolute position-relative top-100 end-0 position-relative" style="transform: translateY(-4px);">
+            <i class='bx text-white bxs-up-arrow position-absolute shadow-lg bottom-100' style="z-index: 3; transform: translateY(5px); margin-left: 112px;"></i>
+            <div class="card rounded-0 p-1 pe-0 pt-2 pb-2 card-body shadow-lg me-3" 
+            style="width: 320px; z-index: 2;">
+                <div class="scrollable-content" style="height: 400px; overflow-y: scroll">
+                    <span class="underline-when-hover ms-2">Đánh dấu tất cả đã đọc</span>
+                    <hr class="m-0 mx-1 mt-1">
+                    @for (item of notifications; track $index) {
+                        
+                        <div class="d-flex flex-column unread item p-2 mx-1" (click)="isShowNotificationDetail = true; isShowNotification = false">
+                            <div class="d-flex flex-row">
+                                <small class="fw-bold title">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugiat incidunt cum error officiis itaque modi rem et inventore voluptas sunt fugit officia, assumenda at accusantium ex natus tenetur iste nesciunt.</small>
+                                <div class="flex-fill"></div>
+                                <div class="text-secondary flex-shrink-0">12 giây trước</div>
+                            </div>
+                            <p class="mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint rem rerum possimus. Placeat, eum iure dolorum repudiandae ipsa recusandae voluptas quod impedit pariatur amet dignissimos natus accusamus architecto ipsum adipisci!</p>
+                        </div>
+                        <div class="d-flex flex-column item p-2 mx-1" (click)="isShowNotificationDetail = true; isShowNotification = false">
+                            <div class="d-flex flex-row">
+                                <small class="fw-bold">Tiêu đề thông báo</small>
+                                <div class="flex-fill"></div>
+                                <div class="text-secondary">12 giây trước</div>
+                            </div>
+                            <p class="mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint rem rerum possimus. Placeat, eum iure dolorum repudiandae ipsa recusandae voluptas quod impedit pariatur amet dignissimos natus accusamus architecto ipsum adipisci!</p>
+                        </div>
+                    }
+                    <hr class="m-0 me-1">
+                    <div class="d-flex justify-content-center align-items-center w-100 pt-1">
+                        <span class="underline-when-hover">Xem thêm</span>
+                        <i class='bx bxs-chevrons-down ms-1'></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</nav>
+
+@if(isShowNotificationDetail) {
+    <div class="position-fixed w-100 h-100" style="background-color: rgba(128, 128, 128, 0.574); z-index: 2;">
+        <div class="card start-50 translate-middle-x" style="width: 600px; margin-top: 80px;">
+            <div class="card-header d-flex py-1 pe-1">
+                Nội dung chi tiết
+                <div class="flex-fill"></div>
+                <button class="btn btn-close" (click)="isShowNotificationDetail = false"></button>
+            </div>
+            <div class="card-body">
+                <p class="mb-0">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequuntur impedit doloribus culpa, architecto quis, cum perferendis, voluptate corporis aliquid veniam porro? Iure distinctio illum fugiat reiciendis. Illo facere nostrum cupiditate.</p>
+            </div>
+        </div>
+    </div>
+}
+

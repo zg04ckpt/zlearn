@@ -16,7 +16,10 @@ export class CommentService {
         return this.http
             .get<APIResult<CommentDTO[]>>(`comments/${testId}`)
             .pipe(map(res => {
-                res.data!.forEach(e => e.userAvatar = environment.baseUrl + e.userAvatar);
+                res.data!.forEach(e => {
+                    e.userAvatar = environment.baseUrl + e.userAvatar;
+                    e.createdAt = new Date(e.createdAt);
+                });
                 return res.data!;
             }));
     }

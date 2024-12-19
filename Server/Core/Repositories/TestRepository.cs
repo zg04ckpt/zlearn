@@ -20,34 +20,17 @@ namespace Core.Repositories
             _context.Questions.Add(question);
         }
 
-        public async Task<PaginatedResult<TestResult>> GetAllResults(int pageIndex, int pageSize, List<ExpressionFilter> filters)
-        {
-             var query = _context.TestResults.AsQueryable().AsNoTracking();
-
-            if (filters != null && filters.Any())
-            {
-                var lambda = LambdaBuilder.GetAndLambdaExpression<TestResult>(filters);
-                query = query.Where(lambda);
-            }
-
-            var data = await query
-                .Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            return new PaginatedResult<TestResult>
-            {
-                Total = await query.CountAsync(),
-                Data = data
-            };
-        }
-
         public async Task<List<Question>> GetQuestions(string testId)
         {
             return await _context.Questions
                 .Where(x => x.TestId.ToString().Equals(testId))
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public IQueryable<TestResult> GetResultQuery()
+        {
+            return _context.TestResults;
         }
 
         public async Task<List<TestResult>> GetResultsByUserId(string userId)

@@ -24,7 +24,6 @@
     position: relative; /* Đảm bảo phần tử cha có vị trí tương đối */
     overflow: hidden; /* Ẩn thanh cuộn mặc định */
     height: auto;
-    padding-right: 8px;
 }
 
 /* Ẩn thanh cuộn mặc định */

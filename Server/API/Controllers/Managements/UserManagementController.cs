@@ -8,6 +8,7 @@ namespace BE.Controllers.Managements
 {
     [Route("api/managements/users")]
     [ApiController]
+    [Authorize(Consts.ADMIN_ROLE)]
     public class UserManagementController : ControllerBase
     {
         private readonly IUserManagementService _userManagementService;
@@ -18,26 +19,9 @@ namespace BE.Controllers.Managements
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAllUsers(int pageIndex, int pageSize, [FromQuery]UserManagementSearchDTO? searchDTO)
+        public async Task<IActionResult> GetAllUsers([FromQuery]UserSearchDTO data)
         {
-            List<ExpressionFilter> filters = new List<ExpressionFilter>();
-            var properties = typeof(UserManagementSearchDTO).GetProperties();
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(searchDTO);
-                if (value != null)
-                {
-                    filters.Add(new ExpressionFilter
-                    {
-                        Property = property.Name,
-                        Value = value,
-                        Comparison = Comparison.Contains
-                    });
-                }
-            }
-
-            return Ok(await _userManagementService.GetAllUsers(pageSize, pageIndex, filters));
+            return Ok(await _userManagementService.GetAllUsers(data));
         }
 
         [HttpGet("{id}")]

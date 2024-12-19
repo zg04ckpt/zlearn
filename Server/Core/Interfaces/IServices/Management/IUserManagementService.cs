@@ -10,7 +10,7 @@ namespace Core.Interfaces.IServices.Management
 {
     public interface IUserManagementService
     {
-        Task<APIResult<PaginatedResult<UserManagementDTO>>> GetAllUsers(int pageSize, int pageIndex, List<ExpressionFilter> filters);
+        Task<APIResult<PaginatedResult<UserManagementDTO>>> GetAllUsers(UserSearchDTO data);
         Task<APIResult<UserManagementDTO>> GetUserById(string userId);
         Task<APIResult> DeleteUser(string userId);
         Task<APIResult> UpdateUser(UserManagementDTO dto);

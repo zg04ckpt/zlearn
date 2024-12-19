@@ -10,7 +10,6 @@ namespace Data.Configs.CommonConfig
         {
             builder.ToTable("Categories");
             builder.HasKey(x => x.Id);
-            builder.HasIndex(x => x.Name).IsUnique(true);
             builder.HasIndex(x => x.Slug).IsUnique(true);
             builder.Property(x => x.ParentId).IsRequired(false);
             builder.Property(x => x.Name).HasMaxLength(100);

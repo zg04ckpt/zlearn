@@ -4,7 +4,7 @@ import { ComponentService } from '../../../services/component.service';
 import { TestStatus } from '../../../enums/test.enum';
 import { Test } from '../../../entities/test/test.entity';
 import { Observable, Subject } from 'rxjs';
-import { DecimalPipe, NgClass } from '@angular/common';
+import { DecimalPipe, NgClass, NgStyle } from '@angular/common';
 import { MarkTestResultDTO } from '../../../dtos/test/test-result.dto';
 import { TestService } from '../../../services/test.service';
 import { MarkTestDTO } from '../../../dtos/test/mark-test.dto';
@@ -21,7 +21,8 @@ import { BreadcrumbService } from '../../../services/breadcrumb.service';
   standalone: true,
   imports: [
     DecimalPipe,
-    NgClass
+    NgClass,
+    NgStyle
   ],
   templateUrl: './test.component.html',
   styleUrl: './test.component.css'
@@ -43,6 +44,8 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
   Math: any = Math;
   Array: any = Array;
   destroyRef = inject(DestroyRef);
+
+  isShowStatus = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,

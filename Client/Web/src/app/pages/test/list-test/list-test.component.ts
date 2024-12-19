@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, Inject, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TestItem } from '../../../entities/test/test-item.entity';
 import { TestService } from '../../../services/test.service';
 import { ComponentService } from '../../../services/component.service';
@@ -25,7 +25,7 @@ import { CategoryItem } from '../../../entities/management/category-item.entity'
 })
 export class ListTestComponent implements OnInit {
   list: TestItem[] = [];
-  pageSize: number = 6;
+  pageSize: number = 10;
   pageIndex: number = 1;
   totalPage: number = 0;
   total: number = 0;
@@ -44,15 +44,34 @@ export class ListTestComponent implements OnInit {
     private userService: UserService,
     private titleService: Title,
     private breadcrumbService: BreadcrumbService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.titleService.setTitle(this.title);
     this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
-    this.search();
-    this.testService.getCategories().subscribe(next => {
-      this.componentService.$showLoadingStatus.next(false);
-      this.categories = next;
+
+    //get query param
+    //?page=1&size=6&cate=&name=
+    this.activatedRoute.queryParamMap.subscribe(next => {
+      if(next.get('page')) {
+        this.pageIndex = Number(next.get('page'));
+      }
+      if(next.get('size')) {
+        this.pageSize = Number(next.get('size'));
+      }
+      if(next.get('cate')) {
+        this.cateSlug = next.get('cate')!;
+      }
+      if(next.get('name')) {
+        this.key = next.get('name')!;
+      }
+
+      this.search();
+      this.testService.getCategories().subscribe(next => {
+        this.componentService.$showLoadingStatus.next(false);
+        this.categories = next;
+      });
     });
   }
 
@@ -61,9 +80,6 @@ export class ListTestComponent implements OnInit {
   }
 
   search() {
-    if(this.pageIndex == 0) {
-      this.pageIndex = 1;
-    }
     this.componentService.$showLoadingStatus.next(true);
     this.testService.getAll(this.pageIndex, this.pageSize, this.key, this.cateSlug)
     .pipe(takeUntilDestroyed(this.destroyRef))
@@ -72,8 +88,18 @@ export class ListTestComponent implements OnInit {
       debugger;
       this.total = res.total;
       this.totalPage = Math.ceil(this.total / this.pageSize);
-      if(this.totalPage == 0) this.pageIndex = 0;
       this.list = res.data;
+
+      //update route
+      this.updateQueryParams();
+    });
+  }
+
+  updateQueryParams(): void {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute, 
+      queryParams: { page: this.pageIndex, size: this.pageSize, cate: this.cateSlug, name: this.key },
+      queryParamsHandling: 'merge'
     });
   }
 

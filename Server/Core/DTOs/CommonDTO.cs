@@ -13,4 +13,12 @@ namespace Core.DTOs
         public string Desc { get; set; }
         public string? Detail { get; set; }
     }
+
+    public class FileStreamDTO
+    {
+        public MemoryStream Stream { get; set; }
+        public string Mime { get; set; }
+        public string FileName { get; set; }
+    }
+
 }

@@ -10,12 +10,12 @@ namespace Data.Entities.DocumentEntities
 {
     public class Document : Content
     {
+        public string FileName { get; set; }
         public string Description { get; set; }
-        public string ImagePath { get; set; }
         public string FilePath { get; set; }
+        public int Size { get; set; } //B
         public Guid? PaymentInfoId { get; set; }
         public int PurchaseCount { get; set; }
-
         //Rela
         public PaymentInfo? PaymentInfo { get; set; }
         public List<Order> Orders { get; set; }

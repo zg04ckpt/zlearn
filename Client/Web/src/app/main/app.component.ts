@@ -1,8 +1,5 @@
 import { AfterViewInit, Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { HeaderComponent } from '../layout/header/header.component';
-import { FooterComponent } from '../layout/footer/footer.component';
-import { SidebarComponent } from '../layout/sidebar/sidebar.component';
 import { LayoutService } from '../services/layout.service';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../components/loading/loading.component';
@@ -15,6 +12,9 @@ import { ServiceUnavailable503Component } from '../pages/others/service-unavaila
 import { UserInfoComponent } from '../components/user-info/user-info.component';
 import { Register2Component } from "../components/register-2/register-2.component";
 import { Login2Component } from "../components/login-2/login-2.component";
+import { HeaderComponent } from '../pages/layout/header/header.component';
+import { FooterComponent } from '../pages/layout/footer/footer.component';
+import { SidebarComponent } from '../pages/layout/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',

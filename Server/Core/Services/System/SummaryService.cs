@@ -4,6 +4,7 @@ using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.System;
 using Core.Repositories;
 using Data.Entities;
+using Data.Entities.CommonEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;

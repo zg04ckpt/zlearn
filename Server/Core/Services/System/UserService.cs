@@ -30,7 +30,7 @@ namespace Core.Services.System
         {
             _userManager = userManager;
             _userRepository = userRepository;
-            _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "UserConfig");
+            _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "User");
             _fileService = fileService;
         }
 

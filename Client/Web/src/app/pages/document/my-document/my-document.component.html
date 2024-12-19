@@ -1,0 +1,73 @@
+<div class="p-3">
+    <!-- Function -->
+    <div class="d-flex mb-3">
+        <!-- Back btn -->
+        <button class="btn btn-sm btn-outline-dark" onclick="window.history.back()">
+            <i class='bx bx-arrow-back pt-1 fw-bold'></i> Quay lại
+        </button>
+    </div>
+
+    <!-- Document list -->
+    <div class="card card-body mt-2 pt-2">
+        <div class="row">
+            @for (item of data; track $index) {
+                <div class="col-3 p-1">
+                    <div class="d-flex flex-column position-relative list-item" [title]="item.name">
+                        <img [src]="item.imageUrl || defaultImageUrl" alt="" class="test-img">
+
+                        <!-- Name -->
+                        <div class="mt-1 text-ellipsis-1lines">
+                            <a class="fs-6 fw-bold text-decoration-none text-dark">{{item.name}}</a>
+                        </div>
+
+                        <!-- Author and time -->
+                        <div class="d-flex flex-row">
+                            <small class="text-secondary me-2" style="opacity: 0.6;">Cập nhật lần cuối:</small>
+                            <small class="fw-bold" style="opacity: 0.5;">{{dateFormatter(item.updatedAt)}}</small>
+                        </div>
+
+                        <!-- Price -->
+                        @if(item.originPrice != 0) {
+                            <div class="d-flex flex-row mt-2 align-items-center">
+                                <div class="text-secondary" style="opacity: 0.6;">Giá</div>
+                                <div class="ms-1 fw-bold" [ngClass]="{'discount': item.lastPrice != item.originPrice}">{{priceFormatter(item.originPrice)}}</div>
+                                @if(item.lastPrice != item.originPrice) {
+                                    <div class="ms-1 fw-bold">{{priceFormatter(item.lastPrice)}}</div>
+                                }
+                                <small class="ms-1">VNĐ</small>
+                                <div class="flex-fill"></div>
+                                <button class="btn btn-dark" [routerLink]="['/documents', item.id, 'update']" style="font-size: 10px;">
+                                    Cập nhật
+                                </button>
+                                <button class="btn btn-outline-danger ms-1 px-2" (click)="deleteDocument(item.id)" style="font-size: 10px;">
+                                    <i class='bx bx-trash'></i>
+                                </button>
+                            </div>
+                        }
+                        @else {
+                            <div class="d-flex flex-row mt-2 align-items-center">
+                                <div class="text-secondary" style="opacity: 0.6;">Giá:</div>
+                                <div class="ms-1 fw-bold">Miễn phí</div>
+                                <div class="flex-fill"></div>
+                                <button class="btn btn-dark" [routerLink]="['/documents', item.id, 'update']" style="font-size: 10px;">
+                                    Cập nhật
+                                </button>
+                                <button class="btn btn-outline-danger ms-1 px-2" (click)="deleteDocument(item.id)" style="font-size: 10px;">
+                                    <i class='bx bx-trash'></i>
+                                </button>
+                            </div>
+                        }
+
+
+                        <!-- Download count -->
+                        <div class="position-absolute d-flex top-0 end-0 m-3 align-items-center px-1 shadow-sm"
+                        style="background-color: rgba(239, 239, 239, 0.859);">
+                            <small>{{item.downloadedCount}}</small>
+                            <i class='bx bxs-download'></i>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

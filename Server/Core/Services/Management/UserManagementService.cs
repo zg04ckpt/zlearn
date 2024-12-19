@@ -6,6 +6,7 @@ using Core.Interfaces.IServices.Management;
 using Core.Mappers;
 using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Management
 {
-    public class UserManagementService : UserMapper, IUserManagementService
+    public class UserManagementService : IUserManagementService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IUserRepository _userRepository;
@@ -90,22 +91,52 @@ namespace Core.Services.Management
             return new APISuccessResult<IEnumerable<string>>(roles);
         }
 
-        public async Task<APIResult<PaginatedResult<UserManagementDTO>>> GetAllUsers(int pageSize, int pageIndex, List<ExpressionFilter> filters)
+        public async Task<APIResult<PaginatedResult<UserManagementDTO>>> GetAllUsers(UserSearchDTO data)
         {
-            var users = await _userRepository.GetPaginatedData(pageIndex, pageSize, filters);
-            var dtos = new List<UserManagementDTO>();
-            foreach(AppUser e in users.Data)
+            var query = _userRepository.GetQuery().AsNoTracking();
+
+            //filter
+            if (!string.IsNullOrEmpty(data.UserName))
             {
-                var dto = MapToManage(e);
-                dto.Roles = await _userManager.GetRolesAsync(e);
-                dtos.Add(dto);
+                query = query.Where(e => e.UserName.Equals(data.UserName, StringComparison.OrdinalIgnoreCase));
             }
-            var data = new PaginatedResult<UserManagementDTO>
+            if (!string.IsNullOrEmpty(data.FirstName))
             {
-                Total = users.Total,
-                Data = dtos.ToArray()
-            };
-            return new APISuccessResult<PaginatedResult<UserManagementDTO>>(data);
+                query = query.Where(e => e.FirstName.Equals(data.FirstName, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.LastName))
+            {
+                query = query.Where(e => e.LastName.Equals(data.LastName, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.Email))
+            {
+                query = query.Where(e => e.Email.Equals(data.Email, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.CreatedDate))
+            {
+                query = query.Where(e => DateTime.Parse(e.CreatedDate).CompareTo(DateTime.Parse(data.CreatedDate)) == 0);
+            }
+
+            //paging
+            query = query
+                .Skip((data.PageIndex - 1) * data.PageSize)
+                .Take(data.PageSize)
+                .OrderBy(e => e.CreatedDate);
+
+            var res = new List<UserManagementDTO>();
+            var users = await query.ToListAsync();
+            foreach ( var user in users )
+            {
+                var dto = UserMapper.MapToManage(user);
+                dto.Roles = await _userManager.GetRolesAsync(user);
+                res.Add(dto);
+            }    
+
+            return new APISuccessResult<PaginatedResult<UserManagementDTO>>(new PaginatedResult<UserManagementDTO>
+            {
+                Total = await query.CountAsync(),
+                Data = res
+            });
         }
 
         public async Task<APIResult<UserManagementDTO>> GetUserById(string userId)
@@ -113,7 +144,7 @@ namespace Core.Services.Management
             var user = await _userManager.FindByIdAsync(userId)
                 ?? throw new ErrorException("Không tìm thấy user");
 
-            var dto = MapToManage(user);
+            var dto = UserMapper.MapToManage(user);
             dto.Roles = await _userManager.GetRolesAsync(user);
             return new APISuccessResult<UserManagementDTO>(dto);
         }
@@ -123,7 +154,7 @@ namespace Core.Services.Management
             var user = await _userManager.FindByIdAsync(dto.Id)
                 ?? throw new ErrorException("Không tìm thấy user");
 
-            user = MapFromManage(user, dto);
+            user = UserMapper.MapFromManage(user, dto);
             var result = await _userManager.UpdateAsync(user);
 
             if(result.Succeeded)

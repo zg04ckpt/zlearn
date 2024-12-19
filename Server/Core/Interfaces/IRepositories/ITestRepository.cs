@@ -20,7 +20,7 @@ namespace Core.Interfaces.IRepositories
         void AddQuestion(Question question);
 
         // ------------------ test result ---------------------
-        Task<PaginatedResult<TestResult>> GetAllResults(int pageIndex, int pageSize, List<ExpressionFilter> filters);
+        IQueryable<TestResult> GetResultQuery();
         Task<List<TestResult>> GetResultsByUserId(string userId);
         void SaveResult(TestResult testResult);
 

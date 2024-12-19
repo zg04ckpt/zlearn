@@ -1,4 +1,5 @@
-﻿using Core.DTOs;
+﻿using Core.Common;
+using Core.DTOs;
 using Core.Services.Common;
 using Data.Entities.TestEntities;
 
@@ -13,15 +14,16 @@ namespace Core.Mappers
                 Id = Guid.NewGuid(),
                 Name = dto.Name,
                 Description = dto.Description,
-                CreatedDate = DateOnly.FromDateTime(DateTime.Now).ToString(),
-                UpdatedDate = DateOnly.FromDateTime(DateTime.Now).ToString(),
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
                 Source = dto.Source,
                 ImageUrl = dto.ImageUrl,
                 Duration = dto.Duration,
                 NumberOfAttempts = 0,
                 NumberOfQuestions = dto.Questions.Count,
                 IsPrivate = dto.IsPrivate,
-                CategorySlug = dto.CategorySlug
+                CategorySlug = dto.CategorySlug,
+                Slug = Utilities.CreateSlugFromString(dto.Name)
             };
         }
 
@@ -31,9 +33,10 @@ namespace Core.Mappers
             test.Description = dto.Description;
             test.Source = dto.Source;
             test.Duration = dto.Duration;
-            test.UpdatedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
+            test.UpdatedAt = DateTime.Now;
             test.IsPrivate = dto.IsPrivate;
             test.CategorySlug = dto.CategorySlug;
+            test.Slug = Utilities.CreateSlugFromString(dto.Name);
             return test;
         }
 
@@ -85,8 +88,8 @@ namespace Core.Mappers
                 Id = test.Id.ToString(),
                 Name = test.Name,
                 ImageUrl = test.ImageUrl,
-                UpdatedDate = test.UpdatedDate,
-                CreatedDate = test.CreatedDate,
+                UpdatedDate = test.UpdatedAt,
+                CreatedDate = test.CreatedAt,
                 Description = test.Description,
                 Source = test.Source,
                 AuthorName = test.AuthorName,

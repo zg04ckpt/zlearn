@@ -5,6 +5,7 @@
 **/script.sql
 **/.vs
 **/*.log
+**/*.sql
 
 # Web
 **/environment.pro.ts

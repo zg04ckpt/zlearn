@@ -13,8 +13,6 @@ namespace Core.Interfaces.IRepositories
     {
         Task<IEnumerable<T>> GetAll();
         Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter);
-        Task<PaginatedResult<T>> GetPaginatedData(int pageIndex, int pageSize, List<ExpressionFilter> filters);
-        Task<PaginatedResult<T>> GetPaginatedData(int pageIndex, int pageSize, Expression<Func<T, bool>> filters);
         IQueryable<T> GetQuery();
         Task<bool> IsExist(Expression<Func<T, bool>> filter);
         Task<T> GetById(Tid id);

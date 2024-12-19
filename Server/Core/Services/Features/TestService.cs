@@ -7,6 +7,7 @@ using Core.Interfaces.IServices.Features;
 using Core.Interfaces.IServices.System;
 using Core.Mappers;
 using Data.Entities.TestEntities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 using System.Security.Claims;
@@ -27,7 +28,7 @@ namespace Core.Services.Features
 
         public TestService(ITestRepository testRepository, IFileService fileService, ISummaryService summaryService, ICategoryRepository categoryRepository, ILogger<TestService> logger, ILogService logHubService)
         {
-            _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "TestConfig");
+            _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test");
             _testRepository = testRepository;
             _fileService = fileService;
             _summaryService = summaryService;
@@ -50,6 +51,7 @@ namespace Core.Services.Features
             var test = TestMapper.MapFromCreate(dto);
             test.AuthorName = claimsPrincipal.FindFirst(ClaimTypes.GivenName)!.Value;
             test.AuthorId = Guid.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            test.CategoryId = (await _categoryRepository.Get(e => e.Slug.Equals(dto.CategorySlug)))!.Id;
             if(dto.Image != null)
             {
                 test.ImageUrl = IMAGE_REQUEST_PATH + (await _fileService.Save(dto.Image, _imageFolderPath));
@@ -154,10 +156,39 @@ namespace Core.Services.Features
             }
         }
 
-        public async Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(int pageSize, int pageIndex, List<ExpressionFilter> filters)
+        public async Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(TestResultSearchDTO data)
         {
-            var data = await _testRepository.GetAllResults(pageSize, pageIndex, filters);
-            return new APISuccessResult<PaginatedResult<TestResult>>(data);
+            var query = _testRepository.GetResultQuery().AsNoTracking();
+
+            //filter
+            if(!string.IsNullOrEmpty(data.UserName))
+            {
+                query = query.Where(e => e.UserName.Equals(data.UserName, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.TestName))
+            {
+                query = query.Where(e => e.TestName.Equals(data.TestName, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.StartTime))
+            {
+                query = query.Where(e => DateTime.Parse(e.StartTime).CompareTo(DateTime.Parse(data.StartTime)) >= 0);
+            }
+            if (!string.IsNullOrEmpty(data.EndTime))
+            {
+                query = query.Where(e => DateTime.Parse(e.EndTime).CompareTo(DateTime.Parse(data.EndTime)) <= 0);
+            }
+
+            //paging
+            query = query
+                .Skip((data.PageIndex - 1) * data.PageSize)
+                .Take(data.PageSize)
+                .OrderByDescending(e => e.StartTime);
+
+            return new APISuccessResult<PaginatedResult<TestResult>>(new PaginatedResult<TestResult>
+            {
+                Total = await query.CountAsync(),
+                Data = await query.ToListAsync()
+            });
         }
 
         public async Task<APIResult<List<TestItemDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal)
@@ -212,16 +243,6 @@ namespace Core.Services.Features
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var results = await _testRepository.GetResultsByUserId(userId);
             return new APISuccessResult<List<TestResult>>(results);
-        }
-
-        public async Task<APIResult<PaginatedResult<TestItemDTO>>> GetTestsAsListItems(int pageSize, int pageIndex, List<ExpressionFilter> filters)
-        {
-            var tests = await _testRepository.GetPaginatedData(pageSize, pageIndex, filters);
-            return new APISuccessResult<PaginatedResult<TestItemDTO>>(new PaginatedResult<TestItemDTO>
-            {
-                Total = tests.Total,
-                Data = tests.Data.Select(x => TestMapper.MapToItem(x))
-            });
         }
 
         public async Task<APIResult<UpdateTestDTO>> GetTestUpdateContent(ClaimsPrincipal claimsPrincipal, string testId)
@@ -339,13 +360,34 @@ namespace Core.Services.Features
             }
         }
 
-        public async Task<APIResult<PaginatedResult<TestItemDTO>>> SearchTest(int pageSize, int pageIndex, TestSearchDTO data)
+        public async Task<APIResult<PaginatedResult<TestItemDTO>>> GetAsItems(TestSearchDTO data)
         {
-            var tests = await _testRepository.GetPaginatedData(pageSize, pageIndex, LambdaBuilder.GetTestSearchingExpression(data));
+            var query = _testRepository.GetQuery().AsNoTracking();
+
+            //filter
+            if (!string.IsNullOrEmpty(data.CategorySlug))
+            {
+                query = query.Where(e => e.CategorySlug.Equals(data.CategorySlug));
+            }
+            if (!string.IsNullOrEmpty(data.Name))
+            {
+                query = query.Where(e => e.Name.Equals(data.Name, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.Description))
+            {
+                query = query.Where(e => e.Description.Equals(data.Description, StringComparison.OrdinalIgnoreCase));
+            }
+
+            //paging
+            query = query
+                .Skip((data.PageIndex - 1) * data.PageSize)
+                .Take(data.PageSize)
+                .OrderByDescending(e => e.NumberOfAttempts);
+
             return new APISuccessResult<PaginatedResult<TestItemDTO>>(new PaginatedResult<TestItemDTO>
             {
-                Total = tests.Total,
-                Data = tests.Data.Select(x => TestMapper.MapToItem(x))
+                Total = await query.CountAsync(),
+                Data = await query.Select(e => TestMapper.MapToItem(e)).ToListAsync()
             });
         }
 
@@ -360,7 +402,8 @@ namespace Core.Services.Features
 
             //update test
             test = TestMapper.MapFromUpdate(test, dto);
-            if(dto.Image != null)
+            test.CategoryId = (await _categoryRepository.Get(e => e.Slug.Equals(dto.CategorySlug)))!.Id;
+            if (dto.Image != null)
             {
                 if (test.ImageUrl != null)
                 {
@@ -414,7 +457,7 @@ namespace Core.Services.Features
                         {
                             await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(e.ImageUrl)));
                         }
-                        e.ImageUrl = IMAGE_REQUEST_PATH + await _fileService.SaveFile(updated.Image);
+                        e.ImageUrl = IMAGE_REQUEST_PATH + await _fileService.Save(updated.Image, _imageFolderPath);
                     } else if(updated.ImageUrl == null && e.ImageUrl != null)
                     {
                         await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(e.ImageUrl)));
@@ -446,6 +489,37 @@ namespace Core.Services.Features
             {
                 return new APIErrorResult("Cập nhật đề thất bại");
             }
+        }
+
+        public async Task<APIResult<PaginatedResult<TestInfoDTO>>> GetAsInfos(TestSearchDTO data)
+        {
+            var query = _testRepository.GetQuery().AsNoTracking();
+
+            //filter
+            if (!string.IsNullOrEmpty(data.CategorySlug))
+            {
+                query = query.Where(e => e.CategorySlug.Equals(data.CategorySlug));
+            }
+            if (!string.IsNullOrEmpty(data.Name))
+            {
+                query = query.Where(e => e.Name.Equals(data.Name, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.Description))
+            {
+                query = query.Where(e => e.Description.Equals(data.Description, StringComparison.OrdinalIgnoreCase));
+            }
+
+            //paging
+            query = query
+                .Skip((data.PageIndex - 1) * data.PageSize)
+                .Take(data.PageSize)
+                .OrderByDescending(e => e.NumberOfAttempts);
+
+            return new APISuccessResult<PaginatedResult<TestInfoDTO>>(new PaginatedResult<TestInfoDTO>
+            {
+                Total = await query.CountAsync(),
+                Data = await query.Select(e => TestMapper.MapToInfo(e)).ToListAsync()
+            });
         }
     }
 }
