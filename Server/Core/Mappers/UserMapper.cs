@@ -6,6 +6,16 @@ namespace Core.Mappers
 {
     public class UserMapper
     {
+        public static UserFindDataDTO MapToFindData(AppUser user)
+        {
+            return new UserFindDataDTO
+            {
+                UserName = user.UserName,
+                Id = user.Id.ToString(),
+                FullName = (string.IsNullOrEmpty(user.LastName) || string.IsNullOrEmpty(user.FirstName))? "Vô danh": user.LastName + " " + user.FirstName
+            };
+        }
+
         public static UserManagementDTO MapToManage(AppUser user)
         {
             return new UserManagementDTO

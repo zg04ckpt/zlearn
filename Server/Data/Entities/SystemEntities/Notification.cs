@@ -9,11 +9,11 @@ namespace Data.Entities.SystemEntities
 {
     public class Notification
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
         public DateTime CreatedAt { get; set; }
-        public bool IsReaded { get; set; }
+        public bool IsRead { get; set; }
         public NotificationType Type { get; set; }
 
         //Rela

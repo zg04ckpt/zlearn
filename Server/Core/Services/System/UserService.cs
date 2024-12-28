@@ -1,9 +1,11 @@
 ﻿using Core.Common;
 using Core.DTOs;
+using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.Common;
 using Core.Interfaces.IServices.System;
 using Core.Mappers;
+using Data.Entities.TestEntities;
 using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -24,15 +26,19 @@ namespace Core.Services.System
         private readonly IUserRepository _userRepository;
         private readonly string _imageFolderPath;
         private readonly IFileService _fileService;
+        private readonly INotificationService _notificationService;
 
 
-        public UserService(UserManager<AppUser> userManager, IUserRepository userRepository, IFileService fileService)
+        public UserService(UserManager<AppUser> userManager, IUserRepository userRepository, IFileService fileService, INotificationService notificationService)
         {
             _userManager = userManager;
             _userRepository = userRepository;
             _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "User");
             _fileService = fileService;
+            _notificationService = notificationService;
         }
+
+
 
         public async Task<APIResult<UserProfileDTO>> GetMyProfile(ClaimsPrincipal claimsPrincipal)
         {
@@ -69,6 +75,16 @@ namespace Core.Services.System
             if(!await _userRepository.IsLiked(userId, likedUserId))
             {
                 await _userRepository.Like(userId, likedUserId);
+
+                // Notification
+                await _notificationService.CreateNewNotification(new CreateNotificationDTO
+                {
+                    Title = "Lượt thích mới",
+                    Message = $"{claimsPrincipal.FindFirst(ClaimTypes.Name)!.Value} đã tặng bạn 1 like",
+                    Type = Data.Entities.Enums.NotificationType.User,
+                    UserId = likedUserId
+                });
+
                 return new APISuccessResult("Đã like!");
             }
             return new APIErrorResult("Mỗi user chỉ được like một lần với một người");

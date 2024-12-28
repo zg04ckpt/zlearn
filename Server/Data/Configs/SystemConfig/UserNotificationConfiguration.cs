@@ -21,7 +21,7 @@ namespace Data.Configs.SystemConfig
             builder.HasOne(x => x.User)
                 .WithMany(x => x.UserNotifications)
                 .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(x => x.Notification)
                 .WithMany(x => x.UserNotifications)

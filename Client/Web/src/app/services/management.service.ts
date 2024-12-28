@@ -11,6 +11,9 @@ import { environment } from '../../environments/environment';
 import { Summary } from '../entities/management/summary.entity';
 import { CategoryNode } from '../entities/management/category-node.entity';
 import { LogDTO } from '../dtos/management/log.dto';
+import { CreateNotificationDTO } from '../dtos/notification/create-notification.dto';
+import { Notification } from '../entities/notification/notification.dto';
+import { FindDataDTO } from '../dtos/user/find-data.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +23,44 @@ export class ManagementService {
   constructor(
     private http: HttpClient
   ) { }
+
+  // Notification ------------------------------------------
+  createNewNotification(data: CreateNotificationDTO): Observable<void> {
+    return this.http
+      .post<APIResult<void>>(`managements/notifications`, data)
+      .pipe(map(res => res.data!));
+  }
+
+  getNotifications(page: number, size: number): Observable<PagingResultDTO<Notification>> {
+    return this.http
+      .get<APIResult<PagingResultDTO<Notification>>>(`managements/notifications?pageIndex=${page}&pageSize=${size}`)
+      .pipe(map(res => res.data!))
+      .pipe(map(res => {
+        res.data.forEach(e => e.createdAt = new Date(e.createdAt))
+        return res;
+      }));
+  }
+
+  deleteNotification(id: number): Observable<void> {
+    return this.http
+      .delete<APIResult<void>>(`managements/notifications/${id}`)
+      .pipe(map(res => res.data!));
+  }
+
+  updateNotification(id: number, title: string, message: string): Observable<void> {
+    return this.http
+      .put<APIResult<void>>(`managements/notifications/${id}`, {
+        title: title,
+        message: message
+      })
+      .pipe(map(res => res.data!));
+  }
+
+  getUserIdOfNotification(notificationId: number): Observable<string> {
+    return this.http
+      .get<APIResult<string>>(`managements/notifications/${notificationId}/user-id`)
+      .pipe(map(res => res.data!));
+  }
 
   // Overview ----------------------------------------------
   getOverviewToday(): Observable<Summary> {
@@ -93,6 +134,11 @@ export class ManagementService {
     ).pipe(map(res => res.data!));
   }
 
+  getUserFindData(): Observable<FindDataDTO[]>{
+    return this.http
+      .get<APIResult<FindDataDTO[]>>(`managements/users/find-data`)
+      .pipe(map(res => res.data!));
+  }
 
   // ROLE -------------------------------------------------
   getAllRoles = (): Observable<APIResult<Role[]>> => this.http.get<APIResult<Role[]>>(`managements/roles`);

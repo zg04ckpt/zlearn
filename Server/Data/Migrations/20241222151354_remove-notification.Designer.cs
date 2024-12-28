@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241216224943_add-document")]
-    partial class adddocument
+    [Migration("20241222151354_remove-notification")]
+    partial class removenotification
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -355,35 +355,6 @@ namespace Data.Migrations
                     b.ToTable("Posts", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Entities.SystemEntities.Notification", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Notifications", (string)null);
-                });
-
             modelBuilder.Entity("Data.Entities.SystemEntities.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -525,23 +496,6 @@ namespace Data.Migrations
                     b.HasIndex("PromotionId");
 
                     b.ToTable("PromotionOrders", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Entities.SystemEntities.UserNotification", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("NotificationId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("UserId", "NotificationId");
-
-                    b.HasIndex("NotificationId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserNotifications", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.TestEntities.Question", b =>
@@ -1092,25 +1046,6 @@ namespace Data.Migrations
                     b.Navigation("Promotion");
                 });
 
-            modelBuilder.Entity("Data.Entities.SystemEntities.UserNotification", b =>
-                {
-                    b.HasOne("Data.Entities.SystemEntities.Notification", "Notification")
-                        .WithMany("UserNotifications")
-                        .HasForeignKey("NotificationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Entities.UserEntities.AppUser", "User")
-                        .WithMany("UserNotifications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Notification");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Data.Entities.TestEntities.Question", b =>
                 {
                     b.HasOne("Data.Entities.TestEntities.Test", "Test")
@@ -1191,11 +1126,6 @@ namespace Data.Migrations
                     b.Navigation("Images");
                 });
 
-            modelBuilder.Entity("Data.Entities.SystemEntities.Notification", b =>
-                {
-                    b.Navigation("UserNotifications");
-                });
-
             modelBuilder.Entity("Data.Entities.SystemEntities.Order", b =>
                 {
                     b.Navigation("Payments");
@@ -1230,8 +1160,6 @@ namespace Data.Migrations
                     b.Navigation("Tests");
 
                     b.Navigation("UserInTests");
-
-                    b.Navigation("UserNotifications");
                 });
 #pragma warning restore 612, 618
         }

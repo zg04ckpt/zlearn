@@ -355,14 +355,14 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.SystemEntities.Notification", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("IsReaded")
+                    b.Property<bool>("IsRead")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Message")
@@ -530,8 +530,8 @@ namespace Data.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("NotificationId")
-                        .HasColumnType("char(36)");
+                    b.Property<int>("NotificationId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "NotificationId");
 
@@ -1101,7 +1101,7 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.UserEntities.AppUser", "User")
                         .WithMany("UserNotifications")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Notification");

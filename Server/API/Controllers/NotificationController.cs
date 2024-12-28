@@ -19,16 +19,15 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetNotification()
+        public async Task<IActionResult> GetNotification(int start)
         {
-            return Ok(await _notificationService.GetNotifications(User));
+            return Ok(await _notificationService.GetNotifications(User, start));
         }
 
         [HttpPost]
-        [Authorize(Consts.ADMIN_ROLE)]
-        public async Task<IActionResult> CreateNotificatiion(CreateNotificationDTO data)
+        public async Task<IActionResult> Connect(ConnectionDTO connection)
         {
-            return Ok(await _notificationService.CreateNewNotification(data, User));
+            return Ok(await _notificationService.SignalRConnect(User, connection.ConnectionId));
         }
     }
 }

@@ -3,6 +3,7 @@ using Core.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,5 +17,6 @@ namespace Core.Interfaces.IServices.Management
         Task<APIResult> UpdateUser(UserManagementDTO dto);
         Task<APIResult<IEnumerable<string>>> GetAllRolesOfUser(string userId);
         Task<APIResult> AssignRole(string userId, RoleAssignmentDTO dto);
+        Task<APIResult<List<UserFindDataDTO>>> GetFindData(ClaimsPrincipal claims);
     }
 }

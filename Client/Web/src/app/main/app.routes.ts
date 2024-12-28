@@ -22,6 +22,7 @@ import { CreateDocumentComponent } from '../pages/document/create-document/creat
 import { MyDocumentComponent } from '../pages/document/my-document/my-document.component';
 import { UpdateDocumentComponent } from '../pages/document/update-document/update-document.component';
 import { DocManagementComponent } from '../pages/management/doc-management/doc-management.component';
+import { NotiManagementComponent } from '../pages/management/noti-management/noti-management.component';
 
 export const routes: Routes = [
     { path: "", component: HomeComponent, data: { breadcrumb: 'Trang chủ'}},
@@ -34,6 +35,7 @@ export const routes: Routes = [
     { path: "management/categories", component: CateManagementComponent, data: { breadcrumb: 'Quản lý danh mục' }},
     { path: "management/logs", component: LogComponent, data: { breadcrumb: 'Quản lý log' }},
     { path: "management/documents", component: DocManagementComponent, data: { breadcrumb: 'Quản lý tài liệu' }},
+    { path: "management/notification", component: NotiManagementComponent, data: { breadcrumb: 'Quản lý thông báo' }},
 
     { path: "tests", component: ListTestComponent, data: { breadcrumb: 'Trắc nghiệm' }},
     { path: "tests/my-tests", component: MyTestsComponent, data: { breadcrumb: 'Quản lý đề' }},

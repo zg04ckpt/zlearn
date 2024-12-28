@@ -128,6 +128,17 @@ builder.Services.AddAuthentication(options =>
                 context.Request.HttpContext.User = null;
             }
             return Task.CompletedTask;
+        },
+
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if(!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/notification"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
         }
     };
 });
@@ -208,7 +219,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 //singalR
-app.MapHub<LogHub>("/logHub");
+app.MapHub<LogHub>("/hubs/log");
+app.MapHub<NotificationHub>("/hubs/notification");
 
 app.UseEndpoints(endpoints =>
 {

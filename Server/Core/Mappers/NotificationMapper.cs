@@ -14,11 +14,11 @@ namespace Core.Mappers
         {
             return new NotificationDTO
             {
-                Id = notification.Id.ToString(),
+                Id = notification.Id,
                 Title = notification.Title,
                 Message = notification.Message,
                 CreatedAt = notification.CreatedAt,
-                IsReaded = notification.IsReaded,
+                IsRead = notification.IsRead,
                 Type = notification.Type
             };
         }
@@ -27,11 +27,10 @@ namespace Core.Mappers
         {
             return new Notification
             {
-                Id = Guid.NewGuid(),
                 Title = data.Title,
                 Message = data.Message,
                 CreatedAt = DateTime.Now,
-                IsReaded = false,
+                IsRead = false,
                 Type = data.Type
             };
         }

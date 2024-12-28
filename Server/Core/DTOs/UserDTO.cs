@@ -19,6 +19,13 @@ namespace Core.DTOs
         public IEnumerable<string> RoleNames { get; set; }
     }
 
+    public class UserFindDataDTO
+    {
+        public string UserName { get; set; }
+        public string Id { get; set; }
+        public string FullName { get; set; }
+    }
+
     public class UserInfoDTO
     {
         public string Id { get; set; }

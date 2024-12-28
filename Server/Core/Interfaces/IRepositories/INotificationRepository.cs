@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace Core.Interfaces.IRepositories
 {
-    public interface INotificationRepository : IBaseRepository<Notification, Guid>
+    public interface INotificationRepository : IBaseRepository<Notification, int>
     {
         Task<List<Notification>> GetNotificationsOfUser(Guid userId);
+        Task<Guid> GetUserId(int notificationId);
+        void CreateUserNotification(UserNotification un);
+        Task MarkAsRead(int notificationId);
     }
 }

@@ -25,8 +25,9 @@ namespace Core.Services.Features
         private readonly ISummaryService _summaryService;
         private readonly ILogger<TestService> _logger;
         private readonly ILogService _logService;
+        private readonly INotificationService _notificationService;
 
-        public TestService(ITestRepository testRepository, IFileService fileService, ISummaryService summaryService, ICategoryRepository categoryRepository, ILogger<TestService> logger, ILogService logHubService)
+        public TestService(ITestRepository testRepository, IFileService fileService, ISummaryService summaryService, ICategoryRepository categoryRepository, ILogger<TestService> logger, ILogService logHubService, INotificationService notificationService)
         {
             _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test");
             _testRepository = testRepository;
@@ -35,6 +36,7 @@ namespace Core.Services.Features
             _categoryRepository = categoryRepository;
             _logger = logger;
             _logService = logHubService;
+            _notificationService = notificationService;
         }
 
         public async Task<APIResult> CreateTest(ClaimsPrincipal claimsPrincipal, CreateTestDTO dto)
@@ -94,8 +96,10 @@ namespace Core.Services.Features
             _testRepository.Create(test);
             if(await _testRepository.SaveChanges())
             {
+                // Log
                 _logger.LogInformation($"Đề trắc nghiệm mới được tạo bởi {test.AuthorName}");
                 await _logService.SendInfoLog($"Đề trắc nghiệm mới được tạo bởi {test.AuthorName}");
+
                 return new APISuccessResult("Tạo đề thành công");
             } 
             else 

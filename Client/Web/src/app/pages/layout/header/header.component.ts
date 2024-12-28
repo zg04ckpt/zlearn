@@ -7,6 +7,12 @@ import { environment } from "../../../../environments/environment";
 import { UserService } from "../../../services/user.service";
 import { AuthService } from "../../../services/auth.service";
 import { ComponentService } from "../../../services/component.service";
+import { NotificationService } from "../../../services/notification.service";
+import { Notification } from "../../../entities/notification/notification.dto";
+import { ShareFunction } from "../../../utilities/share-function.uti";
+import * as SignalR from "@microsoft/signalr"
+import { LayoutService } from "../../../services/layout.service";
+import { StorageKey, StorageService } from "../../../services/storage.service";
 
 
 @Component({
@@ -25,24 +31,24 @@ export class HeaderComponent implements OnInit {
   defaultAvtUrl = environment.defaultAvtUrl;
 
   isShowNotification = false;
-  isShowNotificationDetail = false;
-  notifications = [
-    'test',
-    'test',
-    'test',
-    'test',
-    'test',
-    'test',
-    'test',
-  ];
+  notifications: Notification[] = [];
+  start = 0;
+  newNotificationsCount = 0;
+  detailIndex = -1;
+  notificationHubConnection: SignalR.HubConnection
+  baseUrl = environment.baseUrl
 
+  uti = new ShareFunction()
 
   constructor(
     private userService: UserService,
     private authService: AuthService,
     private componentService: ComponentService,
     private router: Router,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private notificationService: NotificationService,
+    private layoutService: LayoutService,
+    private storageService: StorageService
   ) {
     userService.$currentUser.subscribe(next => this.user = next);
     breadcrumbService.$breadcrumb.subscribe(next => {
@@ -66,9 +72,34 @@ export class HeaderComponent implements OnInit {
         this.breadcrumbs = this.breadcrumbs.slice(0, i+1);
       }
     });
+    this.notificationHubConnection = new SignalR
+      .HubConnectionBuilder()
+      .configureLogging(SignalR.LogLevel.None)
+      .withUrl(this.baseUrl + '/hubs/notification', {
+        accessTokenFactory: () => storageService.get(StorageKey.accessToken) || ''
+      })
+      .build();
+    layoutService.$isLoggedIn.subscribe(() => this.getNotifications());
   }
 
   ngOnInit(): void {
+    //get notifications
+    this.getNotifications();
+
+    //add listen for notification
+    this.notificationHubConnection.start().then(() => {
+      if(this.user) {
+        this.notificationService.listenForUser(this.notificationHubConnection.connectionId!).subscribe(res => {
+          this.componentService.$showLoadingStatus.next(false);
+        });
+      }
+      this.notificationHubConnection.on('onHasNewNotification', (data:Notification) => {
+        data.createdAt = new Date(data.createdAt)
+        this.notifications.splice(0, 0, data);
+        this.componentService.$showToast.next(`1 thông báo mới!`);
+      });
+    }).catch(err => console.error('SignalR connection error: ', err));
+
     //add close notification event
     window.onclick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -79,6 +110,50 @@ export class HeaderComponent implements OnInit {
         this.isShowNotification = false;
       }
     };
+  }
+
+  getNotifications() {
+    this.notificationService.getNotifications(this.start).subscribe(res => {
+      this.componentService.$showLoadingStatus.next(false);
+      this.notifications = res;
+      this.start = 0;
+      this.newNotificationsCount = 0;
+      this.notifications.forEach(e => {
+        if(!e.isRead && this.user) {
+          this.newNotificationsCount++;
+        }
+      });
+      if(this.user && this.newNotificationsCount > 0) {
+        this.componentService.$showToast.next(`Bạn có ${this.newNotificationsCount} thông báo mới!`)
+      }
+    });
+  }
+
+  showMoreNotifications() {
+    this.start += 20;
+    this.notificationService.getNotifications(this.start).subscribe(res => {
+      this.componentService.$showLoadingStatus.next(false);
+      this.notifications = res;
+      this.notifications.forEach(e => {
+        if(!e.isRead) {
+          this.newNotificationsCount++;
+        }
+      });
+    });
+  }
+
+  readNotification(idx: number) {
+    // If logged in => mark this notification is read
+    if(this.user && !this.notifications[idx].isRead) {
+      this.notificationHubConnection.invoke('OnReadNotification', this.notifications[idx].id);
+    }
+
+    this.detailIndex = idx; 
+    this.notifications[idx].isRead = true; 
+    this.newNotificationsCount = this.newNotificationsCount-1; 
+    this.isShowNotification = false;
+
+    
   }
 
   showLogin() {
@@ -94,7 +169,7 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.authService.logout().subscribe({
       next: res => {
-        debugger;
+        this.getNotifications();
         this.componentService.$showToast.next("Đã đăng xuất");
         this.authService.purgeAuth();
         this.componentService.$showLoadingStatus.next(false);

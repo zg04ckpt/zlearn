@@ -18,7 +18,17 @@ style="position: fixed; top: 0; height: 50px; z-index: 3;">
     </div>
 
     <div class="position-absolute end-0 top-50 translate-middle-y justify-content-end me-2">
-        <div class="d-flex end-0">
+        <div class="d-flex end-0 align-items-center">
+            <!-- Notification -->
+            <span class="label position-relative me-2" title="Thông báo" (click)="isShowNotification = !isShowNotification">
+                <i class='bx bxs-bell'></i>
+                @if(newNotificationsCount > 0) {
+                    <div class="label-badge position-absolute top-0 end-0 translate-middle m-2"></div>
+                }
+                @if(isShowNotification) {
+                    <i class='bx text-white bxs-up-arrow position-absolute shadow-lg mt-4 start-50 translate-middle-x' style="z-index: 3;"></i>
+                }
+            </span>
             @if (!user) {
                 <a (click)="showLogin()" class="link-info me-1 px-1" style="cursor: pointer;">
                     Đăng nhập
@@ -30,12 +40,6 @@ style="position: fixed; top: 0; height: 50px; z-index: 3;">
             }
             @else {
                 <div class="d-flex end-0">
-                    <!-- Notification -->
-                    <span class="label position-relative" title="Thông báo" (click)="isShowNotification = !isShowNotification">
-                        <i class='bx bxs-bell'></i>
-                        <div class="label-badge position-absolute top-0 end-0 translate-middle m-2"></div>
-                    </span>
-                    
                     <!-- Message -->
                     <span class="me-2 label position-relative" title="Tin nhắn">
                         <i class='bx bxs-chat'></i>
@@ -58,7 +62,6 @@ style="position: fixed; top: 0; height: 50px; z-index: 3;">
                             </li>
                         </ul>
                     </div>
-                    
                 </div>
             }
         </div>
@@ -66,32 +69,26 @@ style="position: fixed; top: 0; height: 50px; z-index: 3;">
 
     @if(isShowNotification) {
         <div id="noti" class=" position-absolute position-relative top-100 end-0 position-relative" style="transform: translateY(-4px);">
-            <i class='bx text-white bxs-up-arrow position-absolute shadow-lg bottom-100' style="z-index: 3; transform: translateY(5px); margin-left: 112px;"></i>
+            
             <div class="card rounded-0 p-1 pe-0 pt-2 pb-2 card-body shadow-lg me-3" 
             style="width: 320px; z-index: 2;">
                 <div class="scrollable-content" style="height: 400px; overflow-y: scroll">
-                    <span class="underline-when-hover ms-2">Đánh dấu tất cả đã đọc</span>
-                    <hr class="m-0 mx-1 mt-1">
+                    <span class="underline-when-hover m-1 mb-1">Đánh dấu tất cả đã đọc</span>
+                    <hr class="m-0 p-0" style="opacity: 0.1;">
                     @for (item of notifications; track $index) {
-                        
-                        <div class="d-flex flex-column unread item p-2 mx-1" (click)="isShowNotificationDetail = true; isShowNotification = false">
+                        <div class="d-flex flex-column unread item p-1 py-2 mx-1" 
+                        style="margin-bottom: 1px;"
+                        [ngClass]="{'unread': !item.isRead && user}"
+                        (click)="readNotification($index)">
                             <div class="d-flex flex-row">
-                                <small class="fw-bold title">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugiat incidunt cum error officiis itaque modi rem et inventore voluptas sunt fugit officia, assumenda at accusantium ex natus tenetur iste nesciunt.</small>
+                                <small class="fw-bold title">{{item.title}}</small>
                                 <div class="flex-fill"></div>
-                                <div class="text-secondary flex-shrink-0">12 giây trước</div>
+                                <div class="text-secondary flex-shrink-0" style="font-size: 10px;">{{uti.dateFormatter(item.createdAt)}}</div>
                             </div>
-                            <p class="mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint rem rerum possimus. Placeat, eum iure dolorum repudiandae ipsa recusandae voluptas quod impedit pariatur amet dignissimos natus accusamus architecto ipsum adipisci!</p>
+                            <p class="mb-1">{{item.message}}</p>
                         </div>
-                        <div class="d-flex flex-column item p-2 mx-1" (click)="isShowNotificationDetail = true; isShowNotification = false">
-                            <div class="d-flex flex-row">
-                                <small class="fw-bold">Tiêu đề thông báo</small>
-                                <div class="flex-fill"></div>
-                                <div class="text-secondary">12 giây trước</div>
-                            </div>
-                            <p class="mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint rem rerum possimus. Placeat, eum iure dolorum repudiandae ipsa recusandae voluptas quod impedit pariatur amet dignissimos natus accusamus architecto ipsum adipisci!</p>
-                        </div>
+                        <hr class="m-0 p-0" style="opacity: 0.1;">
                     }
-                    <hr class="m-0 me-1">
                     <div class="d-flex justify-content-center align-items-center w-100 pt-1">
                         <span class="underline-when-hover">Xem thêm</span>
                         <i class='bx bxs-chevrons-down ms-1'></i>
@@ -102,16 +99,16 @@ style="position: fixed; top: 0; height: 50px; z-index: 3;">
     }
 </nav>
 
-@if(isShowNotificationDetail) {
+@if(detailIndex != -1) {
     <div class="position-fixed w-100 h-100" style="background-color: rgba(128, 128, 128, 0.574); z-index: 2;">
         <div class="card start-50 translate-middle-x" style="width: 600px; margin-top: 80px;">
             <div class="card-header d-flex py-1 pe-1">
-                Nội dung chi tiết
+                {{notifications[detailIndex].title}}
                 <div class="flex-fill"></div>
-                <button class="btn btn-close" (click)="isShowNotificationDetail = false"></button>
+                <button class="btn btn-close" (click)="detailIndex = -1"></button>
             </div>
             <div class="card-body">
-                <p class="mb-0">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequuntur impedit doloribus culpa, architecto quis, cum perferendis, voluptate corporis aliquid veniam porro? Iure distinctio illum fugiat reiciendis. Illo facere nostrum cupiditate.</p>
+                <p class="mb-0">{{notifications[detailIndex].message}}</p>
             </div>
         </div>
     </div>

@@ -36,7 +36,7 @@ export class OverviewComponent implements OnInit {
 
   logs: LogDTO[] = [];
   logHubConnection = new signalR.HubConnectionBuilder()
-    .withUrl(environment.baseUrl + '/logHub').build();
+    .withUrl(environment.baseUrl + '/hubs/log').build();
   maxLogLines = 10;
 
   constructor(

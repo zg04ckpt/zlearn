@@ -10,7 +10,7 @@ namespace Data.Entities.SystemEntities
     public class UserNotification
     {
         public Guid UserId { get; set; }
-        public Guid NotificationId { get; set; }
+        public int NotificationId { get; set; }
 
         //Rela
         public AppUser User { get; set; }

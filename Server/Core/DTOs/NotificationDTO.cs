@@ -9,11 +9,11 @@ namespace Core.DTOs
 {
     public class NotificationDTO
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
         public DateTime CreatedAt { get; set; }
-        public bool IsReaded { get; set; }
+        public bool IsRead { get; set; }
         public NotificationType Type { get; set; }
     }
 
@@ -22,5 +22,12 @@ namespace Core.DTOs
         public string Title { get; set; }
         public string Message { get; set; }
         public NotificationType Type { get; set; }
+        public string? UserId { get; set; }
+    }
+
+    public class UpdateNotificationDTO
+    {
+        public string Title { get; set; }
+        public string Message { get; set; }
     }
 }

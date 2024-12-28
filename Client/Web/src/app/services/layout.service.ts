@@ -6,4 +6,5 @@ import { Subject } from "rxjs";
 })
 export class LayoutService {
     public $showSidebar = new Subject<boolean>();
+    public $isLoggedIn = new Subject();
 }

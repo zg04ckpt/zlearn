@@ -24,6 +24,12 @@ namespace BE.Controllers.Managements
             return Ok(await _userManagementService.GetAllUsers(data));
         }
 
+        [HttpGet("find-data")]
+        public async Task<IActionResult> GetFindData()
+        {
+            return Ok(await _userManagementService.GetFindData(User));
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(string id)
         {

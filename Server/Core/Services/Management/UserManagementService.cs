@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,17 @@ namespace Core.Services.Management
             _userRepository = userRepository;
         }
 
+        public async Task<APIResult<List<UserFindDataDTO>>> GetFindData(ClaimsPrincipal claims)
+        {
+            if (!claims.IsInRole("Admin"))
+            {
+                throw new ForbiddenException();
+            }
+
+            var users = await _userRepository.GetAll();
+            return new APISuccessResult<List<UserFindDataDTO>>(users.Select(e => UserMapper.MapToFindData(e)).ToList()
+            );
+        }
         public async Task<APIResult> AssignRole(string userId, RoleAssignmentDTO dto)
         {
             var user = await _userManager.FindByIdAsync(userId)
