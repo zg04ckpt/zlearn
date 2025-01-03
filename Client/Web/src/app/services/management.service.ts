@@ -98,7 +98,14 @@ export class ManagementService {
     
     return this.http.get<APIResult<PagingResultDTO<UserManagement>>>(
       `managements/users`, { params }
-    ).pipe(map(res => res.data!));
+    ).pipe(map(res => res.data!))
+    .pipe(map(res => {
+      res.data.forEach(e => {
+        e.createdAt = new Date(e.createdAt)
+        e.updatedAt = new Date(e.updatedAt)
+      });
+      return res;
+    }));
   }
 
   getUserById(id: string): Observable<UserManagement> {

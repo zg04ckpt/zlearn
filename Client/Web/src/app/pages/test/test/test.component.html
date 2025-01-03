@@ -195,7 +195,7 @@
         <button class="btn btn-danger btn-sm mt-2" (click)="endTest()">Kết thúc</button>
     }
     @else if(status == TestStatus.Completed) {
-        <button class="btn btn-success btn-sm m-0" (click)="markTest()">Nộp bài và xem kết quả</button>
+        <button class="btn btn-outline-dark btn-sm m-0" (click)="markTest()">Nộp bài</button>
     }
     @else if(status == TestStatus.ShowAnswer) {
         <button class="btn btn-secondary btn-sm m-0" onclick="window.history.back()">Quay lại</button>

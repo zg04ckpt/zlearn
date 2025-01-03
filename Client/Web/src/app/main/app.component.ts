@@ -15,6 +15,7 @@ import { Login2Component } from "../components/login-2/login-2.component";
 import { HeaderComponent } from '../pages/layout/header/header.component';
 import { FooterComponent } from '../pages/layout/footer/footer.component';
 import { SidebarComponent } from '../pages/layout/sidebar/sidebar.component';
+import { BreadcrumbComponent } from "../pages/layout/breadcrumb/breadcrumb.component";
 
 @Component({
   selector: 'app-root',
@@ -32,8 +33,9 @@ import { SidebarComponent } from '../pages/layout/sidebar/sidebar.component';
     Forbidden403Component,
     ServiceUnavailable503Component,
     Register2Component,
-    Login2Component
-  ],
+    Login2Component,
+    BreadcrumbComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

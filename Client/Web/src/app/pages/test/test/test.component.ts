@@ -118,26 +118,22 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
   endTest() {
     if(this.status == TestStatus.Testing) {
       this.componentService.displayConfirmMessage("Xác nhận kết thúc?", () => {
-        this.end = new Date;
         this.status = TestStatus.Completed;
       });
     } else {
-      this.end = new Date;
       this.status = TestStatus.Completed;
     }
   }
 
   markTest() {
+    debugger
     this.componentService.$showLoadingStatus.next(true);
-
-    const user = this.userService.getLoggedInUser();
     this.answer = {
       answers: this.test!.questions.map(x => ({
         id: x.id,
         selected: x.selectedAnswer
       })),
-      startTime: this.commonService.getDateTimeString(this.start!),
-      endTime: this.commonService.getDateTimeString(this.end!),
+      startTime: this.test!.startTime.toISOString(),
       testId: this.testId!,
       testName: this.test!.name,
     };

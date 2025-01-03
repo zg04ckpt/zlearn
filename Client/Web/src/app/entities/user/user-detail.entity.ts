@@ -8,7 +8,7 @@ export interface UserDetail {
     imageUrl: string|null;
     phoneNum: string;
     gender: Gender;
-    dayOfBirth: string;
+    dayOfBirth: Date;
     address: string;
     intro: string;
     socialLinks: {name: string, url: string}[];

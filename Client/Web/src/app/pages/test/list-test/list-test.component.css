@@ -12,3 +12,50 @@ option {
     border: 1px rgb(164, 164, 164) solid;
     align-items: center;
 }
+
+.small-size * {
+    font-size: 12px;
+}
+
+.paging-btn {
+    font-weight: bolder;
+    font-size: large;
+}
+
+.paging-btn:hover {
+    cursor: pointer;
+    opacity: 0.6;
+    transform: scale(1.2);
+}
+
+.cancel-btn {
+    border: solid 1px rgb(186, 186, 186);
+}
+
+.cancel-btn:hover {
+    color: rgb(183, 1, 1);
+    cursor: pointer;
+}
+
+.list-item {
+    flex-shrink: 0;
+    padding: 10px;
+}
+
+.list-item:hover {
+    background-color: rgba(128, 128, 128, 0.173);
+}
+
+.bullet {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: gray;
+}
+
+.test-img {
+    object-fit: cover;
+    border: 1px #45454535 solid;
+    width: 100%; 
+    height: 180px;
+}

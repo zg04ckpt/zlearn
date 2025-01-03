@@ -59,3 +59,21 @@
     text-overflow: ellipsis;
     max-width: 100px;
 }
+
+.text-ellipsis-2lines {
+    display: -webkit-box;        /* Creates a flexible box container */
+    -webkit-box-orient: vertical; /* Defines the orientation as vertical */
+    overflow: hidden;           /* Ensures content is clipped if it overflows */
+    text-overflow: ellipsis;    /* Adds ellipsis at the end of the clipped content */
+    -webkit-line-clamp: 2;      /* Limits to 2 lines */
+    max-width: 100%;            /* Ensures the element has a maximum width */
+    white-space: normal;  
+}
+
+.bullet {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: gray;
+}
+

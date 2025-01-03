@@ -14,9 +14,9 @@ export class NotificationService {
     private http: HttpClient
   ) { }
 
-  getNotifications(start: number): Observable<Notification[]> {
+  getNotifications(start: number, max: number): Observable<Notification[]> {
     return this.http
-      .get<APIResult<Notification[]>>(`notifications?start=${start}`)
+      .get<APIResult<Notification[]>>(`notifications?start=${start}&max=${max}`)
       .pipe(map(res => res.data!))
       .pipe(map(res => {
         res.forEach(e => e.createdAt = new Date(e.createdAt))

@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
   detailIndex = -1;
   notificationHubConnection: SignalR.HubConnection
   baseUrl = environment.baseUrl
+  maxOfNotification = 20
 
   uti = new ShareFunction()
 
@@ -113,7 +114,7 @@ export class HeaderComponent implements OnInit {
   }
 
   getNotifications() {
-    this.notificationService.getNotifications(this.start).subscribe(res => {
+    this.notificationService.getNotifications(this.start, this.maxOfNotification).subscribe(res => {
       this.componentService.$showLoadingStatus.next(false);
       this.notifications = res;
       this.start = 0;
@@ -130,15 +131,16 @@ export class HeaderComponent implements OnInit {
   }
 
   showMoreNotifications() {
-    this.start += 20;
-    this.notificationService.getNotifications(this.start).subscribe(res => {
+    this.start = this.notifications.length;
+    this.notificationService.getNotifications(this.start, this.maxOfNotification).subscribe(res => {
       this.componentService.$showLoadingStatus.next(false);
-      this.notifications = res;
-      this.notifications.forEach(e => {
+      res.forEach(e => {
         if(!e.isRead) {
           this.newNotificationsCount++;
         }
       });
+
+      this.notifications = this.notifications.concat(res);
     });
   }
 

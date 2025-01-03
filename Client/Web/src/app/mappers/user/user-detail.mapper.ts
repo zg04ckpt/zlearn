@@ -23,7 +23,7 @@ export class UserDetailMapper extends Mapper<UserDetailDTO, UserDetail> {
             email: param.email,
             phoneNum: param.phoneNum,
             gender: param.gender as Gender,
-            dayOfBirth: param.dayOfBirth,
+            dayOfBirth: new Date(param.dayOfBirth),
             address: param.address,
             intro: param.intro,
             socialLinks: list,

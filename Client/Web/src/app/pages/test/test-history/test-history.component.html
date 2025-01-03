@@ -1,0 +1,55 @@
+<div class="p-2 col-lg-10">
+    <!-- Action -->
+    <div class="d-flex flex-row">
+        <button class="btn btn-sm btn-outline-secondary" onclick="window.history.back()">Quay lại</button>
+
+        <!-- Analysis -->
+        <button class="btn btn-sm btn-outline-dark ms-2" title="Chưa code">Phân tích</button>
+
+        <!-- Download -->
+        <button class="btn btn-sm btn-outline-dark ms-2" title="Chưa code">Tải xuống</button>
+    </div>
+
+    <!-- Content -->
+    <div class="card card-body mt-2 pt-1">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Điểm</th>
+                    <th>Tên bài TN</th>
+                    <th>Bắt đầu</th>
+                    <th>Thời gian</th>
+                    <th>Câu đúng</th>
+                    <th>Tùy chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(list3.length == 0) {
+                    <tr><td colspan="12" style="border: none;">
+                        <div class="text-secondary fst-italic text-center my-5"> --- Danh sách trống ---</div>
+                    </td></tr>
+                }
+                @for (item of list3; track $index) {
+                    <tr>
+                        <td>{{$index + 1}}</td>
+                        <td>{{item.score}}</td>
+                        <td >
+                            <a class="text-decoration-none" [href]="'/tests/' + item.testId">{{item.testName}}</a>
+                        </td>
+                        <td>{{uti.dateFormatter(item.startTime)}}</td>
+                        <td>{{timeFormat(item.usedTime)}}</td>
+                        <td>{{item.correct}}</td>
+                        <td> 
+                            <i class='bx bx-dots-vertical-rounded' data-bs-toggle="dropdown"></i>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item btn" style="font-size: 13px;">Chi tiết</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+</div>

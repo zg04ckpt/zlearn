@@ -16,6 +16,7 @@ import { TestResult } from "../entities/test/test-result.entity";
 import { APIResult } from "../dtos/common/api-result.dto";
 import { FileService } from "./file.service";
 import { CategoryItem } from "../entities/management/category-item.entity";
+import { SavedTestDTO } from "../dtos/test/saved-test.dto";
 
 @Injectable({
     providedIn: 'root'
@@ -42,6 +43,7 @@ export class TestService {
                 map(res => {
                     res.data.forEach(x => {
                         x.imageUrl = x.imageUrl? this.baseUrl + x.imageUrl : null;
+                        x.updatedAt = new Date(x.updatedAt)
                     });
                     return res;
                 })
@@ -114,6 +116,7 @@ export class TestService {
                 return res.data!;
             }),
             map(res => {
+                res.startTime = new Date(res.startTime);
                 res.questions.forEach(x => x.imageUrl = this.baseUrl + x.imageUrl);
                 return res;
             })
@@ -239,12 +242,15 @@ export class TestService {
             }));       
     }
 
-    public getAllSavedTests(): Observable<TestItem[]> {
+    public getAllSavedTests(): Observable<SavedTestDTO[]> {
         return this.http
-        .get<APIResult<TestItem[]>>('tests/save')
+        .get<APIResult<SavedTestDTO[]>>('tests/save')
         .pipe(map(res => res.data!))
         .pipe(map(res => {
-            res.forEach(x => x.imageUrl = x.imageUrl? this.baseUrl + x.imageUrl : null);
+            res.forEach(x => {
+                x.imageUrl = x.imageUrl? this.baseUrl + x.imageUrl : null
+                x.savedAt = new Date(x.savedAt)
+            });
             return res;
         }));
     }
@@ -279,9 +285,13 @@ export class TestService {
     public getResultsByUserId(): Observable<TestResult[]> {
         return this.http
         .get<APIResult<TestResult[]>>('tests/my-results')
+        .pipe(map(res => res.data!))
         .pipe(map(res => {
-            debugger
-            return res.data!;
+            res.forEach(e => {
+                e.startTime = new Date(e.startTime);
+                e.endTime = new Date(e.endTime);
+            })
+            return res;
         }));
     }
 }

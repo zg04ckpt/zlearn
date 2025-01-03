@@ -25,9 +25,6 @@ import { CategoryItem } from '../../../entities/management/category-item.entity'
 })
 export class ListTestComponent implements OnInit {
   list: TestItem[] = [];
-  pageSize: number = 10;
-  pageIndex: number = 1;
-  totalPage: number = 0;
   total: number = 0;
   key: string = "";
   destroyRef = inject(DestroyRef);
@@ -36,6 +33,31 @@ export class ListTestComponent implements OnInit {
 
   categories: CategoryItem[] = [];
   cateSlug = "";
+  paging = {
+    page: 1,
+    size: 1,
+    total: 1,
+    next: () => {
+      if(this.paging.page < this.paging.total) {
+        this.paging.page++;
+        this.search();
+      }
+    },
+    prev: () => {
+      if(this.paging.page > 1) {
+        this.paging.page--;
+        this.search();
+      }
+    },
+    end: () => {
+      this.paging.page = this.paging.total
+      this.search();
+    },
+    start: () => {
+      this.paging.page = 1
+      this.search();
+    },
+  }
 
   constructor(
     private router: Router,
@@ -55,10 +77,10 @@ export class ListTestComponent implements OnInit {
     //?page=1&size=6&cate=&name=
     this.activatedRoute.queryParamMap.subscribe(next => {
       if(next.get('page')) {
-        this.pageIndex = Number(next.get('page'));
+        this.paging.page = Number(next.get('page'));
       }
       if(next.get('size')) {
-        this.pageSize = Number(next.get('size'));
+        this.paging.size = Number(next.get('size'));
       }
       if(next.get('cate')) {
         this.cateSlug = next.get('cate')!;
@@ -81,14 +103,19 @@ export class ListTestComponent implements OnInit {
 
   search() {
     this.componentService.$showLoadingStatus.next(true);
-    this.testService.getAll(this.pageIndex, this.pageSize, this.key, this.cateSlug)
+    this.testService.getAll(this.paging.page, this.paging.size, this.key, this.cateSlug)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(res => {
       this.componentService.$showLoadingStatus.next(false);
       debugger;
       this.total = res.total;
-      this.totalPage = Math.ceil(this.total / this.pageSize);
+      this.paging.total = Math.ceil(this.total / this.paging.size);
+      
+      // test
       this.list = res.data;
+      // for(let i = 1; i <= 60; i++) {
+      //   this.list = this.list.concat(res.data)
+      // }
 
       //update route
       this.updateQueryParams();
@@ -98,7 +125,11 @@ export class ListTestComponent implements OnInit {
   updateQueryParams(): void {
     this.router.navigate([], {
       relativeTo: this.activatedRoute, 
-      queryParams: { page: this.pageIndex, size: this.pageSize, cate: this.cateSlug, name: this.key },
+      queryParams: { 
+        page: this.paging.page, 
+        size: this.paging.size, 
+        cate: this.cateSlug, 
+        name: this.key },
       queryParamsHandling: 'merge'
     });
   }

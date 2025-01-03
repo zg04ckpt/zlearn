@@ -6,7 +6,7 @@ export interface UserDetailDTO {
     imageUrl: string|null;
     phoneNum: string;
     gender: number;
-    dayOfBirth: string;
+    dayOfBirth: Date;
     address: string;
     intro: string;
     socialLinks: string;

@@ -2,28 +2,16 @@
 
     <!-- List control -->
     <div class="d-flex small-size justify-items-center mt-2" style="height: 26px;">
-        <button class="btn btn-sm btn-outline-secondary me-2" onclick="window.history.back()">Quay lại</button>
-
-        <input type="text" class="form-control w-auto" placeholder="Tìm kiếm theo tên" [(ngModel)]="key">
-        <button class="btn btn-outline-dark pt-1 ms-1" (click)="search()">
-            <i class='bx bx-search fs-6'></i>
-        </button>
-        <!-- Search by name -->
-        @if(key) {
-            <div class="d-flex align-items-center ms-2 cancel-btn pe-2" (click)="key = ''; search()">
-                <i class='bx bx-x fw-bolder fs-4'></i>
-                <span class="">Hủy tìm kiếm</span>
-            </div>
-        }
+        <button class="btn btn-sm btn-outline-secondary" onclick="window.history.back()">Quay lại</button>
     </div>
 
     <!-- List test -->
     <div class="card card-body mt-2 pt-2">
         <div class="row">
-            @if(list1.length == 0) {
+            @if(list.length == 0) {
                 <div class="text-secondary fst-italic text-center my-5"> --- Danh sách trống ---</div>
             }
-            @for (item of list1; track $index) {
+            @for (item of list; track $index) {
                 <div class="col-6 col-md-4 col-lg-3 p-1">
                     <div class="d-flex flex-column position-relative list-item" [title]="item.name">
                         <img [src]="item.imageUrl || defaultImageUrl" alt="" class="test-img">
@@ -40,13 +28,12 @@
                             <small class="text-secondary" style="opacity: 0.6;">{{item.numberOfAttempts}} lượt làm</small>
                         </div>
 
-                        <small>Cập nhật {{uti.dateFormatter(item.updatedDate)}}</small>
-
-                        <!-- Action -->
-                        <div class="d-flex mt-1">
-                            <button class="btn btn-sm btn-outline-dark" (click)="navigate(item.id)">Xem</button>
-                            <button class="btn btn-sm btn-outline-dark ms-1" [routerLink]="['/tests', 'update', item.id]">Chỉnh sửa</button>
-                            <button class="btn btn-sm btn-outline-dark ms-1" (click)="deleteTest(item.id)">Xóa</button>
+                        <!-- Additional -->
+                        <small>Đã lưu {{uti.dateFormatter(item.savedAt)}}</small>
+                        <div class="d-flex flex-row align-items-center">
+                            <div class="flex-fill"></div>
+                            <button class="btn btn-sm btn-outline-dark" [routerLink]="['/tests', item.id]"><i class='bx bxs-show'></i> Xem</button>
+                            <button class="btn btn-sm btn-outline-dark ms-1" (click)="removeSavedTest(item.id)"><i class='bx bx-bookmark-minus fw-bolder'></i> Bỏ lưu</button>
                         </div>
                     </div>
                 </div>

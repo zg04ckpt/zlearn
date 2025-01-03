@@ -23,6 +23,8 @@ import { MyDocumentComponent } from '../pages/document/my-document/my-document.c
 import { UpdateDocumentComponent } from '../pages/document/update-document/update-document.component';
 import { DocManagementComponent } from '../pages/management/doc-management/doc-management.component';
 import { NotiManagementComponent } from '../pages/management/noti-management/noti-management.component';
+import { SavedTestsComponent } from '../pages/test/saved-tests/saved-tests.component';
+import { TestHistoryComponent } from '../pages/test/test-history/test-history.component';
 
 export const routes: Routes = [
     { path: "", component: HomeComponent, data: { breadcrumb: 'Trang chủ'}},
@@ -38,7 +40,9 @@ export const routes: Routes = [
     { path: "management/notification", component: NotiManagementComponent, data: { breadcrumb: 'Quản lý thông báo' }},
 
     { path: "tests", component: ListTestComponent, data: { breadcrumb: 'Trắc nghiệm' }},
-    { path: "tests/my-tests", component: MyTestsComponent, data: { breadcrumb: 'Quản lý đề' }},
+    { path: "tests/my-tests", component: MyTestsComponent, data: { breadcrumb: 'Đề đã tạo' }},
+    { path: "tests/saved", component: SavedTestsComponent, data: { breadcrumb: 'Đề đã lưu' }},
+    { path: "tests/history", component: TestHistoryComponent, data: { breadcrumb: 'Đề đã làm' }},
     { path: "tests/create", component: CreateTest2Component, canDeactivate: [canDeactivateGuard], data: { breadcrumb: 'Tạo đề mới' }},
     { path: "tests/update/:id", component: UpdateTest2Component, canDeactivate: [canDeactivateGuard], data: { breadcrumb: 'Cập nhật đề' }},
     { path: "tests/:id", component: TestDetailComponent, data: { breadcrumb: 'Chi tiết' }},
