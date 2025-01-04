@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CreateCommentDTO } from '../../../dtos/comment/create-comment.dto';
 import { CreateDocumentDTO } from '../../../dtos/document/create-document.dto';
 import { FormsModule } from '@angular/forms';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 import { NgClass } from '@angular/common';
 import { DocumentService } from '../../../services/document.service';
 import { BankInfo } from '../../../dtos/document/bank-info.dto';
@@ -66,7 +66,7 @@ export class CreateDocumentComponent implements OnInit {
 
     //set bread and title
     this.titleService.setTitle("Tạo tài liệu mới");
-    this.breadcrumbService.addBreadcrumb("Tạo tài liệu mới", this.router.url);
+    this.breadcrumbService.getBreadcrumb('tai-lieu');
   }
 
   uploadFile(event: Event) {

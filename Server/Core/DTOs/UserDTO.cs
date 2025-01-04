@@ -33,7 +33,7 @@ namespace Core.DTOs
         public string? LastName { get; set; }
         public string? Username { get; set; }
         public string? ImageUrl { get; set; }
-        public string? DayOfBirth { get; set; }
+        public DateTime DayOfBirth { get; set; }
         public Gender Gender { get; set; }
         public string Email { get; set; }
         public int Likes { get; set; }
@@ -51,7 +51,7 @@ namespace Core.DTOs
         public string? LastName { get; set; }
         public IFormFile? Image { get; set; }
         public string? ImageUrl { get; set; }
-        public string? DayOfBirth { get; set; }
+        public DateTime DayOfBirth { get; set; }
         public Gender Gender { get; set; }
         public string Email { get; set; }
         public string? PhoneNum { get; set; }
@@ -67,8 +67,9 @@ namespace Core.DTOs
         public string? LastName { get; set; }
         public string? Address { get; set; }
         public Gender Gender { get; set; }
-        public string? DateOfBirth { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public string? Description { get; set; }
         public string? UserLinks { get; set; }
         public string Id { get; set; }

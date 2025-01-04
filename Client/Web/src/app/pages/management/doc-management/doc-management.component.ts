@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DocumentSearchingDTO } from '../../../dtos/document/document-searching.dto';
 import { Title } from '@angular/platform-browser';
 import { DocumentItemDTO } from '../../../dtos/document/document-item';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
 import { ComponentService } from '../../../services/component.service';
 import { DocumentService } from '../../../services/document.service';
@@ -58,7 +58,6 @@ export class DocManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle("Quản lý tài liệu");
-    this.breadcrumbService.addBreadcrumb("Quản lý tài liệu", this.router.url);
 
     this.search();
     //get categories

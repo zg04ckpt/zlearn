@@ -3,6 +3,7 @@ export interface CategoryNode {
     name: string;
     description: string;
     slug: string;
+    link: string;
     children: CategoryNode[];
     isExpand: boolean
 }

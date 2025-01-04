@@ -6,6 +6,7 @@ using Core.Interfaces.IServices.System;
 using Core.Mappers;
 using Core.RealTime;
 using Data.Entities.Enums;
+using Data.Entities.NotificationEntities;
 using Data.Entities.SystemEntities;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -69,42 +70,60 @@ namespace Core.Services.System
             }
 
             var query = _notificationRepository.GetQuery().AsNoTracking();
+            var total = await query.CountAsync();
             var data = query
+                .OrderByDescending(e => e.CreatedAt)
                 .Skip((pageIndex-1) * pageSize)
                 .Take(pageSize)
-                .OrderByDescending(e => e.CreatedAt)
                 .Select(e => NotificationMapper.MapToDTO(e));
 
             return new APISuccessResult<PaginatedResult<NotificationDTO>>(new PaginatedResult<NotificationDTO>
             {
                 Data = data,
-                Total = await query.CountAsync()
+                Total = total
             });
         }
 
-        public async Task<APIResult<List<NotificationDTO>>> GetNotifications(ClaimsPrincipal claims, int start)
+        public async Task<APIResult<List<NotificationDTO>>> GetNotifications(ClaimsPrincipal claims, int start, int max)
         {
-            //Skip and only take max 20 noti
+            //Skip and only take max noti
             var query = _notificationRepository.GetQuery().AsNoTracking();
+
+            //Find for anonymous
+            var userId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                query = query.Where(e => e.Type == NotificationType.System);
+            }
+
             query = query
-                .Where(e => e.Type == NotificationType.System)
+                .OrderByDescending(e => e.CreatedAt)
                 .Skip(start)
-                .Take(20);
+                .Take(max);
 
             // Get system notification
-            var notifications = await query.ToListAsync();
+            var notifications = await query
+                .Select(e => NotificationMapper.MapToDTO(e))
+                .ToListAsync();
 
-            // Get user notification
-            var userId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // Check is read
             if(!string.IsNullOrEmpty(userId))
             {
-                notifications.AddRange(await _notificationRepository.GetNotificationsOfUser(Guid.Parse(userId)));
+                var set = await _notificationRepository.GetReadNotifications(Guid.Parse(userId));
+                notifications.ForEach(e =>
+                {
+                    if(set.Contains(e.Id))
+                    {
+                        e.IsRead = true;
+                    }    
+                    else
+                    {
+                        e.IsRead = false;
+                    }    
+                });
             }    
 
-            //Sort by date
-            notifications.Sort((a, b) => b.CreatedAt.CompareTo(a.CreatedAt));
-
-            return new APISuccessResult<List<NotificationDTO>>(notifications.Select(e => NotificationMapper.MapToDTO(e)).ToList());
+            return new APISuccessResult<List<NotificationDTO>>(notifications);
         }
 
         public async Task<APIResult> Delete(ClaimsPrincipal claims, int notificationId)
@@ -177,9 +196,9 @@ namespace Core.Services.System
             return new APISuccessResult();
         }
 
-        public async Task ReadNotification(int notificationId)
+        public async Task ReadNotification(int notificationId, Guid userId)
         {
-            await _notificationRepository.MarkAsRead(notificationId);
+            await _notificationRepository.MaskRead(notificationId, userId);
         }
 
         public async Task CreateNewNotification(CreateNotificationDTO data)

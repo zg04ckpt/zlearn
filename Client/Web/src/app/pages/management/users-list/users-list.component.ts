@@ -59,7 +59,6 @@ export class UsersListComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle(this.title);
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
     this.get(this.pageIndex);
 
     //load default role

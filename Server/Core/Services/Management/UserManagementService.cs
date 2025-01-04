@@ -126,14 +126,15 @@ namespace Core.Services.Management
             }
             if (!string.IsNullOrEmpty(data.CreatedDate))
             {
-                query = query.Where(e => DateTime.Parse(e.CreatedDate).CompareTo(DateTime.Parse(data.CreatedDate)) == 0);
+                query = query.Where(e => e.CreatedAt.CompareTo(DateTime.Parse(data.CreatedDate)) == 0);
             }
 
             //paging
+            var total = await query.CountAsync();
             query = query
                 .Skip((data.PageIndex - 1) * data.PageSize)
                 .Take(data.PageSize)
-                .OrderBy(e => e.CreatedDate);
+                .OrderBy(e => e.CreatedAt);
 
             var res = new List<UserManagementDTO>();
             var users = await query.ToListAsync();
@@ -146,7 +147,7 @@ namespace Core.Services.Management
 
             return new APISuccessResult<PaginatedResult<UserManagementDTO>>(new PaginatedResult<UserManagementDTO>
             {
-                Total = await query.CountAsync(),
+                Total = total,
                 Data = res
             });
         }

@@ -30,7 +30,7 @@ namespace Data.Migrations
                 table: "Categories");
 
             migrationBuilder.DropColumn(
-                name: "CreatedDate",
+                name: "CreatedAt",
                 table: "Tests");
 
             migrationBuilder.RenameColumn(
@@ -776,7 +776,7 @@ namespace Data.Migrations
                 .OldAnnotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.AddColumn<string>(
-                name: "CreatedDate",
+                name: "CreatedAt",
                 table: "Tests",
                 type: "longtext",
                 nullable: false)

@@ -38,9 +38,8 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.breadcrumbService.addBreadcrumb("", "/");
     this.titleService.setTitle(this.title + " - ZLEARN");
-
+    this.breadcrumbService.getBreadcrumb('root');
     // Random 10 tests
     this.homeService.getRandomTest(10).subscribe(res => {
       debugger

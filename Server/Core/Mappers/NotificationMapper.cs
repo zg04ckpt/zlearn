@@ -1,5 +1,5 @@
 ﻿using Core.DTOs;
-using Data.Entities.SystemEntities;
+using Data.Entities.NotificationEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,6 @@ namespace Core.Mappers
                 Title = notification.Title,
                 Message = notification.Message,
                 CreatedAt = notification.CreatedAt,
-                IsRead = notification.IsRead,
                 Type = notification.Type
             };
         }
@@ -30,7 +29,6 @@ namespace Core.Mappers
                 Title = data.Title,
                 Message = data.Message,
                 CreatedAt = DateTime.Now,
-                IsRead = false,
                 Type = data.Type
             };
         }

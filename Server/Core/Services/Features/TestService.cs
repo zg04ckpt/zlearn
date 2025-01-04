@@ -175,14 +175,15 @@ namespace Core.Services.Features
             }
             if (!string.IsNullOrEmpty(data.StartTime))
             {
-                query = query.Where(e => DateTime.Parse(e.StartTime).CompareTo(DateTime.Parse(data.StartTime)) >= 0);
+                query = query.Where(e => e.StartTime.CompareTo(data.StartTime) >= 0);
             }
             if (!string.IsNullOrEmpty(data.EndTime))
             {
-                query = query.Where(e => DateTime.Parse(e.EndTime).CompareTo(DateTime.Parse(data.EndTime)) <= 0);
+                query = query.Where(e => e.EndTime.CompareTo(data.EndTime) <= 0);
             }
 
             //paging
+            var total = await query.CountAsync();
             query = query
                 .Skip((data.PageIndex - 1) * data.PageSize)
                 .Take(data.PageSize)
@@ -190,16 +191,16 @@ namespace Core.Services.Features
 
             return new APISuccessResult<PaginatedResult<TestResult>>(new PaginatedResult<TestResult>
             {
-                Total = await query.CountAsync(),
+                Total = total,
                 Data = await query.ToListAsync()
             });
         }
 
-        public async Task<APIResult<List<TestItemDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal)
+        public async Task<APIResult<List<SavedTestDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal)
         {
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            var rawData = await _testRepository.GetSavedTestsOfUser(userId);
-            return new APISuccessResult<List<TestItemDTO>> (rawData.Select(e => TestMapper.MapToItem(e)).ToList());
+            var data = await _testRepository.GetSavedTestsOfUser(userId);
+            return new APISuccessResult<List<SavedTestDTO>> (data);
         }
 
         public async Task<APIResult<TestDTO>> GetTestContent(ClaimsPrincipal claimsPrincipal, string testId)
@@ -246,6 +247,7 @@ namespace Core.Services.Features
         {
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var results = await _testRepository.GetResultsByUserId(userId);
+            results.Sort((a, b) => b.StartTime.CompareTo(a.StartTime));
             return new APISuccessResult<List<TestResult>>(results);
         }
 
@@ -300,20 +302,21 @@ namespace Core.Services.Features
             }
 
             //calculate used time
-            var start = DateTime.Parse(dto.StartTime).AddHours(-7);
-            var end = DateTime.Parse(dto.EndTime).AddHours(-7); ;
+            var start = DateTime.Parse(dto.StartTime);
+            var end = DateTime.Now;
             var duration = end - start;
 
             //calculate score and save result
             double score = (double)correct / questions.Count * 10;
+            score = Math.Round(score, 2);
 
             var result = new TestResult
             {
                 Id = Guid.NewGuid(),
                 Score = (decimal)score,
                 Correct = correct,
-                StartTime = dto.StartTime,
-                EndTime = dto.EndTime,
+                StartTime = start,
+                EndTime = end,
                 UsedTime = (int)duration.TotalSeconds,
                 TestId = Guid.Parse(dto.TestId),
                 TestName = dto.TestName,
@@ -350,7 +353,7 @@ namespace Core.Services.Features
             {
                 UserId = Guid.Parse(userId),
                 TestId = Guid.Parse(testId),
-                MarkedAt = DateOnly.FromDateTime(DateTime.Today).ToString(),
+                SavedAt = DateTime.Now,
             };
             _testRepository.SaveTest(savedTest);
 
@@ -375,22 +378,23 @@ namespace Core.Services.Features
             }
             if (!string.IsNullOrEmpty(data.Name))
             {
-                query = query.Where(e => e.Name.Equals(data.Name, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(e => e.Name.ToLower().Contains(data.Name.ToLower()));
             }
             if (!string.IsNullOrEmpty(data.Description))
             {
-                query = query.Where(e => e.Description.Equals(data.Description, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(e => e.Description.ToLower().Contains(data.Description.ToLower()));
             }
 
             //paging
+            var total = await query.CountAsync();
             query = query
+                .OrderByDescending(e => e.NumberOfAttempts)
                 .Skip((data.PageIndex - 1) * data.PageSize)
-                .Take(data.PageSize)
-                .OrderByDescending(e => e.NumberOfAttempts);
+                .Take(data.PageSize);
 
             return new APISuccessResult<PaginatedResult<TestItemDTO>>(new PaginatedResult<TestItemDTO>
             {
-                Total = await query.CountAsync(),
+                Total = total,
                 Data = await query.Select(e => TestMapper.MapToItem(e)).ToListAsync()
             });
         }
@@ -514,6 +518,7 @@ namespace Core.Services.Features
             }
 
             //paging
+            var total = await query.CountAsync();
             query = query
                 .Skip((data.PageIndex - 1) * data.PageSize)
                 .Take(data.PageSize)
@@ -521,7 +526,7 @@ namespace Core.Services.Features
 
             return new APISuccessResult<PaginatedResult<TestInfoDTO>>(new PaginatedResult<TestInfoDTO>
             {
-                Total = await query.CountAsync(),
+                Total = total,
                 Data = await query.Select(e => TestMapper.MapToInfo(e)).ToListAsync()
             });
         }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { DocumentSearchingDTO } from '../../../dtos/document/document-searching.dto';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 import { DocumentItemDTO } from '../../../dtos/document/document-item';
 import { DocumentService } from '../../../services/document.service';
 import { ComponentService } from '../../../services/component.service';
@@ -39,7 +39,7 @@ export class MyDocumentComponent implements OnInit {
   ngOnInit(): void {
     //set bread and title
     this.titleService.setTitle("Tài liệu đã tải lên");
-    this.breadcrumbService.addBreadcrumb("Tài liệu đã tải lên", this.router.url);
+    this.breadcrumbService.getBreadcrumb('tai-lieu');
 
     //get documents
     this.search();

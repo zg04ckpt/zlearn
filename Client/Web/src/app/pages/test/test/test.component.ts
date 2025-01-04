@@ -107,7 +107,6 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
         } else {
           this.title = `${this.test.name} - Thi thử`;
         }
-        this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
         this.titleService.setTitle(this.title);
         debugger;
     });

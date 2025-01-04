@@ -172,17 +172,29 @@ export class ManagementService {
     ).pipe(map(res => res.data!));
   }
 
-  createNewCate(parentId: string, name: string, slug: string, desc: string): Observable<string> {
+  createNewCate(parentId: string, name: string, slug: string, desc: string, link: string): Observable<string> {
     return this.http.post<APIResult<string>>(
       `managements/categories`, 
-      {name: name, description: desc, parentId: parentId, slug: slug}
+      { 
+        name: name, 
+        description: desc, 
+        parentId: parentId, 
+        slug: slug,
+        link: link
+      }
     ).pipe(map(res => res.data!));
   }
 
-  updateCate(id: string, parentId: string, name: string, slug: string, desc: string): Observable<void> {
+  updateCate(id: string, parentId: string, name: string, slug: string, desc: string, link: string): Observable<void> {
     return this.http.put<APIResult<void>>(
       `managements/categories/${id}`, 
-      {name: name, description: desc, parentId: parentId, slug: slug}
+      { 
+        name: name, 
+        description: desc, 
+        parentId: parentId, 
+        slug: slug,
+        link: link
+      }
     ).pipe(map(res => res.data!));
   }
 

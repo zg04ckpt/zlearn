@@ -2,6 +2,7 @@
 using Core.DTOs;
 using Core.Exceptions;
 using Core.Interfaces.IRepositories;
+using Core.Mappers;
 using Core.Services.Common;
 using Data;
 using Data.Entities.TestEntities;
@@ -41,12 +42,12 @@ namespace Core.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Test>> GetSavedTestsOfUser(string userId)
+        public async Task<List<SavedTestDTO>> GetSavedTestsOfUser(string userId)
         {
             return await(from test in _context.Tests
                         join st in _context.SavedTests on test.Id equals st.TestId
                         where st.UserId.ToString().Equals(userId)
-                        select test).ToListAsync();
+                        select TestMapper.MapToSaved(test, st)).ToListAsync();
         }
 
         public async Task<List<Test>> GetTopByAttempt(int amount)

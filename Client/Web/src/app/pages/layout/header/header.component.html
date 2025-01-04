@@ -1,21 +1,13 @@
-<nav class="navbar navbar-dark bg-dark w-100 d-flex justify-content-between" 
+<nav class="navbar navbar-dark bg-dark w-100 d-flex justify-content-start" 
 style="position: fixed; top: 0; height: 50px; z-index: 3;">
 
-    <a routerLink="" class="d-none d-md-block fw-bold text-white fs-5 text-center text-decoration-none"
+    <a routerLink="" class="d-none d-md-block d-flex flex-row fw-bold text-white fs-5 text-center text-decoration-none"
     style="width: 220px;">
         ZLEARN
+        <small style="color: white; font-size: 12px;">v2.1</small>
     </a>
 
-    <div #breadcrumb class="breadcrumb m-0 ms-3 ms-md-0 flex-fill">
-        <li class="breadcrumb-item" [ngClass]="{'active': breadcrumbs.length == 0}">
-            <a [routerLink]="['/']"><i class='bx bxs-home'></i></a>
-        </li>
-        @for (item of breadcrumbs; track $index) {
-            <li class="breadcrumb-item" [ngClass]="{'active': $index == breadcrumbs.length-1}">
-                <a [routerLink]="[item.url]">{{item.name}}</a>
-            </li>
-        }
-    </div>
+    <a class="fw-bold time">{{currentTime | date: 'EEEE, dd/MM/yyyy, HH:mm:ss'}}</a>
 
     <div class="position-absolute end-0 top-50 translate-middle-y justify-content-end me-2">
         <div class="d-flex end-0 align-items-center">

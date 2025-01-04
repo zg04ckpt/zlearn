@@ -27,7 +27,7 @@ namespace Core.RealTime
         {
             if (!string.IsNullOrEmpty(Context.UserIdentifier))
             {
-                await _notificationService.ReadNotification(notificationId);
+                await _notificationService.ReadNotification(notificationId, Guid.Parse(Context.UserIdentifier));
             }
         }
     }

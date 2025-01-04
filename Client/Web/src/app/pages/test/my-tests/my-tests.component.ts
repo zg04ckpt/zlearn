@@ -48,15 +48,13 @@ export class MyTestsComponent implements OnInit {
 
   ngOnInit(): void {
     this.showCreatedTests();
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+    this.breadcrumbService.getBreadcrumb('trac-nghiem');
     this.titleService.setTitle(this.title);
   }
 
   search() {
-
+    this.showCreatedTests();
   }
-
-  
 
   back() {
     history.back();

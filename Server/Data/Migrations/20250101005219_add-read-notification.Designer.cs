@@ -3,6 +3,7 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250101005219_add-read-notification")]
+    partial class addreadnotification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,10 +34,6 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Link")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -614,8 +612,9 @@ namespace Data.Migrations
                     b.Property<Guid>("TestId")
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("SavedAt")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("SavedAt")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("UserId", "TestId");
 
@@ -702,14 +701,16 @@ namespace Data.Migrations
                     b.Property<int>("Correct")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("EndTime")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<decimal>("Score")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("StartTime")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<Guid>("TestId")
                         .HasColumnType("char(36)");
@@ -778,11 +779,11 @@ namespace Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("CreatedAt")
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("DateOfBirth")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
@@ -845,9 +846,6 @@ namespace Data.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("UserLinks")
                         .HasColumnType("longtext");

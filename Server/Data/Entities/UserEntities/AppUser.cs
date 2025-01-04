@@ -1,6 +1,7 @@
 ﻿using Data.Entities.CommonEntities;
 using Data.Entities.DocumentEntities;
 using Data.Entities.Enums;
+using Data.Entities.NotificationEntities;
 using Data.Entities.PostEnttities;
 using Data.Entities.SystemEntities;
 using Data.Entities.TestEntities;
@@ -19,8 +20,9 @@ namespace Data.Entities.UserEntities
         public string LastName { get; set; }
         public string Address { get; set; }
         public Gender Gender { get; set; }
-        public string DateOfBirth { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public string RefreshToken { get; set; }
         public string ImageUrl { get; set; }
         public bool Active { get; set; }
@@ -39,6 +41,7 @@ namespace Data.Entities.UserEntities
         public List<SavedTest> UserInTests { get; set; }
         public List<Comment> Comments { get; set; }
         public List<UserNotification> UserNotifications { get; set; }
+        public List<ReadNotification> ReadNotifications { get; set; }
         public List<Order> Orders { get; set; }
     }
 }

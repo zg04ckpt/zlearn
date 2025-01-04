@@ -65,7 +65,7 @@ namespace Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("CreatedDate")
+                    b.Property<string>("CreatedAt")
                         .HasColumnType("longtext");
 
                     b.Property<string>("DateOfBirth")
@@ -283,7 +283,7 @@ namespace Data.Migrations
                     b.Property<Guid>("TestId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("MarkedAt")
+                    b.Property<string>("SavedAt")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -333,7 +333,7 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("CreatedDate")
+                    b.Property<string>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("longtext");
 

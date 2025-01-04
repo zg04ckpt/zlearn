@@ -1,7 +1,8 @@
 import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Breadcrumb } from '../../../services/breadcrumb.service';
+import { Breadcrumb, BreadcrumbService } from '../../../services/breadcrumb.service';
+import { BreadcrumbItem } from '../../../entities/common/breadcrumb.entity';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -14,7 +15,11 @@ import { Breadcrumb } from '../../../services/breadcrumb.service';
   styleUrl: './breadcrumb.component.css'
 })
 export class BreadcrumbComponent {
-  breadcrumbs: Breadcrumb[] = [
-    {name: 'test', url: 'linkkkkk'}
-  ]
+  breadcrumbs: BreadcrumbItem[] = []
+
+  constructor(
+    private breadcrumbService: BreadcrumbService
+  ) {
+    breadcrumbService.$data.subscribe(next => this.breadcrumbs = next);
+  }
 }

@@ -3,18 +3,18 @@ a {
 }
 
 
-.breadcrumb-item a {
-    color: gray;
+.header-item {
+    color: white;
 }
 
-.breadcrumb-item a:hover {
+.header-item:hover {
     text-decoration: underline;
     color: yellow;
+    cursor: pointer;
 }
 
-.breadcrumb-item,.active a {
-    color: white;
-    font-weight: bold;
+.time {
+    color: rgb(0, 217, 255);
 }
 
 #avt {

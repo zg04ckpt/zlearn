@@ -8,7 +8,7 @@ import { DocumentItemDTO } from '../dtos/document/document-item';
 import { environment } from '../../environments/environment';
 import { BankInfo } from '../dtos/document/bank-info.dto';
 import { ComponentService } from './component.service';
-import { CategoryItem } from '../entities/management/category-item.entity';
+import { CategoryItem } from '../entities/common/category-item.entity';
 import { PagingResultDTO } from '../dtos/common/paging-result.dto';
 import { DocumentDetailDTO } from '../dtos/document/document-detail.dto';
 import { UpdateDocumentDTO } from '../dtos/document/update-document.dto';

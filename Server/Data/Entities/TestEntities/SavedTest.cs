@@ -13,6 +13,6 @@ namespace Data.Entities.TestEntities
         public AppUser User { get; set; }
         public Guid TestId { get; set; }
         public Test Test { get; set; }
-        public string MarkedAt { get; set; }
+        public DateTime SavedAt { get; set; }
     }
 }

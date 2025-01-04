@@ -11,7 +11,7 @@
     <div class="d-flex small-size justify-items-center mt-2" style="height: 26px;">
         <!-- Cate -->
         <h6 class="mt-1 me-1">Danh mục</h6>
-        <select class="form-select w-auto py-0" [(ngModel)]="cateSlug" (change)="search()">
+        <select class="form-select w-auto py-0" [(ngModel)]="cateSlug" (change)="search(); updateBreadcrumb()">
             <option value="">Tất cả</option>
             @for (item of categories; track $index) {
                 <option [value]="item.slug" [title]="item.description">{{item.name}}</option>

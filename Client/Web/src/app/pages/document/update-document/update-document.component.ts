@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CreateDocumentDTO } from '../../../dtos/document/create-document.dto';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 import { BankInfo } from '../../../dtos/document/bank-info.dto';
 import { environment } from '../../../../environments/environment';
 import { DocumentService } from '../../../services/document.service';
@@ -75,7 +75,7 @@ export class UpdateDocumentComponent implements OnInit {
 
     //set bread and title
     this.titleService.setTitle("Cập nhật tài liệu");
-    this.breadcrumbService.addBreadcrumb("Cập nhật tài liệu", this.router.url);
+    this.breadcrumbService.getBreadcrumb('tai-lieu');
   }
 
   uploadFile(event: Event) {

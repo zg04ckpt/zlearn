@@ -84,7 +84,6 @@ export class NotiManagementComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.titleService.setTitle("Quản lý thông báo");
-    this.breadcrumbService.addBreadcrumb("Quản lý thông báo", this.router.url);
     this.getAllNotifications();
 
     //Get data for find user data

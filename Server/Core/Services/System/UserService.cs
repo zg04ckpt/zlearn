@@ -103,6 +103,7 @@ namespace Core.Services.System
                 }
                 user.ImageUrl = IMAGE_REQUEST_PATH + await _fileService.Save(dto.Image, _imageFolderPath);
             }
+            user.UpdatedAt = DateTime.Now;
             await _userManager.UpdateAsync(user);
             return new APISuccessResult("Cập nhật thành công");
         }

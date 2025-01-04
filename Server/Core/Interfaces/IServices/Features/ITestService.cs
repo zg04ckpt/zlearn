@@ -27,7 +27,7 @@ namespace Core.Interfaces.IServices.Features
 
         // ---------- Save test --------------
         Task<APIResult> SaveTest(ClaimsPrincipal claimsPrincipal, string testId);
-        Task<APIResult<List<TestItemDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal);
+        Task<APIResult<List<SavedTestDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult> DeleteFromSaved(ClaimsPrincipal claimsPrincipal, string testId);
         Task<APIResult<bool>> IsSaved(ClaimsPrincipal claimsPrincipal, string testId);
     }

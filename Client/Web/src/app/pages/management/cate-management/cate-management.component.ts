@@ -41,7 +41,8 @@ export class CateManagementComponent implements OnInit {
     parentId: "",
     newName: "",
     newDesc: "",
-    newSlug: ""
+    newSlug: "",
+    newLink: ""
   };
 
   //update
@@ -53,6 +54,7 @@ export class CateManagementComponent implements OnInit {
     oldName: "",
     newName: "",
     newDesc: "",
+    newLink: "",
     slug: ""
   };
 
@@ -66,7 +68,6 @@ export class CateManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle("Quản lý danh mục");
-    this.breadcrumbService.addBreadcrumb("Quản lý danh mục", this.router.url);
     this.managementService.getCategoryTree().subscribe(next => {
       this.componentService.$showLoadingStatus.next(false);
       this.data.push(next);
@@ -111,14 +112,22 @@ export class CateManagementComponent implements OnInit {
       oldName: node.name,
       newName: node.name,
       newDesc: node.description,
-      slug: node.slug
+      slug: node.slug,
+      newLink: node.link
     }
     this.isShowUpdateDialog = true;
   }
 
   updateCategory() {
     this.managementService
-      .updateCate(this.updateModel.id, this.updateModel.newParentId, this.updateModel.newName, this.updateModel.slug, this.updateModel.newDesc)
+      .updateCate(
+        this.updateModel.id, 
+        this.updateModel.newParentId, 
+        this.updateModel.newName, 
+        this.updateModel.slug, 
+        this.updateModel.newDesc,
+        this.updateModel.newLink
+      )
       .subscribe(next => {
         this.componentService.$showLoadingStatus.next(false);        
 
@@ -147,7 +156,13 @@ export class CateManagementComponent implements OnInit {
 
   addNewCategory() {
     this.managementService
-      .createNewCate(this.addModel.parentId, this.addModel.newName, this.addModel.newSlug, this.addModel.newDesc)
+      .createNewCate(
+        this.addModel.parentId, 
+        this.addModel.newName, 
+        this.addModel.newSlug, 
+        this.addModel.newDesc,
+        this.addModel.newLink
+      )
       .subscribe(newCateId => {
         this.componentService.$showLoadingStatus.next(false);
         this.isShowAddDialog = true; 
@@ -160,7 +175,8 @@ export class CateManagementComponent implements OnInit {
           description: this.addModel.newDesc,
           slug: this.addModel.newSlug,
           isExpand: false,
-          children: []
+          children: [],
+          link: this.addModel.newLink
         };
         parentNode.children.push(newNode);
         this.treeMap.set(newNode.id, {node: newNode, parentId: this.addModel.parentId});
@@ -172,7 +188,8 @@ export class CateManagementComponent implements OnInit {
           parentId: "",
           newName: "",
           newDesc: "",
-          newSlug: ""
+          newSlug: "",
+          newLink: ""
         };
       });
   }

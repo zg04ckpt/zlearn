@@ -139,7 +139,7 @@ namespace Core.Services.System
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                CreatedDate = DateOnly.FromDateTime(DateTime.Today).ToString()
+                CreatedAt = DateTime.Now
             };
 
             //save user to db

@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Entities.SystemEntities
+namespace Data.Entities.NotificationEntities
 {
-    public class UserNotification
+    public class ReadNotification
     {
-        public Guid UserId { get; set; }
         public int NotificationId { get; set; }
+        public Guid UserId { get; set; }
 
         //Rela
-        public AppUser User { get; set; }
         public Notification Notification { get; set; }
+        public AppUser User { get; set; }
     }
 }

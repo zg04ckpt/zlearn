@@ -14,6 +14,8 @@ using Data.Entities.SystemEntities;
 using Data.Configs.DocumentConfig;
 using Data.Configs.PostConfig;
 using Data.Configs.SystemConfig;
+using Data.Entities.NotificationEntities;
+using Data.Configs.NotificationConfig;
 
 namespace Data
 {
@@ -47,6 +49,7 @@ namespace Data
             modelBuilder.ApplyConfiguration(new PromotionOrderConfiguration());
             modelBuilder.ApplyConfiguration(new UserNotificationConfiguration());
             modelBuilder.ApplyConfiguration(new UploadedFileConfiguration());
+            modelBuilder.ApplyConfiguration(new ReadNotificationConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -77,6 +80,7 @@ namespace Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<UploadedFile> UploadedFiles { get; set; }
+        public DbSet<ReadNotification> ReadNotifications { get; set; }
         #endregion
     }
 }

@@ -15,7 +15,7 @@ import { ComponentService } from "./component.service";
 import { TestResult } from "../entities/test/test-result.entity";
 import { APIResult } from "../dtos/common/api-result.dto";
 import { FileService } from "./file.service";
-import { CategoryItem } from "../entities/management/category-item.entity";
+import { CategoryItem } from "../entities/common/category-item.entity";
 import { SavedTestDTO } from "../dtos/test/saved-test.dto";
 
 @Injectable({

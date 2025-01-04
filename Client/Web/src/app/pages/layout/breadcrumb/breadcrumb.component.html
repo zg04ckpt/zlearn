@@ -1,10 +1,12 @@
-<div #breadcrumb class="breadcrumb m-1">
-    <li class="breadcrumb-item" [ngClass]="{'active': breadcrumbs.length == 0}">
-        <a [routerLink]="['/']"><i class='bx bxs-home'></i> Trang chủ</a>
-    </li>
+<div #breadcrumb class="breadcrumb m-1 ms-2">
     @for (item of breadcrumbs; track $index) {
         <li class="breadcrumb-item" [ngClass]="{'active': $index == breadcrumbs.length-1}">
-            <a [routerLink]="[item.url]">{{item.name}}</a>
+            <a [href]="[item.link]">
+                @if ($index == 0) {
+                    <i class='bx bxs-home'></i>
+                }
+                {{item.name}}
+            </a>
         </li>
     }
 </div>

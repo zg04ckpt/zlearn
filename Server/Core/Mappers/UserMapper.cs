@@ -25,7 +25,8 @@ namespace Core.Mappers
                 Address = user.Address,
                 Gender = user.Gender,
                 DateOfBirth = user.DateOfBirth,
-                CreatedDate = user.CreatedDate,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt,
                 Description = user.Description,
                 UserLinks = user.UserLinks,
                 Id = user.Id.ToString(),
@@ -48,7 +49,7 @@ namespace Core.Mappers
             oldUser.Address = user.Address;
             oldUser.Gender = user.Gender;
             oldUser.DateOfBirth = user.DateOfBirth;
-            oldUser.CreatedDate = user.CreatedDate;
+            oldUser.CreatedAt = user.CreatedAt;
             oldUser.Description = user.Description;
             oldUser.UserLinks = user.UserLinks;
             oldUser.UserName = user.UserName;

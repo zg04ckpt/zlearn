@@ -172,6 +172,7 @@ namespace Core.Services.Features
             }
 
             //paging
+            var total = await query.CountAsync();
             var res = await query
                 .Skip((data.PageIndex - 1) * data.PageSize)
                 .Take(data.PageSize)
@@ -181,7 +182,7 @@ namespace Core.Services.Features
             return new APISuccessResult<PaginatedResult<DocumentItemDTO>>(new PaginatedResult<DocumentItemDTO>
             {
                 Data = res.Select(e => DocumentMapper.MapToItem(e)),
-                Total = await query.CountAsync()
+                Total = total
             });
         }
 

@@ -15,6 +15,7 @@ namespace Data.Entities.CommonEntities
         public string Description { get; set; }
         public string Slug { get; set; }
         public Guid? ParentId { get; set; }
+        public string Link { get; set; }
 
         //Rela
         public Category Parent { get; set; }

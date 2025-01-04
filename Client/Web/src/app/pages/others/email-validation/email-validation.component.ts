@@ -60,7 +60,6 @@ export class EmailValidationComponent implements OnInit {
     });
     // other
     this.titleService.setTitle("Xác nhận email");
-    this.breadcrumbService.addBreadcrumb("Xác nhận email", this.router.url);
   }
 
   showLogin() {

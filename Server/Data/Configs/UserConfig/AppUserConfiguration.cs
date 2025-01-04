@@ -19,9 +19,7 @@ namespace Data.Configs.UserConfig
             builder.Property(x => x.LastName).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.Address).IsRequired(false).HasMaxLength(50);
             builder.Property(x => x.Gender).HasDefaultValue(Gender.Other);
-            builder.Property(x => x.DateOfBirth).IsRequired(false);
             builder.Property(x => x.RefreshToken).IsRequired(false);
-            builder.Property(x => x.CreatedDate).IsRequired(false);
             builder.Property(x => x.UserLinks).IsRequired(false);
             builder.Property(x => x.Description).IsRequired(false);
             builder.Property(x => x.UserName).IsRequired();

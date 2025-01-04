@@ -27,6 +27,20 @@ namespace Core.Mappers
             };
         }
 
+        public static SavedTestDTO MapToSaved(Test test, SavedTest st)
+        {
+            return new SavedTestDTO
+            {
+                Id = test.Id.ToString().ToLower(),
+                Name = test.Name,
+                ImageUrl = test.ImageUrl,
+                NumberOfAttempts = test.NumberOfAttempts,
+                NumberOfQuestions = test.NumberOfQuestions,
+                IsPrivate = test.IsPrivate,
+                SavedAt = st.SavedAt
+            };
+        }
+
         public static Test MapFromUpdate(Test test, UpdateTestDTO dto)
         {
             test.Name = dto.Name;
@@ -77,7 +91,7 @@ namespace Core.Mappers
                 NumberOfAttempts = test.NumberOfAttempts,
                 NumberOfQuestions = test.NumberOfQuestions,
                 IsPrivate = test.IsPrivate,
-                Description = test.Description
+                UpdatedAt = test.UpdatedAt
             };
         }
 
@@ -96,7 +110,8 @@ namespace Core.Mappers
                 AuthorId = test.AuthorId.ToString(),
                 NumberOfAttempts = test.NumberOfAttempts,
                 NumberOfQuestions = test.NumberOfQuestions,
-                IsPrivate = test.IsPrivate
+                IsPrivate = test.IsPrivate,
+                CategorySlug = test.CategorySlug
             };
         }
 
@@ -104,7 +119,7 @@ namespace Core.Mappers
         {
             return new TestDTO
             {
-
+                StartTime = DateTime.Now,
                 Name = test.Name,
                 Duration = test.Duration,
                 Questions = questions.Select(x => new QuestionDTO

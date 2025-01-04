@@ -1,4 +1,4 @@
-import { NgClass } from "@angular/common";
+import { DatePipe, NgClass } from "@angular/common";
 import { Component, HostListener, OnInit } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { User } from "../../../entities/user/user.entity";
@@ -20,15 +20,16 @@ import { StorageKey, StorageService } from "../../../services/storage.service";
   standalone: true,
   imports: [
     RouterLink,
-    NgClass
+    NgClass,
+    DatePipe
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
   user: User|null = null;
-  breadcrumbs: Breadcrumb[] = []
   defaultAvtUrl = environment.defaultAvtUrl;
+  currentTime = new Date();
 
   isShowNotification = false;
   notifications: Notification[] = [];
@@ -52,27 +53,8 @@ export class HeaderComponent implements OnInit {
     private storageService: StorageService
   ) {
     userService.$currentUser.subscribe(next => this.user = next);
-    breadcrumbService.$breadcrumb.subscribe(next => {
-      if(next == null) {
-        this.breadcrumbs.pop();
-        return;
-      }
+    setInterval(() => this.currentTime = new Date(), 1000);
 
-      if(next.url == '/') {
-        this.breadcrumbs = [];
-        return;
-      }
-
-      const i = this.breadcrumbs.findIndex(e => e.url == next.url);
-      if(i == -1) {
-        this.breadcrumbs.push(next);
-        if(this.breadcrumbs.length >= 3) {
-          this.breadcrumbs.shift();
-        }
-      } else {
-        this.breadcrumbs = this.breadcrumbs.slice(0, i+1);
-      }
-    });
     this.notificationHubConnection = new SignalR
       .HubConnectionBuilder()
       .configureLogging(SignalR.LogLevel.None)
@@ -81,19 +63,15 @@ export class HeaderComponent implements OnInit {
       })
       .build();
     layoutService.$isLoggedIn.subscribe(() => this.getNotifications());
-  }
-
-  ngOnInit(): void {
-    //get notifications
-    this.getNotifications();
-
-    //add listen for notification
+      //add listen for notification
     this.notificationHubConnection.start().then(() => {
       if(this.user) {
         this.notificationService.listenForUser(this.notificationHubConnection.connectionId!).subscribe(res => {
           this.componentService.$showLoadingStatus.next(false);
         });
       }
+      //get notifications
+      this.getNotifications();
       this.notificationHubConnection.on('onHasNewNotification', (data:Notification) => {
         data.createdAt = new Date(data.createdAt)
         this.notifications.splice(0, 0, data);
@@ -101,6 +79,10 @@ export class HeaderComponent implements OnInit {
       });
     }).catch(err => console.error('SignalR connection error: ', err));
 
+    
+  }
+
+  ngOnInit(): void {
     //add close notification event
     window.onclick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -154,8 +136,6 @@ export class HeaderComponent implements OnInit {
     this.notifications[idx].isRead = true; 
     this.newNotificationsCount = this.newNotificationsCount-1; 
     this.isShowNotification = false;
-
-    
   }
 
   showLogin() {

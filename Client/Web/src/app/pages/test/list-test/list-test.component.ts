@@ -11,7 +11,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Title } from '@angular/platform-browser';
 import { LayoutService } from '../../../services/layout.service';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 
 @Component({
   selector: 'app-list-test',
@@ -35,7 +35,7 @@ export class ListTestComponent implements OnInit {
   cateSlug = "";
   paging = {
     page: 1,
-    size: 1,
+    size: 24,
     total: 1,
     next: () => {
       if(this.paging.page < this.paging.total) {
@@ -71,7 +71,6 @@ export class ListTestComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle(this.title);
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
 
     //get query param
     //?page=1&size=6&cate=&name=
@@ -84,6 +83,9 @@ export class ListTestComponent implements OnInit {
       }
       if(next.get('cate')) {
         this.cateSlug = next.get('cate')!;
+        this.breadcrumbService.getBreadcrumb(this.cateSlug)
+      } else {
+        this.breadcrumbService.getBreadcrumb('trac-nghiem')
       }
       if(next.get('name')) {
         this.key = next.get('name')!;
@@ -99,6 +101,14 @@ export class ListTestComponent implements OnInit {
 
   isLoggedIn(): boolean {
     return this.userService.getLoggedInUser() != null;
+  }
+
+  updateBreadcrumb() {
+    if(this.cateSlug) {
+      this.breadcrumbService.getBreadcrumb(this.cateSlug);
+    } else {
+      this.breadcrumbService.getBreadcrumb('trac-nghiem');
+    }
   }
 
   search() {

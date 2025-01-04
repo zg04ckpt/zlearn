@@ -33,7 +33,6 @@ export class RoleComponent implements OnInit {
   ngOnInit(): void {
     this.load();
     this.titleService.setTitle(this.title);
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
   }
 
   load() {

@@ -1,8 +1,10 @@
-﻿using Core.Exceptions;
+﻿using Core.DTOs;
+using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Data;
-using Data.Entities.SystemEntities;
+using Data.Entities.NotificationEntities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +24,14 @@ namespace Core.Repositories
             _context.UserNotifications.Add(un);
         }
 
-        public async Task<List<Notification>> GetNotificationsOfUser(Guid userId)
+        public async Task<HashSet<int>> GetReadNotifications(Guid userId)
         {
-            var query = from un in _context.UserNotifications
-                      join n in _context.Notifications on un.NotificationId equals n.Id
-                      where un.UserId == userId
-                      select n;
-            return await query.ToListAsync();
+            HashSet<int> set = new();
+            var readNotifications = await _context.ReadNotifications
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+            readNotifications.ForEach(e => set.Add(e.NotificationId));
+            return set;
         }
 
         public async Task<Guid> GetUserId(int notificationId)
@@ -39,18 +42,14 @@ namespace Core.Repositories
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task MarkAsRead(int notificationId)
+        public async Task MaskRead(int notificationId, Guid userId)
         {
-            var res = await _context.Database
-                .ExecuteSqlInterpolatedAsync(@$"
-                UPDATE Notifications 
-                SET isRead = true 
-                WHERE Id = {notificationId}
-            ");
-            if (res == 0)
+            _context.Add(new ReadNotification
             {
-                throw new ErrorException("Cập nhật thông báo thất bại");
-            }
+                NotificationId = notificationId,
+                UserId = userId
+            });
+            await _context.SaveChangesAsync();
         }
     }
 }

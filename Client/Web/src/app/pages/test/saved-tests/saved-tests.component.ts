@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { SavedTestDTO } from '../../../dtos/test/saved-test.dto';
 import { environment } from '../../../../environments/environment';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
@@ -42,7 +42,7 @@ export class SavedTestsComponent {
 
   ngOnInit(): void {
     this.titleService.setTitle(this.title);
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+    this.breadcrumbService.getBreadcrumb('trac-nghiem');
     this.search();
   }
 

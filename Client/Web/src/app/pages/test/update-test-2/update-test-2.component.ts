@@ -9,7 +9,7 @@ import { BreadcrumbService } from '../../../services/breadcrumb.service';
 import { CreateTestDTO } from '../../../dtos/test/create-test.dto';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 import { environment } from '../../../../environments/environment';
 import * as XLSX from 'xlsx';
 import { UpdateTestDTO } from '../../../dtos/test/update-test.dts';

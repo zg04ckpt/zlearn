@@ -13,7 +13,7 @@ import { Title } from '@angular/platform-browser';
 import { CommentService } from '../../../services/comment.service';
 import { CommentDTO } from '../../../dtos/comment/comment.dto';
 import { DocumentItemDTO } from '../../../dtos/document/document-item';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 
 @Component({
   selector: 'app-test-management',
@@ -55,7 +55,6 @@ export class TestManagementComponent implements OnInit {
   ngOnInit(): void {
     this.search();
     this.titleService.setTitle(this.title);
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
     //get categories
     this.testService.getCategories().subscribe(next => {
       this.componentService.$showLoadingStatus.next(false);

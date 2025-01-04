@@ -12,6 +12,7 @@ namespace Core.DTOs
     #region test
     public class TestDTO
     {
+        public DateTime StartTime { get; set; }
         public string Name { get; set; }
         public int Duration { get; set; }
         public List<QuestionDTO> Questions { get; set; }
@@ -25,7 +26,18 @@ namespace Core.DTOs
         public int NumberOfQuestions { get; set; }
         public int NumberOfAttempts { get; set; }
         public bool IsPrivate { get; set; }
-        public string Description { get; set; }
+        public DateTime UpdatedAt { get; set; }
+    }
+
+    public class SavedTestDTO
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string? ImageUrl { get; set; }
+        public int NumberOfQuestions { get; set; }
+        public int NumberOfAttempts { get; set; }
+        public bool IsPrivate { get; set; }
+        public DateTime SavedAt { get; set; }
     }
 
     public class TestInfoDTO
@@ -37,6 +49,7 @@ namespace Core.DTOs
         public DateTime CreatedDate { get; set; }
         public string Description { get; set; }
         public string CategoryName { get; set; }
+        public string CategorySlug { get; set; }
         public string Source { get; set; }
         public string AuthorName { get; set; }
         public string AuthorId { get; set; }
@@ -138,7 +151,6 @@ namespace Core.DTOs
     {
         public List<QuestionAnswerDTO> Answers { get; set; }
         public string StartTime { get; set; }
-        public string EndTime { get; set; }
         public string TestId { get; set; }
         public string TestName { get; set; }
     }

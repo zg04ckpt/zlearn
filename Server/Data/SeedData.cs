@@ -48,7 +48,7 @@ namespace Data
                     Email = adminEmail,
                     FirstName = "Nguyên",
                     LastName = "Hoàng",
-                    CreatedDate = DateOnly.FromDateTime(DateTime.Today).ToString(),
+                    CreatedAt = DateTime.Now,
                     EmailConfirmed = true,
                 };
 

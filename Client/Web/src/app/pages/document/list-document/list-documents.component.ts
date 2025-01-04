@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 import { environment } from '../../../../environments/environment';
 import { DatePipe, NgClass } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -66,8 +66,7 @@ export class ListDocumentsComponent implements OnInit {
 
     //set bread and title
     this.titleService.setTitle("Tài liệu");
-    this.breadcrumbService.addBreadcrumb("Tài liệu", this.router.url);
-
+    this.breadcrumbService.getBreadcrumb('tai-lieu')
     //get query param
     //?page=1&size=6&cate=&name=
     this.activatedRoute.queryParamMap.subscribe(next => {
@@ -79,6 +78,10 @@ export class ListDocumentsComponent implements OnInit {
       }
       if(next.get('cate')) {
         this.searchingData.categorySlug = next.get('cate')!;
+        this.breadcrumbService.getBreadcrumb(this.searchingData.categorySlug);
+      }
+      else {
+        this.breadcrumbService.getBreadcrumb('tai-lieu');
       }
       if(next.get('name')) {
         this.searchingData.name = next.get('name')!;

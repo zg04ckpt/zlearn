@@ -19,9 +19,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetNotification(int start)
+        public async Task<IActionResult> GetNotification(int start, int max)
         {
-            return Ok(await _notificationService.GetNotifications(User, start));
+            return Ok(await _notificationService.GetNotifications(User, start, max));
         }
 
         [HttpPost]

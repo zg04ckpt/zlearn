@@ -84,7 +84,7 @@ export class TestDetailComponent implements OnInit{
         this.data = res;
         this.title = `${this.data!.name}`;
         this.titleService.setTitle(this.title);
-        this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+        this.breadcrumbService.getBreadcrumb(res.categorySlug)
       }
     });
 

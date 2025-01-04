@@ -6,6 +6,7 @@
 **/.vs
 **/*.log
 **/*.sql
+**/Logs
 
 # Web
 **/environment.pro.ts

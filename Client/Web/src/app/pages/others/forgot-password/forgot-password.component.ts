@@ -98,7 +98,7 @@ export class ForgotPasswordComponent implements OnInit {
     
     // other
     this.titleService.setTitle("Quên mật khẩu");
-    this.breadcrumbService.addBreadcrumb("Quên mật khẩu", this.router.url);
+    // this.breadcrumbService.getBreadcrumb('quen-mat-khau');
   }
 
   public forgotPassword() {
