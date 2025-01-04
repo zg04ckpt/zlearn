@@ -8,6 +8,16 @@
     text-decoration: underline;
 }
 
+.toggle-btn {
+    text-decoration: none;
+    color: white;
+    background-color: gray;
+    opacity: 0.3;
+}
+
+.toggle-btn:hover {
+    opacity: 1;
+}
 
 .top1 {
     color: #ffcd06;
@@ -20,3 +30,16 @@
 .top3 {
     color: #d3301a;
 }
+
+.test-rank * {
+    font-size: 12px;
+}
+
+.test-rank th {
+    font-size: 10px;
+}
+
+.user-rank * {
+    font-size: 12px;
+}
+

@@ -17,19 +17,17 @@
                             <img class="d-block w-100" [src]="item.imageUrl || defaultImageUrl"  
                             style="object-fit: cover; width: 80%; height: 300px;">
                             <div class="carousel-caption d-none d-md-block">
-                                <h3>{{item.name}}</h3>
-                                <p>{{item.description}}</p>
+                                <h3 style="color: rgb(181, 181, 181);">{{item.name}}</h3>
+                                <!-- <p class="text-secondary">{{item.description}}</p> -->
                             </div>
                         </div>
                     }
                 </div>
-                <a class="carousel-control-prev" href="#topTests" role="button" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
+                <a class="position-absolute translate-middle-y top-50" href="#topTests" role="button" data-bs-slide="prev">
+                    <i class='bx bx-chevron-left fs-1 py-5 toggle-btn ms-3'></i>
                 </a>
-                <a class="carousel-control-next" href="#topTests" role="button" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
+                <a class="position-absolute translate-middle-y top-50 end-0" href="#topTests" role="button" data-bs-slide="next">
+                    <i class='bx bx-chevron-right fs-1 py-5 toggle-btn me-3'></i>
                 </a>
             </div>
 
@@ -53,13 +51,13 @@
 
     <!-- Ranking -->
     <div class="col-md-3">
-        <div class="d-flex justify-content-center flex-md-column mt-3 mt-md-2 me-2">
+        <div class="d-flex flex-md-column mt-3 mt-md-2 me-2 mb-5 mb-md-0">
             <!-- User rank -->
-            <div class="user-rank card ms-2 ms-md-0 shadow-sm border-1 border-dark" style="width: 300px;">
+            <div class="user-rank col-6 col-md-12 card ms-2 ms-md-0 shadow-sm border-1 border-secondary-subtle">
                 <div class="card-header text-center fw-bolder">BXH người dùng</div>
                 <div class="card-body px-1">
                     
-                    <div class="d-flex flex-column">
+                    <div class="d-flex flex-column ">
                         @for (item of topUsers; track $index) {
                             <div class="d-flex">
                                 @if($index != 0) {
@@ -69,12 +67,12 @@
                                 }
                                 @else {
                                     <span class="order mx-2 top1">
-                                        <i class='bx bxs-trophy fs-3'></i>
+                                        <i class='bx bxs-trophy fs-5'></i>
                                     </span>
                                 }
                                 <span class="name underline-when-hover" (click)="showInfo(item.id)" [ngClass]="{'fw-bolder': $index == 0}">{{item.username}}</span>
                                 <span class="likes" class="d-flex me-3 flex-fill align-items-center justify-content-end">
-                                    <i class='bx bx-heart ms-1 fs-5'></i>
+                                    <i class='bx bx-heart ms-1 fs-6'></i>
                                     <div class="text-center" style="width: 20px;">{{item.likes}}</div>
                                 </span>
                             </div>
@@ -84,25 +82,34 @@
             </div>
         
             <!-- Test rank -->
-            <div class="user-rank card mt-0 mt-md-3 ms-2 ms-md-0 shadow-sm border-1 border-dark" style="width: 300px;">
+            <div class="user-rank col-6 col-md-12 card mt-0 mt-md-3 ms-2 ms-md-0 shadow-sm border-1 border-secondary-subtle">
                 <div class="card-header text-center fw-bolder">BXH đề</div>
-                <div class="card-body px-1">
+                <div class="card-body px-1 pt-1">
                     
-                    <div class="d-flex flex-column">
+                    <table class="table table-borderless test-rank pt-1">
+                        <thead>
+                            <tr>
+                                <th class="col-1">STT</th>
+                                <th class="col-auto">Tên</th>
+                                <th class="col-2 px-0">Lượt làm</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            @for (item of topTests; track $index) {
+                                <tr>
+                                    <td class="text-center fw-bolder">{{$index + 1}}</td>
+                                    <td class="text-ellipsis">
+                                        <a class="link-dark underline-when-hover" [routerLink]="['/tests/', item.id]">{{item.name}}</a>
+                                    </td>
+                                    <td>
+                                        <div class="fw-light">{{item.numberOfAttempts}}</div>
+                                    </td>
+                                </tr>
+                            }
 
-                        @for (item of topTests; track $index) {
-                            <div class="d-flex">
-                                <span class="order mx-3 justify-content-center" style="width: 10px;">
-                                    {{$index + 1}}
-                                </span>
-                                <a class="link-dark underline-when-hover" [routerLink]="['/tests/', item.id]">{{item.name}}</a>
-                                <span class="likes" class="d-flex me-3 flex-fill align-items-center justify-content-end">
-                                    <div class="me-1 text-secondary" style="font-size: 12px;">Lượt làm</div>
-                                    <div class="fw-bolder text-center ms-1" style="width: 30px;">{{item.numberOfAttempts}}</div>
-                                </span>
-                            </div>
-                        }
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

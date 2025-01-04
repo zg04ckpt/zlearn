@@ -4,7 +4,7 @@ using Core.Exceptions;
 using Core.Interfaces.IServices;
 using Core.Interfaces.IServices.Common;
 using Core.Interfaces.IServices.System;
-using Data.Entities;
+using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
@@ -139,7 +139,7 @@ namespace Core.Services.System
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                CreatedDate = DateOnly.FromDateTime(DateTime.Today).ToString()
+                CreatedAt = DateTime.Now
             };
 
             //save user to db

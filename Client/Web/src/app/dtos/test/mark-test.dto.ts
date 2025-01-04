@@ -4,7 +4,6 @@ export interface MarkTestDTO {
       selected: number;
     }[];
     startTime: string;
-    endTime: string;
     testId: string;
     testName: string;
 }

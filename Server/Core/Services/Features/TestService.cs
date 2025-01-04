@@ -6,7 +6,8 @@ using Core.Interfaces.IServices.Common;
 using Core.Interfaces.IServices.Features;
 using Core.Interfaces.IServices.System;
 using Core.Mappers;
-using Data.Entities;
+using Data.Entities.TestEntities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 using System.Security.Claims;
@@ -24,8 +25,9 @@ namespace Core.Services.Features
         private readonly ISummaryService _summaryService;
         private readonly ILogger<TestService> _logger;
         private readonly ILogService _logService;
+        private readonly INotificationService _notificationService;
 
-        public TestService(ITestRepository testRepository, IFileService fileService, ISummaryService summaryService, ICategoryRepository categoryRepository, ILogger<TestService> logger, ILogService logHubService)
+        public TestService(ITestRepository testRepository, IFileService fileService, ISummaryService summaryService, ICategoryRepository categoryRepository, ILogger<TestService> logger, ILogService logHubService, INotificationService notificationService)
         {
             _imageFolderPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Test");
             _testRepository = testRepository;
@@ -34,6 +36,7 @@ namespace Core.Services.Features
             _categoryRepository = categoryRepository;
             _logger = logger;
             _logService = logHubService;
+            _notificationService = notificationService;
         }
 
         public async Task<APIResult> CreateTest(ClaimsPrincipal claimsPrincipal, CreateTestDTO dto)
@@ -50,6 +53,7 @@ namespace Core.Services.Features
             var test = TestMapper.MapFromCreate(dto);
             test.AuthorName = claimsPrincipal.FindFirst(ClaimTypes.GivenName)!.Value;
             test.AuthorId = Guid.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            test.CategoryId = (await _categoryRepository.Get(e => e.Slug.Equals(dto.CategorySlug)))!.Id;
             if(dto.Image != null)
             {
                 test.ImageUrl = IMAGE_REQUEST_PATH + (await _fileService.Save(dto.Image, _imageFolderPath));
@@ -92,8 +96,10 @@ namespace Core.Services.Features
             _testRepository.Create(test);
             if(await _testRepository.SaveChanges())
             {
+                // Log
                 _logger.LogInformation($"Đề trắc nghiệm mới được tạo bởi {test.AuthorName}");
                 await _logService.SendInfoLog($"Đề trắc nghiệm mới được tạo bởi {test.AuthorName}");
+
                 return new APISuccessResult("Tạo đề thành công");
             } 
             else 
@@ -154,17 +160,47 @@ namespace Core.Services.Features
             }
         }
 
-        public async Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(int pageSize, int pageIndex, List<ExpressionFilter> filters)
+        public async Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(TestResultSearchDTO data)
         {
-            var data = await _testRepository.GetAllResults(pageSize, pageIndex, filters);
-            return new APISuccessResult<PaginatedResult<TestResult>>(data);
+            var query = _testRepository.GetResultQuery().AsNoTracking();
+
+            //filter
+            if(!string.IsNullOrEmpty(data.UserName))
+            {
+                query = query.Where(e => e.UserName.Equals(data.UserName, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.TestName))
+            {
+                query = query.Where(e => e.TestName.Equals(data.TestName, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.StartTime))
+            {
+                query = query.Where(e => e.StartTime.CompareTo(data.StartTime) >= 0);
+            }
+            if (!string.IsNullOrEmpty(data.EndTime))
+            {
+                query = query.Where(e => e.EndTime.CompareTo(data.EndTime) <= 0);
+            }
+
+            //paging
+            var total = await query.CountAsync();
+            query = query
+                .Skip((data.PageIndex - 1) * data.PageSize)
+                .Take(data.PageSize)
+                .OrderByDescending(e => e.StartTime);
+
+            return new APISuccessResult<PaginatedResult<TestResult>>(new PaginatedResult<TestResult>
+            {
+                Total = total,
+                Data = await query.ToListAsync()
+            });
         }
 
-        public async Task<APIResult<List<TestItemDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal)
+        public async Task<APIResult<List<SavedTestDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal)
         {
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            var rawData = await _testRepository.GetSavedTestsOfUser(userId);
-            return new APISuccessResult<List<TestItemDTO>> (rawData.Select(e => TestMapper.MapToItem(e)).ToList());
+            var data = await _testRepository.GetSavedTestsOfUser(userId);
+            return new APISuccessResult<List<SavedTestDTO>> (data);
         }
 
         public async Task<APIResult<TestDTO>> GetTestContent(ClaimsPrincipal claimsPrincipal, string testId)
@@ -211,17 +247,8 @@ namespace Core.Services.Features
         {
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var results = await _testRepository.GetResultsByUserId(userId);
+            results.Sort((a, b) => b.StartTime.CompareTo(a.StartTime));
             return new APISuccessResult<List<TestResult>>(results);
-        }
-
-        public async Task<APIResult<PaginatedResult<TestItemDTO>>> GetTestsAsListItems(int pageSize, int pageIndex, List<ExpressionFilter> filters)
-        {
-            var tests = await _testRepository.GetPaginatedData(pageSize, pageIndex, filters);
-            return new APISuccessResult<PaginatedResult<TestItemDTO>>(new PaginatedResult<TestItemDTO>
-            {
-                Total = tests.Total,
-                Data = tests.Data.Select(x => TestMapper.MapToItem(x))
-            });
         }
 
         public async Task<APIResult<UpdateTestDTO>> GetTestUpdateContent(ClaimsPrincipal claimsPrincipal, string testId)
@@ -275,20 +302,21 @@ namespace Core.Services.Features
             }
 
             //calculate used time
-            var start = DateTime.Parse(dto.StartTime).AddHours(-7);
-            var end = DateTime.Parse(dto.EndTime).AddHours(-7); ;
+            var start = DateTime.Parse(dto.StartTime);
+            var end = DateTime.Now;
             var duration = end - start;
 
             //calculate score and save result
             double score = (double)correct / questions.Count * 10;
+            score = Math.Round(score, 2);
 
             var result = new TestResult
             {
                 Id = Guid.NewGuid(),
                 Score = (decimal)score,
                 Correct = correct,
-                StartTime = dto.StartTime,
-                EndTime = dto.EndTime,
+                StartTime = start,
+                EndTime = end,
                 UsedTime = (int)duration.TotalSeconds,
                 TestId = Guid.Parse(dto.TestId),
                 TestName = dto.TestName,
@@ -325,7 +353,7 @@ namespace Core.Services.Features
             {
                 UserId = Guid.Parse(userId),
                 TestId = Guid.Parse(testId),
-                MarkedAt = DateOnly.FromDateTime(DateTime.Today).ToString(),
+                SavedAt = DateTime.Now,
             };
             _testRepository.SaveTest(savedTest);
 
@@ -339,13 +367,35 @@ namespace Core.Services.Features
             }
         }
 
-        public async Task<APIResult<PaginatedResult<TestItemDTO>>> SearchTest(int pageSize, int pageIndex, TestSearchDTO data)
+        public async Task<APIResult<PaginatedResult<TestItemDTO>>> GetAsItems(TestSearchDTO data)
         {
-            var tests = await _testRepository.GetPaginatedData(pageSize, pageIndex, LambdaBuilder.GetTestSearchingExpression(data));
+            var query = _testRepository.GetQuery().AsNoTracking();
+
+            //filter
+            if (!string.IsNullOrEmpty(data.CategorySlug))
+            {
+                query = query.Where(e => e.CategorySlug.Equals(data.CategorySlug));
+            }
+            if (!string.IsNullOrEmpty(data.Name))
+            {
+                query = query.Where(e => e.Name.ToLower().Contains(data.Name.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(data.Description))
+            {
+                query = query.Where(e => e.Description.ToLower().Contains(data.Description.ToLower()));
+            }
+
+            //paging
+            var total = await query.CountAsync();
+            query = query
+                .OrderByDescending(e => e.NumberOfAttempts)
+                .Skip((data.PageIndex - 1) * data.PageSize)
+                .Take(data.PageSize);
+
             return new APISuccessResult<PaginatedResult<TestItemDTO>>(new PaginatedResult<TestItemDTO>
             {
-                Total = tests.Total,
-                Data = tests.Data.Select(x => TestMapper.MapToItem(x))
+                Total = total,
+                Data = await query.Select(e => TestMapper.MapToItem(e)).ToListAsync()
             });
         }
 
@@ -360,7 +410,8 @@ namespace Core.Services.Features
 
             //update test
             test = TestMapper.MapFromUpdate(test, dto);
-            if(dto.Image != null)
+            test.CategoryId = (await _categoryRepository.Get(e => e.Slug.Equals(dto.CategorySlug)))!.Id;
+            if (dto.Image != null)
             {
                 if (test.ImageUrl != null)
                 {
@@ -414,7 +465,7 @@ namespace Core.Services.Features
                         {
                             await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(e.ImageUrl)));
                         }
-                        e.ImageUrl = IMAGE_REQUEST_PATH + await _fileService.SaveFile(updated.Image);
+                        e.ImageUrl = IMAGE_REQUEST_PATH + await _fileService.Save(updated.Image, _imageFolderPath);
                     } else if(updated.ImageUrl == null && e.ImageUrl != null)
                     {
                         await _fileService.Delete(Path.Combine(_imageFolderPath, Path.GetFileName(e.ImageUrl)));
@@ -446,6 +497,38 @@ namespace Core.Services.Features
             {
                 return new APIErrorResult("Cập nhật đề thất bại");
             }
+        }
+
+        public async Task<APIResult<PaginatedResult<TestInfoDTO>>> GetAsInfos(TestSearchDTO data)
+        {
+            var query = _testRepository.GetQuery().AsNoTracking();
+
+            //filter
+            if (!string.IsNullOrEmpty(data.CategorySlug))
+            {
+                query = query.Where(e => e.CategorySlug.Equals(data.CategorySlug));
+            }
+            if (!string.IsNullOrEmpty(data.Name))
+            {
+                query = query.Where(e => e.Name.Equals(data.Name, StringComparison.OrdinalIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(data.Description))
+            {
+                query = query.Where(e => e.Description.Equals(data.Description, StringComparison.OrdinalIgnoreCase));
+            }
+
+            //paging
+            var total = await query.CountAsync();
+            query = query
+                .Skip((data.PageIndex - 1) * data.PageSize)
+                .Take(data.PageSize)
+                .OrderByDescending(e => e.NumberOfAttempts);
+
+            return new APISuccessResult<PaginatedResult<TestInfoDTO>>(new PaginatedResult<TestInfoDTO>
+            {
+                Total = total,
+                Data = await query.Select(e => TestMapper.MapToInfo(e)).ToListAsync()
+            });
         }
     }
 }

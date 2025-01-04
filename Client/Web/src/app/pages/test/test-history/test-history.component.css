@@ -1,0 +1,26 @@
+button {
+    width: 100px;
+}
+
+.nav-link.active {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.nav-link {
+    width: 150px;
+    color: gray;
+}
+
+.list-item {
+    flex-shrink: 0;
+    padding: 10px;
+}
+
+.list-item:hover {
+    background-color: rgba(128, 128, 128, 0.173);
+}
+
+table * {
+    font-size: 12px;
+}

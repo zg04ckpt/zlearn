@@ -4,6 +4,9 @@
 **/bin
 **/script.sql
 **/.vs
+**/*.log
+**/*.sql
+**/Logs
 
 # Web
 **/environment.pro.ts
@@ -14,5 +17,6 @@
 
 #other
 docker-compose.yaml
+docker-compose.prod.yaml
 .github
 .vs

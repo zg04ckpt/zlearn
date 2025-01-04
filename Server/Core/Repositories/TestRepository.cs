@@ -2,9 +2,10 @@
 using Core.DTOs;
 using Core.Exceptions;
 using Core.Interfaces.IRepositories;
+using Core.Mappers;
 using Core.Services.Common;
 using Data;
-using Data.Entities;
+using Data.Entities.TestEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Repositories
@@ -20,34 +21,17 @@ namespace Core.Repositories
             _context.Questions.Add(question);
         }
 
-        public async Task<PaginatedResult<TestResult>> GetAllResults(int pageIndex, int pageSize, List<ExpressionFilter> filters)
-        {
-             var query = _context.TestResults.AsQueryable().AsNoTracking();
-
-            if (filters != null && filters.Any())
-            {
-                var lambda = LambdaBuilder.GetAndLambdaExpression<TestResult>(filters);
-                query = query.Where(lambda);
-            }
-
-            var data = await query
-                .Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            return new PaginatedResult<TestResult>
-            {
-                Total = await query.CountAsync(),
-                Data = data
-            };
-        }
-
         public async Task<List<Question>> GetQuestions(string testId)
         {
             return await _context.Questions
                 .Where(x => x.TestId.ToString().Equals(testId))
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public IQueryable<TestResult> GetResultQuery()
+        {
+            return _context.TestResults;
         }
 
         public async Task<List<TestResult>> GetResultsByUserId(string userId)
@@ -58,12 +42,12 @@ namespace Core.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Test>> GetSavedTestsOfUser(string userId)
+        public async Task<List<SavedTestDTO>> GetSavedTestsOfUser(string userId)
         {
             return await(from test in _context.Tests
                         join st in _context.SavedTests on test.Id equals st.TestId
                         where st.UserId.ToString().Equals(userId)
-                        select test).ToListAsync();
+                        select TestMapper.MapToSaved(test, st)).ToListAsync();
         }
 
         public async Task<List<Test>> GetTopByAttempt(int amount)

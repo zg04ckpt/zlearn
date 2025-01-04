@@ -1,0 +1,116 @@
+a {
+    text-decoration: none;
+}
+
+
+.header-item {
+    color: white;
+}
+
+.header-item:hover {
+    text-decoration: underline;
+    color: yellow;
+    cursor: pointer;
+}
+
+.time {
+    color: rgb(0, 217, 255);
+}
+
+#avt {
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    margin: auto;
+}
+
+#notification  {
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin: auto;
+    align-content: center;
+    text-align: center;
+}
+
+.label {
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin: auto;
+    align-content: center;
+    text-align: center;
+}
+
+.label-badge {
+    width: 5px;
+    height: 5px;
+    background-color: red;
+    border-radius: 50%;
+    display: block;
+}
+
+.unread {
+    background-color: #c6c6c68b;
+}
+
+.label:hover {
+    color: yellow;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.13);
+}
+
+#noti * {
+    font-size: 11px;
+}
+
+#noti .item:hover {
+    cursor: pointer;
+    background-color: rgb(209, 209, 209);
+}
+
+#noti .item p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3; /* Số dòng tối đa */
+}
+
+#noti .item .title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2; /* Số dòng tối đa */
+}
+
+#avt:hover {
+    cursor: pointer;
+    border: 1px solid rgb(16, 197, 229);
+    
+}
+
+.dropdown-arrow {
+    width: 16px;
+    height: 16px;
+    display: block;
+    background-color: rgb(211, 20, 20);
+    transform: rotate(90);
+    transform: translateX(50%);
+}
+
+#noti .scrollable-content::-webkit-scrollbar {
+    width: 4px; /* Đặt chiều rộng của thanh cuộn */
+}
+
+#noti .scrollable-content::-webkit-scrollbar-button {
+    display: none; /* Ẩn các nút mũi tên */
+}
+
+#noti .scrollable-content::-webkit-scrollbar-thumb {
+    background-color: #888; /* Màu của thanh cuộn */
+    border-radius: 0px; /* Bo tròn các góc của thanh cuộn */
+}

@@ -1,15 +1,15 @@
 ﻿using Core.Common;
 using Core.DTOs;
-using Data.Entities;
+using Data.Entities.TestEntities;
 using System.Security.Claims;
 
-namespace Core.Interfaces.IServices.Features 
-{ 
+namespace Core.Interfaces.IServices.Features
+{
     public interface ITestService
     {
-        // ---------- Test -----------
-        Task<APIResult<PaginatedResult<TestItemDTO>>> GetTestsAsListItems(int pageSize, int pageIndex, List<ExpressionFilter> filters);
-        Task<APIResult<PaginatedResult<TestItemDTO>>> SearchTest(int pageSize, int pageIndex, TestSearchDTO data);
+        // ---------- TestConfig -----------
+        Task<APIResult<PaginatedResult<TestItemDTO>>> GetAsItems(TestSearchDTO data);
+        Task<APIResult<PaginatedResult<TestInfoDTO>>> GetAsInfos(TestSearchDTO data);
         Task<APIResult<List<TestInfoDTO>>> GetTestInfosOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult<TestInfoDTO>> GetTestInfo(string testId);
         Task<APIResult<TestDTO>> GetTestContent(ClaimsPrincipal claimsPrincipal, string testId);
@@ -19,15 +19,15 @@ namespace Core.Interfaces.IServices.Features
         Task<APIResult> DeleteTest(ClaimsPrincipal claimsPrincipal, string testId);
 
 
-        // ---------- Test result ------------
-        Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(int pageSize, int pageIndex, List<ExpressionFilter> filters);
+        // ---------- TestConfig result ------------
+        Task<APIResult<PaginatedResult<TestResult>>> GetAllResults(TestResultSearchDTO data);
         Task<APIResult<List<TestResult>>> GetTestResultsOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult<TestResultDTO>> MarkTest(ClaimsPrincipal claimsPrincipal, MarkTestDTO dto, string ip);
 
 
         // ---------- Save test --------------
         Task<APIResult> SaveTest(ClaimsPrincipal claimsPrincipal, string testId);
-        Task<APIResult<List<TestItemDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal);
+        Task<APIResult<List<SavedTestDTO>>> GetSavedTestsOfUser(ClaimsPrincipal claimsPrincipal);
         Task<APIResult> DeleteFromSaved(ClaimsPrincipal claimsPrincipal, string testId);
         Task<APIResult<bool>> IsSaved(ClaimsPrincipal claimsPrincipal, string testId);
     }

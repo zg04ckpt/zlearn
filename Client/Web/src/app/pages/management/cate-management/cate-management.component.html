@@ -11,6 +11,7 @@
             <input type="text" placeholder="Tên danh mục mới" class="form-control mt-2" [(ngModel)]="addModel.newName">
             <input type="text" placeholder="Tên rút gọn(VD: trac-nghiem)" class="form-control mt-2" [(ngModel)]="addModel.newSlug">
             <input type="text" placeholder="Mô tả danh mục mới" class="form-control mt-2" [(ngModel)]="addModel.newDesc">
+            <input type="text" placeholder="Đường dẫn danh mục mới" class="form-control mt-2" [(ngModel)]="addModel.newLink">
             <div class="w-100 mt-3 text-center">
                 <button class="btn btn-outline-dark" style="width: 100px;" (click)="addNewCategory()">Tạo mới</button>
             </div>
@@ -37,6 +38,10 @@
             <label for="" class="mt-2 fw-bold">Mô tả danh mục mới:</label>
             <input type="text" placeholder="Mô tả danh mục mới" class="form-control mt-2" [(ngModel)]="updateModel.newDesc">
             
+            <!-- Link -->
+            <label for="" class="mt-2 fw-bold">Đường dẫn danh mục mới:</label>
+            <input type="text" placeholder="Đường dẫn danh mục mới" class="form-control mt-2" [(ngModel)]="updateModel.newLink">
+
             <!-- Select parent -->
             <label for="" class="mt-2 fw-bold">Danh mục cha:</label>
             <select class="form-select mt-1" [(ngModel)]="updateModel.newParentId">

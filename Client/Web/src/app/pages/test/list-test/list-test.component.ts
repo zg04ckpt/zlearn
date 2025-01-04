@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, Inject, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TestItem } from '../../../entities/test/test-item.entity';
 import { TestService } from '../../../services/test.service';
 import { ComponentService } from '../../../services/component.service';
@@ -11,7 +11,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Title } from '@angular/platform-browser';
 import { LayoutService } from '../../../services/layout.service';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 
 @Component({
   selector: 'app-list-test',
@@ -25,9 +25,6 @@ import { CategoryItem } from '../../../entities/management/category-item.entity'
 })
 export class ListTestComponent implements OnInit {
   list: TestItem[] = [];
-  pageSize: number = 6;
-  pageIndex: number = 1;
-  totalPage: number = 0;
   total: number = 0;
   key: string = "";
   destroyRef = inject(DestroyRef);
@@ -36,6 +33,31 @@ export class ListTestComponent implements OnInit {
 
   categories: CategoryItem[] = [];
   cateSlug = "";
+  paging = {
+    page: 1,
+    size: 24,
+    total: 1,
+    next: () => {
+      if(this.paging.page < this.paging.total) {
+        this.paging.page++;
+        this.search();
+      }
+    },
+    prev: () => {
+      if(this.paging.page > 1) {
+        this.paging.page--;
+        this.search();
+      }
+    },
+    end: () => {
+      this.paging.page = this.paging.total
+      this.search();
+    },
+    start: () => {
+      this.paging.page = 1
+      this.search();
+    },
+  }
 
   constructor(
     private router: Router,
@@ -44,15 +66,36 @@ export class ListTestComponent implements OnInit {
     private userService: UserService,
     private titleService: Title,
     private breadcrumbService: BreadcrumbService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.titleService.setTitle(this.title);
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
-    this.search();
-    this.testService.getCategories().subscribe(next => {
-      this.componentService.$showLoadingStatus.next(false);
-      this.categories = next;
+
+    //get query param
+    //?page=1&size=6&cate=&name=
+    this.activatedRoute.queryParamMap.subscribe(next => {
+      if(next.get('page')) {
+        this.paging.page = Number(next.get('page'));
+      }
+      if(next.get('size')) {
+        this.paging.size = Number(next.get('size'));
+      }
+      if(next.get('cate')) {
+        this.cateSlug = next.get('cate')!;
+        this.breadcrumbService.getBreadcrumb(this.cateSlug)
+      } else {
+        this.breadcrumbService.getBreadcrumb('trac-nghiem')
+      }
+      if(next.get('name')) {
+        this.key = next.get('name')!;
+      }
+
+      this.search();
+      this.testService.getCategories().subscribe(next => {
+        this.componentService.$showLoadingStatus.next(false);
+        this.categories = next;
+      });
     });
   }
 
@@ -60,20 +103,44 @@ export class ListTestComponent implements OnInit {
     return this.userService.getLoggedInUser() != null;
   }
 
-  search() {
-    if(this.pageIndex == 0) {
-      this.pageIndex = 1;
+  updateBreadcrumb() {
+    if(this.cateSlug) {
+      this.breadcrumbService.getBreadcrumb(this.cateSlug);
+    } else {
+      this.breadcrumbService.getBreadcrumb('trac-nghiem');
     }
+  }
+
+  search() {
     this.componentService.$showLoadingStatus.next(true);
-    this.testService.getAll(this.pageIndex, this.pageSize, this.key, this.cateSlug)
+    this.testService.getAll(this.paging.page, this.paging.size, this.key, this.cateSlug)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(res => {
       this.componentService.$showLoadingStatus.next(false);
       debugger;
       this.total = res.total;
-      this.totalPage = Math.ceil(this.total / this.pageSize);
-      if(this.totalPage == 0) this.pageIndex = 0;
+      this.paging.total = Math.ceil(this.total / this.paging.size);
+      
+      // test
       this.list = res.data;
+      // for(let i = 1; i <= 60; i++) {
+      //   this.list = this.list.concat(res.data)
+      // }
+
+      //update route
+      this.updateQueryParams();
+    });
+  }
+
+  updateQueryParams(): void {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute, 
+      queryParams: { 
+        page: this.paging.page, 
+        size: this.paging.size, 
+        cate: this.cateSlug, 
+        name: this.key },
+      queryParamsHandling: 'merge'
     });
   }
 

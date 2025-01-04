@@ -31,7 +31,6 @@ export class LogComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle("Quản lý log");
-    this.breadcrumbService.addBreadcrumb("Quản lý log", this.router.url);
   }
 
   getLogs(value: string) {

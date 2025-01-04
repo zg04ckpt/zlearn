@@ -6,14 +6,17 @@ import { Router } from '@angular/router';
 import { ComponentService } from '../services/component.service';
 import { AuthService } from '../services/auth.service';
 import { StorageKey, StorageService } from '../services/storage.service';
-import { APIError } from '../dtos/common/api-result.dto';
 
 export const apiInterceptor: HttpInterceptorFn = (req, next) => {
-  // if(!req.url.includes('images')) {
-  //   req = req.clone({
-  //     url: `${environment.baseUrl}/api/${req.url}`
-  //   });
-  // }
+  
+  const thirdPartyUrls = [
+    'https://api.vietqr.io/v2/banks'
+  ];
+  // Check if the request URL is in the list of third-party URLs
+  if (thirdPartyUrls.some(url => req.url.includes(url))) {
+    return next(req); 
+  }
+
   req = req.clone({
     url: `${environment.baseUrl}/api/${req.url}`
   });
@@ -62,7 +65,6 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
 
           catchError(res => {
             //error => login or redirect to home
-            debugger;
             authService.showEndLoginSessionMessage();
             componentService.$showLoadingStatus.next(false);
             return EMPTY;
@@ -70,8 +72,6 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
         );
       }
     }
-    //other
-    debugger
     commonService.displayAPIError(res.error);
     return EMPTY;
   }));

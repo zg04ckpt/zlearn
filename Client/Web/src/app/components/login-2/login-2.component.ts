@@ -7,6 +7,7 @@ import { ComponentService } from '../../services/component.service';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { FactoryTarget } from '@angular/compiler';
+import { LayoutService } from '../../services/layout.service';
 
 @Component({
   selector: 'app-login-2',
@@ -24,6 +25,7 @@ export class Login2Component implements OnInit {
     private componentService: ComponentService,
     private authService: AuthService,
     private userService: UserService,
+    private layoutService: LayoutService
   ) {}
 
   show = false;
@@ -81,6 +83,7 @@ export class Login2Component implements OnInit {
         this.componentService.$showToast.next(`Xin chào ${res.fullName}!`);
         this.userService.$currentUser.next(res);
         this.authService.setLoginSessionTimer();
+        this.layoutService.$isLoggedIn.next(null);
       }
     });
   }

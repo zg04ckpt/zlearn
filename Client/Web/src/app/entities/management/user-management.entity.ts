@@ -5,7 +5,8 @@ export interface UserManagement
     address: string;
     gender: number;
     dateOfBirth: string;
-    createdDate: string;
+    createdAt: Date;
+    updatedAt: Date;
     description: string;
     userLinks: string;
     id: string;

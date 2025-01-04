@@ -11,6 +11,6 @@ namespace Core.RealTime
     public class LogHub : Hub
     {
         public LogHub() { }
-
+        
     }
 }

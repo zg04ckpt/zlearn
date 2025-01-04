@@ -12,24 +12,31 @@ import { DatePipe } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { BreadcrumbService } from '../../../services/breadcrumb.service';
 import { environment } from '../../../../environments/environment';
+import { FormsModule } from '@angular/forms';
+import { ShareFunction } from '../../../utilities/share-function.uti';
 
 @Component({
   selector: 'app-my-tests',
   standalone: true,
   imports: [
     RouterLink,
-    DatePipe
+    DatePipe,
+    FormsModule
   ],
   templateUrl: './my-tests.component.html',
   styleUrl: './my-tests.component.css'
 })
 export class MyTestsComponent implements OnInit {
   list1: TestDetail[] = [];
+  key = ''
+
   list2: TestItem[] = [];
   list3: TestResult[] = [];
   destroyRef = inject(DestroyRef);
   title: string = "Quản lý đề";
   defaultImageUrl = environment.defaultImageUrl;
+
+  uti = new ShareFunction()
 
   constructor(
     private testService: TestService,
@@ -41,14 +48,13 @@ export class MyTestsComponent implements OnInit {
 
   ngOnInit(): void {
     this.showCreatedTests();
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+    this.breadcrumbService.getBreadcrumb('trac-nghiem');
     this.titleService.setTitle(this.title);
   }
 
-  timeFormat(duration: number): string {
-    return Math.floor(duration/60).toString().padStart(2, '0') + 'm:'
-    + Math.floor(duration%60).toString().padStart(2, '0') + 's';
-  } 
+  search() {
+    this.showCreatedTests();
+  }
 
   back() {
     history.back();
@@ -66,28 +72,6 @@ export class MyTestsComponent implements OnInit {
         this.componentService.$showLoadingStatus.next(false);
         this.list1 = res;
         this.sort("byName");
-      },
-
-      error: res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.componentService.displayAPIError(res);
-      },
-
-      complete: () => this.componentService.$showLoadingStatus.next(false)
-    });
-  }
-
-  showSavedTests() {
-    this.titleService.setTitle("Đề đã lưu - ZLEARN")
-    this.list1 = [];
-    this.list3 = [];
-    this.componentService.$showLoadingStatus.next(true);
-    this.testService.getAllSavedTests()
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe({
-      next: res => {
-        this.componentService.$showLoadingStatus.next(false);
-        this.list2 = res;
       },
 
       error: res => {
@@ -139,7 +123,7 @@ export class MyTestsComponent implements OnInit {
       .subscribe({
         next: res => {
           this.componentService.$showLoadingStatus.next(false);
-          this.showSavedTests();
+          // this.showSavedTests();
         },
 
         error: res => {
@@ -155,22 +139,11 @@ export class MyTestsComponent implements OnInit {
   deleteTest(id: string) {
     this.componentService.displayConfirmMessage("Xác nhận xóa?", () => {
       this.componentService.$showLoadingStatus.next(true);
-      this.testService.delete(id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: res => {
+      this.testService.delete(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
           this.componentService.$showLoadingStatus.next(false);
           this.componentService.$showToast.next("Xóa thành công!");
           this.showCreatedTests();
-        },
-
-        error: res => {
-          this.componentService.$showLoadingStatus.next(false);
-          this.componentService.displayAPIError(res);
-        },
-
-        complete: () => this.componentService.$showLoadingStatus.next(false)
-      });
+        });
     });
   }
 

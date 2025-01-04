@@ -1,6 +1,9 @@
 ﻿
 using Data.Entities;
+using Data.Entities.CommonEntities;
+using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -14,7 +17,7 @@ namespace Data
         public static async Task Initialize(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, AppDbContext dbContext)
         {
             // Init default role
-            string[] roleNames = { "Admin", "User" };
+            string[] roleNames = { "Admin", "UserConfig" };
             foreach (var roleName in roleNames)
             {
                 var roleExist = await roleManager.RoleExistsAsync(roleName);
@@ -45,7 +48,7 @@ namespace Data
                     Email = adminEmail,
                     FirstName = "Nguyên",
                     LastName = "Hoàng",
-                    CreatedDate = DateOnly.FromDateTime(DateTime.Today).ToString(),
+                    CreatedAt = DateTime.Now,
                     EmailConfirmed = true,
                 };
 
@@ -65,8 +68,8 @@ namespace Data
                 }
             }
 
-            // Init root category
-            if(!dbContext.Categories.Any(e => e.ParentId == null && e.Name.Equals("Danh mục"))) {
+            // Init category
+            if(!await dbContext.Categories.AnyAsync()) {
                 var rootCategory = new Category
                 {
                     Id = Guid.NewGuid(),
@@ -76,6 +79,37 @@ namespace Data
                     Slug = "root"
                 };
                 dbContext.Categories.Add(rootCategory);
+
+                var testCategory = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Trắc nghiệm",
+                    Description = "Mặc định",
+                    ParentId = rootCategory.Id,
+                    Slug = "trac-nghiem"
+                };
+                dbContext.Categories.Add(testCategory);
+
+                var docCategory = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Tài liệu",
+                    Description = "Mặc định",
+                    ParentId = rootCategory.Id,
+                    Slug = "tai-lieu"
+                };
+                dbContext.Categories.Add(docCategory);
+
+                var postCategory = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Bài viết",
+                    Description = "Mặc định",
+                    ParentId = rootCategory.Id,
+                    Slug = "bai-viet"
+                };
+                dbContext.Categories.Add(postCategory);
+
                 await dbContext.SaveChangesAsync();
             }
         }

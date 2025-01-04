@@ -3,8 +3,8 @@ export interface TestResult
     id: string;
     score: number;
     correct: number;
-    startTime: string;
-    endTime: string;
+    startTime: Date;
+    endTime: Date;
     usedTime: number;
     testId: string;
     testName: string;

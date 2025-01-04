@@ -1,0 +1,110 @@
+<nav class="navbar navbar-dark bg-dark w-100 d-flex justify-content-start" 
+style="position: fixed; top: 0; height: 50px; z-index: 3;">
+
+    <a routerLink="" class="d-none d-md-block d-flex flex-row fw-bold text-white fs-5 text-center text-decoration-none"
+    style="width: 220px;">
+        ZLEARN
+        <small style="color: white; font-size: 12px;">v2.1</small>
+    </a>
+
+    <a class="fw-bold time">{{currentTime | date: 'EEEE, dd/MM/yyyy, HH:mm:ss'}}</a>
+
+    <div class="position-absolute end-0 top-50 translate-middle-y justify-content-end me-2">
+        <div class="d-flex end-0 align-items-center">
+            <!-- Notification -->
+            <span class="label position-relative me-2" title="Thông báo" (click)="isShowNotification = !isShowNotification">
+                <i class='bx bxs-bell'></i>
+                @if(newNotificationsCount > 0) {
+                    <div class="label-badge position-absolute top-0 end-0 translate-middle m-2"></div>
+                }
+                @if(isShowNotification) {
+                    <i class='bx text-white bxs-up-arrow position-absolute shadow-lg mt-4 start-50 translate-middle-x' style="z-index: 3;"></i>
+                }
+            </span>
+            @if (!user) {
+                <a (click)="showLogin()" class="link-info me-1 px-1" style="cursor: pointer;">
+                    Đăng nhập
+                </a>
+                |
+                <a (click)="showRegister()" class="link-secondary px-1 me-2" style="cursor: pointer;">
+                    Đăng kí
+                </a>
+            }
+            @else {
+                <div class="d-flex end-0">
+                    <!-- Message -->
+                    <span class="me-2 label position-relative" title="Tin nhắn">
+                        <i class='bx bxs-chat'></i>
+                        <div class="label-badge position-absolute top-0 end-0 translate-middle m-2"></div>
+                    </span>
+                    <small class="d-none d-md-block text-light me-2 align-content-center my-auto fw-bold fst-italic">
+                        {{user.fullName || user.userName}}
+                    </small>
+                    <div class="dropdown position-relative">
+                        <img class="dropdown-toggle me-2" data-bs-toggle="dropdown" [src]="user.profileImage || defaultAvtUrl" alt="" id="avt">
+                        <ul class="dropdown-menu position-absolute mt-2 p-2 border-2 border-black shadow-sm" 
+                            style="left: 100%; transform: translateX(-100%);">
+                            <li><a class="dropdown-item my-1" [routerLink]="['user/profile']">Tài khoản</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <span class="dropdown-item align-content-center btn fw-bold text-center" (click)="logout()">
+                                    Đăng xuất
+                                    <i class='bx bx-log-out fw-bold'></i>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if(isShowNotification) {
+        <div id="noti" class=" position-absolute position-relative top-100 end-0 position-relative" style="transform: translateY(-4px);">
+            
+            <div class="card rounded-0 p-1 pe-0 pt-2 pb-2 card-body shadow-lg me-3" 
+            style="width: 320px; z-index: 2;">
+                <div class="scrollable-content" style="height: 400px; overflow-y: scroll">
+                    <span class="underline-when-hover m-1 mb-1">Đánh dấu tất cả đã đọc</span>
+                    <hr class="m-0 p-0" style="opacity: 0.1;">
+                    @for (item of notifications; track $index) {
+                        <div class="d-flex flex-column unread item p-1 py-2 mx-1" 
+                        style="margin-bottom: 1px;"
+                        [ngClass]="{'unread': !item.isRead && user}"
+                        (click)="readNotification($index)">
+                            <div class="d-flex flex-row">
+                                <small class="fw-bold title">{{item.title}}</small>
+                                <div class="flex-fill"></div>
+                                <div class="text-secondary flex-shrink-0" style="font-size: 10px;">{{uti.dateFormatter(item.createdAt)}}</div>
+                            </div>
+                            <p class="mb-1">{{item.message}}</p>
+                        </div>
+                        <hr class="m-0 p-0" style="opacity: 0.1;">
+                    }
+                    @if(notifications.length >= maxOfNotification) {
+                        <div class="d-flex underline-when-hover justify-content-center align-items-center w-100 pt-1" (click)="showMoreNotifications()">
+                            <span class="">Xem thêm</span>
+                            <i class='bx bxs-chevrons-down ms-1'></i>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</nav>
+
+@if(detailIndex != -1) {
+    <div class="position-fixed w-100 h-100" style="background-color: rgba(128, 128, 128, 0.574); z-index: 2;">
+        <div class="card start-50 translate-middle-x" style="width: 600px; margin-top: 80px;">
+            <div class="card-header d-flex py-1 pe-1">
+                {{notifications[detailIndex].title}}
+                <div class="flex-fill"></div>
+                <button class="btn btn-close" (click)="detailIndex = -1"></button>
+            </div>
+            <div class="card-body">
+                <p class="mb-0">{{notifications[detailIndex].message}}</p>
+            </div>
+        </div>
+    </div>
+}
+

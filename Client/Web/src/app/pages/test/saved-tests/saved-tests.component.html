@@ -1,0 +1,44 @@
+<div class="p-2">
+
+    <!-- List control -->
+    <div class="d-flex small-size justify-items-center mt-2" style="height: 26px;">
+        <button class="btn btn-sm btn-outline-secondary" onclick="window.history.back()">Quay lại</button>
+    </div>
+
+    <!-- List test -->
+    <div class="card card-body mt-2 pt-2">
+        <div class="row">
+            @if(list.length == 0) {
+                <div class="text-secondary fst-italic text-center my-5"> --- Danh sách trống ---</div>
+            }
+            @for (item of list; track $index) {
+                <div class="col-6 col-md-4 col-lg-3 p-1">
+                    <div class="d-flex flex-column position-relative list-item" [title]="item.name">
+                        <img [src]="item.imageUrl || defaultImageUrl" alt="" class="test-img">
+
+                        <!-- Name -->
+                        <div class="mt-1 text-ellipsis-2lines">
+                            <a class="fs-6 fw-bold text-decoration-none text-dark">{{item.name}}</a>
+                        </div>
+
+                        <!-- Attempts and Questions count -->
+                        <div class="d-flex flex-row align-items-center">
+                            <small class="text-secondary" style="opacity: 0.6;">{{item.numberOfQuestions}} câu hỏi</small>
+                            <div class="bullet mx-2"></div>
+                            <small class="text-secondary" style="opacity: 0.6;">{{item.numberOfAttempts}} lượt làm</small>
+                        </div>
+
+                        <!-- Additional -->
+                        <small>Đã lưu {{uti.dateFormatter(item.savedAt)}}</small>
+                        <div class="d-flex flex-row align-items-center">
+                            <div class="flex-fill"></div>
+                            <button class="btn btn-sm btn-outline-dark" [routerLink]="['/tests', item.id]"><i class='bx bxs-show'></i> Xem</button>
+                            <button class="btn btn-sm btn-outline-dark ms-1" (click)="removeSavedTest(item.id)"><i class='bx bx-bookmark-minus fw-bolder'></i> Bỏ lưu</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

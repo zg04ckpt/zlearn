@@ -1,9 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Data.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Data.Configs;
-using Data.Entities;
+using Data.Entities.TestEntities;
+using Data.Entities.UserEntities;
+using Data.Entities.CommonEntities;
+using Data.Configs.TestConfig;
+using Data.Configs.UserConfig;
+using Data.Configs.CommonConfig;
+using Data.Entities.DocumentEntities;
+using Data.Entities.PostEnttities;
+using Data.Entities.PostEntities;
+using Data.Entities.SystemEntities;
+using Data.Configs.DocumentConfig;
+using Data.Configs.PostConfig;
+using Data.Configs.SystemConfig;
+using Data.Entities.NotificationEntities;
+using Data.Configs.NotificationConfig;
 
 namespace Data
 {
@@ -16,17 +28,28 @@ namespace Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new QuestionConfig());
-            modelBuilder.ApplyConfiguration(new TestConfig());
-            modelBuilder.ApplyConfiguration(new TestResultConfig());
-            modelBuilder.ApplyConfiguration(new SavedTestConfig());
-            modelBuilder.ApplyConfiguration(new AppUserConfig());
-            modelBuilder.ApplyConfiguration(new AppRoleConfig());
-            modelBuilder.ApplyConfiguration(new ImageConfig());
-            modelBuilder.ApplyConfiguration(new CommentConfig());
-            modelBuilder.ApplyConfiguration(new UserLikeConfig());
-            modelBuilder.ApplyConfiguration(new SummaryConfig());
-            modelBuilder.ApplyConfiguration(new CategoryConfig());
+            modelBuilder.ApplyConfiguration(new QuestionConfiguration());
+            modelBuilder.ApplyConfiguration(new TestConfiguration());
+            modelBuilder.ApplyConfiguration(new TestResultConfiguration());
+            modelBuilder.ApplyConfiguration(new SavedTestConfiguration());
+            modelBuilder.ApplyConfiguration(new AppUserConfiguration());
+            modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new CommentConfiguration());
+            modelBuilder.ApplyConfiguration(new UserLikeConfiguration());
+            modelBuilder.ApplyConfiguration(new SummaryConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new DocumentConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentInfoConfiguration());
+            modelBuilder.ApplyConfiguration(new PostConfiguration());
+            modelBuilder.ApplyConfiguration(new PostImageConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new PromotionConfiguration());
+            modelBuilder.ApplyConfiguration(new PromotionOrderConfiguration());
+            modelBuilder.ApplyConfiguration(new UserNotificationConfiguration());
+            modelBuilder.ApplyConfiguration(new UploadedFileConfiguration());
+            modelBuilder.ApplyConfiguration(new ReadNotificationConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -43,10 +66,21 @@ namespace Data
         public DbSet<Question> Questions { get; set; }
         public DbSet<TestResult> TestResults { get; set; }
         public DbSet<SavedTest> SavedTests { get; set; }
-        public DbSet<Image> Images { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Summary> Summaries { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<PostImage> PostImages { get; set; }
+        public DbSet<PaymentInfo> PaymentInfos { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<PromotionOrder> PromotionOrders { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
+        public DbSet<UploadedFile> UploadedFiles { get; set; }
+        public DbSet<ReadNotification> ReadNotifications { get; set; }
         #endregion
     }
 }

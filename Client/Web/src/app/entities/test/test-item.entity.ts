@@ -5,5 +5,5 @@ export interface TestItem {
     numberOfQuestions: number;
     numberOfAttempts: number;
     isPrivate: boolean,
-    description: string
+    updatedAt: Date
 }

@@ -1,0 +1,125 @@
+<div class="p-3">
+    <!-- Create notification -->
+    <h6 class="fw-bold">Tạo mới thông báo</h6>
+    <div class="card card-body pt-2 shadow-sm">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="d-flex flex-column">
+                    <!-- Title -->
+                    <label>Tiêu đề</label>
+                    <input type="text" class="form-control mb-2" [(ngModel)]="createData.title">
+                    <!-- Content -->
+                    <label>Nội dung</label>
+                    <textarea class="form-control" [(ngModel)]="createData.message"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="d-flex flex-column">
+                    <label>Loại thông báo</label>
+                    <div class="d-flex mb-2 w-100">
+                        <select class="form-select w-auto" [(ngModel)]="createData.type">
+                            <option [ngValue]="0">Thông báo hệ thống</option>
+                            <option [ngValue]="1">Thông báo người dùng</option>
+                        </select>
+                        @if(createData.type == 1) {
+                            <div class="position-relative flex-fill ms-2">
+                                <input #inp type="text" class="form-control " placeholder="Nhập username / ID"
+                                (focus)="searchUserInput.focus = true" (blur)="searchUserInput.onblur()"
+                                (input)="searchUserInput.listener.next(inp.value)"
+                                [(ngModel)]="createData.userId">
+                                @if(searchUserInput.focus) {
+                                    <div class="list-group position-absolute top-100 card card-body p-0 w-100 rounded-0 mt-1 shadow-sm start-0 scrollable-content"
+                                    style="max-height: 400px; overflow-y: scroll;">
+                                        @if(userFindData.length == 0) {
+                                            <div class="ms-2">Không tìm thấy</div>
+                                        }
+                                        @for (item of userFindData; track $index) {
+                                            <div class="list-group-item list-group-item-action py-1" (click)="createData.userId = item.id"><b>{{item.fullName}}</b> ({{item.userName}})</div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    
+
+                    <div class="d-flex mt-4">
+                        <button class="btn btn-sm btn-outline-dark" (click)="createNewNotification()">Tạo thông báo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- List notification -->
+    <!-- Paging -->
+    <div class="d-flex mt-3">
+        <h6 class="fw-bold">Quản lý thông báo</h6>
+        <div class="flex-fill"></div>
+        <div class="d-flex align-items-center">
+            <i class='bx bxs-chevrons-left paging-btn' (click)="paging.start()"></i>
+            <i class='bx bxs-chevron-left paging-btn' (click)="paging.prev()"></i>
+            <span class="mx-2">Trang {{paging.page}}/{{paging.total}}</span>
+            <i class='bx bxs-chevron-right paging-btn' (click)="paging.next()"></i>
+            <i class='bx bxs-chevrons-right paging-btn' (click)="paging.end()"></i>
+        </div>
+    </div>
+    <div class="card card-body pt-1 shadow-sm">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-auto">STT</th>
+                    <th class="col-2">Tiêu đề</th>
+                    <th class="col-8">Nội dung</th>
+                    <th class="col-1">Thời gian</th> 
+                    <th class="col-1">Loại</th> 
+                    <th class="col-auto"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of notifications; track $index) {
+                    <tr>
+                        <td>{{$index + 1}}</td>
+                        <td>{{item.title}}</td>
+                        <td>{{item.message}}</td>
+                        <td class="text-secondary pe-0" style="font-size: 12px;">{{uti.dateFormatter(item.createdAt)}}</td>
+                        <td>
+                            @if(item.type == 0) {
+                                Hệ thống
+                            }
+                            @else {
+                                <i class='bx bxs-user paging-btn' (click)="showUserInfo(item.id)"></i>
+                            }
+                        </td>
+                        <td>
+                            <div class="d-flex">
+                                <i class='bx bxs-edit-alt paging-btn mx-1' (click)="showUpdateDialog(item)"></i>
+                                <i class='bx bxs-trash paging-btn mx-1' (click)="deleteNotification(item.id)"></i>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if(updateDialog.isShow) {
+    <div class="position-absolute w-100 h-100 top-0 start-0" style="background-color: rgba(128, 128, 128, 0.505);">
+        <div class="card card-body position-absolute start-50 translate-middle-x pt-2"
+        style="width: 400px; margin-top: 50px;">
+            <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="updateDialog.isShow = false"></button>
+            <h6 class="text-center mb-3">Cập nhật thông báo</h6>
+
+            <label >Tiêu đề</label>
+            <input type="text" class="form-control" [(ngModel)]="updateDialog.title">
+
+            <label >Nội dung</label>
+            <textarea type="text" class="form-control" [(ngModel)]="updateDialog.message"></textarea>
+
+            <div class="d-flex justify-content-center mt-3">
+                <button class="btn btn-sm btn-outline-dark px-4" (click)="updateNotification()">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+}

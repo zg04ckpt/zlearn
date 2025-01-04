@@ -1,10 +1,10 @@
-import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentService } from '../../../services/component.service';
 import { TestStatus } from '../../../enums/test.enum';
 import { Test } from '../../../entities/test/test.entity';
 import { Observable, Subject } from 'rxjs';
-import { DecimalPipe, NgClass } from '@angular/common';
+import { DecimalPipe, NgClass, NgStyle } from '@angular/common';
 import { MarkTestResultDTO } from '../../../dtos/test/test-result.dto';
 import { TestService } from '../../../services/test.service';
 import { MarkTestDTO } from '../../../dtos/test/mark-test.dto';
@@ -21,7 +21,8 @@ import { BreadcrumbService } from '../../../services/breadcrumb.service';
   standalone: true,
   imports: [
     DecimalPipe,
-    NgClass
+    NgClass,
+    NgStyle
   ],
   templateUrl: './test.component.html',
   styleUrl: './test.component.css'
@@ -44,6 +45,8 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
   Array: any = Array;
   destroyRef = inject(DestroyRef);
 
+  isShowStatus = true;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private componentService: ComponentService,
@@ -52,7 +55,8 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
     private userService: UserService,
     private router: Router,
     private titleService: Title,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private renderer: Renderer2
   ) {}
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -103,7 +107,6 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
         } else {
           this.title = `${this.test.name} - Thi thử`;
         }
-        this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
         this.titleService.setTitle(this.title);
         debugger;
     });
@@ -114,26 +117,22 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
   endTest() {
     if(this.status == TestStatus.Testing) {
       this.componentService.displayConfirmMessage("Xác nhận kết thúc?", () => {
-        this.end = new Date;
         this.status = TestStatus.Completed;
       });
     } else {
-      this.end = new Date;
       this.status = TestStatus.Completed;
     }
   }
 
   markTest() {
+    debugger
     this.componentService.$showLoadingStatus.next(true);
-
-    const user = this.userService.getLoggedInUser();
     this.answer = {
       answers: this.test!.questions.map(x => ({
         id: x.id,
         selected: x.selectedAnswer
       })),
-      startTime: this.commonService.getDateTimeString(this.start!),
-      endTime: this.commonService.getDateTimeString(this.end!),
+      startTime: this.test!.startTime.toISOString(),
       testId: this.testId!,
       testName: this.test!.name,
     };
@@ -143,7 +142,16 @@ export class TestComponent implements OnInit, CanComponentDeactivate {
       this.componentService.$showLoadingStatus.next(false);
       this.result = res;
       this.status = TestStatus.ShowAnswer;
+      this.scrollToItem();
     });
+  }
+
+  scrollToItem() {
+    const element = document.getElementById('top');
+    element?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
   }
 
   navigate(url: string) {

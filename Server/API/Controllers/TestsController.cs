@@ -25,7 +25,7 @@ namespace API.Controllers
 
 
         [HttpPost]
-        [Authorize(Consts.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> Create([FromForm] CreateTestDTO dto)
         {
             return Ok(await _testService.CreateTest(User, dto));
@@ -33,7 +33,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{testId}")]
-        [Authorize(Consts.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> Delete(string testId)
         {
             return Ok(await _testService.DeleteTest(User, testId));
@@ -42,25 +42,16 @@ namespace API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAll(int pageIndex, int pageSize, [FromQuery] TestSearchDTO dto)
+        public async Task<IActionResult> GetAll([FromQuery] TestSearchDTO dto)
         {
-            List<ExpressionFilter> filters = new();
-            var properties = typeof(TestSearchDTO).GetProperties();
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(dto);
-                if(value != null)
-                {
-                    filters.Add(new ExpressionFilter
-                    {
-                        Property = property.Name,
-                        Value = value,
-                        Comparison = Comparison.Contains
-                    });
-                }
-            }
+            return Ok(await _testService.GetAsItems(dto));
+        }
 
-            return Ok(await _testService.SearchTest(pageIndex, pageSize, dto));
+        [HttpGet("all-info")]
+        [Authorize(Consts.ADMIN_ROLE)]
+        public async Task<IActionResult> GetAllInfos([FromQuery] TestSearchDTO dto)
+        {
+            return Ok(await _testService.GetAsInfos(dto));
         }
 
 
@@ -80,32 +71,8 @@ namespace API.Controllers
         }
 
 
-        [HttpGet("results")]
-        [Authorize(Consts.USER_ROLE)]
-        public async Task<IActionResult> GetAllResults(int pageIndex, int pageSize, [FromQuery] TestResultSearchDTO dto)
-        {
-            List<ExpressionFilter> filters = new List<ExpressionFilter>();
-            var properties = typeof(TestSearchDTO).GetProperties();
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(dto);
-                if (value != null)
-                {
-                    filters.Add(new ExpressionFilter
-                    {
-                        Property = property.Name,
-                        Value = value,
-                        Comparison = Comparison.Contains
-                    });
-                }
-            }
-
-            return Ok(await _testService.GetAllResults(pageSize, pageIndex, filters));
-        }
-
-
         [HttpGet("my-results")]
-        [Authorize(Consts.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> GetResultsByUserId()
         {
             return Ok(await _testService.GetTestResultsOfUser(User));
@@ -137,7 +104,7 @@ namespace API.Controllers
 
 
         [HttpPut("{testId}")]
-        [Authorize(Consts.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> Update(string testId, [FromForm] UpdateTestDTO dto)
         {
             return Ok(await _testService.UpdateTest(User, testId, dto));
@@ -145,7 +112,7 @@ namespace API.Controllers
 
 
         [HttpGet("{testId}/update-content")]
-        [Authorize(Consts.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> GetUpdateContent(string testId)
         {
             return Ok(await _testService.GetTestUpdateContent(User, testId));
@@ -153,7 +120,7 @@ namespace API.Controllers
 
 
         [HttpPost("save")]
-        [Authorize(Consts.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> SaveTest([FromQuery] string testId)
         {
             return Ok(await _testService.SaveTest(User, testId));
@@ -161,7 +128,7 @@ namespace API.Controllers
 
 
         [HttpGet("save")]
-        [Authorize(Consts.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> GetSavedTest()
         {
             return Ok(await _testService.GetSavedTestsOfUser(User));
@@ -169,7 +136,7 @@ namespace API.Controllers
 
 
         [HttpGet("save/isSaved")]
-        [Authorize(Consts.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> IsSaved([FromQuery] string testId)
         {
             return Ok(await _testService.IsSaved(User, testId));
@@ -177,13 +144,11 @@ namespace API.Controllers
 
 
         [HttpDelete("save")]
-        [Authorize(Consts.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> RemoveSavedTest([FromQuery]string testId)
         {
             return Ok(await _testService.DeleteFromSaved(User, testId));
         }
-
-
     }
 }
 

@@ -14,7 +14,7 @@ using Core.Services.Features;
 using Core.Services.Management;
 using Core.Services.System;
 using Data;
-using Data.Entities;
+using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -29,9 +29,11 @@ var configuration = builder.Configuration;
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(
+    options.UseMySql(
         configuration.GetConnectionString("DefaultConnection"),
-        options => options.EnableRetryOnFailure());
+        new MySqlServerVersion(new Version(8, 0, 37)),
+        options => options.EnableRetryOnFailure()
+    );
     options.EnableDetailedErrors();
 });
 
@@ -42,25 +44,29 @@ builder.Services.AddIdentity<AppUser, AppRole>()
 
 builder.Services.AddTransient<IRoleManagementService, RoleManagementService>();
 builder.Services.AddTransient<IUserManagementService, UserManagementService>();
-builder.Services.AddTransient<ITestManagementService, TestManagementService>();
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITestRepository, TestRepository>();
 builder.Services.AddTransient<ICommentRepository, CommentRepository>();
 builder.Services.AddTransient<ISummaryRepository, SummaryRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+builder.Services.AddTransient<IDocumentRepository, DocumentRepository>();
+builder.Services.AddTransient<IUploadedFileRepository, UploadedFileRepository>();
+builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
 
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<IFileService, FileService>();
 builder.Services.AddSingleton<ILogService, LogService>();
+builder.Services.AddSingleton<ISummaryService, SummaryService>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICommentService, CommentService>();
 builder.Services.AddTransient<IHomeService, HomeService>();
-builder.Services.AddSingleton<ISummaryService, SummaryService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IDocumentService, DocumentService>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddTransient<TrackingMiddleware, TrackingMiddleware>();
 
 
@@ -122,6 +128,17 @@ builder.Services.AddAuthentication(options =>
                 context.Request.HttpContext.User = null;
             }
             return Task.CompletedTask;
+        },
+
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if(!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/notification"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
         }
     };
 });
@@ -170,8 +187,8 @@ app.UseMiddleware<HandleExceptionMiddleware>();
 app.UseMiddleware<TrackingMiddleware>();
 
 
-//app.UseClientRateLimiting();
-//app.UseIpRateLimiting();
+app.UseClientRateLimiting();
+app.UseIpRateLimiting();
 
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -191,12 +208,19 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/api/images/user"
 });
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "Document")),
+    RequestPath = "/api/images/document"
+});
+
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
 
 //singalR
-app.MapHub<LogHub>("/logHub");
+app.MapHub<LogHub>("/hubs/log");
+app.MapHub<NotificationHub>("/hubs/notification");
 
 app.UseEndpoints(endpoints =>
 {

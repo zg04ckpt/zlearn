@@ -9,7 +9,7 @@ namespace Core.Common
     public static class Consts
     {
         public const string ADMIN_ROLE = "Admin";
-        public const string USER_ROLE = "User";
+        public const string USER_ROLE = "UserConfig";
         public const string JWT_SECTION = "JwtSettings";
         public static class SettingKeys
         {

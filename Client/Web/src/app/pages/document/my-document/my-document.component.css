@@ -1,0 +1,90 @@
+.paging-btn {
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.paging-btn:hover {
+    color: aqua;
+    cursor: pointer;
+}
+
+.test-img {
+    object-fit: cover;
+    border: 1px #45454535 solid;
+    width: 100%; 
+    height: 180px;
+}
+
+.msg:hover {
+    color: aqua;
+}
+
+.list-item {
+    flex-shrink: 0;
+    padding: 10px;
+}
+
+.list-item:hover {
+    background-color: rgba(128, 128, 128, 0.173);
+}
+
+.list-item button:hover {
+    opacity: 0.6;
+}
+
+.text-ellipsis-1lines {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%; /* Đảm bảo rằng phần tử có chiều rộng tối đa */
+}
+
+
+.toggle-btn {
+    text-decoration: none;
+    color: white;
+    background-color: gray;
+    opacity: 0.3;
+}
+
+.toggle-btn:hover {
+    opacity: 1;
+}
+
+.scroll-wrapper {
+    position: relative;
+    overflow-y: hidden; /* Dành không gian cố định cho thanh cuộn */
+}
+
+.scroll-wrapper::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.scroll-wrapper:hover {
+    overflow-y: auto;
+}
+
+.scroll-wrapper:hover::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.scroll-wrapper::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+.scroll-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scroll-wrapper .inner-content {
+    padding-right: 8px;
+    box-sizing: content-box;
+}
+
+.discount {
+    text-decoration: line-through;
+    color: rgba(128, 128, 128, 0.542);
+}

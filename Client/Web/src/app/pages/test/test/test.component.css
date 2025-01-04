@@ -15,6 +15,15 @@
     right: 20px;
 }
 
+#status-box .toggle {
+    background-color: white;
+}
+
+#status-box .toggle:hover {
+    background-color: gray;
+    color: white;
+}
+
 .disable {
     pointer-events: none;
 }

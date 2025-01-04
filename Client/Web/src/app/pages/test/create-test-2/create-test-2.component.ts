@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CreateTestDTO } from '../../../dtos/test/create-test.dto';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
-import { CategoryItem } from '../../../entities/management/category-item.entity';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 import { ComponentService } from '../../../services/component.service';
 import { TestService } from '../../../services/test.service';
 import { UserService } from '../../../services/user.service';

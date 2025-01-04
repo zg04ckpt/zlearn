@@ -1,0 +1,142 @@
+<div class="p-2">
+    <!-- Function -->
+    <div class="d-flex mb-3 small-size justify-items-center" style="height: 26px;">
+        <div class="flex-fill"></div>
+
+        <!-- Search by name -->
+        @if(searchingData.name) {
+            <div class="d-flex align-items-center me-2 cancel-btn" (click)="searchingData.name = ''; search()">
+                <i class='bx bx-x fw-bolder fs-4'></i>
+                <span class="">Hủy tìm kiếm</span>
+            </div>
+        }
+        <input type="text" class="form-control w-auto" placeholder="Tìm kiếm theo tên" [(ngModel)]="searchingData.name">
+        <button class="btn btn-outline-dark px-2 ms-1 me-3" (click)="searchingData.pageIndex= 1; search()">
+            <i class='bx bx-search fs-6'></i>
+        </button>
+
+        <!-- Cate -->
+        <h6 class="mt-1 me-1">Danh mục</h6>
+        <select class="form-select w-auto py-0" [(ngModel)]="searchingData.categorySlug" (change)="search()">
+            <option value="">Tất cả</option>
+            @for (item of categories; track $index) {
+                <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
+            }
+        </select>
+
+        <!-- Paging -->
+        <div class="btn-group ms-3" style="width: auto;">
+            <button class="btn btn-sm btn-outline-secondary"
+            [disabled]="searchingData.pageIndex <= 1"
+            (click)="searchingData.pageIndex = searchingData.pageIndex - 1; search()">
+                <i class='bx bxs-chevrons-left py-1'></i>
+            </button>
+
+            <button class="btn btn-sm btn-outline-secondary">
+            Trang {{searchingData.pageIndex}}/{{searchingData.totalPage}}</button>
+
+            <button class="btn btn-sm btn-outline-secondary"
+            [disabled]="searchingData.pageIndex >= searchingData.totalPage"
+            (click)="searchingData.pageIndex = searchingData.pageIndex + 1; search()">
+                <i class='bx bxs-chevrons-right py-1'></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Table -->
+     <div class="card card-body w-100 overflow-y-auto" style="height: 600px;">
+        <table class="table table-sm table-hover small-size">
+            <thead>
+                <tr>
+                    <th style="width: 40px;">STT</th>
+                    <th>Tên tài liệu</th>
+                    <th>Người đăng</th>
+                    <th>Giá</th>
+                    <th style="width: 100px;">Định dạng</th>
+                    <th style="width: 100px;">Kích thước</th>
+                    <th style="width: 140px;">Cập nhật</th>
+                    <th style="width: 100px;">Lượt tải</th>
+                    <th style="width: 70px;">Chi tiết</th>
+                    <th style="width: 70px;">Xóa</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of data; track $index) {
+                    <tr>
+                        <td>{{$index + 1}}</td>
+                        <td>{{item.name}}</td>
+                        <td class="underline-when-hover" (click)="showAuthorInfo(item.authorId)">{{item.authorName}}</td>
+                        <td>{{item.lastPrice}}</td>
+                        <td>{{item.documentType}}</td>
+                        <td>{{0}}</td>
+                        <td>{{dateFormatter(item.updatedAt)}}</td>
+                        <td>{{item.downloadedCount}}</td>
+                        <td class="p-0 text-center"><i class='bx bxs-show fs-4 p-0 m-0 cancel-btn' (click)="getDetail(item)"></i></td>
+                        <td class="p-0"><i class="bx bx-x fs-4 p-0 m-0 cancel-btn" (click)="deleteDocument(item.id)"></i></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+     </div>
+</div>
+
+@if(infoDialog.show) {
+    <div class="position-absolute w-100 h-100 top-0 start-0" style="background-color: rgba(128, 128, 128, 0.502);">
+        <div class="card card-body position-absolute start-50 translate-middle-x p-2 pb-5" style="width: 800px; margin-top: 30px;">
+            <button class="btn btn-close position-absolute end-0 top-0 m-1" (click)="infoDialog.show = false"></button>
+            <h6 class="fw-bold text-center">Thông tin chi tiết</h6>
+
+            <div class="ps-4 mt-3" style="max-height: 600px; overflow-y: auto">
+                <div class="row m-0">
+                    <!-- Name -->
+                    <label for="" class="col-3 text-secondary">Tên tài liệu:</label>
+                    <h6 class="col-8 fw-bolder">{{infoDialog.data!.name}}</h6>
+
+                    <!-- Author -->
+                    <label for="" class="col-3 text-secondary">Người đăng:</label>
+                    <h6 class="col-8 underline-when-hover" (click)="showAuthorInfo(infoDialog.data!.authorId)">{{infoDialog.data!.authorName}}</h6>
+
+                    <!-- Cập nhật -->
+                    <label for="" class="col-3 text-secondary">Cập nhật:</label>
+                    <h6 class="col-8 text-secondary fw-light fst-italic">{{dateFormatter(infoDialog.data!.updatedAt)}}</h6>
+
+                    <!-- Type -->
+                    <label for="" class="col-3 text-secondary">Loại tài liệu:</label>
+                    <h6 class="col-8 fw-bolder">{{infoDialog.data!.documentType}}</h6>
+
+                    <!-- Description -->
+                    <label for="" class="col-3 text-secondary">Mô tả:</label>
+                    <h6 class="col-8 ">{{infoDialog.desc}}</h6>
+
+                    <!-- Preview images -->
+                    <div class="m-0 mt-2">
+                        <div id="preview" class="carousel slide pointer-event me-2" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                @for (item of infoDialog.images; track $index) {
+                                    <button type="button" data-bs-target="#preview" [attr.data-bs-slide-to]="$index" [ngClass]="{'active': $index == 0}"></button>
+                                }
+                            </div>
+                            <div class="carousel-inner">
+                                @for (item of infoDialog.images; track $index) {
+                                    <div class="carousel-item" [ngClass]="{'active': $index == 0}">
+                                        <img class="d-block w-100" [src]="item" style="object-fit: cover; height: 300px;">
+                                    </div>
+                                }
+                            </div>
+                            <a class="position-absolute translate-middle-y top-50" href="#preview" role="button" data-bs-slide="prev">
+                                <i class='bx bx-chevron-left fs-1 py-5 toggle-btn ms-3'></i>
+                            </a>
+                            <a class="position-absolute translate-middle-y top-50 end-0" href="#preview" role="button" data-bs-slide="next">
+                                <i class='bx bx-chevron-right fs-1 py-5 toggle-btn me-3'></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+}

@@ -1,114 +1,71 @@
-<div class="container-lg px-3">
+<div class="p-2">
+    <!-- Func of users -->
+    <div class="d-flex" style="height: 26px;">
+        <a class="btn btn-sm btn-outline-dark" [routerLink]="['create']"><i class='bx bx-plus fw-bold'></i> Tạo mới</a>
+        <a class="btn btn-sm btn-outline-dark ms-2" [routerLink]="['my-tests']"><i class='bx bxs-cylinder fw-bold'></i> Đã tạo</a>
+        <a class="btn btn-sm btn-outline-dark ms-2" [routerLink]="['saved']"><i class='bx bx-bookmark fw-bold'></i> Đã lưu</a>
+        <a class="btn btn-sm btn-outline-dark ms-2" [routerLink]="['history']"><i class='bx bx-history fw-bold' ></i> Lịch sử làm đề</a>
+    </div>
 
-    <div class="row mt-3">
-        <div class="col-10 offset-1">
-
-            <!-- Category and search -->
-            <div class="d-flex mt-5 justify-content-center">
-                <div class="input-group w-75 px-0">
-                    <label class="input-group-text">Danh mục</label>
-                    <select class="form-select" [(ngModel)]="cateSlug" (change)="search()">
-                        <option value="">Tất cả</option>
-                        @for (item of categories; track $index) {
-                            <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
-                        }
-                    </select>
-                </div>
-        
-                <div class="input-group ms-2 w-25">
-                    <input type="text" class="form-control" placeholder="Tên đề ..." [(ngModel)]="key">
-                    <button class="btn btn-outline-dark" (click)="pageIndex = 1; search()">
-                        <i class='bx bx-search fs-6 py-1'></i>
-                    </button>
-                </div>
+    <!-- List control -->
+    <div class="d-flex small-size justify-items-center mt-2" style="height: 26px;">
+        <!-- Cate -->
+        <h6 class="mt-1 me-1">Danh mục</h6>
+        <select class="form-select w-auto py-0" [(ngModel)]="cateSlug" (change)="search(); updateBreadcrumb()">
+            <option value="">Tất cả</option>
+            @for (item of categories; track $index) {
+                <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
+            }
+        </select>
+        <div class="flex-fill"></div>
+        <!-- Search by name -->
+        @if(key) {
+            <div class="d-flex align-items-center me-2 cancel-btn pe-2" (click)="key = ''; search()">
+                <i class='bx bx-x fw-bolder fs-4'></i>
+                <span class="">Hủy tìm kiếm</span>
             </div>
+        }
+        <input type="text" class="form-control w-auto" placeholder="Tìm kiếm theo tên" [(ngModel)]="key">
+        <button class="btn btn-outline-dark px-2 ms-1 me-3" (click)="paging.page= 1; search()">
+            <i class='bx bx-search fs-6'></i>
+        </button>
 
-            <!-- Top action -->
-            <div class="d-flex mt-3">
-                @if(isLoggedIn()) {
-                    <button class="btn btn-sm btn-outline-dark"
-                    [routerLink]="['/tests', 'my-tests']">
-                        <i class='bx bx-food-menu me-1 mt-1'></i>Chức năng
-                    </button>
-                }
-            </div>
+        <!-- Paging -->
+        <div class="d-flex align-items-center mx-3">
+            <i class='bx bxs-chevrons-left paging-btn' (click)="paging.start()" style="font-size: large;"></i>
+            <i class='bx bxs-chevron-left paging-btn' (click)="paging.prev()" style="font-size: large;"></i>
+            <span class="mx-2">Trang {{paging.page}}/{{paging.total}}</span>
+            <i class='bx bxs-chevron-right paging-btn' (click)="paging.next()" style="font-size: large;"></i>
+            <i class='bx bxs-chevrons-right paging-btn' (click)="paging.end()" style="font-size: large;"></i>
+        </div>
+    </div>
 
-            <!-- Content -->
-            <div class="card card-body mt-2">
-                <div class="d-flex align-items-center">
-                    <span class="flex-fill">Tìm thấy: <b class="text-info">{{total}}</b> kết quả</span>
+    <!-- List test -->
+    <div class="card card-body mt-2 pt-2">
+        <div class="row">
+            @if(list.length == 0) {
+                <div class="text-secondary fst-italic text-center my-5"> --- Danh sách trống ---</div>
+            }
+            @for (item of list; track $index) {
+                <div class="col-6 col-md-4 col-lg-3 p-1">
+                    <div class="d-flex flex-column position-relative list-item" [title]="item.name" (click)="navigate(item.id)">
+                        <img [src]="item.imageUrl || defaultImageUrl" alt="" class="test-img">
 
-                    @if(key != "") {
-                        <div class="d-flex me-2 ps-2 shadow-sm" id="selected">
-                            <span style="font-size: 12px;">Tìm kiếm theo từ khóa</span>
-                            <i class='bx bx-x-circle text-danger m-1' (click)="key = ''; pageIndex = 1; search()"></i>
+                        <!-- Name -->
+                        <div class="mt-1 text-ellipsis-2lines">
+                            <a class="fs-6 fw-bold text-decoration-none text-dark">{{item.name}}</a>
                         </div>
-                    }
 
-                    <div class="me-3">
-                        <span>Số KQ/trang:</span>
-                        <select class="ms-1" [(ngModel)]="pageSize" (change)="pageIndex = 1; search();" name="pageSize">
-                            <option value="6">6</option>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                        </select>
-                    </div>
-
-                    <!--paging-->
-                    <div class="btn-group" style="width: auto;">
-                        <button class="btn btn-sm btn-outline-secondary"
-                        [disabled]="pageIndex <= 1"
-                        (click)="pageIndex = pageIndex - 1; search()">
-                            <i class='bx bxs-chevrons-left py-1'></i>
-                        </button>
-
-                        <button class="btn btn-sm btn-outline-secondary"
-                        title="Chưa code đâu đừng ấn nhé v:">
-                        Trang {{pageIndex}}/{{totalPage}}</button>
-
-                        <button class="btn btn-sm btn-outline-secondary"
-                        [disabled]="pageIndex == totalPage"
-                        (click)="pageIndex = pageIndex + 1; search()">
-                            <i class='bx bxs-chevrons-right py-1'></i>
-                        </button>
+                        <!-- Attempts and Questions count -->
+                        <div class="d-flex flex-row align-items-center">
+                            <small class="text-secondary" style="opacity: 0.6;">{{item.numberOfAttempts}} lượt làm</small>
+                            <div class="bullet mx-2"></div>
+                            <small class="text-secondary" style="opacity: 0.6;">{{item.numberOfQuestions}} câu hỏi</small>
+                        </div>
                     </div>
                 </div>
-
-                <!--content-->
-                <div class="mt-4 mx-2">
-                    <div class="row">
-
-                        @for (item of list; track $index) {
-                            <div class="col-lg-6">
-                                <div class="card card-body d-flex flex-row p-2 test mb-3" (click)="navigate(item.id)">
-                                    <img [src]="item.imageUrl || defaultImageUrl" alt="" width="50px" height="50px" style="object-fit: cover;">
-                                    <div class="d-flex flex-column ms-2 flex-fill">
-                                        <h6 class="fs-6 fw-bold mt-1">{{item.name}}</h6>
-                                        <div class="d-flex flex-row justify-content-between">
-                                            <small class="fw-medium text-secondary">SL câu hỏi: {{item.numberOfQuestions}}</small>
-                                            <small class="fw-medium text-secondary">Số lượt làm: {{item.numberOfAttempts}}</small>
-                                        </div>
-                                    </div>
-                                    @if(item.isPrivate) {
-                                        <span class="position-absolute top-0 end-0 m-1">
-                                            <i class='bx bxs-lock fs-4'></i>
-                                        </span>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-            </div>
+            }
         </div>
     </div>
-    
-
-    <div class="row mt-3">
-        <div class="col-10 offset-1">
-            
-        </div>
-    </div>
-
 </div>
+

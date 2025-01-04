@@ -57,8 +57,8 @@ export class UserProfileComponent implements OnInit {
       this.componentService.$showLoadingStatus.next(false);
       this.authService.showLoginRequirement();
     }
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
     this.titleService.setTitle(this.title);
+    this.breadcrumbService.getBreadcrumb('quan-li-tai-khoan')
   }
 
   reset() {

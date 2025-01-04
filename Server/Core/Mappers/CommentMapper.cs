@@ -1,5 +1,5 @@
 ﻿using Core.DTOs;
-using Data.Entities;
+using Data.Entities.CommonEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace Core.Mappers
                 CreatedAt = DateTime.Now,
                 Likes = 0,
                 ParentId = dto.ParentId != null? Guid.Parse(dto.ParentId) : null,
-                TestId = Guid.Parse(dto.TestId)
+                TargetId = dto.TestId
             };
         }
 

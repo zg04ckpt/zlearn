@@ -1,4 +1,5 @@
 ﻿using API.Authorization;
+using Core.Common;
 using Core.DTOs;
 using Core.Interfaces.IServices.System;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ namespace API.Controllers.Managements
 {
     [Route("api/managements/categories")]
     [ApiController]
-    [Authorize("Admin")]
+    [Authorize(Consts.ADMIN_ROLE)]
     public class CategoryManagementController : ControllerBase
     {
         private readonly ICategoryService _categoryService;

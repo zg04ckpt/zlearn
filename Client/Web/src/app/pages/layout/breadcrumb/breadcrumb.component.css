@@ -1,0 +1,15 @@
+.breadcrumb-item a {
+    color: gray;
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    text-decoration: underline;
+    color: rgb(28, 171, 219);
+    opacity: 0.5;
+}
+
+.breadcrumb-item,.active a {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}

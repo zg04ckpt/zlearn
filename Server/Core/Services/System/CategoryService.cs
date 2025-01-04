@@ -4,7 +4,7 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.System;
 using Core.Mappers;
-using Data.Entities;
+using Data.Entities.CommonEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,15 +25,21 @@ namespace Core.Services.System
         public async Task<APIResult<string>> CreateNewCategory(CategoryDTO data)
         {
             // Check if name is duplicated
-            if (await _categoryRepository.IsExist(e => e.Name == data.Name))
+            if (await _categoryRepository.IsExist(e => e.Name == data.Name && e.ParentId.ToString().Equals(data.ParentId)))
             {
-                throw new ErrorException("Tên danh mục đã tồn tại!");
+                throw new ErrorException("Tên danh mục đã tồn tại cùng cấp!");
             }
 
             // Check if slug is duplicated
             if (await _categoryRepository.IsExist(e => e.Slug == data.Slug))
             {
                 throw new ErrorException("Tên rút gọn danh mục đã tồn tại!");
+            }
+
+            // Check if link is duplicated
+            if (await _categoryRepository.IsExist(e => e.Link == data.Link))
+            {
+                throw new ErrorException("Đường dẫn danh mục đã tồn tại!");
             }
 
             // Create new category
@@ -43,7 +49,8 @@ namespace Core.Services.System
                 Name = data.Name,
                 Description = data.Description,
                 ParentId = data.ParentId != null ? Guid.Parse(data.ParentId) : null,
-                Slug = data.Slug
+                Slug = data.Slug,
+                Link = data.Link
             };
             _categoryRepository.Create(category);
             await _categoryRepository.SaveChanges();
@@ -117,15 +124,21 @@ namespace Core.Services.System
             }
 
             // Check if name is duplicated
-            if (await _categoryRepository.IsExist(e => !e.Equals(category) && e.Name == data.Name))
+            if (category.Name != data.Name && await _categoryRepository.IsExist(e => e.Name == data.Name && e.ParentId.ToString().Equals(data.ParentId)))
             {
-                throw new ErrorException("Tên danh mục đã tồn tại!");
+                throw new ErrorException("Tên danh mục đã tồn tại cùng cấp!");
             }
 
             // Check if slug is duplicated
-            if (await _categoryRepository.IsExist(e => !e.Equals(category) && e.Slug == data.Slug))
+            if (category.Slug != data.Slug && await _categoryRepository.IsExist(e => !e.Equals(category) && e.Slug == data.Slug))
             {
                 throw new ErrorException("Tên rút gọn danh mục đã tồn tại!");
+            }
+
+            // Check if link is duplicated
+            if (category.Link != data.Link && await _categoryRepository.IsExist(e => e.Link == data.Link))
+            {
+                throw new ErrorException("Đường dẫn danh mục đã tồn tại!");
             }
 
             //update
@@ -133,6 +146,7 @@ namespace Core.Services.System
             category.Name = data.Name;
             category.Description = data.Description;
             category.Slug = data.Slug;
+            category.Link = data.Link;
 
             _categoryRepository.Update(category);
             await _categoryRepository.SaveChanges();
@@ -148,6 +162,36 @@ namespace Core.Services.System
                 .Select(e => CategoryMapper.MapToItem(e))
                 .ToList();
             return new APISuccessResult<List<CategoryItemDTO>>(categories);
+        }
+
+        public async Task<APIResult<List<CategoryBreadcrumbDTO>>> GetBreadcrumb(string currentCategorySlug)
+        {
+            var cate = await _categoryRepository.Get(x => x.Slug == currentCategorySlug)
+                ?? throw new ErrorException("Danh mục không tồn tại");
+
+            var res = new List<CategoryBreadcrumbDTO>
+            {
+                new() {
+                    Level = 1,
+                    Name = cate.Name,
+                    Link = cate.Link
+                }
+            };
+            while (cate.ParentId != null)
+            {
+                cate = await _categoryRepository.Get(e => e.Id.Equals(cate.ParentId))
+                    ?? throw new ErrorException("Danh mục không tồn tại");
+                res.Add(new()
+                {
+                    Level = res.Count + 1,
+                    Name = cate.Name,
+                    Link = cate.Link
+                });
+            }
+
+            res.Reverse();
+
+            return new APISuccessResult<List<CategoryBreadcrumbDTO>>(res);
         }
     }
 }

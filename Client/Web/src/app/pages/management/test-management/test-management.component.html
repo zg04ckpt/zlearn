@@ -18,7 +18,17 @@
                     </button>
                 }
 
-                <div class="d-flex me-3">
+                <!-- Cate -->
+                <h6 class="mt-1 me-1">Danh mục</h6>
+                <select class="form-select w-auto py-0" [(ngModel)]="testCate" (change)="search()">
+                    <option value="">Tất cả</option>
+                    @for (item of categories; track $index) {
+                        <option [value]="item.slug" [title]="item.description">{{item.name}}</option>
+                    }
+                </select>
+
+                <!-- Search -->
+                <div class="d-flex mx-3">
                     <input type="text" class="border-1 ps-2" placeholder="Nhập tên đề ..." [(ngModel)]="key" style="font-size: 12px;">
                     <button class="btn btn-sm btn-outline-dark ms-1" (click)="pageIndex = 1; search()">
                         <i class='bx bx-search fs-6 py-1'></i>
@@ -65,7 +75,7 @@
                         <td>
                             <a class="link-dark underline-when-hover" [routerLink]="['/tests/', item.id]">{{item.name}}</a>
                         </td>
-                        <td>{{item.updatedDate}}</td>
+                        <td>{{dateFormatter(item.updatedDate)}}</td>
                         <td class="underline-when-hover" (click)="showUserDetail(item.authorId)">{{item.authorName}}</td>
                         <td>{{item.description}}</td>
                         <td>{{item.numberOfAttempts}}</td>

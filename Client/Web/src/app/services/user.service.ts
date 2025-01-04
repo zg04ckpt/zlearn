@@ -57,7 +57,7 @@ export class UserService {
     }
     formData.append(`phoneNum`, data.phoneNum);
     formData.append(`gender`, data.gender.toString());
-    formData.append(`dayOfBirth`, data.dayOfBirth);
+    formData.append(`dayOfBirth`, data.dayOfBirth.toString());
     formData.append(`address`, data.address);
     formData.append(`intro`, data.intro);
     formData.append(`socialLinks`, data.socialLinks);

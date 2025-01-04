@@ -97,9 +97,11 @@
     background: transparent;
 }
 
-.text-ellipsis {
-    white-space: nowrap; 
-    overflow: hidden; 
+.over-show-dot {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 60%;
+    max-width: 100%;
 }

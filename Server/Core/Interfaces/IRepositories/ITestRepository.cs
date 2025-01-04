@@ -1,6 +1,6 @@
 ﻿using Core.Common;
 using Core.DTOs;
-using Data.Entities;
+using Data.Entities.TestEntities;
 using System.Security.Claims;
 
 namespace Core.Interfaces.IRepositories
@@ -20,12 +20,12 @@ namespace Core.Interfaces.IRepositories
         void AddQuestion(Question question);
 
         // ------------------ test result ---------------------
-        Task<PaginatedResult<TestResult>> GetAllResults(int pageIndex, int pageSize, List<ExpressionFilter> filters);
+        IQueryable<TestResult> GetResultQuery();
         Task<List<TestResult>> GetResultsByUserId(string userId);
         void SaveResult(TestResult testResult);
 
         // ------------------ save test ---------------------
-        Task<List<Test>> GetSavedTestsOfUser(string userId);
+        Task<List<SavedTestDTO>> GetSavedTestsOfUser(string userId);
         void SaveTest(SavedTest savedTest);
         Task UnSave(string userId, string testId);
         Task<bool> IsSaved(string userId, string testId);

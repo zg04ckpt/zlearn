@@ -5,8 +5,9 @@ export interface TestDetail {
     authorId: string;
     imageUrl: string|null;
     categoryName: string;
-    createdDate: string;
-    updatedDate: string;
+    categorySlug: string;
+    createdDate: Date;
+    updatedDate: Date;
     numberOfQuestions: number;
     numberOfAttempts: number;
     description: string;

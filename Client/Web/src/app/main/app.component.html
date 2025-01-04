@@ -2,6 +2,7 @@
 <app-sidebar/>
 
 <div class="main-content" [ngClass]="showSidebar? 'with-sidebar':'without-sidebar'">
+    <app-breadcrumb class="w-100"/>
     <router-outlet/>
     <app-service-unavailable503/>
     <app-forbidden403/>

@@ -24,17 +24,17 @@
     
                         <div class="row mt-1">
                             <div class="col-3">Người đăng:</div>
-                            <div class="col-7"><b>{{data!.authorName || '--'}}</b></div>
+                            <div class="col-7"><b class="underline-when-hover" (click)="showInfo(data.authorId)">{{data!.authorName}}</b></div>
                         </div>
     
                         <div class="row mt-1">
                             <div class="col-3">Cập nhật:</div>
-                            <div class="col-7"><b>{{data!.updatedDate}}</b></div>
+                            <div class="col-7"><b>{{dateFormatter(data.updatedDate)}}</b></div>
                         </div>
 
                         <div class="row mt-1">
                             <div class="col-3">Danh mục:</div>
-                            <div class="col-7"><b>{{data!.categoryName}}</b></div>
+                            <div class="col-7"><b>{{data.categoryName}}</b></div>
                         </div>
     
                         <div class="row mt-1">
@@ -95,10 +95,10 @@
             <div class="card other-tests-list card-body shadow-sm pt-1 ps-1 mb-3">
                 <div class="d-flex">
                     @for (item of randomTests; track $index) {
-                        <div class="mx-2 other-tests p-2 my-2 d-flex flex-column d-block" style="width: 200px; height: auto;"
+                        <div class="mx-2 other-tests p-2 my-2 d-flex flex-column d-block" style="width: 200px; height: auto;" [title]="item.name"
                         [routerLink]="['/tests/', item.id]">
                             <img [src]="item.imageUrl || defaultImageUrl" alt="" class="test-img">
-                            <small class="fw-bold fs-6">{{item.name}}</small>
+                            <small class="fw-bold fs-6 over-show-dot" >{{item.name}}</small>
                             <div class="d-flex flex-row text-secondary">
                                 <small>{{item.numberOfQuestions}} câu hỏi</small>
                                 <small> - {{item.numberOfAttempts}} lượt làm</small>
@@ -123,7 +123,7 @@
                                     <div class="d-flex flex-row flex-column ms-2">
                                         <div class="d-flex">
                                             <small class="fw-bold align-text-top text-ellipsis">{{item.userName}}</small>
-                                            <small class="text-secondary align-content-center ms-2" style="font-size: 10px; white-space: nowrap;">{{item.createdAt | date: 'HH:mm - dd/MM/yyyy'}}</small>
+                                            <small class="text-secondary align-content-center ms-2" style="font-size: 10px; white-space: nowrap;">{{dateFormatter(item.createdAt)}}</small>
                                         </div>
                                         <p class="mb-1" style="font-size: 12px;">{{item.content}}</p>
                                     </div>
@@ -136,7 +136,7 @@
                                         <i class='bx bx-trash fw-bold remove-btn' (click)="removeComment(item.id)"></i>
                                     }
     
-                                    <div class="me-1" style="font-size: 10px;">{{item.childsId.length || 0}}</div>
+                                    <div class="me-1" style="font-size: 10px;">{{item.childsId?.length || 0}}</div>
                                     <i class='bx bx-reply fw-bold reply-btn'></i>
     
                                     <div class="me-1" style="font-size: 10px;">{{item.likes}}</div>

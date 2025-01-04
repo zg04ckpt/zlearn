@@ -1,0 +1,9 @@
+.add-image {
+    width: 200px; 
+    height: 200px; 
+    background-color: rgba(128, 128, 128, 0.505);
+}
+
+.add-image:hover {
+    opacity: 0.8;
+}

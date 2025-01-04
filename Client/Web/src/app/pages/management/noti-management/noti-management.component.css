@@ -1,0 +1,36 @@
+label {
+    color: rgba(128, 128, 128, 0.778);
+    font-weight:600;
+}
+
+.paging-btn {
+    font-weight: bolder;
+    font-size: large;
+}
+
+.paging-btn:hover {
+    cursor: pointer;
+    opacity: 0.6;
+    transform: scale(1.2);
+}
+
+table * {
+    font-size: 13px;
+}
+
+.scrollable-content::-webkit-scrollbar {
+    width: 4px; /* Đặt chiều rộng của thanh cuộn */
+}
+
+.scrollable-content::-webkit-scrollbar-button {
+    display: none; /* Ẩn các nút mũi tên */
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+    background-color: #888; /* Màu của thanh cuộn */
+    border-radius: 0px; /* Bo tròn các góc của thanh cuộn */
+}
+
+.scrollable-content * {
+    font-size: 12px;
+}

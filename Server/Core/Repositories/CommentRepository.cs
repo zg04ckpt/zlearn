@@ -1,7 +1,7 @@
 ﻿using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Data;
-using Data.Entities;
+using Data.Entities.CommonEntities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace Core.Repositories
         {
             return await _context.Comments
                 .Include(x => x.User)
-                .Where(x => x.TestId.ToString().Equals(testId))
+                .Where(x => x.TargetId.Equals(testId))
                 .OrderBy(x => x.CreatedAt)
                 .ToListAsync();
         }

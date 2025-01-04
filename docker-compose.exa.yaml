@@ -19,6 +19,7 @@ services:
       context: ./Server
       dockerfile: Dockerfile.api
     environment:
+      TZ: "Asia/Ho_Chi_Minh"
       SYSTEM_EMAIL: "[email for auto send mail]"
       SYSTEM_EMAIL_PASS: "[access pass for sender email]"
       ADMIN_EMAIL: "[default email for admin account]"
@@ -26,8 +27,8 @@ services:
       ASPNETCORE_ENVIRONMENT: "Production"
       SECRET_KEY: "[secret key for jwt token]"
     volumes:
-      - resources:/Resources
-      - logs:/Logs
+      - resources:/App/Resources
+      - logs:/App/Logs
     ports:
       - 5000:80
     depends_on:

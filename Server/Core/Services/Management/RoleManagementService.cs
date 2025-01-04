@@ -4,7 +4,7 @@ using Core.Exceptions;
 using Core.Interfaces.IRepositories;
 using Core.Interfaces.IServices.Management;
 using Core.Mappers;
-using Data.Entities;
+using Data.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

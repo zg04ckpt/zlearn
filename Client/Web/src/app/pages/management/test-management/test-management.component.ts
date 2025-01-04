@@ -12,6 +12,8 @@ import { BreadcrumbService } from '../../../services/breadcrumb.service';
 import { Title } from '@angular/platform-browser';
 import { CommentService } from '../../../services/comment.service';
 import { CommentDTO } from '../../../dtos/comment/comment.dto';
+import { DocumentItemDTO } from '../../../dtos/document/document-item';
+import { CategoryItem } from '../../../entities/common/category-item.entity';
 
 @Component({
   selector: 'app-test-management',
@@ -37,8 +39,10 @@ export class TestManagementComponent implements OnInit {
   isShowCommentsOfTest = false;
   comments: CommentDTO[] = [];
 
+  categories: CategoryItem[] = [];
+  testCate: string = ''
+
   constructor(
-    private managementService: ManagementService,
     private componentService: ComponentService,
     private testService: TestService,
     private userService: UserService,
@@ -51,7 +55,11 @@ export class TestManagementComponent implements OnInit {
   ngOnInit(): void {
     this.search();
     this.titleService.setTitle(this.title);
-    this.breadcrumbService.addBreadcrumb(this.title, this.router.url);
+    //get categories
+    this.testService.getCategories().subscribe(next => {
+      this.componentService.$showLoadingStatus.next(false);
+      this.categories = next;
+    });
   }
 
   showUserDetail(userId: string) {
@@ -59,7 +67,7 @@ export class TestManagementComponent implements OnInit {
   }
 
   search() {
-    this.managementService.getAllTests(this.pageIndex, this.pageSize, this.key)
+    this.testService.getAllInfos(this.pageIndex, this.pageSize, this.key, this.testCate)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(res => {
       this.componentService.$showLoadingStatus.next(false);
@@ -98,5 +106,22 @@ export class TestManagementComponent implements OnInit {
       });
     });
   }
+
+  dateFormatter(date: Date): string {
+    const now = Date.now();
+    const past = date.getTime();
+    const duration = (now - past) / 1000;
+  
+    if (duration < 60) {
+      return Math.floor(duration) + " giây trước";
+    } else if (duration < 3600) {
+      return Math.floor(duration / 60) + " phút trước";
+    } else if (duration < 86400) {
+      return Math.floor(duration / 3600) + " giờ trước";
+    } else {
+      return Math.floor(duration / 86400) + " ngày trước";
+    }
+  }
+
 }
 
